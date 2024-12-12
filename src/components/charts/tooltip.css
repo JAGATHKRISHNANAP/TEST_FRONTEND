@@ -1,0 +1,55 @@
+/* In your CSS file or a style block in your component */
+.tooltip {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 1px;
+    /* height:100px; */
+    /* border-radius: 25px; */
+    text-align: center; /* Center align text */
+}
+
+.tooltip-header {
+    font-weight: bold;
+    /* margin-bottom: 2px; */
+}
+
+.tooltip-body {
+    /* align: left; */
+    margin-left: 15px;
+    text-align: start;
+    margin-top: 2px;
+}
+
+
+
+.chart-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+
+
+
+.apexcharts-toolbar {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.apexcharts-custom-icon.custom-sort-ascending,
+.apexcharts-custom-icon.custom-sort-descending {
+    order: -1; /* Move custom icons to the start */
+}
+
+.apexcharts-toolbar > * {
+    margin-right: 8px; /* Adjust spacing if needed */
+}
+
+
+
+
+
+
+

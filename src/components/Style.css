@@ -1,0 +1,105 @@
+.input_edit{
+    /* width: 100%; */
+    /* padding: 2px; */
+    background-color: #f0f0f0;
+    border: 1px solid #a79090;
+    border-radius: 10px;
+    cursor: pointer;
+    /* margin-bottom: px; */
+    /* align-items: start; */
+    width: 1000px;
+    /* margin-right: 10px; */
+    height:50px;
+  }
+  
+  
+.x-axis-columns {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .x-axis-column {
+    display: flex;
+    align-items: left;
+    padding: 5px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    background: linear-gradient(to right, #1976d2, #42a5f5);
+    color: white;
+    border-radius: 10px;
+  }
+  
+  .x-axis-column span {
+    margin-right: 2px;
+  }
+  
+  .btn-container {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center; /* Vertically centers the content */
+  }
+  
+
+
+
+.save-button {
+  margin-top: 10px;
+  padding: 5px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background: linear-gradient(to right, #1976d2, #42a5f5);
+  color: white;
+  border-radius: 10px;
+  border: 1px solid #1976d2;
+}
+
+
+.save-button:hover {
+  background: linear-gradient(to right, #1565c0, #1e88e5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
+  .chart-container {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center; /* Remove this if you only need horizontal alignment */
+    margin-top: 10px;
+  }
+  
+
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(10%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .x-axis-column span {
+    display: inline-block;
+    animation: none; /* Initially no animation */
+  }
+  
+
+
+
+
+
+  .editdashsidebar11 {
+    background-color: #ffffff;
+    height: 30px;
+  }
+  
+  .sidebar-right {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar-section {
+    margin-top: 20px;
+  }
+  

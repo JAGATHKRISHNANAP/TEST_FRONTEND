@@ -1,0 +1,16 @@
+.row {
+    display: flex;
+    /* width:1000px */
+  }
+  
+  .column {
+    flex: 1;
+    overflow-y: auto; /* Make the column scrollable */
+    max-height: 300px; /* Set the max height */
+  }
+  
+  .textarea-container {
+    flex: 2;
+    padding: 10px;
+  }
+  

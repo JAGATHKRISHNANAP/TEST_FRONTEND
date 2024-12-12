@@ -1,0 +1,87 @@
+/* TextChart.css */
+.row{
+    display: flex;
+}
+.border-box {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 5px;
+    overflow: auto;
+  }
+  .left-align {
+    text-align: left;
+    margin-left: 10px;
+  }
+  .display{
+    display: flex;
+  }
+  .catagory{
+    color: #1976d2;
+  }
+  .value{
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    margin:0%;
+  }
+
+
+
+
+  .color-picker {
+    width: 100%; /* Ensure the container takes the full width of the parent */
+    max-width: 100%; /* Prevent overflow */
+  }
+  
+
+
+
+
+
+
+
+
+  
+
+  .node circle {
+    fill: steelblue;
+  }
+  
+  .node text {
+    font: 12px sans-serif;
+  }
+  
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+  
+
+
+  .country {
+    cursor: pointer;
+  }
+  .tooltip {
+    position: absolute;
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  
+
+
+/* test jagath */
+
+
+.react-resizable-handle {
+  display: block !important;
+  width: 10px; /* Adjust size as needed */
+  height: 10px;
+  background-color: gray; /* Optional: color for visibility */
+  cursor: se-resize; /* Resizing cursor for better UX */
+}
