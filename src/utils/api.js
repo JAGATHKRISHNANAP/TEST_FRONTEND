@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL='http://localhost:5000'
+const API_URL= 'http://localhost:5000'
+// const API_URL='http://43.204.149.125:5000'
 
 export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company_database,selectedSheet) => {
   const formData = new FormData();
@@ -21,6 +22,66 @@ export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company
   return response.data;
 };
 
+// src/api/csvApi.js
+
+
+export const uploadCsvApi = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // Get company_database from localStorage and append to formData
+  const company_database = localStorage.getItem('company_name');
+  formData.append('company_database', company_database);
+
+  return axios.post(`${API_URL}/uploadcsv`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+
+
+export const uploadAudioApi = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await axios.post(`${API_URL}/upload_audio_file`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return response.data.transcription;
+};
+
+
+export const generateDualAxisChartApi = async ({
+  selectedTable,
+  xAxis,
+  yAxis,
+  barColor,
+  aggregate,
+  chartType,
+  checkedOptions,
+}) => {
+  const xAxisColumns = xAxis.join(', ');
+  const databaseName = localStorage.getItem('company_name');
+
+  const response = await axios.post(`${API_URL}/plot_dual_axis_chart`, {
+    selectedTable,
+    xAxis: xAxisColumns,
+    yAxis,
+    barColor,
+    aggregate,
+    chartType,
+    filterOptions: checkedOptions.join(', '),
+    databaseName,
+  });
+
+  return response.data;
+};
+
 
 export const saveDataToDatabase = async ({
   user_id,company_name,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
@@ -33,13 +94,13 @@ export const saveDataToDatabase = async ({
 
 
 export const plot_chart = async (data) => {
-  const response = await axios.post('http://localhost:5000/plot_chart', data);
+  const response = await axios.post(`${API_URL}/plot_chart`, data);
   return response.data;
 };
 
 
 export const submitCalculationData = async (data, setReloadColumns) => {
-  const response = await axios.post('http://localhost:5000/api/calculation', data);
+  const response = await axios.post(`${API_URL}/api/calculation`, data);
   console.log('Calculation data submitted:', response.data);
   setReloadColumns(prevState => !prevState); // Toggle the state to trigger reload
   return response.data;
@@ -47,7 +108,7 @@ export const submitCalculationData = async (data, setReloadColumns) => {
 
 
 export const signUp = async (userDetails) => {
-  const response = await fetch('http://localhost:5000/api/signup', {
+  const response = await fetch(`${API_URL}/api/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -60,7 +121,7 @@ export const signUp = async (userDetails) => {
 
 export const fetchUserdata = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/signUP_username');
+    const response = await axios.get(`${API_URL}/api/signUP_username`);
     return response.data;
   } catch (error) {
     console.error('Error fetching usernames:', error);
@@ -93,6 +154,16 @@ export const fetchChartData = createAsyncThunk('chart/fetchChartData', async (ch
   const response = await axios.get(`${API_URL}/chart_data/${chartName}`);
   return response.data;
 });
+
+export const fetchSingleChartData = async (chartName) => {
+  try {
+    const response = await axios.get(`${API_URL}/chart_data/${chartName}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching data for Chart ${chartName}:`, error);
+    throw new Error(`Failed to fetch data for Chart ${chartName}`);
+  }
+};
 
 
 export const sendTestChartData = async (text_y_xis, text_y_database,text_y_table, text_y_aggregate) => {
@@ -170,7 +241,7 @@ export const fetchDashboardTotalRows = createAsyncThunk('chart/fetchDashboardTot
 });
 
 export const fetchDashboardData = createAsyncThunk('chart/fetchDashboardData', async (dashboard_names) => {
-  const response = await axios.get(`http://localhost:5000/Dashboard_data/${dashboard_names}`);
+  const response = await axios.get(`${API_URL}/Dashboard_data/${dashboard_names}`);
   console.log("response",response.data)
   return response.data;
 });
@@ -298,7 +369,7 @@ export const uploadAudioFile = (formData) => {
 
 export const fetchTableNamesAPI = async (databaseName) => {
   try {
-    const response = await axios.get('http://localhost:5000/table_names', {
+    const response = await axios.get(`${API_URL}/table_names`, {
       params: { databaseName },
     });
     return response.data;
@@ -311,7 +382,7 @@ export const fetchTableNamesAPI = async (databaseName) => {
 
 export const fetchColumnsAPI = async (tableName, databaseName) => {
   try {
-    const response = await axios.get(`http://localhost:5000/column_names/${tableName}`, {
+    const response = await axios.get(`${API_URL}/column_names/${tableName}`, {
       params: { databaseName },
     });
     return {
@@ -327,10 +398,26 @@ export const fetchColumnsAPI = async (tableName, databaseName) => {
 
 export const performJoinOperation = async (payload) => {
   try {
-    const response = await axios.post('http://localhost:5000/join-tables', payload);
+    const response = await axios.post(`${API_URL}/join-tables`, payload);
     return response.data;
   } catch (error) {
     console.error('Error performing join:', error);
     throw error; // Rethrow to handle errors in the caller
+  }
+};
+
+
+export const fetchEmployesName = async (companyName) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/employees?company=${companyName}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Fetched data:', data); // Check the data structure
+    return data;
+  } catch (error) {
+    console.error('Error fetching employees:', error);
+    throw error;
   }
 };

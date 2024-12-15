@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { userSignUp, fetchCompanies, fetchRoles } from '../../utils/api';
+import { userSignUp, fetchCompanies, fetchRoles ,fetchEmployesName} from '../../utils/api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Box, Container, Card, TextField, Button, Snackbar,Link,
@@ -32,6 +32,7 @@ export default function SignUp() {
   const [companyName, setCompanyName] = useState('');
   const [selected, setSelected] = useState(null);
   const [categoryInput, setCategoryInput] = useState('');
+  const [employees, setEmployees] = useState([]);
   const [formData, setFormData] = useState({
     employeeName: '',
     roleId: '',
@@ -41,6 +42,7 @@ export default function SignUp() {
     password: '',
     retypePassword: '',
     categories: [],
+    reportingId: '',
   });
 
 
@@ -81,6 +83,24 @@ export default function SignUp() {
     loadRoles();
   }, []);
 
+
+  useEffect(() => {
+    const getEmployees = async () => {
+      if (companyName) {
+        try {
+          const data = await fetchEmployesName(companyName);
+          console.log('Fetched data:', data); // Check the data structure
+          setEmployees(data); // Set the employees data
+        } catch (error) {
+          console.error('Error in getEmployees:', error);
+        }
+      }
+    };
+  
+    getEmployees();
+  }, [companyName]);
+  
+
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleAddCategory = () => {
@@ -111,6 +131,7 @@ export default function SignUp() {
       password: formData.password,
       retypePassword: formData.retypePassword,
       categories: formData.categories,
+      reportingId: formData.reportingId, 
     };
   
     if (!userDetails.employeeName || userDetails.employeeName.trim().length < 3) {
@@ -242,7 +263,7 @@ export default function SignUp() {
         </Toolbar>
       </AppBar>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 2 }}>
         {!showEditDetails ? (
           <Container component="main" maxWidth="xs">
             <Card variant="outlined" sx={{ padding: 4, boxShadow: 3 }}>
@@ -296,6 +317,26 @@ export default function SignUp() {
                         onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                       />
                     </Grid>
+
+                    <Grid item xs={12}>
+                      <TextField
+                        select
+                        label="Reporting Employee"
+                        fullWidth
+                        value={formData.reportingId}
+                        onChange={(e) => setFormData({ ...formData, reportingId: e.target.value })}
+                        SelectProps={{ native: true }}
+                      >
+                        <option value=""></option>
+                        {employees.map((employee) => (
+                          <option key={employee.employee_id} value={employee.employee_id}>
+                            {employee.employee_name}
+                          </option>
+                        ))}
+                      </TextField>
+                    </Grid>
+
+
                     <Grid item xs={12}>
                       <TextField
                         name="email"

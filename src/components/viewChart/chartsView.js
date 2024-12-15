@@ -4,18 +4,13 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTotalRows } from "../../utils/api";
 import ResizableChart from "./ResizableChart";
-import { saveAllCharts } from "../../utils/api";
+import {fetchSingleChartData } from "../../utils/api";
 import {
   Box,
   Grid,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
+
 } from "@mui/material";
-import axios from "axios";
 
 function Chartsview() {
   const dispatch = useDispatch();
@@ -23,15 +18,6 @@ function Chartsview() {
   const [chartData, setChartData] = useState([]); // Will hold a single chart
   const [droppedCharts, setDroppedCharts] = useState([]); // Single chart tracking
   const [chartNamesArray, setChartNamesArray] = useState([]); // Initialize as an empty array
-  const [openDialog, setOpenDialog] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const dashboardfilterXaxis = useSelector(
-    (state) => state.viewcharts.selectedCategory_xaxis
-  );
-  const selectedCategory = useSelector(
-    (state) => state.viewcharts.selectedCategory
-  );
-  const database_name = localStorage.getItem("company_name");
   const [user_id, setUserId] = React.useState(localStorage.getItem("user_id"));
 
   const [windowSize, setWindowSize] = useState({
@@ -84,33 +70,33 @@ function Chartsview() {
       });
   }, [dispatch, user_id]);
 
-  const handleChartButtonClick = useCallback(async (chartName) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/chart_data/${chartName}`
-      );
-      const data = response.data;
 
-      // Increase chart size based on window size
-      const chartWidth = windowSize.width * 0.8; // 80% of the window width
-      const chartHeight = windowSize.height * 0.6; // 60% of the window height
-
-      setChartData([
-        {
-          ...data,
-          chartName,
-          width: chartWidth,
-          height: chartHeight,
-          position: { x: 0, y: 0 },
-        },
-      ]);
-      setDroppedCharts([chartName]);
-      setError(null);
-    } catch (error) {
-      console.error(`Error fetching data for Chart ${chartName}:`, error);
-      setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
-    }
-  }, [windowSize]);
+  const handleChartButtonClick = useCallback(
+    async (chartName) => {
+      try {
+        const data = await fetchSingleChartData(chartName);
+  
+        // Increase chart size based on window size
+        const chartWidth = windowSize.width * 0.8; // 80% of the window width
+        const chartHeight = windowSize.height * 0.6; // 60% of the window height
+  
+        setChartData([
+          {
+            ...data,
+            chartName,
+            width: chartWidth,
+            height: chartHeight,
+            position: { x: 0, y: 0 },
+          },
+        ]);
+        setDroppedCharts([chartName]);
+        setError(null);
+      } catch (error) {
+        setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
+      }
+    },
+    [windowSize]
+  );
 
   const updateChartDetails = useCallback((chartName, newDetails) => {
     setChartData((prevData) =>
@@ -124,23 +110,6 @@ function Chartsview() {
     setDroppedCharts((prev) => prev.filter((name) => name !== chartName));
   }, []);
 
-  const handleSaveClick = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDialogClose = (shouldSave) => {
-    setOpenDialog(false);
-    if (shouldSave && fileName) {
-      saveAllCharts(
-        user_id,
-        chartData,
-        dashboardfilterXaxis,
-        selectedCategory,
-        fileName
-      );
-      setFileName("");
-    }
-  };
 
   const renderedChartButtons = useMemo(
     () =>

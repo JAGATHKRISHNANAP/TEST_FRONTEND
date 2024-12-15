@@ -1,7 +1,7 @@
 
 // src/features/audioFile/audioFileSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { uploadAudioApi } from '../../utils/api';
 
 const audioFileSlice = createSlice({
   name: 'audioFile',
@@ -43,21 +43,13 @@ const audioFileSlice = createSlice({
 
 export const { setFile, uploadStart, uploadSuccess, uploadFailure,resetUploadState } = audioFileSlice.actions;
 
-// export const { setFiles, resetUploadState } = audioFileSlice.actions;
+
 
 export const uploadAudio = (file) => async (dispatch) => {
   dispatch(uploadStart());
   try {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await axios.post('http://localhost:5000/upload_audio_file', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    dispatch(uploadSuccess(response.data.transcription));
+    const transcription = await uploadAudioApi(file); // Call API function
+    dispatch(uploadSuccess(transcription));
   } catch (error) {
     dispatch(uploadFailure(error.message));
   }
