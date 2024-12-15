@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { userSignUp, fetchCompanies, fetchRoles } from '../../utils/api';
+import { userSignUp, fetchCompanies, fetchRoles,fetchReportingIds } from '../../utils/api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Box, Container, Card, TextField, Button, Snackbar,Link,
@@ -32,6 +32,8 @@ export default function SignUp() {
   const [companyName, setCompanyName] = useState('');
   const [selected, setSelected] = useState(null);
   const [categoryInput, setCategoryInput] = useState('');
+  const [employees, setEmployees] = useState([]);
+  const [reportingIds, setReportingIds] = useState([]);
   const [formData, setFormData] = useState({
     employeeName: '',
     roleId: '',
@@ -41,9 +43,18 @@ export default function SignUp() {
     password: '',
     retypePassword: '',
     categories: [],
+    reportingId: '',
   });
 
-
+  useEffect(() => {
+    const storedCompanyName = location.state?.companyName || sessionStorage.getItem('companyName');
+    
+    if (storedCompanyName) {
+      setCompanyName(storedCompanyName);
+    } else {
+      console.error('Company name is not available in session storage or location state.');
+    }
+  }, [location.state]);
   useEffect(() => {
     const storedCompanyName = localStorage.getItem('user_name');
     setIsLoggedIn(!!sessionStorage.getItem('session_id'));
@@ -59,7 +70,7 @@ export default function SignUp() {
   }, [company]);
 
   useEffect(() => {
-    const loadCompanies = async () => {
+    const loadCompanies = async (companyName) => {
       try {
         const data = await fetchCompanies();
         setCompanies(data);
@@ -76,11 +87,27 @@ export default function SignUp() {
         console.error('Error fetching roles:', error);
       }
     };
-
+    const loadReportingIds = async () => {
+      try {
+        // Fetch reporting IDs from the API or static data
+        const data = await fetchReportingIds(); // Assuming this function is available
+        setReportingIds(data);
+      } catch (error) {
+        console.error('Error fetching reporting IDs:', error);
+      }
+    };
+  
+    loadReportingIds();
     loadCompanies();
     loadRoles();
   }, []);
-
+  // const fetchReportingIds = async () => {
+  //   const storedCompanyName = localStorage.getItem('user_name');
+  //   const response = await fetch(`http://localhost:5000/api/employees?company=${storedCompanyName}`);
+  //   const data = await response.json();
+  //   console.log(data); // Confirm structure
+  //   return data.map(item => ({ id: item.employee_id, name: item.employee_name }));
+  // };
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleAddCategory = () => {
@@ -111,6 +138,7 @@ export default function SignUp() {
       password: formData.password,
       retypePassword: formData.retypePassword,
       categories: formData.categories,
+      reportingId: formData.reportingId, // Include Reporting ID
     };
   
     if (!userDetails.employeeName || userDetails.employeeName.trim().length < 3) {
@@ -151,6 +179,7 @@ export default function SignUp() {
           password: '',
           retypePassword: '',
           categories: [],
+          reportingId:''
         });
   
         setCategoryInput(''); // Clear category input field
@@ -295,6 +324,23 @@ export default function SignUp() {
                         value={formData.userName}
                         onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                       />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        select
+                        label="Reporting Employee"
+                        fullWidth
+                        value={formData.reportingId}
+                        onChange={(e) => setFormData({ ...formData, reportingId: e.target.value })}
+                        SelectProps={{ native: true }}
+                      >
+                        <option value=""></option>
+                        {reportingIds.map((reportingId) => (
+                          <option key={reportingId.id} value={reportingId.id}>
+                            {reportingId.name}
+                          </option>
+                        ))}
+                      </TextField>
                     </Grid>
                     <Grid item xs={12}>
                       <TextField

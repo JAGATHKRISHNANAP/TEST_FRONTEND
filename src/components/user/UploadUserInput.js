@@ -12,7 +12,8 @@ export default function UploadUserInput({ onUploadSubmit }) {
   const [parsedData, setParsedData] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [registerType,setRegisterType]=useState('');
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarType, setSnackbarType] = useState('success');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -41,7 +42,10 @@ export default function UploadUserInput({ onUploadSubmit }) {
         error: (err) => {
           setError('Error parsing CSV file');
           console.error(err);
+          setSnackbarType('error');
+          setSnackbarOpen(true);
         }
+        
       });
     } else if (file.name.endsWith('.xlsx')) {
       // Excel Parsing
@@ -54,47 +58,64 @@ export default function UploadUserInput({ onUploadSubmit }) {
         const userDetails  = [];
   
         if (sheetData.length > 0) {
-          const headers = sheetData[0]; // First row contains headers (column names)
-          const rows = sheetData.slice(1); // Data rows
+          const headers = sheetData[0]; 
+          const rows = sheetData.slice(1); 
   
           rows.forEach((row) => {
             const rowObject = {};
             headers.forEach((header, colIndex) => {
-              rowObject[header] = row[colIndex]; // Create key-value pairs for each row
+              rowObject[header] = row[colIndex]; 
             });
-            userDetails .push(rowObject); // Add the row object to the array
+            userDetails .push(rowObject); 
           });
   
           console.log("Excel Parsed Data as Array of Key-Value Pairs:", userDetails );
         }
   
-        setParsedData(userDetails ); // Store the array in state if needed
+        setParsedData(userDetails ); 
       };
       fileReader.readAsArrayBuffer(file);
     } else {
       setError('Unsupported file format');
+      setSnackbarType('error');
+      setSnackbarOpen(true);
     }
   };
   
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (parsedData && registerType) {
       try {
+        const response = await userSignUp(registerType, parsedData);
         
-        // Send parsed data and registerType to backend using userSignUp API
-        const response = await userSignUp(registerType,parsedData );
-        console.log('Data successfully sent to backend:', response.data);
-        setSuccessMessage('Data uploaded successfully!');
+        if (response.data && response.data.message) {
+          setSuccessMessage('Data uploaded successfully!');
+          setError(''); 
+          setSnackbarType('success');
+          setSnackbarOpen(true);
+        } else {
+          throw new Error('Unexpected response format');
+        }
       } catch (error) {
-        console.error('Error sending data to backend:', error);
-        setError('Error uploading data');
+        const errorMessage = error.response?.data?.message || 'Error uploading data';
+        setError(errorMessage);
+        setSuccessMessage(''); 
+        setSnackbarType('error');
+        setSnackbarOpen(true);
       }
     } else {
       setError('No data available to upload');
+      setSuccessMessage(''); 
+      setSnackbarType('error');
+      setSnackbarOpen(true); 
     }
   };
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <Typography variant="h6">Upload your file</Typography>

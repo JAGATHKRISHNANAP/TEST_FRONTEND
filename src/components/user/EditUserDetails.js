@@ -4,7 +4,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import { useLocation } from 'react-router-dom'; // Import useLocation
-import { fetchUserDetails, fetchRoles, fetchCategories, updateUserDetails } from '../../utils/api'; // Assuming you're importing from utils/api
+import { fetchUserDetails, fetchRoles, fetchCategories, updateUserDetails ,fetchReportingIds} from '../../utils/api'; // Assuming you're importing from utils/api
 
 const defaultTheme = createTheme();
 
@@ -23,6 +23,7 @@ export default function EditUserDetails() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
 
+  const [reportingIds, setReportingIds] = useState([]);
   const limit = 10;
   const location = useLocation(); // Use useLocation to get the company name
 
@@ -63,11 +64,23 @@ export default function EditUserDetails() {
         console.error('Error fetching categories:', error);
       }
     };
-
+    const loadReportingIds = async () => {
+      try {
+        // Fetch reporting IDs from the API or static data
+        const data = await fetchReportingIds(); // Assuming this function is available
+        setReportingIds(data);
+      } catch (error) {
+        console.error('Error fetching reporting IDs:', error);
+      }
+    };
+  
+    loadReportingIds();
+  // Load roles and categ
     // Load roles and categories
     loadRoles();
     loadCategories();
   }, []);
+  
 
   // Fetch user details based on company name
   const handleFetchDetails = async (page = 1) => {
@@ -122,7 +135,7 @@ export default function EditUserDetails() {
       const selectedUserDetails = users.filter((user) => selectedUsers.includes(user.username));
       await Promise.all(
         selectedUserDetails.map((user) =>
-          updateUserDetails(user.username, companyName, user.role_id, user.category_name)
+          updateUserDetails(user.username, companyName, user.role_id, user.category_name,user.reporting_id )
         )
       );
       setSuccessMessage('Selected users updated successfully!');
@@ -200,6 +213,8 @@ export default function EditUserDetails() {
                       <TableCell>Employee Name</TableCell>
                       <TableCell>Role</TableCell>
                       <TableCell>Category</TableCell>
+                      <TableCell sx={{ width: 150 }}>Reporting ID</TableCell> 
+ 
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -242,6 +257,27 @@ export default function EditUserDetails() {
                             }}
                           />
                         </TableCell>
+                        <TableCell>
+                        <TextField
+                          select
+                          value={user.reporting_id || ""}
+                          onChange={(e) => {
+                            const updatedUsers = users.map((u) =>
+                              u.username === user.username
+                                ? { ...u, reporting_id: e.target.value }
+                                : u
+                            );
+                            setUsers(updatedUsers);
+                          }}
+                        >
+                          <MenuItem value="">Select Reporting Employee</MenuItem>
+                          {reportingIds.map((reportingId) => (
+                            <MenuItem key={reportingId.id} value={reportingId.id}>
+                              {reportingId.name}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

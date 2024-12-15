@@ -97,7 +97,7 @@ const DropZone = ({ droppedTables, setDroppedTables, setConnections, handleOpenR
       className="dropzone"
       ref={drop}
       sx={{
-        height: '380px',
+        height: '330px',
         width: '99.5%',
         position: 'relative',
         backgroundColor: 'white',
@@ -274,7 +274,7 @@ const JoinConfigSection = ({
         marginTop: '0px',
         padding: '40px',
         borderRadius: '8px',
-        width: 700,
+        width: 500,
         backgroundColor: 'white',
       }}
     >
@@ -301,9 +301,9 @@ const JoinConfigSection = ({
             padding: '10px',
             backgroundColor: 'white',
             borderRadius: '8px',
-            width: '100%',
+            width: '90%',
             height: 'auto',
-            marginBottom: '80px',
+            marginBottom: '20px',
             marginTop:'40px'
           }}
         >
@@ -570,9 +570,9 @@ const CustomJoinWithFetchTables = () => {
 
 return (
   <DndProvider backend={HTML5Backend}>
-    <Grid container spacing={2} sx={{ height: '93vh', padding: '10px', boxSizing: 'border-box',marginTop:'40px' }}>
+    <Grid container spacing={2} sx={{ height: '93vh', padding: '10px', boxSizing: 'border-box',marginTop:'50px' }}>
       {/* Left Panel */}
-      <Grid item xs={12} md={3} sx={{ maxHeight: '100vh', overflowY: 'auto' }}>
+      <Grid item xs={12} md={2.5} sx={{ maxHeight: '92.5vh', overflowY: 'auto' }}>
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: 'white' }}>
           <CardHeader
             title={
@@ -598,11 +598,11 @@ return (
       </Grid>
 
       {/* Right Panel */}
-      <Grid item xs={12} md={9}>
-        <Grid container spacing={2} sx={{ height: '85vh' }}>
+      <Grid item xs={12} md={9.5}>
+        <Grid container spacing={2} sx={{ height: '75vh' }}>
           {/* Drop Zone Section */}
           <Grid item xs={12}>
-            <Box sx={{ backgroundColor: 'white', padding: '10px', borderRadius: '5px', maxHeight: '400px', overflowY: 'auto' }}>
+            <Box sx={{ backgroundColor: 'white', padding: '10px', borderRadius: '5px', maxHeight: '335px', overflowY: 'auto' }}>
               <DropZone
                 droppedTables={droppedTables}
                 setDroppedTables={setDroppedTables}
@@ -616,13 +616,13 @@ return (
           <Grid item xs={12}>
               <Grid container spacing={2}>
                 {/* Join Config Section */}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6.2}>
                   <Box
                     sx={{
                       backgroundColor: 'white',
                       padding: '10px',
                       borderRadius: '5px',
-                      height: '450px', // Fixed height for Join Config
+                      height: '380px', // Fixed height for Join Config
                       overflowY: 'auto',
                     }}
                   >
@@ -637,13 +637,13 @@ return (
                 </Grid>
 
                 {/* Columns Preview Section */}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={5.8}>
                   <Box
                     sx={{
                       backgroundColor: droppedTables.length === 0 ? '#f0f0f0' : 'white',
                       padding: '10px',
                       borderRadius: '5px',
-                      height: '450px', // Fixed height for Columns Preview
+                      height: '380px', // Fixed height for Columns Preview
                       overflowY: 'auto',
                       display: 'flex',
                       flexDirection: 'column',
@@ -665,7 +665,7 @@ return (
                           <Box
                             key={index}
                             sx={{
-                              minWidth: '350px',
+                              minWidth: '280px',
                               width: '48%',
                               padding: '10px',
                               border: '1px solid #ccc',

@@ -1,3 +1,4 @@
+import { Legend } from "chart.js";
 import React from "react";
 import Chart from "react-apexcharts";
 import { ResizableBox } from 'react-resizable';
@@ -26,6 +27,7 @@ const PolarAreaChart = ({ categories, values, aggregation }) => {
                 formatter: function (value) {
                     return parseFloat(value).toFixed(2);
                 },
+            Legend:false
             }
         },
         plotOptions: {

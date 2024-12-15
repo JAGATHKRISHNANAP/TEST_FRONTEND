@@ -84,8 +84,9 @@ export const signIn = async (email, password,company) => {
 };
 
 
-export const fetchTotalRows = createAsyncThunk('chart/fetchTotalRows', async () => {
-  const response = await axios.get(`${API_URL}/total_rows`);
+export const fetchTotalRows = createAsyncThunk('chart/fetchTotalRows', async (user_id) => {
+  const response = await axios.get(`${API_URL}/total_rows`,
+    {params:{user_id:user_id},});
   return response.data;
 });
 
@@ -164,8 +165,10 @@ export const saveAllCharts = async (user_id,chartData,dashboardfilterXaxis,selec
 };
 
 
-export const fetchDashboardTotalRows = createAsyncThunk('chart/fetchDashboardTotalRows', async () => {
-  const response = await axios.get(`${API_URL}/saved_dashboard_total_rows`);
+export const fetchDashboardTotalRows = createAsyncThunk('chart/fetchDashboardTotalRows', async (user_id) => {
+  const company=localStorage.getItem('company_name');
+  const response = await axios.get(`${API_URL}/saved_dashboard_total_rows`,
+    {params: { user_id: user_id ,company},});
   return response.data;
 });
 
@@ -298,7 +301,8 @@ export const uploadAudioFile = (formData) => {
 
 export const fetchTableNamesAPI = async (databaseName) => {
   try {
-    const response = await axios.get('http://localhost:5000/table_names', {
+    const response = await axios.get('http://localhost:5000/api/table_names', {
+
       params: { databaseName },
     });
     return response.data;
@@ -332,5 +336,53 @@ export const performJoinOperation = async (payload) => {
   } catch (error) {
     console.error('Error performing join:', error);
     throw error; // Rethrow to handle errors in the caller
+  }
+};
+
+
+export const deletedashboard = (chartName) => async (dispatch) => {
+  try {
+    const response = await axios.delete(`${API_URL}/delete-chart`, { data: { chart_name: chartName } });
+    dispatch({ type: "DELETE_CHART_SUCCESS", payload: response.data });
+  } catch (error) {
+    dispatch({ type: "DELETE_CHART_FAILURE", error });
+  }
+};
+export const deleteChart = async (chartName) => {
+  try {
+    const response = await axios.delete(`http://localhost:5000/api/charts/${chartName}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting chart "${chartName}":`, error);
+    throw error;
+  }
+};
+
+export const isChartInDashboard = async (chartName) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/is-chart-in-dashboard?chart_name=${chartName}`);
+    const data = await response.json();
+    console.log('API Response for chart:', chartName, data); // Debug the API response
+    return data;
+  } catch (error) {
+    console.error('Error checking chart usage:', error);
+    return { isInDashboard: false };
+  }
+};
+
+export const checkIfTableInUse = async (selectedSheet) => {
+  const response = await fetch(`http://localhost:5000/api/checkTableUsage?tableName=${selectedSheet}`);
+  const data = await response.json();
+  return data.isInUse; 
+};
+export const fetchReportingIds = async () => {
+  try {
+    const companyName = localStorage.getItem('user_name');
+    const response = await fetch(`http://localhost:5000/api/employees?company=${companyName}`);
+    const data = await response.json();
+    return data.map(item => ({ id: item.employee_id, name: item.employee_name }));
+  } catch (error) {
+    console.error('Error fetching reporting IDs:', error);
+    throw new Error('Failed to fetch reporting IDs');
   }
 };

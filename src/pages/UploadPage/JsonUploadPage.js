@@ -54,75 +54,151 @@ const JsonUpload = () => {
   };
 
 
-   const flattenObject = (obj, prefix = '') => {
+  //  const flattenObject = (obj, prefix = '') => {
+  //   let result = {};
+  //   for (const key in obj) {
+  //     if (obj.hasOwnProperty(key)) {
+  //       const newKey = prefix ? `${prefix}.${key}` : key;
+  //       if (typeof obj[key] === 'object' && obj[key] !== null) {
+  //         // Recursively flatten the nested object
+  //         Object.assign(result, flattenObject(obj[key], newKey));
+  //       } else {
+  //         result[newKey] = obj[key];
+  //       }
+  //     }
+  //   }
+  //   return result;
+  // };
+
+  // const handleFileChange = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (!selectedFile) return;
+  
+  //   // Validate file size
+  //   if (selectedFile.size > MAX_FILE_SIZE) {
+  //     alert(`File size exceeds the limit of ${MAX_FILE_SIZE / (1024 * 1024)} MB.`);
+  //     return;
+  //   }
+  
+  //   if (selectedFile.type === 'application/json') {
+  //     dispatch(setFile(selectedFile));
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       try {
+  //         let json = JSON.parse(event.target.result);
+  
+  //         // Check if the JSON is a list, if not, convert it to an array
+  //         if (Array.isArray(json)) {
+  //           // If JSON is already an array, use it directly
+  //           json = json;
+  //         } else if (typeof json === 'object') {
+  //           // If JSON is an object, convert it into an array with the object as its single element
+  //           json = [json];
+  //         } else {
+  //           throw new Error('Invalid JSON format. Expected an array or an object.');
+  //         }
+  
+  //         // Flatten each row of JSON data
+  //         const flattenedData = json.map(row => flattenObject(row)); // Flatten each row if needed
+  
+  //         // If no primary key exists, create one
+  //         if (!flattenedData[0].hasOwnProperty('id')) {
+  //           flattenedData.forEach((row, index) => {
+  //             row.id = index + 1; // Add a unique ID to each row
+  //           });
+  //         }
+  
+  //         setJsonData(flattenedData.slice(0, flattenedData.length )); // Exclude the last row
+  //         setTotalRows(flattenedData.length);
+  //         setTotalColumns(Object.keys(flattenedData[0] || {}).length);
+  //         dispatch(setColumnHeadings(Object.keys(flattenedData[0] || {})));
+  //       } catch (error) {
+  //         alert('Error parsing JSON file. Please upload a valid JSON file.');
+  //       }
+  //     };
+  //     reader.readAsText(selectedFile);
+  //   } else {
+  //     dispatch(setFile(null));
+  //     alert('Please upload a valid JSON file.');
+  //   }
+  // };
+  
+  
+  const flattenObject = (obj) => {
     let result = {};
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
-        const newKey = prefix ? `${prefix}.${key}` : key;
         if (typeof obj[key] === 'object' && obj[key] !== null) {
-          // Recursively flatten the nested object
-          Object.assign(result, flattenObject(obj[key], newKey));
+          // Recursively flatten the nested object without creating a new key
+          Object.assign(result, flattenObject(obj[key]));
         } else {
-          result[newKey] = obj[key];
+          result[key] = obj[key];
         }
       }
     }
     return result;
   };
-
+  
+  
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
-  
+
     // Validate file size
     if (selectedFile.size > MAX_FILE_SIZE) {
-      alert(`File size exceeds the limit of ${MAX_FILE_SIZE / (1024 * 1024)} MB.`);
+      setSnackbarMessage(`File size exceeds the limit of ${MAX_FILE_SIZE / (1024 * 1024)} MB.`);
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
       return;
     }
-  
+
     if (selectedFile.type === 'application/json') {
       dispatch(setFile(selectedFile));
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
           let json = JSON.parse(event.target.result);
-  
+
           // Check if the JSON is a list, if not, convert it to an array
           if (Array.isArray(json)) {
-            // If JSON is already an array, use it directly
             json = json;
           } else if (typeof json === 'object') {
-            // If JSON is an object, convert it into an array with the object as its single element
             json = [json];
           } else {
             throw new Error('Invalid JSON format. Expected an array or an object.');
           }
-  
+
           // Flatten each row of JSON data
-          const flattenedData = json.map(row => flattenObject(row)); // Flatten each row if needed
-  
+          const flattenedData = json.map(row => flattenObject(row));
+
           // If no primary key exists, create one
           if (!flattenedData[0].hasOwnProperty('id')) {
             flattenedData.forEach((row, index) => {
               row.id = index + 1; // Add a unique ID to each row
             });
           }
-  
-          setJsonData(flattenedData.slice(0, flattenedData.length )); // Exclude the last row
+
+          setJsonData(flattenedData.slice(0, 5)); // Preview first 5 rows
+          console.log(flattenedData);
+
           setTotalRows(flattenedData.length);
           setTotalColumns(Object.keys(flattenedData[0] || {}).length);
           dispatch(setColumnHeadings(Object.keys(flattenedData[0] || {})));
         } catch (error) {
-          alert('Error parsing JSON file. Please upload a valid JSON file.');
+          setSnackbarMessage('Error parsing JSON file. Please upload a valid JSON file.');
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
         }
       };
       reader.readAsText(selectedFile);
     } else {
       dispatch(setFile(null));
-      alert('Please upload a valid JSON file.');
+      setSnackbarMessage('Please upload a valid JSON file.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -225,8 +301,7 @@ const JsonUpload = () => {
         </Grid>
         
       {jsonData.length > 0 && (
-                  <Grid item xs={12} style={{ margin: '40px' ,backgroundColor: '#ffffff', justifyContent: 'center',display:'flex', alignItems: 'center', borderRadius: '10px' 
-                  }}>
+                  <Grid item xs={12} style={{ margin: '120px', backgroundColor: '#ffffff', justifyContent: 'center', display: 'flex', alignItems: 'center', borderRadius: '10px' }}>
 <Table>
   <TableHead>
     <TableRow>

@@ -87,8 +87,10 @@ const Pie = (props) => {
         dataPointSelection: handleClicked
       },
       id: "basic-pie"
+      
     },
     labels: categories || [],
+    Legend:false
   };
 
   let aggregationLabel = '';
