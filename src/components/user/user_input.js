@@ -98,7 +98,7 @@ export default function SignUp() {
     };
   
     getEmployees();
-  }, [companyName]);
+  }, [companyName,componentKey]);
   
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -161,6 +161,8 @@ export default function SignUp() {
         setOpen(true);
         setPasswordError(false);
         setPasswordErrorMessage('User registered successfully!');
+        // window.location.reload();
+        setComponentKey((prevKey) => prevKey + 1);
   
         // Reset form data
         setFormData({

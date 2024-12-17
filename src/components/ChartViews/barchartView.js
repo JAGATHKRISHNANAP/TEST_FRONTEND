@@ -104,7 +104,7 @@ const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x
                     colors: ['#000'],
                 },
                 rotate: -45,
-                show:false
+                show:true
             },
         },
         yaxis: {

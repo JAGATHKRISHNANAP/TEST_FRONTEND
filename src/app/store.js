@@ -33,9 +33,15 @@ import calculationReducer from '../features/calculation-Slice/calculation-Slice'
 import  signupReducer  from '../features/signUp/signUpSlice';
 // import fetchedChartDataReducer from '../features/fetchChartDataForView/fetchChartDataSlice';
 
+import loginReducer from '../features/login/loginSlice';
+
 
 const store = configureStore({
   reducer: {
+
+    login: loginReducer,
+
+
 
     csvFile: csvFileReducer,
     excelFile: excelFileReducer,

@@ -1,22 +1,191 @@
+// import * as React from 'react';
+// import { styled } from '@mui/material/styles';
+// import Box from '@mui/material/Box';
+// import Button from '@mui/material/Button';
+// import MuiCard from '@mui/material/Card';
+// import FormLabel from '@mui/material/FormLabel';
+// import FormControl from '@mui/material/FormControl';
+// import TextField from '@mui/material/TextField';
+// import Typography from '@mui/material/Typography';
+// import Snackbar from '@mui/material/Snackbar';
+// import Alert from '@mui/material/Alert';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { setUserName, setPassword, setRetypePassword, setOrganizationName, setEmail } from '../../features/signUp/signUpSlice';
+// import { signUp, fetchUserdata } from '../../utils/api'; // import the api file
+
+// const Card = styled(MuiCard)(({ theme }) => ({
+//   display: 'flex',
+//   flexDirection: 'column',
+//   alignSelf: 'center',
+//   width: '100%',
+//   padding: theme.spacing(4),
+//   gap: theme.spacing(2),
+//   boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+//   [theme.breakpoints.up('sm')]: {
+//     width: '550px',
+//   },
+// }));
+
+// export default function SignUp() {
+//   const [passwordError, setPasswordError] = React.useState(false);
+//   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+//   const [open, setOpen] = React.useState(false);
+//   const [usernames, setUsernames] = React.useState([]);
+//   const [showCompanyDropdown, setShowCompanyDropdown] = React.useState(false);
+//   const dispatch = useDispatch();
+
+//   React.useEffect(() => {
+//     const getUsernames = async () => {
+//       try {
+//         const fetchedUserdata = await fetchUserdata();
+//         const extractedUsernames = fetchedUserdata.map(user => user[3]);
+//         setUsernames(extractedUsernames.flat());
+//       } catch (error) {
+//         console.error('Error fetching usernames:', error);
+//       }
+//     };
+//     getUsernames();
+//   }, []);
+
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+//     const data = new FormData(event.currentTarget);
+
+//     const userName = data.get('userName');
+//     const password = data.get('password');
+//     const retypePassword = data.get('retypePassword');
+//     const organizationName = data.get('organizationName');
+//     const email = data.get('email');
+
+//     const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+
+//     if (!passwordValidation.test(password)) {
+//       setPasswordError(true);
+//       setPasswordErrorMessage('Password must be at least 8 characters long and include symbols, letters, and numbers.');
+//       setOpen(true);
+//       return;
+//     }
+
+//     if (password !== retypePassword) {
+//       setPasswordError(true);
+//       setPasswordErrorMessage('Passwords do not match.');
+//       setOpen(true);
+//       return;
+//     }
+
+//     if (usernames.includes(userName)) {
+//       setPasswordError(true);
+//       setPasswordErrorMessage('Username is already taken.');
+//       setOpen(true);
+//       return;
+//     }
+
+//     setPasswordError(false);
+//     setPasswordErrorMessage('');
+//     setOpen(false);
+//     dispatch(setUserName(userName));
+//     dispatch(setPassword(password));
+//     dispatch(setRetypePassword(retypePassword));
+//     dispatch(setOrganizationName(organizationName));
+//     dispatch(setEmail(email));
+
+//     const userDetails = { userName, password, retypePassword, organizationName, email };
+
+//     try {
+//       const response = await signUp(userDetails);
+//       if (response.message === 'User created successfully') {
+//         window.location.reload();
+//       }
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
+
+//   const handleClose = (event, reason) => {
+//     if (reason === 'clickaway') {
+//       return;
+//     }
+//     setOpen(false);
+//   };
+
+
+//   return (
+    
+//     <Card variant="outlined"  sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)',marginTop:'80px'}}>
+//       <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
+//         Organization Sign Up
+//       </Typography>
+
+//       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}>
+        
+
+
+//       <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}>
+//   <FormLabel htmlFor="organizationName" sx={{ whiteSpace: 'nowrap' }}>Organization Name</FormLabel>
+//   <TextField id="organizationName" name="organizationName" placeholder="Enter organization name" required fullWidth />
+// </FormControl>
+
+//         {/* User name */}
+//         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8.8, width: '100%' }}>
+//   <FormLabel htmlFor="userName" sx={{ whiteSpace: 'nowrap' }}>User Name</FormLabel>
+//   <TextField id="userName" name="userName" placeholder="Enter user name" required fullWidth />
+// </FormControl>
+
+
+//         {/* Email */}
+//         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 13.7, width: '100%' }}>
+//           <FormLabel htmlFor="email">Email</FormLabel>
+//           <TextField id="email" name="email" placeholder="your@email.com" type="email" required fullWidth />
+//         </FormControl>
+
+//         {/* Password */}
+//         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 9.8, width: '100%' }}>
+//           <FormLabel htmlFor="password">Password</FormLabel>
+//           <TextField id="password" name="password" placeholder="••••••" type="password" required fullWidth />
+//         </FormControl>
+
+//         {/* Retype Password */}
+//         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3.1, width: '100%' }}>
+//           <FormLabel htmlFor="retypePassword"  sx={{ whiteSpace: 'nowrap' }}>Retype Password</FormLabel>
+//           <TextField id="retypePassword" name="retypePassword" placeholder="••••••" type="password" required fullWidth />
+//         </FormControl>
+
+//         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+//   <Button type="submit" sx={{ width: '200px' }} variant="contained">
+//     Sign Up
+//   </Button>
+// </Box>
+
+
+//       </Box>
+
+//       {/* Snackbar for error handling */}
+//       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+//         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+//           {passwordErrorMessage}
+//         </Alert>
+//       </Snackbar>
+//     </Card>
+//   );
+// }
+
+
+
+
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
-import Checkbox from '@mui/material/Checkbox';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserName, setPassword, setRetypePassword, setOrganizationName, setEmail } from '../../features/signUp/signUpSlice';
 import { signUp, fetchUserdata } from '../../utils/api'; // import the api file
-import { Link } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -31,21 +200,234 @@ const Card = styled(MuiCard)(({ theme }) => ({
   },
 }));
 
+// export default function SignUp() {
+//   const [passwordError, setPasswordError] = React.useState(false);
+//   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+//   const [open, setOpen] = React.useState(false);
+//   const [successMessage, setSuccessMessage] = React.useState(''); // New success message state
+//   const [usernames, setUsernames] = React.useState([]);
+//   const [showCompanyDropdown, setShowCompanyDropdown] = React.useState(false);
+//   const dispatch = useDispatch();
+
+//   React.useEffect(() => {
+//     const getUsernames = async () => {
+//       try {
+//         const fetchedUserdata = await fetchUserdata();
+//         const extractedUsernames = fetchedUserdata.map((user) => user[3]);
+//         setUsernames(extractedUsernames.flat());
+//       } catch (error) {
+//         console.error('Error fetching usernames:', error);
+//       }
+//     };
+//     getUsernames();
+//   }, []);
+
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+//     const data = new FormData(event.currentTarget);
+
+//     const userName = data.get('userName');
+//     const password = data.get('password');
+//     const retypePassword = data.get('retypePassword');
+//     const organizationName = data.get('organizationName');
+//     const email = data.get('email');
+
+//     const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+
+//     if (!passwordValidation.test(password)) {
+//       setPasswordError(true);
+//       setPasswordErrorMessage('Password must be at least 8 characters long and include symbols, letters, and numbers.');
+//       setOpen(true);
+//       return;
+//     }
+
+//     if (password !== retypePassword) {
+//       setPasswordError(true);
+//       setPasswordErrorMessage('Passwords do not match.');
+//       setOpen(true);
+//       return;
+//     }
+
+//     if (usernames.includes(userName)) {
+//       setPasswordError(true);
+//       setPasswordErrorMessage('Username is already taken.');
+//       setOpen(true);
+//       return;
+//     }
+
+//     setPasswordError(false);
+//     setPasswordErrorMessage('');
+//     setOpen(false);
+//     dispatch(setUserName(userName));
+//     dispatch(setPassword(password));
+//     dispatch(setRetypePassword(retypePassword));
+//     dispatch(setOrganizationName(organizationName));
+//     dispatch(setEmail(email));
+
+//     const userDetails = { userName, password, retypePassword, organizationName, email };
+
+//     try {
+//       const response = await signUp(userDetails);
+//       if (response.message === 'User created successfully') {
+//         setSuccessMessage('User created successfully!'); // Set success message
+//         setOpen(true); // Open the Snackbar for success
+//         // setTimeout(() => window.location.reload(), 2000); // Optional: Reload after 2 seconds
+//       }
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
+
+//   const handleClose = (event, reason) => {
+//     if (reason === 'clickaway') {
+//       return;
+//     }
+//     setOpen(false);
+//     setSuccessMessage(''); // Clear success message on close
+//   };
+
+//   return (
+//     <Card
+//       variant="outlined"
+//       sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', marginTop: '80px' }}
+//     >
+//       <Typography
+//         component="h1"
+//         variant="h4"
+//         sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+//       >
+//         Organization Sign Up
+//       </Typography>
+
+//       <Box
+//         component="form"
+//         onSubmit={handleSubmit}
+//         noValidate
+//         sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
+//       >
+//         {/* Organization Name */}
+//         <FormControl
+//           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}
+//         >
+//           <FormLabel htmlFor="organizationName" sx={{ whiteSpace: 'nowrap' }}>
+//             Organization Name
+//           </FormLabel>
+//           <TextField
+//             id="organizationName"
+//             name="organizationName"
+//             placeholder="Enter organization name"
+//             required
+//             fullWidth
+//           />
+//         </FormControl>
+
+//         {/* User Name */}
+//         <FormControl
+//           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8.8, width: '100%' }}
+//         >
+//           <FormLabel htmlFor="userName" sx={{ whiteSpace: 'nowrap' }}>
+//             User Name
+//           </FormLabel>
+//           <TextField
+//             id="userName"
+//             name="userName"
+//             placeholder="Enter user name"
+//             required
+//             fullWidth
+//           />
+//         </FormControl>
+
+//         {/* Email */}
+//         <FormControl
+//           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 13.7, width: '100%' }}
+//         >
+//           <FormLabel htmlFor="email">Email</FormLabel>
+//           <TextField
+//             id="email"
+//             name="email"
+//             placeholder="your@email.com"
+//             type="email"
+//             required
+//             fullWidth
+//           />
+//         </FormControl>
+
+//         {/* Password */}
+//         <FormControl
+//           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 9.8, width: '100%' }}
+//         >
+//           <FormLabel htmlFor="password">Password</FormLabel>
+//           <TextField
+//             id="password"
+//             name="password"
+//             placeholder="••••••"
+//             type="password"
+//             required
+//             fullWidth
+//           />
+//         </FormControl>
+
+//         {/* Retype Password */}
+//         <FormControl
+//           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3.1, width: '100%' }}
+//         >
+//           <FormLabel htmlFor="retypePassword" sx={{ whiteSpace: 'nowrap' }}>
+//             Retype Password
+//           </FormLabel>
+//           <TextField
+//             id="retypePassword"
+//             name="retypePassword"
+//             placeholder="••••••"
+//             type="password"
+//             required
+//             fullWidth
+//           />
+//         </FormControl>
+
+//         {/* Submit Button */}
+//         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+//           <Button type="submit" sx={{ width: '200px' }} variant="contained">
+//             Sign Up
+//           </Button>
+//         </Box>
+//       </Box>
+
+//       {/* Snackbar for error or success handling */}
+//       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+//         <Alert
+//           onClose={handleClose}
+//           severity={successMessage ? 'success' : 'error'} // Change severity based on message type
+//           sx={{ width: '100%' }}
+//         >
+//           {successMessage || passwordErrorMessage} {/* Display appropriate message */}
+//         </Alert>
+//       </Snackbar>
+//     </Card>
+//   );
+// }
+
+
 export default function SignUp() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const [successMessage, setSuccessMessage] = React.useState('');
   const [usernames, setUsernames] = React.useState([]);
-  const [showCompanyDropdown, setShowCompanyDropdown] = React.useState(false);
-  const [selectedCompany, setSelectedCompany] = React.useState('');
+  
+  // State variables for form inputs
+  const [organizationName, setOrganizationName] = React.useState('');
+  const [userName, setUserName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [retypePassword, setRetypePassword] = React.useState('');
+  
   const dispatch = useDispatch();
-  const { userName, password, retypePassword, organizationName, email } = useSelector((state) => state.signup);
 
   React.useEffect(() => {
     const getUsernames = async () => {
       try {
         const fetchedUserdata = await fetchUserdata();
-        const extractedUsernames = fetchedUserdata.map(user => user[3]);
+        const extractedUsernames = fetchedUserdata.map((user) => user[3]);
         setUsernames(extractedUsernames.flat());
       } catch (error) {
         console.error('Error fetching usernames:', error);
@@ -56,15 +438,16 @@ export default function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    const userName = data.get('userName');
-    const password = data.get('password');
-    const retypePassword = data.get('retypePassword');
-    const organizationName = data.get('organizationName');
-    const email = data.get('email');
 
     const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+
+        // Validate that all fields are filled
+    if (!organizationName || !userName || !email || !password || !retypePassword) {
+      setPasswordError(true);
+      setPasswordErrorMessage('All fields are required.');
+      setOpen(true);
+      return;
+    }
 
     if (!passwordValidation.test(password)) {
       setPasswordError(true);
@@ -90,18 +473,22 @@ export default function SignUp() {
     setPasswordError(false);
     setPasswordErrorMessage('');
     setOpen(false);
-    dispatch(setUserName(userName));
-    dispatch(setPassword(password));
-    dispatch(setRetypePassword(retypePassword));
-    dispatch(setOrganizationName(organizationName));
-    dispatch(setEmail(email));
 
     const userDetails = { userName, password, retypePassword, organizationName, email };
 
     try {
       const response = await signUp(userDetails);
       if (response.message === 'User created successfully') {
-        window.location.reload();
+        // Clear input fields
+        setOrganizationName('');
+        setUserName('');
+        setEmail('');
+        setPassword('');
+        setRetypePassword('');
+        
+        // Display success message
+        setSuccessMessage('User created successfully!');
+        setOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -113,69 +500,123 @@ export default function SignUp() {
       return;
     }
     setOpen(false);
-  };
-
-  const handleCompanyCheckboxChange = (event) => {
-    setShowCompanyDropdown(event.target.checked);
+    setSuccessMessage('');
   };
 
   return (
-    
-    <Card variant="outlined"  sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)',marginTop:'80px'}}>
-      <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
+    <Card
+      variant="outlined"
+      sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', marginTop: '80px' }}
+    >
+      <Typography
+        component="h1"
+        variant="h4"
+        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+      >
         Organization Sign Up
       </Typography>
 
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}>
-        
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
+      >
+        {/* Organization Name */}
+        <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}>
+          <FormLabel htmlFor="organizationName" sx={{ whiteSpace: 'nowrap' }}>
+            Organization Name
+          </FormLabel>
+          <TextField
+            id="organizationName"
+            name="organizationName"
+            placeholder="Enter organization name"
+            value={organizationName}
+            onChange={(e) => setOrganizationName(e.target.value)}
+            required
+            fullWidth
+          />
+        </FormControl>
 
-
-      <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}>
-  <FormLabel htmlFor="organizationName" sx={{ whiteSpace: 'nowrap' }}>Organization Name</FormLabel>
-  <TextField id="organizationName" name="organizationName" placeholder="Enter organization name" required fullWidth />
-</FormControl>
-
-        {/* User name */}
+        {/* User Name */}
         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8.8, width: '100%' }}>
-  <FormLabel htmlFor="userName" sx={{ whiteSpace: 'nowrap' }}>User Name</FormLabel>
-  <TextField id="userName" name="userName" placeholder="Enter user name" required fullWidth />
-</FormControl>
-
+          <FormLabel htmlFor="userName" sx={{ whiteSpace: 'nowrap' }}>
+            User Name
+          </FormLabel>
+          <TextField
+            id="userName"
+            name="userName"
+            placeholder="Enter user name"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            required
+            fullWidth
+          />
+        </FormControl>
 
         {/* Email */}
         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 13.7, width: '100%' }}>
           <FormLabel htmlFor="email">Email</FormLabel>
-          <TextField id="email" name="email" placeholder="your@email.com" type="email" required fullWidth />
+          <TextField
+            id="email"
+            name="email"
+            placeholder="your@email.com"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            fullWidth
+          />
         </FormControl>
 
         {/* Password */}
         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 9.8, width: '100%' }}>
           <FormLabel htmlFor="password">Password</FormLabel>
-          <TextField id="password" name="password" placeholder="••••••" type="password" required fullWidth />
+          <TextField
+            id="password"
+            name="password"
+            placeholder="••••••"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+          />
         </FormControl>
 
         {/* Retype Password */}
         <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3.1, width: '100%' }}>
-          <FormLabel htmlFor="retypePassword"  sx={{ whiteSpace: 'nowrap' }}>Retype Password</FormLabel>
-          <TextField id="retypePassword" name="retypePassword" placeholder="••••••" type="password" required fullWidth />
+          <FormLabel htmlFor="retypePassword" sx={{ whiteSpace: 'nowrap' }}>
+            Retype Password
+          </FormLabel>
+          <TextField
+            id="retypePassword"
+            name="retypePassword"
+            placeholder="••••••"
+            type="password"
+            value={retypePassword}
+            onChange={(e) => setRetypePassword(e.target.value)}
+            required
+            fullWidth
+          />
         </FormControl>
 
+        {/* Submit Button */}
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-  <Button type="submit" sx={{ width: '200px' }} variant="contained">
-    Sign Up
-  </Button>
-</Box>
-
-        
-        {/* <Typography sx={{ textAlign: 'center' }}>
-          Already have an account? <Link href="/login" variant="body2">Sign in</Link>
-        </Typography> */}
+          <Button type="submit" sx={{ width: '200px' }} variant="contained">
+            Sign Up
+          </Button>
+        </Box>
       </Box>
 
-      {/* Snackbar for error handling */}
+      {/* Snackbar for error or success handling */}
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {passwordErrorMessage}
+        <Alert
+          onClose={handleClose}
+          severity={successMessage ? 'success' : 'error'}
+          sx={{ width: '100%' }}
+        >
+          {successMessage || passwordErrorMessage}
         </Alert>
       </Snackbar>
     </Card>

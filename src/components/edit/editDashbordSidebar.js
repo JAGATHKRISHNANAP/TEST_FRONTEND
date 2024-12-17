@@ -8,25 +8,59 @@ import "../Style.css";
 function EditDashbordSidebar() {
   const dispatch = useDispatch();
   const [chartNamesArray, setChartNamesArray] = useState([]);
+  const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
 
+  // useEffect(() => {
+  //   console.log("Fetching total rows");
+  //   dispatch(fetchTotalRows())
+  //     .unwrap()
+  //     .then((response) => {
+  //       if (response && response.chart_names) {
+  //         setChartNamesArray(response.chart_names);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching total rows:", err);
+  //     });
+  // }, [dispatch]);
+
+  // const handleChartButtonClick = (chartNumber, chartName) => {
+  //   console.log("Clicked chart name:", chartName);
+  //   dispatch(fetchChartData(chartName));
+  // };
   useEffect(() => {
     console.log("Fetching total rows");
-    dispatch(fetchTotalRows())
+    dispatch(fetchTotalRows(user_id))
       .unwrap()
       .then((response) => {
         if (response && response.chart_names) {
-          setChartNamesArray(response.chart_names);
+          // Check if chart_names is an array or an object
+          if (Array.isArray(response.chart_names)) {
+            setChartNamesArray(response.chart_names);
+          } else if (typeof response.chart_names === 'object') {
+            // Extract array from object
+            const chartNames = Object.values(response.chart_names).flat(); // Flatten array if necessary
+            setChartNamesArray(chartNames);
+          } else {
+            console.error("Unexpected format for chart_names:", response.chart_names);
+            setChartNamesArray([]);  // Set to empty array if the format is unexpected
+          }
+        } else {
+          console.error("chart_names is not present in the response:", response);
+          setChartNamesArray([]);  // Set to empty array if chart_names is missing
         }
       })
       .catch((err) => {
         console.error("Error fetching total rows:", err);
+        setChartNamesArray([]);  // Set to empty array in case of API error
       });
-  }, [dispatch]);
-
+  }, [dispatch, user_id]);
   const handleChartButtonClick = (chartNumber, chartName) => {
     console.log("Clicked chart name:", chartName);
     dispatch(fetchChartData(chartName));
   };
+
+
 
   console.log("chartNamesArray:", chartNamesArray);
   return (

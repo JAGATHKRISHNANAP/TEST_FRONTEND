@@ -95,7 +95,7 @@ const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                     colors: ['#000'],
                 },
                 rotate: -45,
-                show:false
+                show:true
             },
         },
         yaxis: [

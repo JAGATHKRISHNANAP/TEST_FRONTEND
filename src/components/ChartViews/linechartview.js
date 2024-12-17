@@ -166,7 +166,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
                 text: `${x_axis}`,
               },
             labels: {
-                show: false,
+                show: true,
                 style: {
                     fontSize: '12px',
                     fontWeight: 400,

@@ -14,6 +14,7 @@ import { signIn, fetchCompanies } from '../../utils/api';
 import { MenuItem, FormControl, FormLabel, Select } from '@mui/material';
 import Card from '@mui/material/Card'; // Importing the Card for the styled UI component
 
+
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -29,6 +30,7 @@ export default function SignIn() {
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+
 
 
 
@@ -74,12 +76,15 @@ export default function SignIn() {
         sessionStorage.setItem('session_id', response.session_id);
 
         if (response.message === 'Login successful to admin page') {
+          localStorage.setItem('loginstatus', true);
           navigate('/signClient');
         } else if (response.message === 'Login successful to user page') {
           sessionStorage.setItem('show_second_navbar', true);
+          localStorage.setItem('loginstatus', true);
           navigate('/user_input');
         } else if (response.message === 'Login successful to user employee page') {
           localStorage.setItem('show_second_navbar', true);
+          localStorage.setItem('loginstatus', true);
           navigate('/employeehome');
         }
       } else {

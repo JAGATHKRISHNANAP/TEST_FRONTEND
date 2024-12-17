@@ -84,7 +84,7 @@ const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", 
                     colors: ['#000'],
                 },
                 rotate: -45,
-                show:false
+                show:true
             },
 
         },

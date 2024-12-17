@@ -17,6 +17,10 @@ import { SketchPicker } from 'react-color'; // Import the Sketch color picker
 import PaletteIcon from '@mui/icons-material/Palette'; // Icon for the color picker toggle button
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { BiSolidFileJson } from "react-icons/bi";
+import { useDispatch, useSelector } from 'react-redux';
+
+// import { login, logout } from './authSlice';
+import { logout } from '../features/login/loginSlice';
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
@@ -38,8 +42,14 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const buttonRef = React.useRef(null);
+  const loginstatus=localStorage.getItem('loginstatus')
+  console.log(loginstatus)
 
   const theamColor=localStorage.setItem('theamColor',appBarColor);
+
+  const dispatch = useDispatch();
+  const loginStatus = useSelector((state) => state.login.loginStatus);
+ 
   // const secondNavbar=localStorage.getItem('show_second_navbar',showSecondNavbar);
 
   React.useEffect(() => {
@@ -118,6 +128,8 @@ function Navbar() {
   //     navigate('/login');
   //   }
   // };
+
+
   const handleLoginLogout = () => {
     if (isLoggedIn) {
       sessionStorage.removeItem('session_id');
@@ -129,6 +141,62 @@ function Navbar() {
     }
   };
   
+  // const handleLoginLogout = () => {
+  //   if (isLoggedIn) {
+  //     sessionStorage.removeItem('session_id');
+  //     sessionStorage.removeItem('username');
+  //      // Set loginstatus to false on logout
+  //     setIsLoggedIn(false);
+  //     localStorage.setItem('loginstatus', false);
+  //     navigate('/login')
+      
+  //   } else {
+  //     // localStorage.setItem('loginstatus', 'true'); // This can be updated when login succeeds
+  //     navigate('/login');
+  //   }
+  // };
+
+
+//   const handleLoginLogout = () => {
+//     if (isLoggedIn) {
+//         sessionStorage.removeItem('session_id');
+//         sessionStorage.removeItem('username');
+//         setIsLoggedIn(false);
+//         localStorage.setItem('loginstatus', 'false'); // Store as string
+//         navigate('/login');
+//     } else {
+//         navigate('/login');
+//     }
+// };
+
+
+// const handleLoginLogout = () => {
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+//   const isLoggedIn = useSelector((state) => state.login.loginStatus);
+
+//   if (isLoggedIn) {
+//     dispatch(logout()); // Dispatch the logout action
+//     navigate('/login');
+//   } else {
+//     navigate('/login'); // Handle login redirection
+//   }
+// };
+// const handleLoginLogout = () => {
+//   if (isLoggedIn) {
+//     dispatch(logout()); // Dispatch the logout action
+//     navigate('/login');
+//   } else {
+//     navigate('/login'); // Handle login redirection
+//   }
+// };
+  
+  // React.useEffect(() => {
+  //   // Update isLoggedIn and loginstatus from localStorage
+  //   setIsLoggedIn(!!sessionStorage.getItem('session_id'));
+  // }, []);
+  
+
   React.useEffect(() => {
     setIsLoggedIn(!!sessionStorage.getItem('session_id'));
   }, []);
@@ -161,7 +229,7 @@ function Navbar() {
 
           <Box sx={{ flexGrow: 1 }} />
           <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
-            {isLoggedIn ? 'Logout' : 'Login'}
+            {isLoggedIn ? 'Logout' : 'Loginsss'}
           </Typography>
 
           {/* Toggle button for Color Picker */}
