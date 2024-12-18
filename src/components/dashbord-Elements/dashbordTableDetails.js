@@ -5,6 +5,7 @@ import { setColumnInfo, setSelectedTable, setShowDashboard } from '../../feature
 import TableChartIcon from '@mui/icons-material/TableChart';
 import Columns from './columns';
 import SplitButton from '../navbartop/dropbutton'; // Ensure you have the correct path
+import {fetchColumnNames} from '../../utils/api';
 
 function DashboardTableDetails({ handleTableChange }) {
   const [checked, setChecked] = React.useState(false);
@@ -15,18 +16,29 @@ function DashboardTableDetails({ handleTableChange }) {
 
   const checkedPathss = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
 
+  // const fetchColumnInfo = async (checkedPaths) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:5000/column_names/${checkedPaths}?databaseName=${databaseName}`);
+  //     const data = await response.json();
+  //     if (data && data.numeric_columns && Array.isArray(data.numeric_columns) &&
+  //       data.text_columns && Array.isArray(data.text_columns)) {
+  //       dispatch(setColumnInfo(data));
+  //     } else {
+  //       console.error('Invalid data structure:', data);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching column information:', error);
+  //   }
+  // };
+
   const fetchColumnInfo = async (checkedPaths) => {
     try {
-      const response = await fetch(`http://localhost:5000/column_names/${checkedPaths}?databaseName=${databaseName}`);
-      const data = await response.json();
-      if (data && data.numeric_columns && Array.isArray(data.numeric_columns) &&
-        data.text_columns && Array.isArray(data.text_columns)) {
+      const data = await fetchColumnNames(checkedPaths, databaseName);
+      if (data) {
         dispatch(setColumnInfo(data));
-      } else {
-        console.error('Invalid data structure:', data);
       }
     } catch (error) {
-      console.error('Error fetching column information:', error);
+      console.error('Error while fetching data:', error);
     }
   };
 

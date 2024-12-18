@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as d3 from 'd3';
-import axios from 'axios';
 import { ResizableBox } from 'react-resizable';
 import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
 import '../charts/tooltip.css';
+import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
 
-const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axis, y_axis ,tableName}) => {
+const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axis, y_axis ,tableName,chartColor}) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
     const databaseName = localStorage.getItem('company_name');
@@ -16,6 +16,8 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
     const [drillStack, setDrillStack] = useState([]);
     const [chartDimensions, setChartDimensions] = useState({ width: 500, height: 300 });
     const tooltipRef = useRef(null);
+
+    console.log("ChartColor===========================",lineColor)
 
     console.log("categories===========================",categories)
     console.log("values===============================",values)
@@ -30,30 +32,32 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
         setChartData({ categories, values });
     }, [categories, values]);
 
+
     const handleClicked = async (event, clickedCategoryIndex) => {
         const clickedCategory = chartData.categories[clickedCategoryIndex];
         dispatch(setClickedCategory(clickedCategory));
-        console.log("clicked Catagory",clickedCategory)
-
+        console.log("clicked Category:", clickedCategory);
+    
         try {
-            const response = await axios.post('http://localhost:5000/Hierarchial-backend-endpoint', {
-                category: clickedCategory,
+            const responseData = await fetchHierarchialDrilldownDataAPI({
+                clickedCategory: clickedCategory,
                 xAxis: x_axis,
                 yAxis: y_axis,
-                tableName: tableName,
-                aggregation: aggregation,
+                selectedTable: tableName,
+                aggregate: aggregation,
                 databaseName: databaseName,
                 currentLevel: drillStack.length,
             });
-
-            if (response.data.categories && response.data.values) {
+    
+            // Update chart data and drill stack if valid response is received
+            if (responseData.categories && responseData.values) {
                 setDrillStack([...drillStack, chartData]);
-                setChartData({ categories: response.data.categories, values: response.data.values });
+                setChartData({ categories: responseData.categories, values: responseData.values });
             } else {
                 console.log("No further levels to drill down.");
             }
         } catch (error) {
-            console.error('Error sending category to backend:', error);
+            console.error('Failed to fetch drilldown data:', error);
         }
     };
 
@@ -110,7 +114,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
             .append('rect')
             .attr('y', (d) => y(d.category))
             .attr('height', y.bandwidth())
-            .attr('fill', lineColor)
+            .attr('fill', chartColor)
             .attr('width', 0)
             .transition()
             .duration(750)

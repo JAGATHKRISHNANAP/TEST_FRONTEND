@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ResizableBox } from 'react-resizable';
 import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
 import './tooltip.css';
+import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
 
 const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) => {
     const dispatch = useDispatch();
@@ -26,32 +27,61 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         setChartData({ categories, values });
     }, [categories, values]);
 
-    const handleClicked = async (event, clickedCategoryIndex) => {
-        const clickedCategory = chartData.categories[clickedCategoryIndex];
-        dispatch(setClickedCategory(clickedCategory));
-        console.log("clicked Catagory",clickedCategory)
+    // const handleClicked = async (event, clickedCategoryIndex) => {
+    //     const clickedCategory = chartData.categories[clickedCategoryIndex];
+    //     dispatch(setClickedCategory(clickedCategory));
+    //     console.log("clicked Catagory",clickedCategory)
 
-        try {
-            const response = await axios.post('http://localhost:5000/Hierarchial-backend-endpoint', {
-                category: clickedCategory,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                tableName: selectedTable,
-                aggregation: aggregate,
-                databaseName: databaseName,
-                currentLevel: drillStack.length,
-            });
+    //     try {
+    //         const response = await axios.post('http://localhost:5000/Hierarchial-backend-endpoint', {
+    //             category: clickedCategory,
+    //             xAxis: xAxis,
+    //             yAxis: yAxis,
+    //             tableName: selectedTable,
+    //             aggregation: aggregate,
+    //             databaseName: databaseName,
+    //             currentLevel: drillStack.length,
+    //         });
 
-            if (response.data.categories && response.data.values) {
-                setDrillStack([...drillStack, chartData]);
-                setChartData({ categories: response.data.categories, values: response.data.values });
-            } else {
-                console.log("No further levels to drill down.");
-            }
-        } catch (error) {
-            console.error('Error sending category to backend:', error);
+    //         if (response.data.categories && response.data.values) {
+    //             setDrillStack([...drillStack, chartData]);
+    //             setChartData({ categories: response.data.categories, values: response.data.values });
+    //         } else {
+    //             console.log("No further levels to drill down.");
+    //         }
+    //     } catch (error) {
+    //         console.error('Error sending category to backend:', error);
+    //     }
+    // };
+
+
+const handleClicked = async (event, clickedCategoryIndex) => {
+    const clickedCategory = chartData.categories[clickedCategoryIndex];
+    dispatch(setClickedCategory(clickedCategory));
+    console.log("clicked Category:", clickedCategory);
+
+    try {
+        const responseData = await fetchHierarchialDrilldownDataAPI({
+            clickedCategory: clickedCategory,
+            xAxis: xAxis,
+            yAxis: yAxis,
+            selectedTable: selectedTable,
+            aggregate: aggregate,
+            databaseName: databaseName,
+            currentLevel: drillStack.length,
+        });
+
+        // Update chart data and drill stack if valid response is received
+        if (responseData.categories && responseData.values) {
+            setDrillStack([...drillStack, chartData]);
+            setChartData({ categories: responseData.categories, values: responseData.values });
+        } else {
+            console.log("No further levels to drill down.");
         }
-    };
+    } catch (error) {
+        console.error('Failed to fetch drilldown data:', error);
+    }
+};
 
     const handleDrillUp = () => {
         if (drillStack.length > 0) {

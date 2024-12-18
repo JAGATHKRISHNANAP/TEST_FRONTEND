@@ -160,12 +160,6 @@ const DroppableArea = () => {
 
 
 
-{chart.chart_type === 'polarArea' && (
-                        <PolarAreaChart
-                          categories={chart.categories}
-                          values={chart.values}
-                        />
-                      )}
           </div>
         ))
       ) : (

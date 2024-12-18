@@ -10,6 +10,8 @@ import "./tooltip.css"; // Import the CSS for the tooltip
 import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
+import { yourBackendEndpointApi,fetchPredictionDataAPI} from '../../utils/api';
+
 
 const LineChart = ({ categories, values, aggregation }) => {
     const dispatch = useDispatch();
@@ -55,6 +57,22 @@ const LineChart = ({ categories, values, aggregation }) => {
             console.error('Error sending category to backend:', error);
         }
     };
+
+        // const handleClicked = async (event, chartContext, config) => {
+        //     const clickedCategoryIndex = config.dataPointIndex;
+        //     const clickedCategory = categories[clickedCategoryIndex];
+        //     dispatch(setClickedCategory(clickedCategory));
+        
+        //     try {
+        //         // Call the API function
+        //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
+        
+        //         setPlotData(responseData); // Update the state with the response
+        //         setBarClicked(true);
+        //     } catch (error) {
+        //         console.error('Failed to send category data:', error);
+        //     }
+        // };
 
     const handleContextMenu = (event) => {
         event.preventDefault();
@@ -119,6 +137,30 @@ const LineChart = ({ categories, values, aggregation }) => {
             console.error("Error fetching prediction data:", error);
         }
     };
+
+// const handlePredictData = async () => {
+//     try {
+//         // Call the separated API function
+//         const predictionData = await fetchPredictionDataAPI({
+//             xAxis,
+//             yAxis,
+//             timePeriod,
+//             number,
+//         });
+
+//         // Update plot data with predictions
+//         setPlotData({
+//             categories: predictionData.map((item) => item.category),
+//             values: predictionData.map((item) => item.value),
+//         });
+
+//         handleCloseModal(); // Close modal after prediction
+//     } catch (error) {
+//         console.error("Failed to fetch prediction data:", error);
+//     }
+// };
+
+
     const handleOpenModal = () => setModalOpen(true);
     const handleCloseModal = () => setModalOpen(false);
 

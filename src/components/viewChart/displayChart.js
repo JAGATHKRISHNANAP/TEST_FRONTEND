@@ -200,7 +200,7 @@ import { fetchTotalRows } from '../../utils/api';
 import DraggableChartButton from './DraggableChartButton';
 import DroppableArea from './DroppableArea';
 import ResizableChart from './ResizableChart';
-import { saveAllCharts } from '../../utils/api';
+import { saveAllCharts ,fetchSingleChartData} from '../../utils/api';
 import { Box, Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -251,23 +251,46 @@ function Charts() {
       });
   }, [dispatch, user_id]);
 
+  // const handleChartButtonClick = useCallback(async (chartName) => {
+  //   console.log(`Chart Name: ${chartName}`);
+
+  //   try {
+  //     const response = await axios.get(`http://localhost:5000/chart_data/${chartName}`);
+  //     const data = response.data;
+  //     console.log('Data fetched from chartdata:', data);
+
+  //     console.log('Data fetched from chartdata:', data);
+
+  //     setChartData((prevData) => {
+  //       const newData = [...prevData, { ...data, chartName, width: 500, height: 400, position: { x: 0, y: 0 } }];
+  //       return newData;
+  //     });
+
+  //     setDroppedCharts((prev) => [...prev, chartName]);
+  //     setError(null);
+  //   } catch (error) {
+  //     console.error(`Error fetching data for Chart ${chartName}:`, error);
+  //     setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
+  //   }
+  // }, []);
   const handleChartButtonClick = useCallback(async (chartName) => {
     console.log(`Chart Name: ${chartName}`);
-
+  
     try {
-      const response = await axios.get(`http://localhost:5000/chart_data/${chartName}`);
-      const data = response.data;
+      // Fetch chart data using the API function
+      const data = await fetchSingleChartData(chartName);
       console.log('Data fetched from chartdata:', data);
-
-      console.log('Data fetched from chartdata:', data);
-
+  
       setChartData((prevData) => {
-        const newData = [...prevData, { ...data, chartName, width: 500, height: 400, position: { x: 0, y: 0 } }];
+        const newData = [
+          ...prevData,
+          { ...data, chartName, width: 500, height: 400, position: { x: 0, y: 0 } },
+        ];
         return newData;
       });
-
-      setDroppedCharts((prev) => [...prev, chartName]);
-      setError(null);
+  
+      setDroppedCharts((prev) => [...prev, chartName]); // Add chart name to dropped charts
+      setError(null); // Clear any previous errors
     } catch (error) {
       console.error(`Error fetching data for Chart ${chartName}:`, error);
       setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
@@ -277,9 +300,17 @@ function Charts() {
   const handleRemoveChart = useCallback((chartName) => {
     setChartData((prevData) => prevData.filter((data) => data.chartName !== chartName));
     setDroppedCharts((prev) => prev.filter((name) => name !== chartName));
+    // setChartNamesArray((prevArray) => prevArray.filter((name) => name !== chartName));
+
+  }, []);
+
+  const handleRemoveChartButton = useCallback((chartName) => {
+    setChartData((prevData) => prevData.filter((data) => data.chartName !== chartName));
+    setDroppedCharts((prev) => prev.filter((name) => name !== chartName));
     setChartNamesArray((prevArray) => prevArray.filter((name) => name !== chartName));
 
   }, []);
+
 
   const updateChartDetails = useCallback((chartName, newDetails) => {
     setChartData((prevData) => {
@@ -308,7 +339,7 @@ function Charts() {
         key={index}
         chartName={chartName}
         disabled={droppedCharts.includes(chartName)}
-        onRemove={handleRemoveChart} 
+        onRemove={handleRemoveChartButton} 
       />
     ))
   ), [chartNamesArray, droppedCharts]);

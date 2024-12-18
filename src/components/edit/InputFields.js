@@ -14,6 +14,8 @@ import DuelAxisChart from "../charts/duelAxesChart";
 import TextChart from "../charts/textChart";
 import PolarAreaChart from "../charts/polarArea";
 
+import {fetchFilterOptionsAPI} from '../../utils/api';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -84,20 +86,37 @@ function EditDashboard() {
     }
   };
 
-  const fetchFilterOptions = async (columnName) => {
-    try {
-      const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`,{
-        params: { databaseName }
-      });
-      const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-      setFilterOptions(options);
-      setCheckedOptions(chartData[9]);
-      setShowFilterDropdown(true);
-      setSelectAllChecked(false);
-    } catch (error) {
-      console.error('Error fetching filter options:', error);
-    }
-  };
+  console.log("databaseName",databaseName)
+  console.log("selectedTable",selectedTable)
+  // console.log("columnNames",columnName)
+
+const fetchFilterOptions = async (columnName) => {
+
+  try {
+    const options = await fetchFilterOptionsAPI(databaseName,selectedTable, columnName);
+    setFilterOptions(options);          // Update filter options state
+    setCheckedOptions(chartData[9]);    // Set default checked options
+    setShowFilterDropdown(true);        // Show filter dropdown
+    setSelectAllChecked(false);         // Reset "Select All" checkbox
+  } catch (error) {
+    console.error('Failed to fetch filter options:', error);
+  }
+};
+
+  // const fetchFilterOptions = async (columnName) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`,{
+  //       params: { databaseName }
+  //     });
+  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+  //     setFilterOptions(options);
+  //     setCheckedOptions(chartData[9]);
+  //     setShowFilterDropdown(true);
+  //     setSelectAllChecked(false);
+  //   } catch (error) {
+  //     console.error('Error fetching filter options:', error);
+  //   }
+  // };
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;

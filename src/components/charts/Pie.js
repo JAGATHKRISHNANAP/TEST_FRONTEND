@@ -9,6 +9,7 @@ import DrillPieChart from "../drillDown/drillDownPieChart";
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip'; // Import the CustomToolTip component
 import "./tooltip.css"; // Import the CSS for the tooltip
+import { yourBackendEndpointApi} from '../../utils/api';
 
 const Pie = (props) => {
   useEffect(() => {
@@ -52,6 +53,23 @@ const Pie = (props) => {
         console.error('Error sending category to backend:', error);
     }
   };
+
+      // const handleClicked = async (event, chartContext, config) => {
+      //     const clickedCategoryIndex = config.dataPointIndex;
+      //     const clickedCategory = categories[clickedCategoryIndex];
+      //     dispatch(setClickedCategory(clickedCategory));
+      
+      //     try {
+      //         // Call the API function
+      //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
+      
+      //         setPlotData(responseData); // Update the state with the response
+      //         setBarClicked(true);
+      //     } catch (error) {
+      //         console.error('Failed to send category data:', error);
+      //     }
+      // };
+
 
   const handleContextMenu = (event) => {
     event.preventDefault();

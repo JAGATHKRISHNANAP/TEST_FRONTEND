@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-// 
+
 const API_URL= 'http://localhost:5000'
 // const API_URL='http://43.204.149.125:5000'
 
@@ -92,6 +92,104 @@ export const saveDataToDatabase = async ({
   return response.data;
 };
 
+
+
+export const yourBackendEndpointApi = async (clickedCategory, xAxis, yAxis, selectedTable, aggregate) => {
+  try {
+    const response = await axios.post(`${API_URL}/your-backend-endpoint`, {
+      category: clickedCategory,
+      xAxis: xAxis,
+      yAxis: yAxis,
+      tableName: selectedTable,
+      aggregation: aggregate
+    });
+    return response.data; // Return the response data to handle it in the component
+  } catch (error) {
+    console.error('Error sending category to backend:', error);
+    throw error; // Rethrow the error to handle it in the calling function
+  }
+};
+
+
+export const fetchHierarchialDrilldownDataAPI = async ({
+  clickedCategory,
+  xAxis,
+  yAxis,
+  selectedTable,
+  aggregate,
+  databaseName,
+  currentLevel,
+}) => {
+  try {
+    const response = await axios.post(`${API_URL}/Hierarchial-backend-endpoint`, {
+      category: clickedCategory,
+      xAxis: xAxis,
+      yAxis: yAxis,
+      tableName: selectedTable,
+      aggregation: aggregate,
+      databaseName: databaseName,
+      currentLevel: currentLevel,
+    });
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Error sending category to backend:', error);
+    throw error; // Rethrow the error for handling
+  }
+};
+
+
+
+export const fetchPredictionDataAPI = async ({ xAxis, yAxis, timePeriod, number }) => {
+  try {
+      const response = await axios.post(`${API_URL}/api/predictions`, {
+          xAxis: xAxis,
+          yAxis: yAxis,
+          timePeriod: timePeriod,
+          number: number,
+      });
+      return response.data; // Return the response data to the calling function
+  } catch (error) {
+      console.error("Error fetching prediction data:", error);
+      throw error; // Rethrow the error for handling in the calling function
+  }
+};
+
+export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnName) => {
+  console.log('Fetching filter options for:', databaseName, selectedTable, columnName);
+  try {
+    const response = await axios.get(`${API_URL}/plot_chart/${selectedTable}/${columnName}`, {
+      params: { databaseName }
+    });
+    const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+    return options; // Return options for handling in the calling function
+  } catch (error) {
+    console.error('Error fetching filter options:', error);
+    throw error; // Rethrow the error to handle it in the calling function
+  }
+};
+
+
+export const sendChartDetails = async (data, position) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/send-chart-details`, {
+      chart_id: data[0],
+      tableName: data[1],
+      x_axis: data[2],
+      y_axis: data[3],
+      aggregate: data[4],
+      chart_type: data[5],
+      chart_heading: data[7],
+      filter_options: data[9],
+      databaseName: data[10],
+      position, // Send position to backend
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error sending chart details to backend:', error);
+    throw error;
+  }
+};
 
 export const plot_chart = async (data) => {
   const response = await axios.post(`${API_URL}/plot_chart`, data);
@@ -385,6 +483,31 @@ export const fetchTableNamesAPI = async (databaseName) => {
     throw error; // Rethrow to handle in the caller
   }
 };
+
+export const fetchColumnNames = async (checkedPaths, databaseName) => {
+  try {
+    const response = await fetch(`${API_URL}/column_names/${checkedPaths}?databaseName=${databaseName}`);
+    const data = await response.json();
+    if (
+      data &&
+      data.numeric_columns &&
+      Array.isArray(data.numeric_columns) &&
+      data.text_columns &&
+      Array.isArray(data.text_columns)
+    ) {
+      return data;
+    } else {
+      console.error('Invalid data structure:', data);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching column information:', error);
+    throw error; // Rethrow error for handling in the calling code
+  }
+};
+
+
+
 
 
 export const fetchColumnsAPI = async (tableName, databaseName) => {

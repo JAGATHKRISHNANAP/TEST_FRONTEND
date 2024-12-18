@@ -8,6 +8,7 @@ import axios from 'axios';
 import DrillBarChart from '../drillDown/drillDownBarChart';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
+import { yourBackendEndpointApi} from '../../utils/api';
 
 const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation }) => {
     const dispatch = useDispatch();
@@ -42,6 +43,22 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
             console.error('Error sending category to backend:', error);
         }
     };
+
+    // const handleClicked = async (event, chartContext, config) => {
+    //     const clickedCategoryIndex = config.dataPointIndex;
+    //     const clickedCategory = categories[clickedCategoryIndex];
+    //     dispatch(setClickedCategory(clickedCategory));
+    
+    //     try {
+    //         // Call the API function
+    //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
+    
+    //         setPlotData(responseData); // Update the state with the response
+    //         setBarClicked(true);
+    //     } catch (error) {
+    //         console.error('Failed to send category data:', error);
+    //     }
+    // };
 
     const handleContextMenu = (event) => {
         event.preventDefault();
@@ -166,40 +183,27 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
         grid: {
             borderColor: '#f1f3fa'
         },
+
         tooltip: {
-            enabled: true,
-            custom: function({ series, seriesIndex, dataPointIndex, w }) {
-                const category = categories[dataPointIndex]; // Accessing category name from the array
-                const value = series[seriesIndex][dataPointIndex];
-                let tooltipContent = '<div class="tooltip">';
-
-                if (!toolTipOptions.heading && !toolTipOptions.categoryName && !toolTipOptions.value) {
-                    tooltipContent += `<div class="tooltip-body">
-                        <span><strong></strong> ${value}</span>
-                    </div>`;
-                } else {
-                    if (toolTipOptions.heading) {
-                        tooltipContent += `<div class="tooltip-header"><h4>${aggregate} of ${xAxis[0]} vs ${yAxis}</h4></div>`;
-                    }
-
-                    tooltipContent += '<div class="tooltip-body">';
-
-                    if (toolTipOptions.categoryName) {
-                        tooltipContent += `<span><strong>Category:</strong> ${category}</span><br/>`;
-                    }
-
-                    if (toolTipOptions.value) {
-                        tooltipContent += `<span><strong>Value:</strong> ${value}</span>`;
-                    }
-
-                    tooltipContent += '</div>';
-                }
-
-                tooltipContent += '</div>';
-
-                return tooltipContent;
+            shared: true, // Enable shared tooltip for multiple series
+            intersect: false, // Ensure tooltips display for all series on the same x-axis
+            custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+                // `w` contains the entire chart object and the categories array
+                const category = w.globals.categoryLabels[dataPointIndex];
+                const series1Value = series[0][dataPointIndex];
+                const series2Value = series[1][dataPointIndex];
+        
+                return `
+                    <div style="padding: 10px; font-size: 12px; font-weight: bold; color: #000;background:rgb(255, 255, 255); border-radius: 5px;text-align: left;">
+                        <div>X-Axis: <span style="color: #008FFB;">${category}</span></div>
+                        <div>${yAxis[0] || 'Series 1'}: <span style="color:rgb(33, 123, 197);">${series1Value.toLocaleString()}</span></div>
+                        <div>${yAxis[1] || 'Series 2'}: <span style="color:rgb(228, 21, 21);">${series2Value.toLocaleString()}</span></div>
+                    </div>
+                `;
             }
-        },
+        }
+        
+        
     };
 
     const series = [
@@ -241,14 +245,14 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
             {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
-            {barClicked && <DrillBarChart
+            {/* {barClicked && <DrillBarChart
                 categories={plotData.categories}
                 values={plotData.values}
                 aggregation={plotData.aggregation}
                 xAxis={xAxis}
                 yAxis={yAxis}
                 selectedTable={selectedTable}
-            />}
+            />} */}
         </div>
     );
 };

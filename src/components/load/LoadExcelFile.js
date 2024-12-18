@@ -110,11 +110,14 @@ import { setShowDashboard, setCheckedPaths } from '../../features/excelFileSlice
 import Dashboard from '../dashbord-Elements/Dashboard';
 import tinycolor from 'tinycolor2';
 
+import { fetchTableNamesAPI} from '../../utils/api';
+
 const LoadExcelFile = () => {
   const dispatch = useDispatch();
   const { showDashboard, checkedPaths, loading } = useSelector((state) => state.loadExcel);
   const [checkedItem, setCheckedItem] = useState(null); // Keep track of only one checked item
   const [tableNames, setTableNames] = useState([]);
+  const databaseName = localStorage.getItem('company_name');
 
   const themeColor = localStorage.getItem('theamColor');
   const lighterColor = tinycolor(themeColor).lighten(10).toString(); // Lighten by 10%
@@ -123,6 +126,21 @@ const LoadExcelFile = () => {
     const storedTableNames = JSON.parse(localStorage.getItem('tableNames')) || [];
     setTableNames(storedTableNames);
   }, []);
+
+  useEffect(() => {
+    const getTableNames = async () => {
+      if (databaseName) {
+        try {
+          const data = await fetchTableNamesAPI(databaseName);
+          setTableNames(data);
+        } catch (error) {
+          console.error('Error in getTableNames:', error);
+        }
+      }
+    };
+
+    getTableNames();
+  }, [databaseName]);
 
   const handleCheckboxChange = (tableName) => {
     setCheckedItem((prev) => (prev === tableName ? null : tableName)); // Toggle the same checkbox or select a new one

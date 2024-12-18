@@ -35,7 +35,7 @@ import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import MapChart from '../ChartViews/mapChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { HierarchialBarChart_chart, sendChartData } from "../../utils/api";
+import { HierarchialBarChart_chart, sendChartData ,sendChartDetails} from "../../utils/api";
 import { addTextChart, addChartData, removeChartData, updateSelectedCategory,updateDuealAxisChartData } from '../../features/ViewChartSlice/viewChartSlice';
 import { ResizableBox } from 'react-resizable';
 import html2canvas from 'html2canvas';
@@ -107,31 +107,83 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
 
 
 
+  // const sendChartDetailsToBackend = async () => {
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/api/send-chart-details', {
+  //       chart_id: data[0],
+  //       tableName: data[1],
+  //       x_axis: data[2],
+  //       y_axis: data[3],
+  //       aggregate: data[4],
+  //       chart_type: data[5],
+  //       chart_heading: data[7],
+  //       filter_options: data[9],
+  //       databaseName: data[10],
+        
+  //       position, // Send position to backend
+  //     });
+  
+  //     if (data[5] === 'treeHierarchy') {
+  //       setHierarchyData(response.data["data frame"]);
+  //       setHierarchy(response.data["x_axis"]);
+  //     }
+  //     if(data[5]==='sampleAitestChart'){
+  //       setAiChartData(response.data['histogram_details']);
+  //     }
+
+  //     const { categories, values, series1, series2 } = response.data;
+
+  //     if (categories) {
+  //       if (values && categories.length === values.length) {
+  //         const chartDataElement = {
+  //           categories,
+  //           values,
+  //           x_axis: data[2],
+  //           chart_type: data[5],
+  //           chart_color: data[6],
+  //           chart_id: data[0],
+  //           y_axis: data[3],
+  //           tableName: data[1],
+  //           aggregate: data[4],
+  //           filter_options: data[9],
+  //           databaseName: data[10],
+  //         };
+  //         dispatch(addChartData(chartDataElement));
+  //       } else if (series1 && series2 && categories.length === series1.length && categories.length === series2.length) {
+  //         const chartDataElement = {
+  //           categories,
+  //           series1,
+  //           series2,
+  //           x_axis: data[2],
+  //           chart_type: data[5],
+  //           chart_id: data[0],
+  //           y_axis: data[3],
+  //           tableName: data[1],
+  //           aggregate: data[4],
+  //           filter_options: data[9],
+  //           databaseName: data[10],
+  //         };
+  //         dispatch(addChartData(chartDataElement));
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sending chart details to backend:', error);
+  //   }
+  // };
+
   const sendChartDetailsToBackend = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/send-chart-details', {
-        chart_id: data[0],
-        tableName: data[1],
-        x_axis: data[2],
-        y_axis: data[3],
-        aggregate: data[4],
-        chart_type: data[5],
-        chart_heading: data[7],
-        filter_options: data[9],
-        databaseName: data[10],
-        
-        position, // Send position to backend
-      });
-  
+      const response = await sendChartDetails(data, position);
+
       if (data[5] === 'treeHierarchy') {
-        setHierarchyData(response.data["data frame"]);
-        setHierarchy(response.data["x_axis"]);
+        setHierarchyData(response["data frame"]);
+        setHierarchy(response["x_axis"]);
       }
-      if(data[5]==='sampleAitestChart'){
-        setAiChartData(response.data['histogram_details']);
+      if (data[5] === 'sampleAitestChart') {
+        setAiChartData(response['histogram_details']);
       }
 
-      const { categories, values, series1, series2 } = response.data;
+      const { categories, values, series1, series2 } = response;
 
       if (categories) {
         if (values && categories.length === values.length) {
@@ -167,7 +219,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         }
       }
     } catch (error) {
-      console.error('Error sending chart details to backend:', error);
+      console.error('Error handling response:', error);
     }
   };
 
@@ -329,7 +381,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
             break;
             case 'hierarchialBarChart':
               if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                return <HierarchialBarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} />;
+                return <HierarchialBarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} chartColor={data[6]} />;
               }
               break;
               // case 'wordCloud':
