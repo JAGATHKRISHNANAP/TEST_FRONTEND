@@ -40,6 +40,16 @@ export const uploadCsvApi = async (file) => {
   });
 };
 
+export const AiMLchartData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/ai_ml_chartdata`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching hello data:', error);
+    throw error;
+  }
+};
+
 
 
 export const uploadAudioApi = async (file) => {
