@@ -81,8 +81,7 @@ function Charts() {
   const handleRemoveChart = useCallback((chartName) => {
     setChartData((prevData) => prevData.filter((data) => data.chartName !== chartName));
     setDroppedCharts((prev) => prev.filter((name) => name !== chartName));
-    setChartNamesArray((prevArray) => prevArray.filter((name) => name !== chartName));
-
+    
   }, []);
 
   const updateChartDetails = useCallback((chartName, newDetails) => {
@@ -105,14 +104,19 @@ function Charts() {
       setFileName(""); // Reset the file name after saving
     }
   };
+  const handleRemoveChartbutton = useCallback((chartName) => {
+    setChartData((prevData) => prevData.filter((data) => data.chartName !== chartName));
+    setDroppedCharts((prev) => prev.filter((name) => name !== chartName));
+    setChartNamesArray((prevArray) => prevArray.filter((name) => name !== chartName));
 
+  }, []);
   const renderedDraggableButtons = useMemo(() => (
     chartNamesArray.map((chartName, index) => (
       <DraggableChartButton
         key={index}
         chartName={chartName}
         disabled={droppedCharts.includes(chartName)}
-        onRemove={handleRemoveChart} 
+        onRemove={handleRemoveChartbutton}
       />
     ))
   ), [chartNamesArray, droppedCharts]);
@@ -122,7 +126,7 @@ function Charts() {
       <ResizableChart
         key={data.chartName}
         data={data}
-        onRemove={handleRemoveChart}
+        onRemove={handleRemoveChart} 
         updateChartDetails={updateChartDetails}
       />
     ))
@@ -169,7 +173,7 @@ function Charts() {
             </Button>
           </DialogActions>
         </Dialog>
-        <Grid item xs={12} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', boxShadow: 3,height:'35px' ,marginBottom:'5px'}}>
+        <Grid item xs={12} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white',overflowY: 'auto',  boxShadow: 3,height:'40px' ,marginBottom:'5px'}}>
           <Box sx={{ display: 'flex', justifyContent: 'center',height:'30px', marginTop:'3px' }}>
             {renderedDraggableButtons}
           </Box>

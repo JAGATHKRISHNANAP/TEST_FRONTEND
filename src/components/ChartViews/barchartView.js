@@ -9,57 +9,108 @@ import { sendClickedCategory } from '../../utils/api';
 
 const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", otherChartCategories = [] }) => {
     const dispatch = useDispatch();
+    // const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
+    // const [showResetButton, setShowResetButton] = useState(false); // State to show/hide the reset button
+    // const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
+    // const charts = useSelector((state) => state.viewcharts.charts);
+    // console.log("charts",charts)
+    // useEffect(() => {
+    //     // console.log("Received categories:",categories);
+    //     // console.log("Received values:", values);
+    //   }, [categories, values]);
+
+    // const handleClicked = async (event, chartContext, config) => {
+    //     if (!isFilterActive) return; // If filter is not active, do nothing
+    
+    //     // console.log("clicked category Axis", x_axis);
+    
+    //     const clickedCategoryIndex = config.dataPointIndex;
+    //     const clickedCategory = categories[clickedCategoryIndex];
+    
+    //     // Check if the clicked category is present in all other charts
+    //     const isCategoryPresentInAllCharts = otherChartCategories.every(chartCats => chartCats.includes(clickedCategory));
+    
+    //     if (!isCategoryPresentInAllCharts) {
+    //         alert("Filter cannot be applied as categories differ between charts.");
+    //         return;
+    //     }
+    
+    //     try {
+    //         // Trigger the API call to send the clicked category
+    //         const response = await sendClickedCategory(clickedCategory,charts,x_axis);
+    //         console.log("chart_data_list:", response.chart_data_list)
+    //         response.chart_data_list.forEach((chartData) => {
+    //             const { chart_id, data } = chartData;
+    //             dispatch(updateChartData({
+    //               chart_id,
+    //               categories: data.categories,
+    //               values: data.values,
+    //               series1:data.series1,
+    //               series2:data.series2,
+    //             }));
+    //           });
+    //     } catch (error) {
+    //         console.error(`Failed to send category ${clickedCategory}:`, error);
+    //     }
+    
+    //     // Set the selected category and show the reset button
+    //     dispatch(updateSelectedCategory(clickedCategory));
+    //     dispatch(updateSelectedCategory_xaxis(x_axis))
+    //     dispatch(setChartStatus(true));
+    //     setShowResetButton(true);
+    // };
+    
     const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
     const [showResetButton, setShowResetButton] = useState(false); // State to show/hide the reset button
     const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
-    const charts = useSelector((state) => state.viewcharts.charts);
+
+    const charts = useSelector((state) => 
+        state.viewcharts.charts || state.viewdashboard.dashboard_charts
+    );
     
     useEffect(() => {
-        // console.log("Received categories:",categories);
-        // console.log("Received values:", values);
-      }, [categories, values]);
+        console.log("charts from Redux:", charts); // For debugging purposes
+    }, [charts]);
 
     const handleClicked = async (event, chartContext, config) => {
         if (!isFilterActive) return; // If filter is not active, do nothing
-    
-        // console.log("clicked category Axis", x_axis);
-    
+
         const clickedCategoryIndex = config.dataPointIndex;
         const clickedCategory = categories[clickedCategoryIndex];
-    
+
         // Check if the clicked category is present in all other charts
         const isCategoryPresentInAllCharts = otherChartCategories.every(chartCats => chartCats.includes(clickedCategory));
-    
+
         if (!isCategoryPresentInAllCharts) {
             alert("Filter cannot be applied as categories differ between charts.");
             return;
         }
-    
+
         try {
             // Trigger the API call to send the clicked category
-            const response = await sendClickedCategory(clickedCategory,charts,x_axis);
-            console.log("chart_data_list:", response.chart_data_list)
+            const response = await sendClickedCategory(clickedCategory, charts, x_axis);
+            console.log("chart_data_list:", response.chart_data_list);
+
             response.chart_data_list.forEach((chartData) => {
                 const { chart_id, data } = chartData;
                 dispatch(updateChartData({
-                  chart_id,
-                  categories: data.categories,
-                  values: data.values,
-                  series1:data.series1,
-                  series2:data.series2,
+                    chart_id,
+                    categories: data.categories,
+                    values: data.values,
+                    series1: data.series1,
+                    series2: data.series2,
                 }));
-              });
+            });
         } catch (error) {
             console.error(`Failed to send category ${clickedCategory}:`, error);
         }
-    
+
         // Set the selected category and show the reset button
         dispatch(updateSelectedCategory(clickedCategory));
-        dispatch(updateSelectedCategory_xaxis(x_axis))
+        dispatch(updateSelectedCategory_xaxis(x_axis));
         dispatch(setChartStatus(true));
         setShowResetButton(true);
     };
-    
     const handleReset = () => {
         // Reset the selected category and hide the reset button
         dispatch(updateSelectedCategory(null));
@@ -104,7 +155,7 @@ const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x
                     colors: ['#000'],
                 },
                 rotate: -45,
-                show:false
+                show:true
             },
         },
         yaxis: {

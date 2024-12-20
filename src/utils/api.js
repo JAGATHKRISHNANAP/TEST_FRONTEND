@@ -179,10 +179,11 @@ export const fetchDashboardData = createAsyncThunk('chart/fetchDashboardData', a
 });
 
 
-export const userSignUp = async (registerType,userDetails) => {
+export const userSignUp = async (registerType,userDetails,company) => {
   try {
     // Sending a POST request to the Flask backend
-    const response = await axios.post(`${API_URL}/api/usersignup`, {registerType,userDetails});
+    company =localStorage.getItem("user_name")
+    const response = await axios.post(`${API_URL}/api/usersignup`, {registerType,userDetails,company});
     return response.data; // Return the response from the server
   } catch (error) {
     console.error('Error during sign-up:', error);

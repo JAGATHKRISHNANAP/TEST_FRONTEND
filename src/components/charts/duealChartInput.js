@@ -248,7 +248,7 @@ function DuealChartInput() {
 
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
                   <label htmlFor="y-axis-input" style={{ margin: '15px 10px 0px 0px' }}>Y-axis:</label>
-                  <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
+                  <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "915px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
                   <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {yAxis.map((column, index) => (
                           <div key={index} className="x-axis-column" style={{maxHeight:"30px"}}>
@@ -275,7 +275,7 @@ function DuealChartInput() {
             <span style={{ marginLeft: '8px' }}>{isRecording ? 'Stop Recording' : 'Record Audio'}</span>
           </button>
           {audioUrl && (
-            <audio controls src={audioUrl} style={{ marginLeft: '20px' }}>
+            <audio controls src={audioUrl} style={{ marginLeft: '30px' }}>
               Your browser does not support the audio element.
             </audio>
           )}

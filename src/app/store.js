@@ -75,6 +75,7 @@ const store = configureStore({
 
     // fetchedChartData: fetchedChartDataReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(), // redux-thunk is included by default
 });
 
 export default store;

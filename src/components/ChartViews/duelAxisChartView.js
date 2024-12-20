@@ -83,7 +83,7 @@ const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                 dataPointSelection: handleClicked,
             },
             toolbar: {
-                show: false,
+                show: true,
             },
         },
         xaxis: {

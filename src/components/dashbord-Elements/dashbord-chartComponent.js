@@ -90,6 +90,14 @@ function DashboardCharts() {
 
               <FcComboChart size={23}/>
             </Button>
+            <Button
+            sx={{ margin: "2px" }}
+            variant={chartType === 'duealbarChart' ? 'contained' : 'outlined'}
+            onClick={() => handleChartTypeChange('duealbarChart')}
+            >
+
+              <FcComboChart size={23}/>
+            </Button>
 
             <Button
             sx={{ margin: "2px" }}

@@ -20,6 +20,7 @@ const excelFileSlice = createSlice({
   initialState: {
     file: null,
     uploading: false,
+    uploadProgress: 0,
     uploadSuccess: false,
     uploadError: null,
     fileName: '',
@@ -38,6 +39,9 @@ const excelFileSlice = createSlice({
     },
     setPrimaryKeyColumn(state, action) {
       state.primaryKeyColumn = action.payload;
+    },
+    setUploadProgress: (state, action) => {
+      state.uploadProgress = action.payload;  // Update progress
     },
   },
   extraReducers: (builder) => {
@@ -63,5 +67,5 @@ const excelFileSlice = createSlice({
   },
 });
 
-export const { setFile, setColumnHeadings, setPrimaryKeyColumn } = excelFileSlice.actions;
+export const { setFile, setColumnHeadings, setPrimaryKeyColumn,setUploadProgress}= excelFileSlice.actions;
 export default excelFileSlice.reducer;

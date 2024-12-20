@@ -349,6 +349,7 @@ import { Button, TextField, Typography, Grid, Snackbar, Alert, Table, TableHead,
 import * as XLSX from 'xlsx';
 import { fetchTableNamesAPI ,checkIfTableInUse} from '../../utils/api';
 import { PieChart } from '@mui/x-charts/PieChart';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -379,6 +380,8 @@ const ExcelUpload = () => {
   const [confirmationChoice, setConfirmationChoice] = React.useState(null);
   const company_database = localStorage.getItem('company_name');
   const databaseName = localStorage.getItem('company_name');
+  const [uploadProgress, setUploadProgress] = React.useState(0); // To store upload progress
+
   React.useEffect(() => {
     if (uploadError) {
       setSnackbarMessage(uploadError);
@@ -501,7 +504,17 @@ const ExcelUpload = () => {
         const existingColumns = await response.json(); // Assumes the API returns an array of column names
         console.log("existingColumns", existingColumns);
         const uploadedColumns = columnHeadings.map((col) => col.toLowerCase());
+        const isTableInUse = await checkIfTableInUse(currentTableName);
   
+        if (isTableInUse) {
+          const userChoice = window.confirm(
+            `The table "${currentTableName}" is being used for chart creation. Do you want to proceed with updating it?`
+          );
+          if (!userChoice) {
+            alert("Upload skipped.");
+            return;
+          }
+         } 
         // Check for mismatched and missing columns
         const mismatchedColumns = uploadedColumns.filter(
           (col) => !existingColumns.includes(col)
@@ -527,21 +540,11 @@ const ExcelUpload = () => {
         }
   
         // Check if the table is being used for chart creation
-        const isTableInUse = await checkIfTableInUse(currentTableName);
-  
-        if (isTableInUse) {
-          const userChoice = window.confirm(
-            `The table "${currentTableName}" is being used for chart creation. Do you want to proceed with updating it?`
-          );
-          if (!userChoice) {
-            alert("Upload skipped.");
-            return;
-          }
-         } 
-        //else {
-        //   // Display message that the table exists but is not used for chart creation
-        //   alert(`Table "${currentTableName}" exists but is not used for chart creation.`);
-        // }
+        
+        else {
+          // Display message that the table exists but is not used for chart creation
+          alert(`Table "${currentTableName}" exists but is not used for chart creation.`);
+        }
       }
   
       // Proceed with the upload
@@ -552,6 +555,11 @@ const ExcelUpload = () => {
           primaryKeyColumnName: columnHeadings[primaryKeyColumn],
           company_database,
           selectedSheet,
+          onUploadProgress: (progressEvent) => {
+            const { loaded, total } = progressEvent;
+            const percentage = Math.floor((loaded * 100) / total);
+            setUploadProgress(percentage); 
+          },
         })
       );
     } else {
@@ -598,9 +606,18 @@ const ExcelUpload = () => {
       minWidth: '120px', // Minimum button width
     }}
   >
-    {uploading ? 'Uploading...' : 'Upload'}
+    {uploading ? ' {uploadProgress}%': 'Upload'}
+    {uploading && (
+    <div>
+      <Typography variant="body2" color="textSecondary"> {uploadProgress}%
+      </Typography>
+      <LinearProgress variant="determinate" value={uploadProgress} />
+    </div>
+  )}
   </LoadingButton>
+  
 </Grid>
+
 
 {/* Reserve space for sheet dropdown */}
 <Grid

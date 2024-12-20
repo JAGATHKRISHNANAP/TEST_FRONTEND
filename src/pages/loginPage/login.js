@@ -40,7 +40,14 @@ export default function SignIn() {
     const email = data.get('email');
     const password = data.get('password');
     const company = data.get('company');
+    const isCompanyValid = companies.some((c) => c.name === company);
 
+    if (!isCompanyValid) {
+      setErrorMessage('Please select the proper company.');
+      setOpen(true);
+      return;
+    }
+  
     try {
       const response = await signIn(email, password, company);
       console.log(response);
@@ -88,7 +95,7 @@ export default function SignIn() {
       }
     } catch (error) {
       console.error('Sign-in error:', error);
-      setErrorMessage('Something went wrong. Please try again later.');
+      setErrorMessage('User Not Found.');
       setOpen(true);
     }
   };

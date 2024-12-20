@@ -15,11 +15,20 @@ const ChartColor = (props) => {
 
   return (
     <div className="App">    
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1,width: '4px'}}>
         <div className="dash-right-side-container">
-          <SketchPicker color={color} 
-          onChangeComplete={handleColorChange}
-          styles={{ default: { picker: { marginLeft:'30px' } } }}
+        <SketchPicker 
+            color={color} 
+            onChangeComplete={handleColorChange}
+            styles={{ 
+              default: { 
+                picker: { 
+                  marginLeft: '0px', 
+                  width: '180px',// Adjust this to reduce the size of the picker
+                  height: '300px' // Adjust this for height as well if necessary
+                } 
+              }
+            }}
           />
         </div>
       </Box>

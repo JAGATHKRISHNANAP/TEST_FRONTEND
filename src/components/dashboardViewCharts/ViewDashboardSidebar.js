@@ -52,20 +52,54 @@ function ViewDashboardSidebar() {
   }, [dispatch, user_id]);
 
 
+  // const handleChartButtonClick = (chartNumber, chartName) => {
+  //   dispatch(fetchDashboardData(chartName))
+  //     .unwrap()
+  //     .then((response) => {
+  //       console.log("Chart datas:", response); // Logging only chart_datas
+          
+  //       response.chart_datas.forEach((chartData) => {
+  //         if (chartData.chart_type === "singleValueChart") {
+  //           dispatch(addTextChart(chartData));
+  //         }
+  //       });
+
+  //       const filteredChartData = response.chart_datas.filter(
+  //         (chartData) => chartData.chart_type !== "singleValueChart"
+  //       );
+  //       filteredChartData.forEach((chartData, index) => {
+  //         console.log("addChartData",addChartData)
+  //         dispatch(addChartData({ ...chartData, index }));
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching chart data:", err);
+  //     });
+  // };
   const handleChartButtonClick = (chartNumber, chartName) => {
     dispatch(fetchDashboardData(chartName))
       .unwrap()
       .then((response) => {
+        console.log("Chart data:", response); // Logging the chart data
+  
+        // Save the chart data in localStorage
+        if (response && response.chart_datas) {
+          // Save the chart data by chart name (or use another identifier)
+          localStorage.setItem(`chartData_${chartName}`, JSON.stringify(response.chart_datas));
+        }
+  
+        // Process the chart data as needed
         response.chart_datas.forEach((chartData) => {
           if (chartData.chart_type === "singleValueChart") {
             dispatch(addTextChart(chartData));
           }
         });
-
+  
         const filteredChartData = response.chart_datas.filter(
           (chartData) => chartData.chart_type !== "singleValueChart"
         );
         filteredChartData.forEach((chartData, index) => {
+          console.log("addChartData", addChartData);
           dispatch(addChartData({ ...chartData, index }));
         });
       })
@@ -73,6 +107,36 @@ function ViewDashboardSidebar() {
         console.error("Error fetching chart data:", err);
       });
   };
+  
+  // const handleChartButtonClick = (chartNumber, chartName) => {
+  //   dispatch(fetchDashboardData(chartName))
+  //     .unwrap()
+  //     .then((response) => {
+  //       console.log("API Response:", response);  // Log the full response
+  //       // const { chart_datas } = response;
+  //       if (chart_datas && chart_datas.length > 0) {
+  //         // Handle data
+  //         chart_datas.forEach((chartData) => {
+  //           if (chartData.chart_type === "singleValueChart") {
+  //             dispatch(addTextChart(chartData));
+  //           }
+  //         });
+  
+  //         const filteredChartData = chart_datas.filter(
+  //           (chartData) => chartData.chart_type !== "singleValueChart"
+  //         );
+  //         filteredChartData.forEach((chartData, index) => {
+  //           dispatch(addChartData({ ...chartData, index }));
+  //         });
+  //       } else {
+  //         console.log("No chart data found.");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching chart data:", err);
+  //     });
+  // };
+  
   
   const handleContextMenu = (event, chartName, index) => {
     event.preventDefault(); // Prevent default context menu

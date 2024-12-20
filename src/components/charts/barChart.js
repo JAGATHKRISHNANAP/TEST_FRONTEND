@@ -300,11 +300,3 @@ export default BarChart;
 
 
 
-
-
-
-
-
-
-
-

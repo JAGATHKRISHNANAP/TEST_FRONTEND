@@ -63,7 +63,12 @@ const Dendrogram = ({ x_axis, treeData }) => {
       d._children = null;
     }
   };
+  const getNodeColor = (d) => {
+    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']; // Darker colors for each level
+    return colors[d.depth] || '#333';
+  };
 
+  
   const generateDendrogram = (hierarchicalData) => {
     const svg = d3.select(svgRef.current);
     const container = d3.select(containerRef.current);
@@ -144,8 +149,9 @@ const Dendrogram = ({ x_axis, treeData }) => {
           updateDendrogram(d);
         });
 
-      nodeEnter.append('circle').attr('r', 10).style('fill', (d) => (d._children ? '#555' : '#999'));
-
+        nodeEnter.append('circle')
+        .attr('r', 10)
+        .style('fill', (d) => getNodeColor(d)); // Set color based on depth
       nodeEnter
         .append('text')
         .attr('dy', '.35em')
@@ -156,7 +162,9 @@ const Dendrogram = ({ x_axis, treeData }) => {
       const nodeUpdate = nodeEnter.merge(node);
       nodeUpdate.transition().duration(750).attr('transform', (d) => `translate(${d.y},${d.x})`);
 
-      nodeUpdate.select('circle').attr('r', 10).style('fill', (d) => (d._children ? '#555' : '#999'));
+      nodeUpdate.select('circle')
+      .attr('r', 10)
+      .style('fill', (d) => getNodeColor(d)); // Update color on transition
 
       const nodeExit = node.exit().transition().duration(750).attr('transform', (d) => `translate(${source.y},${source.x})`).remove();
 

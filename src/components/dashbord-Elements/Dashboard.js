@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -27,7 +27,7 @@ import TextChart from '../charts/textChart';
 import MapChart from '../charts/mapchart';
 import SingleValueChart from '../charts/singleValueChart';
 import ChartColor from '../charts/color';
-
+import DuelBarChart from '../charts/duelBarChart';
 
 import SampleAiTestChart from '../charts/sampleAiTestChart';
 import BoxPlotChart from '../charts/BoxPlotChart';
@@ -85,7 +85,19 @@ function Dashboard() {
       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
     }
   }, [SelectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
-
+  const preventReload = (e) => {
+    e.preventDefault();
+    e.returnValue = '';  // This triggers a confirmation prompt
+  };
+  useEffect(() => {
+    // Listen for the beforeunload event
+    window.addEventListener('beforeunload', preventReload);
+    
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', preventReload);
+    };
+  }, []);
   const handleSaveButtonClick = () => {
     setSaveName('');
     setOpen(true);
@@ -271,6 +283,23 @@ function Dashboard() {
                 </div>
               </div>
             )}
+            {xAxis.length > 0 && chartType === "duealbarChart" && (
+              <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <DuelBarChart
+                      categories={plotData?.categories}
+                      series1={plotData?.series1}
+                      series2={plotData?.series2}
+                      aggregation={plotData?.aggregation}
+                    />
+                  </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+                </div>
+              </div>
+            )}
             {chartType === "treeHierarchy"  && (
                           <div style={{ marginTop: '20px' }}>
                               <div >
@@ -341,7 +370,7 @@ function Dashboard() {
               <DashboardCharts />
             </Item>
             {xAxis.length > 0 && (
-              <div style={{ marginTop: '20px'}}>
+              <div style={{ marginTop: '20px',marginRight:'25px'}}>
                 {/* <Item> */}
                   <ChartColor />
                 {/* </Item> */}

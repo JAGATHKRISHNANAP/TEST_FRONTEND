@@ -473,9 +473,9 @@ const renderTableData = () => {
 return (
   <div>
     <Draggable 
-      handle=".custom-handle1" 
       onStop={handleDragStop}
-      bounds={false} 
+      // bounds={false} 
+      position={position}
     >
       <div 
         className="chart-container" 

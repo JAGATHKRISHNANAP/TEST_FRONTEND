@@ -191,7 +191,7 @@ function Chartsview() {
 
   return (
     <div className="App">
-      <Box sx={{ flexGrow: 1, minHeight: "85vh", marginTop: "70px" }}>
+      <Box sx={{ flexGrow: 1, minHeight: "85vh", marginTop: "70px" ,backgroundColor:"white"}}>
         <Grid container spacing={2} wrap="wrap">
           <Grid item xs={12} md={12}>
             {/* Render charts when the user clicks on the buttons */}
@@ -199,33 +199,11 @@ function Chartsview() {
           </Grid>
         </Grid>
       </Box>
-
-      <Grid
-        item
-        xs={12}
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: "white",
-          boxShadow: 3,
-          height: "35px",
-          marginBottom: "5px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            height: "30px",
-            marginTop: "3px",
-          }}
-        >
-          {/* Render chart buttons here */}
-          {renderedChartButtons}
-        </Box>
-      </Grid>
+<Grid item xs={12} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white',overflowY: 'auto',  boxShadow: 3,height:'40px' ,marginBottom:'5px'}}>
+          <Box sx={{ display: 'flex', justifyContent: 'center',height:'30px', marginTop:'3px' }}>
+            {renderedChartButtons}
+          </Box>
+        </Grid>
     </div>
   );
 }

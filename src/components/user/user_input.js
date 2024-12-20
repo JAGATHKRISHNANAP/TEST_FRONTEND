@@ -45,6 +45,7 @@ export default function SignUp() {
     categories: [],
     reportingId: '',
   });
+  
 
   useEffect(() => {
     const storedCompanyName = location.state?.companyName || sessionStorage.getItem('companyName');
