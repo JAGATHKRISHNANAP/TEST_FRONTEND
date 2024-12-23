@@ -312,7 +312,7 @@ function Navbar() {
           sx={{
             backgroundColor:
               location.pathname === '/load_data'||
-              location.pathname === '/Create_Dashboard' 
+              location.pathname === '/Charts_view' 
                 ? '#c5c5c9'
                 : 'inherit',
             alignItems: 'center',
