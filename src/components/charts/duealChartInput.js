@@ -45,24 +45,9 @@ function DuealChartInput() {
     }
   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
 
-
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-  //       params: { databaseName }
-  //     });
-  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-  //     dispatch(setFilterOptions(options));
-  //     dispatch(setCheckedOptions(options));
-  //     dispatch(setShowFilterDropdown(true));
-  //     dispatch(setSelectAllChecked(true));
-  //   } catch (error) {
-  //     console.error('Error fetching filter options:', error);
-  //   }
-  // };
   const fetchFilterOptions = async (columnName) => {
     try {
-      const options = await fetchFilterOptionsAPI( databaseName,selectedTable, columnName,);
+      const options = await fetchFilterOptionsAPI( databaseName,selectedTable, columnName);
       dispatch(setFilterOptions(options));
       dispatch(setCheckedOptions(options));
       dispatch(setShowFilterDropdown(true));
@@ -71,19 +56,6 @@ function DuealChartInput() {
       console.error('Failed to fetch filter options:', error);
     }
   };
-
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //     const options = await fetchFilterOptionsAPI(databaseName, selectedTable, columnName);
-  //     dispatch(setFilterOptions(options));
-  //     dispatch(setCheckedOptions(options));
-  //     dispatch(setShowFilterDropdown(true));
-  //     dispatch(setSelectAllChecked(true));
-  //   } catch (error) {
-  //     console.error('Failed to fetch filter options', error);
-  //   }
-  // };
-
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
@@ -196,7 +168,6 @@ function DuealChartInput() {
   return (
     <div className="App">
                 <div className="dash-right-side-container">
-                  {/* <h1>dueal axis</h1> */}
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
                     <label htmlFor="x-axis-input">X-axis: </label>
                     <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "x-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '10px' }}>

@@ -229,7 +229,7 @@ function Navbar() {
 
           <Box sx={{ flexGrow: 1 }} />
           <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
-            {isLoggedIn ? 'Logout' : 'Loginsss'}
+            {isLoggedIn ? 'Logout' : 'Login'}
           </Typography>
 
           {/* Toggle button for Color Picker */}

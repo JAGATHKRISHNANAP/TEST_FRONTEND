@@ -22,10 +22,9 @@ export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company
   return response.data;
 };
 
-// src/api/csvApi.js
-
 
 export const uploadCsvApi = async (file) => {
+
   const formData = new FormData();
   formData.append('file', file);
 
@@ -164,11 +163,11 @@ export const fetchPredictionDataAPI = async ({ xAxis, yAxis, timePeriod, number 
   }
 };
 
-export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnName) => {
+export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnName,xAxis) => {
   console.log('Fetching filter options for:', databaseName, selectedTable, columnName);
   try {
     const response = await axios.get(`${API_URL}/plot_chart/${selectedTable}/${columnName}`, {
-      params: { databaseName }
+      params: { databaseName,xAxis }
     });
     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
     return options; // Return options for handling in the calling function
@@ -253,10 +252,7 @@ export const signIn = async (email, password,company) => {
 };
 
 
-// export const fetchTotalRows = createAsyncThunk('chart/fetchTotalRows', async () => {
-//   const response = await axios.get(`${API_URL}/total_rows`);
-//   return response.data;
-// });
+
 export const fetchTotalRows = createAsyncThunk('chart/fetchTotalRows', async (user_id) => {
   const response = await axios.get(`${API_URL}/total_rows`,
     {params:{user_id:user_id},});
