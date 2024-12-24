@@ -140,6 +140,15 @@ function Navbar() {
   const handleColorChange = (color) => {
     setAppBarColor(color.hex);
   };
+  const handleMenuMouseEnter = () => {
+    setOpenMenu(true);  // Open menu when mouse enters the button
+  };
+  
+  const handleMenuMouseLeave = () => {
+    setOpenMenu(false);  // Close menu when mouse leaves the button
+  };
+  
+
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -191,7 +200,7 @@ function Navbar() {
                   color: 'inherit',
                 }}
               >
-                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' }}>
+                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
                   Data Source <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
                 </ListItemIcon>
               </Button>
@@ -203,8 +212,8 @@ function Navbar() {
                 PaperProps={{
                   sx: {
                     width: menuWidth || 'auto',
-                    backgroundColor: '#424242',
-                    color: '#fff',
+                    backgroundColor: '#ffffff',
+                    color: 'black',
                   },
                 }}
               >
@@ -235,7 +244,20 @@ function Navbar() {
                   design
                 </ListItemIcon>
               </Button> */}
-
+<Button
+onClick={() => handleNavigation('/load_data')}
+    sx={{
+      backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
+      maxWidth: '150px',
+      alignItems: 'center',
+      color: 'inherit',
+    }}
+  >
+    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+      Data Table 
+    </ListItemIcon>
+  </Button>
+  
 <Button
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
           aria-haspopup="true"
@@ -243,8 +265,8 @@ function Navbar() {
           onClick={handleDesignMenuClick}
           sx={{
             backgroundColor:
-              location.pathname === '/load_data'||
-              location.pathname === '/Create_Dashboard' 
+            location.pathname === '/Create_Dashboard' ||
+            location.pathname === '/dashboard_view'
                 ? '#c5c5c9'
                 : 'inherit',
             alignItems: 'center',
@@ -257,6 +279,7 @@ function Navbar() {
               width: '150px',
               justifyContent: 'center',
               color: '#000000',
+              textTransform: 'none' 
             }}
           >
             Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
@@ -270,18 +293,18 @@ function Navbar() {
           PaperProps={{
             sx: {
               width: menuWidth || 'auto',
-              backgroundColor: '#424242',
-              color: '#fff',
+              backgroundColor: '#ffffff',
+              color: 'black',
             },
           }}
         >
-          <MenuItem onClick={() => handleNavigation('/load_data')}>
-            Load Data
-          </MenuItem>
+          
           <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
             Charts
           </MenuItem>
-          
+          <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
+          Dashboard
+          </MenuItem>
         </Menu>
 
               <Button
@@ -291,7 +314,7 @@ function Navbar() {
                   alignItems: 'center',
                 }}
               >
-                <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000' }}>
+                <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000',textTransform: 'none'  }}>
                   edit
                 </ListItemIcon>
               </Button>
@@ -308,7 +331,7 @@ function Navbar() {
                   color: 'inherit',
                 }}
               >
-                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' }}>
+                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' ,textTransform: 'none' }}>
                   View <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
                 </ListItemIcon>
               </Button>
@@ -321,8 +344,8 @@ function Navbar() {
                 PaperProps={{
                   sx: {
                     width: menuWidth || 'auto',
-                    backgroundColor: '#424242',
-                    color: '#fff',
+                    backgroundColor: '#ffffff',
+                    color: 'black',
                   },
                 }}
               >

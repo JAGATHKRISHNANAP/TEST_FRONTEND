@@ -40,13 +40,13 @@ export default function SignIn() {
     const email = data.get('email');
     const password = data.get('password');
     const company = data.get('company');
-    const isCompanyValid = companies.some((c) => c.name === company);
+    // const isCompanyValid = companies.some((c) => c.name === company);
 
-    if (!isCompanyValid) {
-      setErrorMessage('Please select the proper company.');
-      setOpen(true);
-      return;
-    }
+    // // if (!isCompanyValid) {
+    // //   setErrorMessage('Please select the proper company.');
+    // //   setOpen(true);
+    // //   return;
+    // // }
   
     try {
       const response = await signIn(email, password, company);

@@ -387,3 +387,10 @@ export const fetchReportingIds = async () => {
     throw new Error('Failed to fetch reporting IDs');
   }
 };
+
+export const fetchTableDetailsAPI = async (databaseName, selectedTable) => {
+  const response = await fetch(`http://localhost:5000/api/fetchTableDetails?databaseName=${databaseName}&selectedTable=${selectedTable}`);
+  const data = await response.json();
+  return data;
+};
+
