@@ -8,7 +8,7 @@ import axios from 'axios';
 import DrillBarChart from '../drillDown/drillDownBarChart';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
-import { yourBackendEndpointApi} from '../../utils/api';
+import { sendCategoryToBackend} from '../../utils/api';
 
 const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation }) => {
     const dispatch = useDispatch();
@@ -24,41 +24,26 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
     const [popupVisible, setPopupVisible] = useState(false);
     const contextMenuRef = useRef(null);
 
-    const handleClicked = async (event, chartContext, config) => {
-        const clickedCategoryIndex = config.dataPointIndex;
-        const clickedCategory = categories[clickedCategoryIndex];
-        dispatch(setClickedCategory(clickedCategory));
-        try {
-            const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-                category: clickedCategory,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                tableName: selectedTable,
-                aggregation: aggregate
-            });
 
-            setPlotData(response.data);
-            setBarClicked(true);
-        } catch (error) {
-            console.error('Error sending category to backend:', error);
-        }
-    };
-
-    // const handleClicked = async (event, chartContext, config) => {
-    //     const clickedCategoryIndex = config.dataPointIndex;
-    //     const clickedCategory = categories[clickedCategoryIndex];
-    //     dispatch(setClickedCategory(clickedCategory));
+        const handleClicked = async (event, chartContext, config) => {
+            const clickedCategoryIndex = config.dataPointIndex;
+            const clickedCategory = categories[clickedCategoryIndex];
+            dispatch(setClickedCategory(clickedCategory));
+            try {
+              const data = await sendCategoryToBackend(
+                clickedCategory,
+                xAxis,
+                yAxis,
+                selectedTable,
+                aggregate
+              );
+              setPlotData(data);
+              setBarClicked(true);
+            } catch (error) {
+              console.error('Error handling click event:', error);
+            }
+          };
     
-    //     try {
-    //         // Call the API function
-    //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
-    
-    //         setPlotData(responseData); // Update the state with the response
-    //         setBarClicked(true);
-    //     } catch (error) {
-    //         console.error('Failed to send category data:', error);
-    //     }
-    // };
 
     const handleContextMenu = (event) => {
         event.preventDefault();

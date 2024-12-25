@@ -14,7 +14,7 @@ import DuelAxisChart from "../charts/duelAxesChart";
 import TextChart from "../charts/textChart";
 import PolarAreaChart from "../charts/polarArea";
 
-import {fetchFilterOptionsAPI} from '../../utils/api';
+import {fetchFilterOptionsAPI,generateChartData} from '../../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -67,24 +67,44 @@ function EditDashboard() {
     }
   }, [xAxis, yAxis, aggregate, chartType, checkedOptions]);
 
+  // const generateChart = async () => {
+  //   setIsChartGenerationClicked(true);
+  //   try {
+  //     const xAxisColumns = xAxis.join(', ');
+  //     const response = await axios.post('http://localhost:5000/edit_plot_chart', {
+  //       selectedTable,
+  //       xAxis: xAxisColumns,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       filterOptions: checkedOptions.join(', '),
+  //       databaseName,
+  //     });
+  //     setPlotData(response.data);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
   const generateChart = async () => {
     setIsChartGenerationClicked(true);
     try {
-      const xAxisColumns = xAxis.join(', ');
-      const response = await axios.post('http://localhost:5000/edit_plot_chart', {
+      const data = await generateChartData(
         selectedTable,
-        xAxis: xAxisColumns,
+        xAxis,
         yAxis,
         aggregate,
         chartType,
-        filterOptions: checkedOptions.join(', '),
-        databaseName,
-      });
-      setPlotData(response.data);
+        checkedOptions,
+        databaseName
+      );
+      setPlotData(data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error generating chart:', error);
     }
   };
+
+  console.log("checkedOptions---------------00000000000",checkedOptions)
 
   console.log("databaseName",databaseName)
   console.log("selectedTable",selectedTable)

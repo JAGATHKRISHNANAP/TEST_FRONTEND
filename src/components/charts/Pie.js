@@ -9,7 +9,7 @@ import DrillPieChart from "../drillDown/drillDownPieChart";
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip'; // Import the CustomToolTip component
 import "./tooltip.css"; // Import the CSS for the tooltip
-import { yourBackendEndpointApi} from '../../utils/api';
+import { sendCategoryToBackend} from '../../utils/api';
 
 const Pie = (props) => {
   useEffect(() => {
@@ -24,7 +24,7 @@ const Pie = (props) => {
   const yAxis = useSelector((state) => state.chart.yAxis);
   const aggregate = useSelector((state) => state.chart.aggregate);
   const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
-  const toolTipOptions = useSelector((state) => state.toolTip);
+  // const toolTipOptions = useSelector((state) => state.toolTip);
   const customHeadings = useSelector((state) => state.toolTip.customHeading); // Added customHeadings selector
   const [plotData, setPlotData] = useState({});
   const [barClicked, setBarClicked] = useState(false);
@@ -33,26 +33,44 @@ const Pie = (props) => {
   const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
   const contextMenuRef = useRef(null);
 
-  const handleClicked = async (event, chartContext, config) => {
-    const clickedCategoryIndex = config.dataPointIndex;
-    const clickedCategory = categories[clickedCategoryIndex];
-    dispatch(setClickedCategory(clickedCategory));
-    try {
-        // Make an HTTP request to your backend
-        const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-            category: clickedCategory,
-            xAxis: xAxis,
-            yAxis: yAxis,
-            tableName: selectedTable,
-            aggregation: aggregate
-        });
+  // const handleClicked = async (event, chartContext, config) => {
+  //   const clickedCategoryIndex = config.dataPointIndex;
+  //   const clickedCategory = categories[clickedCategoryIndex];
+  //   dispatch(setClickedCategory(clickedCategory));
+  //   try {
+  //       // Make an HTTP request to your backend
+  //       const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
+  //           category: clickedCategory,
+  //           xAxis: xAxis,
+  //           yAxis: yAxis,
+  //           tableName: selectedTable,
+  //           aggregation: aggregate
+  //       });
 
-        setPlotData(response.data);
-        setBarClicked(true);
-    } catch (error) {
-        console.error('Error sending category to backend:', error);
-    }
-  };
+  //       setPlotData(response.data);
+  //       setBarClicked(true);
+  //   } catch (error) {
+  //       console.error('Error sending category to backend:', error);
+  //   }
+  // };
+      const handleClicked = async (event, chartContext, config) => {
+          const clickedCategoryIndex = config.dataPointIndex;
+          const clickedCategory = categories[clickedCategoryIndex];
+          dispatch(setClickedCategory(clickedCategory));
+          try {
+            const data = await sendCategoryToBackend(
+              clickedCategory,
+              xAxis,
+              yAxis,
+              selectedTable,
+              aggregate
+            );
+            setPlotData(data);
+            setBarClicked(true);
+          } catch (error) {
+            console.error('Error handling click event:', error);
+          }
+        };
 
       // const handleClicked = async (event, chartContext, config) => {
       //     const clickedCategoryIndex = config.dataPointIndex;

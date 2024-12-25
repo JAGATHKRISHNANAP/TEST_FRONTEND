@@ -9,7 +9,7 @@ import DrillLineChart from "../drillDown/drillDownLineChart";
 import "./tooltip.css"; // Import the CSS for the tooltip
 import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
-import { yourBackendEndpointApi} from '../../utils/api';
+import { sendCategoryToBackend} from '../../utils/api';
 
 const LineChart = ({ categories, values, aggregation }) => {
 
@@ -29,26 +29,44 @@ const LineChart = ({ categories, values, aggregation }) => {
     const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
     const contextMenuRef = useRef(null);
 
-    const handleClicked = async (event, chartContext, config) => {
-        const clickedCategoryIndex = config.dataPointIndex;
-        const clickedCategory = categories[clickedCategoryIndex];
-        dispatch(setClickedCategory(clickedCategory));
-        try {
-            // Make an HTTP request to your backend
-            const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-                category: clickedCategory,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                tableName: selectedTable,
-                aggregation: aggregate
-            });
+    // const handleClicked = async (event, chartContext, config) => {
+    //     const clickedCategoryIndex = config.dataPointIndex;
+    //     const clickedCategory = categories[clickedCategoryIndex];
+    //     dispatch(setClickedCategory(clickedCategory));
+    //     try {
+    //         // Make an HTTP request to your backend
+    //         const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
+    //             category: clickedCategory,
+    //             xAxis: xAxis,
+    //             yAxis: yAxis,
+    //             tableName: selectedTable,
+    //             aggregation: aggregate
+    //         });
 
-            setPlotData(response.data);
-            setBarClicked(true);
-        } catch (error) {
-            console.error('Error sending category to backend:', error);
-        }
-    };
+    //         setPlotData(response.data);
+    //         setBarClicked(true);
+    //     } catch (error) {
+    //         console.error('Error sending category to backend:', error);
+    //     }
+    // };
+        const handleClicked = async (event, chartContext, config) => {
+            const clickedCategoryIndex = config.dataPointIndex;
+            const clickedCategory = categories[clickedCategoryIndex];
+            dispatch(setClickedCategory(clickedCategory));
+            try {
+              const data = await sendCategoryToBackend(
+                clickedCategory,
+                xAxis,
+                yAxis,
+                selectedTable,
+                aggregate
+              );
+              setPlotData(data);
+              setBarClicked(true);
+            } catch (error) {
+              console.error('Error handling click event:', error);
+            }
+          };
         // const handleClicked = async (event, chartContext, config) => {
         //     const clickedCategoryIndex = config.dataPointIndex;
         //     const clickedCategory = categories[clickedCategoryIndex];

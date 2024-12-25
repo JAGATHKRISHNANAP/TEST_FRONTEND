@@ -4,14 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
-import axios from 'axios';
 import DrillBarChart from '../drillDown/drillDownBarChart';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
 import "./tooltip.css";
-
-import { CIcon } from '@coreui/icons-react'; // Import CoreUI icon
-import { cilSortAscending, cilSortDescending } from '@coreui/icons'; // use 'cil' instead of 'cis'
+import { sendCategoryToBackend } from '../../utils/api';
 
 
 
@@ -65,19 +62,19 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         const clickedCategory = categories[clickedCategoryIndex];
         dispatch(setClickedCategory(clickedCategory));
         try {
-            const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-                category: clickedCategory,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                tableName: selectedTable,
-                aggregation: aggregate
-            });
-            setPlotData(response.data);
-            setBarClicked(true);
+          const data = await sendCategoryToBackend(
+            clickedCategory,
+            xAxis,
+            yAxis,
+            selectedTable,
+            aggregate
+          );
+          setPlotData(data);
+          setBarClicked(true);
         } catch (error) {
-            console.error('Error sending category to backend:', error);
+          console.error('Error handling click event:', error);
         }
-    };
+      };
 
     const handleContextMenu = (event) => {
         event.preventDefault();

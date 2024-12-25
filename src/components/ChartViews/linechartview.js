@@ -11,6 +11,7 @@ import ContectMenu from "../charts/contextMenu";
 import CustomToolTip from "../charts/customToolTip";
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
 // import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
+import { sendCategoryToBackend } from '../../utils/api';
 
 const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChartCategories = []  }) => {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
     // const yAxis = useSelector((state) => state.chart.yAxis);
     const aggregate = useSelector((state) => state.chart.aggregate);
     const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
-    const toolTipOptions = useSelector((state) => state.toolTip);
+    // const toolTipOptions = useSelector((state) => state.toolTip);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const [plotData, setPlotData] = useState({});
     const [barClicked, setBarClicked] = useState(false);
@@ -40,26 +41,47 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
     const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
     const contextMenuRef = useRef(null);
 
-    const handleClicked = async (event, chartContext, config) => {
-        const clickedCategoryIndex = config.dataPointIndex;
-        const clickedCategory = categories[clickedCategoryIndex];
-        dispatch(setClickedCategory(clickedCategory));
-        try {
-            // Make an HTTP request to your backend
-            const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-                category: clickedCategory,
-                xAxis: x_axis,
-                yAxis: y_axis,
-                tableName: selectedTable,
-                aggregation: aggregate
-            });
+    // const handleClicked = async (event, chartContext, config) => {
+    //     const clickedCategoryIndex = config.dataPointIndex;
+    //     const clickedCategory = categories[clickedCategoryIndex];
+    //     dispatch(setClickedCategory(clickedCategory));
+    //     try {
+    //         // Make an HTTP request to your backend
+    //         const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
+    //             category: clickedCategory,
+    //             xAxis: x_axis,
+    //             yAxis: y_axis,
+    //             tableName: selectedTable,
+    //             aggregation: aggregate
+    //         });
 
-            setPlotData(response.data);
-            setBarClicked(true);
-        } catch (error) {
-            console.error('Error sending category to backend:', error);
-        }
-    };
+    //         setPlotData(response.data);
+    //         setBarClicked(true);
+    //     } catch (error) {
+    //         console.error('Error sending category to backend:', error);
+    //     }
+    // };
+
+        const handleClicked = async (event, chartContext, config) => {
+            const clickedCategoryIndex = config.dataPointIndex;
+            const clickedCategory = categories[clickedCategoryIndex];
+            dispatch(setClickedCategory(clickedCategory));
+            try {
+              const data = await sendCategoryToBackend(
+                clickedCategory,
+                x_axis,
+                y_axis,
+                selectedTable,
+                aggregate
+              );
+              setPlotData(data);
+              setBarClicked(true);
+            } catch (error) {
+              console.error('Error handling click event:', error);
+            }
+          };
+    
+    
 
     const handleContextMenu = (event) => {
         event.preventDefault();

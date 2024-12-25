@@ -10,7 +10,7 @@ import "./tooltip.css"; // Import the CSS for the tooltip
 import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
-import { yourBackendEndpointApi,fetchPredictionDataAPI} from '../../utils/api';
+import {sendCategoryToBackend} from '../../utils/api';
 
 
 const LineChart = ({ categories, values, aggregation }) => {
@@ -42,21 +42,20 @@ const LineChart = ({ categories, values, aggregation }) => {
         const clickedCategory = categories[clickedCategoryIndex];
         dispatch(setClickedCategory(clickedCategory));
         try {
-            // Make an HTTP request to your backend
-            const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-                category: clickedCategory,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                tableName: selectedTable,
-                aggregation: aggregate
-            });
-
-            setPlotData(response.data);
-            setBarClicked(true);
+          const data = await sendCategoryToBackend(
+            clickedCategory,
+            xAxis,
+            yAxis,
+            selectedTable,
+            aggregate
+          );
+          setPlotData(data);
+          setBarClicked(true);
         } catch (error) {
-            console.error('Error sending category to backend:', error);
+          console.error('Error handling click event:', error);
         }
-    };
+      };
+
 
         // const handleClicked = async (event, chartContext, config) => {
         //     const clickedCategoryIndex = config.dataPointIndex;

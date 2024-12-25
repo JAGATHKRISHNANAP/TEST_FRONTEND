@@ -312,7 +312,7 @@ function Navbar() {
           sx={{
             backgroundColor:
               location.pathname === '/load_data'||
-              location.pathname === '/Charts_view' 
+              location.pathname === '/Create_Dashboard' 
                 ? '#c5c5c9'
                 : 'inherit',
             alignItems: 'center',
@@ -370,7 +370,7 @@ function Navbar() {
                 aria-expanded={openViewMenu ? 'true' : undefined}
                 onClick={handleViewMenuClick}
                 sx={{
-                  backgroundColor: location.pathname === '/Create_Dashboard' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
+                  backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
                   maxWidth: '150px',
                   alignItems: 'center',
                   color: 'inherit',

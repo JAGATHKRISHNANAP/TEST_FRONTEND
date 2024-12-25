@@ -18,6 +18,7 @@ export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company
       'Content-Type': 'multipart/form-data',
     },
   });
+  console.log("response data",response.data)
   
   return response.data;
 };
@@ -65,6 +66,46 @@ export const uploadAudioApi = async (file) => {
 };
 
 
+
+export const generateChartData = async (selectedTable, xAxis, yAxis, aggregate, chartType, filterOptions, databaseName) => {
+  const xAxisColumns = xAxis.join(', ');
+  const filterOptionsString = filterOptions.join(', ');
+
+  try {
+    const response = await axios.post(`${API_URL}/edit_plot_chart`, {
+      selectedTable,
+      xAxis: xAxisColumns,
+      yAxis,
+      aggregate,
+      chartType,
+      filterOptions: filterOptionsString,
+      databaseName,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error in generateChartData API:', error);
+    throw error;
+  }
+};
+
+
+export const sendCategoryToBackend = async (category, xAxis, yAxis, tableName, aggregation) => {
+  try {
+    const response = await axios.post(`${API_URL}/your-backend-endpoint`, {
+      category,
+      xAxis,
+      yAxis,
+      tableName,
+      aggregation,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error in sendCategoryToBackend API:', error);
+    throw error;
+  }
+};
+
+
 export const generateDualAxisChartApi = async ({
   selectedTable,
   xAxis,
@@ -103,21 +144,21 @@ export const saveDataToDatabase = async ({
 
 
 
-export const yourBackendEndpointApi = async (clickedCategory, xAxis, yAxis, selectedTable, aggregate) => {
-  try {
-    const response = await axios.post(`${API_URL}/your-backend-endpoint`, {
-      category: clickedCategory,
-      xAxis: xAxis,
-      yAxis: yAxis,
-      tableName: selectedTable,
-      aggregation: aggregate
-    });
-    return response.data; // Return the response data to handle it in the component
-  } catch (error) {
-    console.error('Error sending category to backend:', error);
-    throw error; // Rethrow the error to handle it in the calling function
-  }
-};
+// export const yourBackendEndpointApi = async (clickedCategory, xAxis, yAxis, selectedTable, aggregate) => {
+//   try {
+//     const response = await axios.post(`${API_URL}/your-backend-endpoint`, {
+//       category: clickedCategory,
+//       xAxis: xAxis,
+//       yAxis: yAxis,
+//       tableName: selectedTable,
+//       aggregation: aggregate
+//     });
+//     return response.data; // Return the response data to handle it in the component
+//   } catch (error) {
+//     console.error('Error sending category to backend:', error);
+//     throw error; // Rethrow the error to handle it in the calling function
+//   }
+// };
 
 
 export const fetchHierarchialDrilldownDataAPI = async ({
