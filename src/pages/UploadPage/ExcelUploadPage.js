@@ -39,17 +39,50 @@ const ExcelUpload = () => {
   const [confirmationChoice, setConfirmationChoice] = React.useState(null);
   const company_database = localStorage.getItem('company_name');
   const databaseName = localStorage.getItem('company_name');
+  // console.log("upload error-------------------",uploadError);
+  
+  // React.useEffect(() => {
+  //   if (uploadError) {
+  //     console.log(uploadError.status);
+  //     setSnackbarMessage(uploadError);
+  //     setSnackbarSeverity('error');
+  //     setSnackbarOpen(true);
+  //   } else if (uploadSuccess) {
+  //     setSnackbarMessage('File uploaded successfully...!!!');
+  //     setSnackbarSeverity('success');
+  //     setSnackbarOpen(true);
+  //   }
+  // }, [uploadError, uploadSuccess]);
+
+
   React.useEffect(() => {
-    if (uploadError) {
-      setSnackbarMessage(uploadError);
+    if (uploadError && uploadError.status === false) {
+      console.log(uploadError.status);
+      setSnackbarMessage(uploadError.message);
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     } else if (uploadSuccess) {
-      setSnackbarMessage('File uploaded successfully...');
+      setSnackbarMessage("File uploaded successfully...");
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
     }
   }, [uploadError, uploadSuccess]);
+
+  // React.useEffect(() => {
+  //   if (uploadError) {
+  //     if (uploadError.status === false) {
+  //       console.log(uploadError.status);
+  //       setSnackbarMessage(uploadError.message);
+  //       setSnackbarSeverity('error');
+  //       setSnackbarOpen(true);
+  //     } else if (uploadError.status === true) {
+  //       setSnackbarMessage(uploadError.message);
+  //       setSnackbarSeverity('success');
+  //       setSnackbarOpen(true);
+  //     }
+  //   }
+  // }, [uploadError, uploadSuccess]);
+
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -331,3 +364,9 @@ const ExcelUpload = () => {
 };
 
 export default ExcelUpload;
+
+
+
+
+
+

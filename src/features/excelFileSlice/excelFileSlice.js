@@ -8,6 +8,7 @@ export const uploadExcel = createAsyncThunk(
   async ({ user_id, file, primaryKeyColumnName, company_database,selectedSheet }, { rejectWithValue }) => { // Add company_database here
     try {
       const response = await uploadExcelFile(user_id, file, primaryKeyColumnName, company_database,selectedSheet); // Pass it to the upload function
+      console.log("--------------------------------------",response);
       return response;
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Error uploading file. Please try again.');

@@ -1,7 +1,6 @@
-// src/components/dashbord-Elements/DashboardCharts.js
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, Divider } from '@mui/material';
+import { Box, Button, Divider ,Tooltip } from '@mui/material';
 import { BarChart as BarChartIcon, PieChart as PieChartIcon, ScatterPlot as ScatterPlotIcon, Timeline as TimelineIcon } from '@mui/icons-material';
 import { setChartType } from '../../features/Dashboard-Slice/chartTypeSlice';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
@@ -27,11 +26,13 @@ function DashboardCharts() {
     dispatch(setChartType(selectedChartType));
   };
 
-  return (
-    <div className="App">    
-      <Box sx={{ flexGrow: 1 }}>
-        <div className="dash-right-side-container">
 
+return (
+  <div className="App">    
+    <Box sx={{ flexGrow: 1 }}>
+      <div className="dash-right-side-container">
+
+        <Tooltip title="Bar Chart" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'bar' ? 'contained' : 'outlined'}
@@ -39,7 +40,9 @@ function DashboardCharts() {
           >
             <BarChartIcon /> 
           </Button>
+        </Tooltip>
 
+        <Tooltip title="Pie Chart" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'pie' ? 'contained' : 'outlined'}
@@ -47,7 +50,9 @@ function DashboardCharts() {
           >
             <PieChartIcon /> 
           </Button>
+        </Tooltip>
 
+        <Tooltip title="Scatter Plot" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'scatter' ? 'contained' : 'outlined'}
@@ -55,7 +60,9 @@ function DashboardCharts() {
           >
             <ScatterPlotIcon />
           </Button>
+        </Tooltip>
 
+        <Tooltip title="Line Chart" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'line' ? 'contained' : 'outlined'}
@@ -63,105 +70,135 @@ function DashboardCharts() {
           >
             <TimelineIcon /> 
           </Button>
+        </Tooltip>
 
+        <Tooltip title="Area Chart" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'area' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('area')}
-            >
-              <FaChartArea size={23}/>
-            </Button>
+          >
+            <FaChartArea size={23}/>
+          </Button>
+        </Tooltip>
 
-            <Button
+        <Tooltip title="Polar Area Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'polarArea' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('polarArea')}
-            >
-              <PiChartPolarFill  size={23}/>
-            </Button>
-        </div>
-        <div>
-        <Divider />
-        <Button
+          >
+            <PiChartPolarFill size={23}/>
+          </Button>
+        </Tooltip>
+      </div>
+      
+      <Divider />
+      
+      <div>
+        <Tooltip title="Dual Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'duealChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('duealChart')}
-            >
+          >
+            <FcComboChart size={23}/>
+          </Button>
+        </Tooltip>
 
-              <FcComboChart size={23}/>
-            </Button>
+        <Tooltip title="Dual Bar Chart" arrow>
+          <Button
+            sx={{ margin: "2px" }}
+            variant={chartType === 'duealbarChart' ? 'contained' : 'outlined'}
+            onClick={() => handleChartTypeChange('duealbarChart')}
+          >
+            <FcComboChart size={23}/>
+          </Button>
+        </Tooltip>
 
-            <Button
+        <Tooltip title="Text Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'textChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('textChart')}
-            >
-              <NotesIcon /> 
-            </Button>
+          >
+            <NotesIcon /> 
+          </Button>
+        </Tooltip>
 
-            <Button
+        <Tooltip title="Map Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'mapchat' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('mapchart')}
-            >
-              <MapIcon/>
-            </Button>
+          >
+            <MapIcon/>
+          </Button>
+        </Tooltip>
 
-            <Button
+        <Tooltip title="Single Value Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'singleValueChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('singleValueChart')}
-            >
-              <LooksOneIcon/>
-            </Button>
+          >
+            <LooksOneIcon/>
+          </Button>
+        </Tooltip>
 
-
-            <Button
+        <Tooltip title="Tree Hierarchy" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'treeHierarchy' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('treeHierarchy')}
-            >
+          >
             <AccountTreeIcon/>
-            </Button>
+          </Button>
+        </Tooltip>
 
-
-            <Button
+        <Tooltip title="Animated Tree Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'animatedTreeChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('animatedTreeChart')}
-            >
-              <SpaceDashboardIcon/>
-            </Button>
+          >
+            <SpaceDashboardIcon/>
+          </Button>
+        </Tooltip>
 
-            <Button
+        <Tooltip title="Hierarchical Bar Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'hierarchialBarChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('hierarchialBarChart')}
-            >
-              <AlignHorizontalLeftIcon/>
-            </Button>
+          >
+            <AlignHorizontalLeftIcon/>
+          </Button>
+        </Tooltip>
 
-
-            <Button
+        <Tooltip title="Sample AI Test Chart" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'sampleAitestChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('sampleAitestChart')}
-            >
+          >
             <TipsAndUpdatesIcon/>
-            </Button>
+          </Button>
+        </Tooltip>
 
-            
-            <Button
+        <Tooltip title="AI Charts" arrow>
+          <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'AiCharts' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('AiCharts')}
-            >
+          >
             <PsychologyIcon/>
-            </Button>
-        </div>
-      </Box>
-    </div>
-  );
+          </Button>
+        </Tooltip>
+      </div>
+    </Box>
+  </div>
+);
 }
 
 export default DashboardCharts;
