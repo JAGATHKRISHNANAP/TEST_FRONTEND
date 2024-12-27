@@ -11,6 +11,7 @@ import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
 import {sendCategoryToBackend} from '../../utils/api';
+import Draggable from "react-draggable";
 
 
 const LineChart = ({ categories, values, aggregation }) => {
@@ -326,7 +327,14 @@ const LineChart = ({ categories, values, aggregation }) => {
             {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+                          {popupVisible && (
+        <Draggable>
+          <div>
+            <CustomToolTip onClose={handleClosePopup} />
+          </div>
+        </Draggable>
+      )}
+            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
             {barClicked && <DrillLineChart
                 categories={plotData.categories}
                 values={plotData.values}
@@ -334,7 +342,7 @@ const LineChart = ({ categories, values, aggregation }) => {
                 xAxis={xAxis}
                 yAxis={yAxis}
                 selectedTable={selectedTable}
-            />}
+            />} */}
         </div>
     );
 };

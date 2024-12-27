@@ -68,20 +68,6 @@ const ExcelUpload = () => {
     }
   }, [uploadError, uploadSuccess]);
 
-  // React.useEffect(() => {
-  //   if (uploadError) {
-  //     if (uploadError.status === false) {
-  //       console.log(uploadError.status);
-  //       setSnackbarMessage(uploadError.message);
-  //       setSnackbarSeverity('error');
-  //       setSnackbarOpen(true);
-  //     } else if (uploadError.status === true) {
-  //       setSnackbarMessage(uploadError.message);
-  //       setSnackbarSeverity('success');
-  //       setSnackbarOpen(true);
-  //     }
-  //   }
-  // }, [uploadError, uploadSuccess]);
 
 
   const handleSnackbarClose = () => {
@@ -163,13 +149,21 @@ const ExcelUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!primaryKeyColumn && excelData.length > 1) {
-      const newHeaders = ['id', ...excelData[0]];  // Add the "id" column at the start
-      const newData = excelData.slice(1).map((row, index) => [index + 1, ...row]); // Assign unique ID starting from 1
-      setExcelData([newHeaders, ...newData]);
-      dispatch(setPrimaryKeyColumn(0));
-    }
-  
+    if (primaryKeyColumn === null && excelData.length > 1) {
+      // Check if the "id" column already exists in the headers
+      if (!excelData[0].includes("id")) {
+        // Automatically create a primary key column if not selected and "id" doesn't exist
+        const newHeaders = ["id", ...excelData[0]]; // Add "id" column at the start
+        const newData = excelData.slice(1).map((row, index) => [index + 1, ...row]); // Assign unique ID starting from 1
+        setExcelData([newHeaders, ...newData]);
+        dispatch(setPrimaryKeyColumn(0)); // Set the new "id" column as the primary key
+      } else {
+        console.log("The 'id' column already exists. Skipping creation.");
+      }
+    } else {
+      console.log("A primary key column is already selected. Skipping creation.");
+    }
+
     if (file && selectedSheet) {
       if (primaryKeyColumn !== null && columnHeadings[primaryKeyColumn]) {
         const existingTableNames = await fetchTableNamesAPI(databaseName);

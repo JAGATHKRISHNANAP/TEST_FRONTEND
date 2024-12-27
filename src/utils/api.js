@@ -144,22 +144,20 @@ export const saveDataToDatabase = async ({
 
 
 
-// export const yourBackendEndpointApi = async (clickedCategory, xAxis, yAxis, selectedTable, aggregate) => {
-//   try {
-//     const response = await axios.post(`${API_URL}/your-backend-endpoint`, {
-//       category: clickedCategory,
-//       xAxis: xAxis,
-//       yAxis: yAxis,
-//       tableName: selectedTable,
-//       aggregation: aggregate
-//     });
-//     return response.data; // Return the response data to handle it in the component
-//   } catch (error) {
-//     console.error('Error sending category to backend:', error);
-//     throw error; // Rethrow the error to handle it in the calling function
-//   }
-// };
-
+export const fetchTableDetailsAPI = async (databaseName, selectedTable) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/api/fetchTableDetails`, {
+      params: {
+        databaseName,
+        selectedTable
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching table details:', error);
+    throw error;
+  }
+};
 
 export const fetchHierarchialDrilldownDataAPI = async ({
   clickedCategory,

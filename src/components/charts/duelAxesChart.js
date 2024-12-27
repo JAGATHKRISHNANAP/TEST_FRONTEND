@@ -9,6 +9,7 @@ import DrillBarChart from '../drillDown/drillDownBarChart';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
 import { sendCategoryToBackend} from '../../utils/api';
+import Draggable from 'react-draggable';
 
 const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation }) => {
     const dispatch = useDispatch();
@@ -229,7 +230,15 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
             {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+                          {popupVisible && (
+        <Draggable>
+          <div>
+            <CustomToolTip onClose={handleClosePopup} />
+          </div>
+        </Draggable>
+      )}
+            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+             */}
             {/* {barClicked && <DrillBarChart
                 categories={plotData.categories}
                 values={plotData.values}

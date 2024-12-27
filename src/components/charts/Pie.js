@@ -10,6 +10,7 @@ import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip'; // Import the CustomToolTip component
 import "./tooltip.css"; // Import the CSS for the tooltip
 import { sendCategoryToBackend} from '../../utils/api';
+import Draggable from "react-draggable";
 
 const Pie = (props) => {
   useEffect(() => {
@@ -33,26 +34,6 @@ const Pie = (props) => {
   const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
   const contextMenuRef = useRef(null);
 
-  // const handleClicked = async (event, chartContext, config) => {
-  //   const clickedCategoryIndex = config.dataPointIndex;
-  //   const clickedCategory = categories[clickedCategoryIndex];
-  //   dispatch(setClickedCategory(clickedCategory));
-  //   try {
-  //       // Make an HTTP request to your backend
-  //       const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-  //           category: clickedCategory,
-  //           xAxis: xAxis,
-  //           yAxis: yAxis,
-  //           tableName: selectedTable,
-  //           aggregation: aggregate
-  //       });
-
-  //       setPlotData(response.data);
-  //       setBarClicked(true);
-  //   } catch (error) {
-  //       console.error('Error sending category to backend:', error);
-  //   }
-  // };
       const handleClicked = async (event, chartContext, config) => {
           const clickedCategoryIndex = config.dataPointIndex;
           const clickedCategory = categories[clickedCategoryIndex];
@@ -71,22 +52,6 @@ const Pie = (props) => {
             console.error('Error handling click event:', error);
           }
         };
-
-      // const handleClicked = async (event, chartContext, config) => {
-      //     const clickedCategoryIndex = config.dataPointIndex;
-      //     const clickedCategory = categories[clickedCategoryIndex];
-      //     dispatch(setClickedCategory(clickedCategory));
-      
-      //     try {
-      //         // Call the API function
-      //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
-      
-      //         setPlotData(responseData); // Update the state with the response
-      //         setBarClicked(true);
-      //     } catch (error) {
-      //         console.error('Failed to send category data:', error);
-      //     }
-      // };
 
 
   const handleContextMenu = (event) => {
@@ -156,7 +121,7 @@ const Pie = (props) => {
       <div className="row">
         <div className="pie-chart">
           {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
-          <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
+          <ResizableBox width={500} height={200} minConstraints={[500, 200]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
             <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
             <Chart
               options={options}
@@ -174,15 +139,22 @@ const Pie = (props) => {
       {contextMenuVisible && (
         <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
       )}
-      {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
-      {barClicked && <DrillPieChart
+      {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
+      {/* {barClicked && <DrillPieChart
           categories={plotData.categories}
           values={plotData.values}
           aggregation={plotData.aggregation}
           xAxis={xAxis}
           yAxis={yAxis}
           selectedTable={selectedTable}
-        />}
+        />} */}
+              {popupVisible && (
+        <Draggable>
+          <div>
+            <CustomToolTip onClose={handleClosePopup} />
+          </div>
+        </Draggable>
+      )}
     </div>
   );
 }

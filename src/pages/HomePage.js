@@ -344,7 +344,7 @@ function Navbar() {
           }}
         >
           <MenuItem onClick={() => handleNavigation('/load_data')}>
-            Load Data
+            Design Chart
           </MenuItem>
           <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
             Charts

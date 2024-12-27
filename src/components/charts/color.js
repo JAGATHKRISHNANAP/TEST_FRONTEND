@@ -19,7 +19,7 @@ const ChartColor = (props) => {
         <div className="dash-right-side-container">
           <SketchPicker color={color} 
           onChangeComplete={handleColorChange}
-          styles={{ default: { picker: { marginLeft:'30px' } } }}
+          styles={{ default: { picker: { marginLeft:'0px' } } }}
           />
         </div>
       </Box>

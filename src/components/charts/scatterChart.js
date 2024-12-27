@@ -10,6 +10,7 @@ import "./tooltip.css"; // Import the CSS for the tooltip
 import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
 import { sendCategoryToBackend} from '../../utils/api';
+import Draggable from "react-draggable";
 
 const LineChart = ({ categories, values, aggregation }) => {
 
@@ -220,15 +221,22 @@ const LineChart = ({ categories, values, aggregation }) => {
             {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
-            {barClicked && <DrillLineChart
+            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
+            {popupVisible && (
+        <Draggable>
+          <div>
+            <CustomToolTip onClose={handleClosePopup} />
+          </div>
+        </Draggable>
+      )}
+            {/* {barClicked && <DrillLineChart
                 categories={plotData.categories}
                 values={plotData.values}
                 aggregation={plotData.aggregation}
                 xAxis={xAxis}
                 yAxis={yAxis}
                 selectedTable={selectedTable}
-            />}
+            />} */}
         </div>
     );
 };

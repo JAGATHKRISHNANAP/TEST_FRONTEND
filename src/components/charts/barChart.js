@@ -9,6 +9,7 @@ import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
 import "./tooltip.css";
 import { sendCategoryToBackend } from '../../utils/api';
+import Draggable from 'react-draggable';
 
 
 
@@ -274,7 +275,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
             {barClicked && <DrillBarChart
                 categories={plotData.categories}
                 values={plotData.values}
@@ -282,7 +283,14 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 xAxis={xAxis}
                 yAxis={yAxis}
                 selectedTable={selectedTable}
-            />}
+            />} */}
+                          {popupVisible && (
+        <Draggable>
+          <div>
+            <CustomToolTip onClose={handleClosePopup} />
+          </div>
+        </Draggable>
+      )}
         </div>
     );
 };
