@@ -306,7 +306,7 @@ import {setXAxis, setYAxis, setAggregate,setFilterOptions, setCheckedOptions, se
 } from '../../features/Dashboard-Slice/chartSlice';
 import axios from 'axios';
 import { Mic, StopCircleRounded } from '@mui/icons-material';
-import { uploadAudioFile } from '../../utils/api'; // Import the API function
+import { uploadAudioFile,fetchFilterOptionsAPI } from '../../utils/api'; // Import the API function
 
 
 function DuealChartInput() {
@@ -335,12 +335,23 @@ function DuealChartInput() {
       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
     }
   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
+  // const fetchFilterOptions = async (columnName) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
+  //       params: { databaseName }
+  //     });
+  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+  //     dispatch(setFilterOptions(options));
+  //     dispatch(setCheckedOptions(options));
+  //     dispatch(setShowFilterDropdown(false));
+  //     dispatch(setSelectAllChecked(true));
+  //   } catch (error) {
+  //     console.error('Error fetching filter options:', error);
+  //   }
+  // };
   const fetchFilterOptions = async (columnName) => {
     try {
-      const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-        params: { databaseName }
-      });
-      const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+      const options = await fetchFilterOptionsAPI(selectedTable, columnName, databaseName);
       dispatch(setFilterOptions(options));
       dispatch(setCheckedOptions(options));
       dispatch(setShowFilterDropdown(false));

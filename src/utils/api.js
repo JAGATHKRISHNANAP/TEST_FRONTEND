@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL= 'http://localhost:5000'
-// const API_URL='http://43.204.149.125:5000'
+// const API_URL= 'http://localhost:5000'
+const API_URL='http://13.203.66.35:5000'
 
 export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company_database,selectedSheet) => {
   const formData = new FormData();
@@ -202,17 +202,29 @@ export const fetchPredictionDataAPI = async ({ xAxis, yAxis, timePeriod, number 
   }
 };
 
-export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnName,xAxis) => {
-  console.log('Fetching filter options for:', databaseName, selectedTable, columnName);
+// export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnName,xAxis) => {
+//   console.log('Fetching filter options for:', databaseName, selectedTable, columnName);
+//   try {
+//     const response = await axios.get(`${API_URL}/plot_chart/${selectedTable}/${columnName}`, {
+//       params: { databaseName,xAxis }
+//     });
+//     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+//     return options; // Return options for handling in the calling function
+//   } catch (error) {
+//     console.error('Error fetching filter options:', error);
+//     throw error; // Rethrow the error to handle it in the calling function
+//   }
+// };
+export const fetchFilterOptionsAPI = async (selectedTable, columnName, databaseName) => {
   try {
     const response = await axios.get(`${API_URL}/plot_chart/${selectedTable}/${columnName}`, {
-      params: { databaseName,xAxis }
+      params: { databaseName },
     });
     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-    return options; // Return options for handling in the calling function
+    return options;
   } catch (error) {
-    console.error('Error fetching filter options:', error);
-    throw error; // Rethrow the error to handle it in the calling function
+    console.error('Error in API call:', error);
+    throw error;
   }
 };
 
