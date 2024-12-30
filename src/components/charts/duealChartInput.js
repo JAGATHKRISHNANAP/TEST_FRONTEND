@@ -52,7 +52,7 @@ function DuealChartInput() {
       const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
       dispatch(setFilterOptions(options));
       dispatch(setCheckedOptions(options));
-      dispatch(setShowFilterDropdown(true));
+      dispatch(setShowFilterDropdown(false));
       dispatch(setSelectAllChecked(true));
     } catch (error) {
       console.error('Error fetching filter options:', error);
@@ -72,7 +72,7 @@ function DuealChartInput() {
     if (showFilterDropdown) {
       dispatch(setShowFilterDropdown(false));
     } else {
-      fetchFilterOptions(columnName);
+      dispatch(setShowFilterDropdown(true));
     }
   };
 
@@ -96,20 +96,29 @@ function DuealChartInput() {
     event.preventDefault();
   };
 
+
+
+
   const handleDrop = (event, target) => {
     event.preventDefault();
     const columnName = event.dataTransfer.getData("columnName");
-    if (target === "x-axis") {
-      if (!xAxis.includes(columnName)) {
-        dispatch(setXAxis([...xAxis, columnName]));
-      }
-    } else if (target === "y-axis") {
-      if (!yAxis.includes(columnName)) {
-        dispatch(setYAxis([...yAxis, columnName]));
-      }
-    }
-  };
 
+    // Disable the filter dropdown
+    setShowFilterDropdown(false);
+
+    if (target === "x-axis") {
+        if (!xAxis.includes(columnName)) {
+            dispatch(setXAxis([...xAxis, columnName]));
+            fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+            
+        }
+    } else if (target === "y-axis") {
+        if (!yAxis.includes(columnName)) {
+            dispatch(setYAxis([...yAxis, columnName]));
+            // fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+        }
+    }
+};
 
   const removeColumnFromXAxis = (columnNameToRemove) => {
     const updatedXAxis = xAxis.filter(column => column !== columnNameToRemove);
@@ -184,41 +193,44 @@ function DuealChartInput() {
                           </div>
                         ))}
                       </div>
+                     
                       {showFilterDropdown && (
-                        <div className="filter-dropdown">
-                          <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }}>
-                            <label>
-                              <ListItemButton sx={{ height: "35px" }}>
-                                <ListItemIcon>
-                                  <Checkbox style={{ marginLeft: '10px' }}
-                                    checked={selectAllChecked}
-                                    onChange={handleSelectAllChange}
-                                  />
-                                </ListItemIcon>
-                                Select All
-                              </ListItemButton>
-                            </label>
-                          </List>
-                          {filterOptions.map((option, index) => (
-                            <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }} key={index}>
-                              <label>
-                                <ListItemButton sx={{ height: "35px" }}>
-                                  <ListItemIcon>
-                                    <Checkbox style={{ marginLeft: '10px' }}
-                                      type="checkbox"
-                                      value={option}
-                                      checked={checkedOptions.includes(option)}
-                                      onChange={() => handleCheckboxChange(option)}
-                                    />
-                                  </ListItemIcon>
-                                  {option}
-                                </ListItemButton>
-                              </label>
-                            </List>
-                          ))}
-                        </div>
-                      )}
-                      
+  <div className="filter-dropdown">
+    <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }}>
+      <label>
+        <ListItemButton sx={{ height: "35px" }}>
+          <ListItemIcon>
+            <Checkbox
+              style={{ marginLeft: '10px' }}
+              checked={selectAllChecked}
+              onChange={handleSelectAllChange}
+            />
+          </ListItemIcon>
+          Select All
+        </ListItemButton>
+      </label>
+    </List>
+    {filterOptions.map((option, index) => (
+      <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }} key={index}>
+        <label>
+          <ListItemButton sx={{ height: "35px" }}>
+            <ListItemIcon>
+              <Checkbox
+                style={{ marginLeft: '10px' }}
+                type="checkbox"
+                value={option}
+                checked={checkedOptions.includes(option)}
+                onChange={() => handleCheckboxChange(option)}
+              />
+            </ListItemIcon>
+            {option}
+          </ListItemButton>
+        </label>
+      </List>
+    ))}
+  </div>
+)}
+
                     </div>
                     
                   <div className="input-fields">

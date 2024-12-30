@@ -61,6 +61,13 @@ function Navbar() {
     setAnchorEl(null);
   };
 
+  const handleMouseLeave = () => {
+    // Delay the menu close to prevent flickering if user hovers off quickly
+    setTimeout(() => {
+        setOpenMenu(false);
+        setAnchorEl(null);
+    }, 1000);  // Adjust time as needed (in ms)
+};
   const disableBackButton = () => {
     window.history.pushState(null, null, window.location.href);
     window.onpopstate = () => {
@@ -84,8 +91,14 @@ function Navbar() {
     setViewMenuAnchorEl(null);
   };
 
-
+   const handleViewMenuMouseLeave = () => {
+    setTimeout(() => {
+      setOpenViewMenu(false); // Close the View menu after delay
+      setViewMenuAnchorEl(null);
+    }, 1000); // Adjust delay time as needed
+  };
   
+
 
   const handleDesignMenuClick = (event) => {
     setDesignMenuAnchorEl(event.currentTarget);
@@ -97,8 +110,14 @@ function Navbar() {
     setOpenDesignMenu(false);
   };
   
-
-
+  const handleDesignMenuMouseLeave = () => {
+    setTimeout(() => {
+      setOpenDesignMenu(false); // Close the Design menu after delay
+      setDesignMenuAnchorEl(null);
+    }, 1000); // Adjust delay time as needed
+  };
+  
+ 
   const handleNavigation = (route) => {
     setActiveRoute(route); 
     navigate(route);
@@ -191,7 +210,8 @@ function Navbar() {
                 aria-controls={openMenu ? 'data-source-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={openMenu ? 'true' : undefined}
-                onClick={handleMenuClick}
+                onMouseOver={handleMenuClick}
+                
                 ref={buttonRef}
                 sx={{
                   backgroundColor: activeRoute === '/excel_upload' || activeRoute === '/csv_upload' || activeRoute === '/Audio_upload' ? '#c5c5c9' : 'inherit',
@@ -208,7 +228,8 @@ function Navbar() {
                 id="data-source-menu"
                 anchorEl={anchorEl}
                 open={openMenu}
-                onClose={handleMenuClose}
+                // onClose={handleMenuClose}
+                onMouseLeave={handleMenuClose}
                 PaperProps={{
                   sx: {
                     width: menuWidth || 'auto',
@@ -231,6 +252,9 @@ function Navbar() {
                 </MenuItem>
                 <MenuItem onClick={() => handleNavigation('/custom_data_source')}>
                   <DashboardCustomizeIcon  style={{ marginRight: 8 ,fontSize: 20}} /> CustomJoin
+                </MenuItem>
+                <MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
+                  <DashboardCustomizeIcon  style={{ marginRight: 8 ,fontSize: 20}} /> Create Data Source
                 </MenuItem>
               </Menu>
               {/* <Button
@@ -262,7 +286,7 @@ onClick={() => handleNavigation('/load_data')}
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={openDesignMenu ? 'true' : undefined}
-          onClick={handleDesignMenuClick}
+          onMouseOver={handleDesignMenuClick}
           sx={{
             backgroundColor:
             location.pathname === '/Create_Dashboard' ||
@@ -289,7 +313,7 @@ onClick={() => handleNavigation('/load_data')}
           id="design-menu"
           anchorEl={designMenuAnchorEl}
           open={openDesignMenu}
-          onClose={handleDesignMenuClose}
+          onMouseLeave={handleDesignMenuClose}
           PaperProps={{
             sx: {
               width: menuWidth || 'auto',
@@ -300,7 +324,7 @@ onClick={() => handleNavigation('/load_data')}
         >
           
           <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
-            Charts
+            Chart
           </MenuItem>
           <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
           Dashboard
@@ -323,7 +347,7 @@ onClick={() => handleNavigation('/load_data')}
                 aria-controls={openViewMenu ? 'view-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={openViewMenu ? 'true' : undefined}
-                onClick={handleViewMenuClick}
+                onMouseOver={handleViewMenuClick}
                 sx={{
                   backgroundColor: location.pathname === '/Create_Dashboard' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
                   maxWidth: '150px',
@@ -340,7 +364,7 @@ onClick={() => handleNavigation('/load_data')}
                 id="view-menu"
                 anchorEl={viewMenuAnchorEl}
                 open={openViewMenu}
-                onClose={handleViewMenuClose}
+                onMouseLeave={handleViewMenuClose}
                 PaperProps={{
                   sx: {
                     width: menuWidth || 'auto',
@@ -351,7 +375,7 @@ onClick={() => handleNavigation('/load_data')}
               >
                 {/* <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>Charts</MenuItem>
                 <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem> */}
-                <MenuItem onClick={() => handleNavigation('/Charts_view')}>Charts</MenuItem>
+                <MenuItem onClick={() => handleNavigation('/Charts_view')}>Chart</MenuItem>
                 <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem>
               </Menu>
             </ButtonGroup>

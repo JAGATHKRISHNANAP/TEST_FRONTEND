@@ -21,8 +21,10 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [popupVisible, setPopupVisible] = useState(false);
+    const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const contextMenuRef = useRef(null);
-
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    
     const handleClicked = async (event, chartContext, config) => {
         const clickedCategoryIndex = config.dataPointIndex;
         const clickedCategory = categories[clickedCategoryIndex];
@@ -225,6 +227,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                
                 {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}> */}
                 <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}>
+                <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
                         <Chart
                             options={options}
                             series={series}

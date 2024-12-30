@@ -838,8 +838,10 @@
 // };
 //  export default LoadExcelFile;
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback  } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+
 import {
   Container,
   AppBar,
@@ -912,11 +914,25 @@ const LoadExcelFile = () => {
       fetchTableDetails();
     }
   }, [selectedTable, databaseName]);
+  const handleSearchDebounced = debounce((query) => {
+    setSearchQuery(query);
+    handleSearchDebounced(query); 
+  }, 300);
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query); // Update the search query immediately
+    handleSearchDebounced(query); // Debounce the filtering
+  };
 
-  // Debounced search function to optimize API calls
-  const handleSearchChange = debounce((event) => {
-    setSearchQuery(event.target.value);
-  }, 500);
+
+  // // Debounced search function to optimize API calls
+  // const handleSearchChange = debounce((event) => {
+  //   setSearchQuery(event.target.value);
+  // }, 500);
+  // const handleSearchChange = (event) => {
+  //   const query = event.target.value;
+  //   debouncedSearch(query); // Call debounced function
+  // };
 
   const filteredTableNames = tableNames.filter((tableName) =>
     tableName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -962,7 +978,7 @@ const LoadExcelFile = () => {
 
           <Grid container spacing={4} sx={{ marginTop: '20px' }} justifyContent="center">
             <Grid item xs={12} md={12}>
-              <FormControl fullWidth>
+              {/* <FormControl fullWidth>
                 <InputLabel id="table-select-label"></InputLabel>
                 <Select
                   labelId="table-select-label"
@@ -1003,7 +1019,6 @@ const LoadExcelFile = () => {
                   {filteredTableNames.length > 0 ? (
                     filteredTableNames.map((tableName) => (
                       <MenuItem key={tableName} value={tableName}>
-                        sele
                         {tableName}
                       </MenuItem>
                     ))
@@ -1011,7 +1026,81 @@ const LoadExcelFile = () => {
                     <MenuItem disabled>No matching tables found</MenuItem>
                   )}
                 </Select>
-              </FormControl>
+              </FormControl> */}
+              <FormControl fullWidth>
+  <InputLabel id="table-select-label"></InputLabel>
+  <Select
+    labelId="table-select-label"
+    value={selectedTable} // Ensure this reflects only the selected table
+    onChange={handleTableSelect}
+    displayEmpty
+    
+    MenuProps={{
+      PaperProps: {
+        sx: {
+          maxHeight: 300,
+        },
+      },
+    }}
+    sx={{
+      backgroundColor: '#f9f9f9',
+      borderRadius: '10px',
+      boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    }}
+    renderValue={(selected) =>
+      selected || <em>Search and Select Table</em> // Placeholder for empty value
+    }
+  >
+    {/* Search Field as the first item */}
+    <MenuItem disableRipple>
+      {/* <TextField
+        placeholder="Search..."
+        fullWidth
+        variant="outlined"
+        value={searchQuery} // Always display the search query here
+        onChange={handleSearchChange}
+        autoFocus
+        onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing
+        sx={{
+          marginBottom: '10px',
+          backgroundColor: '#ffffff',
+          borderRadius: '8px',
+        }}
+      /> */}
+      <TextField
+  placeholder="Search..."
+  required
+  fullWidth
+  variant="outlined"
+  value={searchQuery} // Bind the searchQuery state
+  onChange={(event) => {
+    const query = event.target.value;
+    setSearchQuery(query); // Update the search query
+    // handleSearchDebounced(query); // Apply debounced filtering
+  }}
+  autoFocus
+  onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing on search
+  sx={{
+    marginBottom: '10px',
+    backgroundColor: '#ffffff',
+    borderRadius: '8px',
+  }}
+/>
+
+    </MenuItem>
+    {/* Filtered table names */}
+    {filteredTableNames.length > 0 ? (
+      filteredTableNames.map((tableName) => (
+        <MenuItem key={tableName} value={tableName}>
+          {tableName}
+        </MenuItem>
+      ))
+    ) : (
+      <MenuItem disabled>No matching tables found</MenuItem>
+    )}
+  </Select>
+</FormControl>
+
             </Grid>
 
             {/* Table Details Section */}

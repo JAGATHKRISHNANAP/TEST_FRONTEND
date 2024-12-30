@@ -57,7 +57,7 @@ function Chartsview() {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchTotalRows(user_id))
+    dispatch(fetchTotalRows(user_id,database_name))
       .unwrap()
       .then((response) => {
         if (response && response.chart_names) {

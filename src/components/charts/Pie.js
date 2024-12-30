@@ -31,6 +31,7 @@ const Pie = (props) => {
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
   const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
   const contextMenuRef = useRef(null);
+  const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
 
   const handleClicked = async (event, chartContext, config) => {
     const clickedCategoryIndex = config.dataPointIndex;
@@ -123,8 +124,8 @@ const Pie = (props) => {
         <div className="pie-chart">
           {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
           <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
-            <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
-            <Chart
+          <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+          <Chart
               options={options}
               series={series}
               type="pie"

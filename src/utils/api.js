@@ -85,8 +85,10 @@ export const signIn = async (email, password,company) => {
 
 
 export const fetchTotalRows = createAsyncThunk('chart/fetchTotalRows', async (user_id) => {
+  
+const company=localStorage.getItem('company_name');
   const response = await axios.get(`${API_URL}/total_rows`,
-    {params:{user_id:user_id},});
+    {params:{user_id:user_id,company},});
   return response.data;
 });
 
@@ -359,12 +361,49 @@ export const deleteChart = async (chartName) => {
   }
 };
 
+// export const isChartInDashboard = async (chartName) => {
+//   try {
+//     const response = await fetch(`http://localhost:5000/api/is-chart-in-dashboard?chart_name=${chartName}`);
+//     const data = await response.json();
+//     console.log('API Response for chart:', chartName, data); // Debug the API response
+//     return data;
+//   } catch (error) {
+//     console.error('Error checking chart usage:', error);
+//     return { isInDashboard: false };
+//   }
+// };
+
+// export const checkIfTableInUse = async (selectedSheet) => {
+//   const response = await fetch(`http://localhost:5000/api/checkTableUsage?tableName=${selectedSheet}`);
+//   const data = await response.json();
+//   return data.isInUse; 
+// };
+// export const fetchReportingIds = async () => {
+//   try {
+//     const companyName = localStorage.getItem('user_name');
+//     const response = await fetch(`http://localhost:5000/api/employees?company=${companyName}`);
+//     const data = await response.json();
+//     return data.map(item => ({ id: item.employee_id, name: item.employee_name }));
+//   } catch (error) {
+//     console.error('Error fetching reporting IDs:', error);
+//     throw new Error('Failed to fetch reporting IDs');
+//   }
+// };
+
+// export const fetchTableDetailsAPI = async (databaseName, selectedTable) => {
+//   const response = await fetch(`http://localhost:5000/api/fetchTableDetails?databaseName=${databaseName}&selectedTable=${selectedTable}`);
+//   const data = await response.json();
+//   return data;
+// };
+
+
 export const isChartInDashboard = async (chartName) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/is-chart-in-dashboard?chart_name=${chartName}`);
-    const data = await response.json();
-    console.log('API Response for chart:', chartName, data); // Debug the API response
-    return data;
+    const response = await axios.get(`http://localhost:5000/api/is-chart-in-dashboard`, {
+      params: { chart_name: chartName }
+    });
+    console.log('API Response for chart:', chartName, response.data); // Debug the API response
+    return response.data;
   } catch (error) {
     console.error('Error checking chart usage:', error);
     return { isInDashboard: false };
@@ -372,16 +411,24 @@ export const isChartInDashboard = async (chartName) => {
 };
 
 export const checkIfTableInUse = async (selectedSheet) => {
-  const response = await fetch(`http://localhost:5000/api/checkTableUsage?tableName=${selectedSheet}`);
-  const data = await response.json();
-  return data.isInUse; 
+  try {
+    const response = await axios.get(`http://localhost:5000/api/checkTableUsage`, {
+      params: { tableName: selectedSheet }
+    });
+    return response.data.isInUse;
+  } catch (error) {
+    console.error('Error checking table usage:', error);
+    throw new Error('Failed to check table usage');
+  }
 };
+
 export const fetchReportingIds = async () => {
   try {
     const companyName = localStorage.getItem('user_name');
-    const response = await fetch(`http://localhost:5000/api/employees?company=${companyName}`);
-    const data = await response.json();
-    return data.map(item => ({ id: item.employee_id, name: item.employee_name }));
+    const response = await axios.get(`http://localhost:5000/api/employees`, {
+      params: { company: companyName }
+    });
+    return response.data.map(item => ({ id: item.employee_id, name: item.employee_name }));
   } catch (error) {
     console.error('Error fetching reporting IDs:', error);
     throw new Error('Failed to fetch reporting IDs');
@@ -389,8 +436,13 @@ export const fetchReportingIds = async () => {
 };
 
 export const fetchTableDetailsAPI = async (databaseName, selectedTable) => {
-  const response = await fetch(`http://localhost:5000/api/fetchTableDetails?databaseName=${databaseName}&selectedTable=${selectedTable}`);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await axios.get(`http://localhost:5000/api/fetchTableDetails`, {
+      params: { databaseName, selectedTable }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching table details:', error);
+    throw new Error('Failed to fetch table details');
+  }
 };
-

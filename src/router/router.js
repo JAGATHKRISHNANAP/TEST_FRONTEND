@@ -24,7 +24,7 @@ import JsonUpload from '../pages/UploadPage/JsonUploadPage';
 import CustomDataSource from '../pages/UploadPage/customDataSource';
 
 import User_input from '../components/user/user_input';
-
+import CreateDataSource from '../pages/UploadPage/createNewDataSource';
 const AppRouter = () => {
   return (
     <Routes>
@@ -34,7 +34,7 @@ const AppRouter = () => {
       <Route path="/audio_upload" element={<AudioFile />} />
       <Route path="/json_upload" element={<JsonUpload />} />
       <Route path="/custom_data_source" element={<CustomDataSource />} />
-
+      <Route path="/Create_DataSource" element={<CreateDataSource />} />
 
 
 

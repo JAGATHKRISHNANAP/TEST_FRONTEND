@@ -141,17 +141,6 @@ const CsvUpload = () => {
   const [primaryKeyNeeded, setPrimaryKeyNeeded] = useState(false);
 
 
-  // useEffect(() => {
-  //   if (uploadError) {
-  //     setSnackbarMessage(uploadError);
-  //     setSnackbarSeverity('error');
-  //     setSnackbarOpen(true);
-  //   } else if (uploadSuccess) {
-  //     setSnackbarMessage('File uploaded successfully...');
-  //     setSnackbarSeverity('success');
-  //     setSnackbarOpen(true);
-  //   }
-  // }, [uploadError, uploadSuccess]);
   useEffect(() => {
     if (uploadError) {
       const message = typeof uploadError === "object" ? uploadError.message || JSON.stringify(uploadError) : uploadError;
@@ -171,89 +160,7 @@ const CsvUpload = () => {
     setSnackbarOpen(false);
   };
 
-  // const handleFileChange = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   if (selectedFile) {
-  //     if (selectedFile.type === 'text/csv') {
-  //       dispatch(setFile(selectedFile));
-  //       Papa.parse(selectedFile, {
-  //         header: true,
-  //         complete: (results) => {
-  //           const data = results.data;
-  //           const headers = Object.keys(data[0]);
-  //           setCsvData(data.slice(0, 5)); // Display only the first 5 rows
-
-  //           setTotalColumns(headers.length);
-  //           setTotalRows(data.length);
-  //           dispatch(setColumnHeadings(headers));
-
-  //           const numericColumns = headers.filter((header) =>
-  //             data.every((row) => !isNaN(parseFloat(row[header])) || row[header] === '')
-  //           );
-
-  //           let primaryKeyColumnIndex = null;
-  //           for (let i = 0; i < headers.length; i++) {
-  //             const uniqueValues = new Set(data.map((row) => row[headers[i]]));
-  //             if (uniqueValues.size === data.length) {
-  //               primaryKeyColumnIndex = i;
-  //               break;
-  //             }
-  //           }
-  //           if (primaryKeyColumnIndex === null) {
-  //             setPrimaryKeyNeeded(true); // No primary key detected
-  //           } else {
-  //             setPrimaryKeyNeeded(false);
-  //           }
-  //           dispatch(setPrimaryKeyColumn(primaryKeyColumnIndex));
-  //         },
-  //       });
-  //     } else {
-  //       dispatch(setFile(null));
-  //       alert('Please select a CSV file.');
-  //     }
-  //   }
-  // // };
-  // const handleFileChange = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   if (selectedFile) {
-  //     if (selectedFile.type === 'text/csv') {
-  //       dispatch(setFile(selectedFile));
-  //       Papa.parse(selectedFile, {
-  //         header: true,
-  //         complete: (results) => {
-  //           let data = results.data;
-  //           const headers = Object.keys(data[0]);
-  
-  //           // Check if a primary key exists
-  //           let primaryKeyColumnIndex = null;
-  //           for (let i = 0; i < headers.length; i++) {
-  //             const uniqueValues = new Set(data.map((row) => row[headers[i]]));
-  //             if (uniqueValues.size === data.length) {
-  //               primaryKeyColumnIndex = i;
-  //               break;
-  //             }
-  //           }
-  
-  //           if (primaryKeyColumnIndex === null) {
-  //             // Add 'id' column as primary key
-  //             const newColumnName = 'id';
-  //             data = data.map((row, index) => ({ [newColumnName]: index + 1, ...row }));
-  //             headers.unshift(newColumnName);
-  //           }
-  
-  //           setCsvData(data.slice(0, 5)); // Display only the first 5 rows
-  //           setTotalColumns(headers.length);
-  //           setTotalRows(data.length);
-  //           dispatch(setColumnHeadings(headers));
-  //           dispatch(setPrimaryKeyColumn(primaryKeyColumnIndex === null ? 0 : primaryKeyColumnIndex));
-  //         },
-  //       });
-  //     } else {
-  //       dispatch(setFile(null));
-  //       alert('Please select a CSV file.');
-  //     }
-  //   }
-  // };
+ 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -303,54 +210,6 @@ const CsvUpload = () => {
     dispatch(setPrimaryKeyColumn(index === primaryKeyColumn ? null : index));
   };
  
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   if (!file) {
-//     alert('Please upload a file.');
-//     return;
-//   }
-
-//   // Ensure the primary key column exists
-//   if (primaryKeyColumn === null || !columnHeadings[primaryKeyColumn]) {
-//     alert('Please select a primary key column or ensure it is added automatically.');
-//     return;
-//   }
-
-//   const tableName = file.name.toLowerCase().replace(/\s+/g, '_').replace(/\..+$/, '');
-//   const existingTableNames = await fetchTableNamesAPI(databaseName);
-
-//   if (existingTableNames.includes(tableName)) {
-//     // Check if the table is being used for chart creation
-//     const isTableInUse = await checkIfTableInUse(tableName);
-
-//     if (isTableInUse) {
-//       const userChoice = window.confirm(
-//         `The table "${tableName}" is being used for chart creation. Do you want to update it?`
-//       );
-//       if (!userChoice) {
-//         alert('Table update canceled.');
-//         return;
-//       }
-//     } else {
-//       const userChoice = window.confirm(`The table "${tableName}" already exists. Do you want to update it?`);
-//       if (!userChoice) {
-//         alert('Table creation skipped.');
-//         return;
-//       }
-//     }
-//   }
-
-//   // Proceed with table upload
-//   dispatch(
-//     uploadCsv({
-//       user_id,
-//       file,
-//       primaryKeyColumnName: columnHeadings[primaryKeyColumn],
-//       company_database,
-//     })
-//   );
-// };
 const handleSubmit = async (e) => {
   e.preventDefault();
 

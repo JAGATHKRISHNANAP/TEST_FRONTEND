@@ -382,18 +382,29 @@ const ExcelUpload = () => {
   const databaseName = localStorage.getItem('company_name');
   const [uploadProgress, setUploadProgress] = React.useState(0); // To store upload progress
 
+  // React.useEffect(() => {
+  //   if (uploadError) {
+  //     setSnackbarMessage(uploadError);
+  //     setSnackbarSeverity('error');
+  //     setSnackbarOpen(true);
+  //   } else if (uploadSuccess) {
+  //     setSnackbarMessage('File uploaded successfully...');
+  //     setSnackbarSeverity('success');
+  //     setSnackbarOpen(true);
+  //   }
+  // }, [uploadError, uploadSuccess]);
   React.useEffect(() => {
-    if (uploadError) {
-      setSnackbarMessage(uploadError);
+    if (uploadError && uploadError.status === false) {
+      console.log(uploadError.status);
+      setSnackbarMessage(uploadError.message);
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     } else if (uploadSuccess) {
-      setSnackbarMessage('File uploaded successfully...');
+      setSnackbarMessage("File uploaded successfully...");
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
     }
   }, [uploadError, uploadSuccess]);
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
@@ -482,13 +493,28 @@ const ExcelUpload = () => {
       return;
     }
   
-    if (!primaryKeyColumn && excelData.length > 1) {
-      // Automatically create a primary key column if not selected
-      const newHeaders = ["id", ...excelData[0]]; // Add "id" column at the start
-      const newData = excelData.slice(1).map((row, index) => [index + 1, ...row]); // Assign unique ID starting from 1
-      setExcelData([newHeaders, ...newData]);
-      dispatch(setPrimaryKeyColumn(0));
+    // if (!primaryKeyColumn && excelData.length > 1) {
+    //   // Automatically create a primary key column if not selected
+    //   const newHeaders = ["id", ...excelData[0]]; // Add "id" column at the start
+    //   const newData = excelData.slice(1).map((row, index) => [index + 1, ...row]); // Assign unique ID starting from 1
+    //   setExcelData([newHeaders, ...newData]);
+    //   dispatch(setPrimaryKeyColumn(0));
+    // }
+    if (primaryKeyColumn === null && excelData.length > 1) {
+      // Check if the "id" column already exists in the headers
+      if (!excelData[0].includes("id")) {
+        // Automatically create a primary key column if not selected and "id" doesn't exist
+        const newHeaders = ["id", ...excelData[0]]; // Add "id" column at the start
+        const newData = excelData.slice(1).map((row, index) => [index + 1, ...row]); // Assign unique ID starting from 1
+        setExcelData([newHeaders, ...newData]);
+        dispatch(setPrimaryKeyColumn(0)); // Set the new "id" column as the primary key
+      } else {
+        console.log("The 'id' column already exists. Skipping creation.");
+      }
+    } else {
+      console.log("A primary key column is already selected. Skipping creation.");
     }
+    
   
     if (primaryKeyColumn !== null && columnHeadings[primaryKeyColumn]) {
       const currentTableName = selectedSheet.toLowerCase().replace(/\s+/g, "_");

@@ -6,7 +6,9 @@ import 'react-resizable/css/styles.css'; // Import the CSS for the resizable box
 
 const AreaChart = ({ categories, values, aggregation }) => {
     const areaColor = useSelector((state) => state.chartColor.chartColor);
-
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    
+    const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const options = {
         chart: {
             type: 'area',
@@ -79,6 +81,8 @@ const AreaChart = ({ categories, values, aggregation }) => {
                 <div className="area-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}> */}
                     <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} >
+                    <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3>
+                    </div>
                         <Chart
                             options={options}
                             series={series}

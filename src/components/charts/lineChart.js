@@ -9,6 +9,7 @@ import DrillLineChart from "../drillDown/drillDownLineChart";
 import "./tooltip.css"; // Import the CSS for the tooltip
 import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
+
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
 
 const LineChart = ({ categories, values, aggregation }) => {
@@ -22,6 +23,7 @@ const LineChart = ({ categories, values, aggregation }) => {
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const [plotData, setPlotData] = useState({});
     const [barClicked, setBarClicked] = useState(false);
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
 
     const [modalOpen, setModalOpen] = useState(false); // State to manage modal visibility
     const [timePeriod, setTimePeriod] = useState(""); // State for dropdown value
@@ -226,7 +228,8 @@ const LineChart = ({ categories, values, aggregation }) => {
                 <div className="line-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
                     <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
-                    <div className="chart-title">{customHeadings}</div>
+                    <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+                
                         <Chart
                             options={options}
                             series={series}
