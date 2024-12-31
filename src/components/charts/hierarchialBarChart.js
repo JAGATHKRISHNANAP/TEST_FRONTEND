@@ -190,6 +190,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const xAxis = useSelector((state) => state.chart.xAxis);
     const yAxis = useSelector((state) => state.chart.yAxis);
     const databaseName = localStorage.getItem('company_name');
+    const [newXAxis, setNewXAxis] = useState(xAxis);
     const aggregate = useSelector((state) => state.chart.aggregate);
     const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
     const svgRef = useRef(null);
@@ -206,6 +207,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         const clickedCategory = chartData.categories[clickedCategoryIndex];
         dispatch(setClickedCategory(clickedCategory));
         console.log("clicked Category:", clickedCategory);
+        setNewXAxis(xAxis[0]);
 
         try {
             const responseData = await fetchHierarchialDrilldownDataAPI({
@@ -221,6 +223,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
             if (responseData.categories && responseData.values) {
                 setDrillStack([...drillStack, chartData]);
                 setChartData({ categories: responseData.categories, values: responseData.values });
+                setNewXAxis(responseData.next_level_column);
             } else {
                 console.log("No further levels to drill down.");
             }
@@ -275,7 +278,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
             .attr('x', adjustedWidth / 2)
             .attr('y', -margin.top / 2)
             .attr('text-anchor', 'middle')
-            .text(xAxis)
+            .text(yAxis)
             .attr('class', 'axis-label');
 
         g.append('g')
@@ -286,7 +289,8 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
             .attr('y', -margin.left / 1.5)
             .attr('transform', 'rotate(-90)')
             .attr('text-anchor', 'middle')
-            .text(yAxis)
+           
+            .text(newXAxis)
             .attr('class', 'axis-label');
 
         g.selectAll('rect')

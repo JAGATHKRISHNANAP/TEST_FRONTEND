@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const API_URL= 'http://localhost:5000'
-const API_URL='http://13.203.66.35:5000'
+const API_URL= 'http://localhost:5000'
+// const API_URL='http://13.203.66.35:5000'
 
 export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company_database,selectedSheet) => {
   const formData = new FormData();

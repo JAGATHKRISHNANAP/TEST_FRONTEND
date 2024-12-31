@@ -373,7 +373,7 @@ onClick={() => handleNavigation('/load_data')}
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={openDesignMenu ? 'true' : undefined}
-          onMouseOver={handleDesignMenuClick}
+          onClick={handleDesignMenuClick}
           sx={{
             backgroundColor:
             location.pathname === '/Create_Dashboard' ||
