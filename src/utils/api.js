@@ -50,7 +50,20 @@ export const AiMLchartData = async () => {
   }
 };
 
-
+// export const fetchPredictionData = async (xAxis, yAxis, timePeriod, number) => {
+//   try {
+//     const response = await axios.post(`${API_URL}/api/predictions`, {
+//       xAxis,
+//       yAxis,
+//       timePeriod,
+//       number,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in fetching prediction data:", error);
+//     throw error;
+//   }
+// };
 
 export const uploadAudioApi = async (file) => {
   const formData = new FormData();
@@ -654,5 +667,25 @@ export const fetchReportingIds = async () => {
   } catch (error) {
     console.error('Error fetching reporting IDs:', error);
     throw new Error('Failed to fetch reporting IDs');
+  }
+};
+
+
+
+
+export const uploadJsonFile = async (file, primaryKeyColumnName, company_database) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('primaryKeyColumnName', primaryKeyColumnName);
+  formData.append('company_database', company_database);
+
+  try {
+    const response = await axios.post(`${API_URL}/upload-json`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error uploading JSON file:", error);
+    throw error;
   }
 };

@@ -153,7 +153,11 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         
         xaxis: {
             categories: sortedCategories,
+            title: {
+                text: `${xAxis}`,
+              },
             labels: {
+
                 show: true,
                 style: {
                     fontSize: '12px',
@@ -169,6 +173,9 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             tickPlacement: 'on',
         },
         yaxis: {
+            title: {
+                text: `${yAxis}`,
+              },
             labels: {
                 style: {
                     fontSize: '12px',

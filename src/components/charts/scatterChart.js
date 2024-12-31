@@ -121,6 +121,9 @@ const LineChart = ({ categories, values, aggregation }) => {
             },
         },
         xaxis: {
+            title: {
+                text: `${xAxis}`,
+              },
             categories: categories || [], // Make sure this array has the correct category names
             labels: {
                 show: true,
@@ -132,6 +135,9 @@ const LineChart = ({ categories, values, aggregation }) => {
             }
         },
         yaxis: {
+            title: {
+                text: `${yAxis}`,
+              },
             labels: {
                 style: {
                     fontSize: '12px',

@@ -106,7 +106,7 @@ return (
           </Button>
         </Tooltip>
 
-        <Tooltip title="Dual Bar Chart" arrow>
+        {/* <Tooltip title="Dual Bar Chart" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'duealbarChart' ? 'contained' : 'outlined'}
@@ -114,7 +114,7 @@ return (
           >
             <FcComboChart size={23}/>
           </Button>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip title="Text Chart" arrow>
           <Button

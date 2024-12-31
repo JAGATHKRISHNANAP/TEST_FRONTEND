@@ -6,6 +6,8 @@ import 'react-resizable/css/styles.css'; // Import the CSS for the resizable box
 
 const AreaChart = ({ categories, values, aggregation }) => {
     const areaColor = useSelector((state) => state.chartColor.chartColor);
+    const xAxis = useSelector((state) => state.chart.xAxis);
+    const yAxis = useSelector((state) => state.chart.yAxis);
 
     const options = {
         chart: {
@@ -14,6 +16,9 @@ const AreaChart = ({ categories, values, aggregation }) => {
         },
         xaxis: {
             categories: categories || [],
+            title: {
+                text: `${xAxis}`,
+              },
             labels: {
                 show: true,
                 style: {
@@ -24,6 +29,9 @@ const AreaChart = ({ categories, values, aggregation }) => {
             }
         },
         yaxis: {
+            title: {
+                text: `${yAxis}`,
+              },
             labels: {
                 style: {
                     fontSize: '12px',

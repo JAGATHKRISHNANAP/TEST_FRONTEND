@@ -304,6 +304,21 @@ function Navbar() {
                 </ListItemIcon>
               </Button> */}
 
+
+<Button
+onClick={() => handleNavigation('/load_data')}
+    sx={{
+      backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
+      maxWidth: '150px',
+      alignItems: 'center',
+      color: 'inherit',
+    }}
+  >
+    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+      Data Table 
+    </ListItemIcon>
+  </Button>
+{/* 
 <Button
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
           aria-haspopup="true"
@@ -329,8 +344,8 @@ function Navbar() {
           >
             Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
           </ListItemIcon>
-        </Button>
-        <Menu
+        </Button> */}
+        {/* <Menu
           id="design-menu"
           anchorEl={designMenuAnchorEl}
           open={openDesignMenu}
@@ -350,7 +365,110 @@ function Navbar() {
             Charts
           </MenuItem>
           
+
+        </Menu> */}
+
+
+<Button
+          aria-controls={openDesignMenu ? 'design-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={openDesignMenu ? 'true' : undefined}
+          onMouseOver={handleDesignMenuClick}
+          sx={{
+            backgroundColor:
+            location.pathname === '/Create_Dashboard' ||
+            location.pathname === '/dashboard_view'
+                ? '#c5c5c9'
+                : 'inherit',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '150px',
+              justifyContent: 'center',
+              color: '#000000',
+              textTransform: 'none' 
+            }}
+          >
+            Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
+          </ListItemIcon>
+        </Button>
+        <Menu
+          id="design-menu"
+          anchorEl={designMenuAnchorEl}
+          open={openDesignMenu}
+          // onMouseLeave={handleDesignMenuClose}
+          onClose={handleDesignMenuClose}
+          PaperProps={{
+            sx: {
+              width: menuWidth || 'auto',
+              backgroundColor: '#ffffff',
+              color: 'black',
+            },
+          }}
+        >
+          
+          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
+            Chart
+          </MenuItem>
+          <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
+          Dashboard
+          </MenuItem>
         </Menu>
+
+{/* <Button
+  aria-controls={openDesignMenu ? 'design-menu' : undefined}
+  aria-haspopup="true"
+  aria-expanded={openDesignMenu ? 'true' : undefined}
+  onMouseOver={handleDesignMenuClick}
+  onMouseLeave={handleDesignMenuClose} // Close menu when mouse leaves the button
+  sx={{
+    backgroundColor:
+      location.pathname === '/Create_Dashboard' ||
+      location.pathname === '/dashboard_view'
+        ? '#c5c5c9'
+        : 'inherit',
+    alignItems: 'center',
+  }}
+>
+  <ListItemIcon
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      width: '150px',
+      justifyContent: 'center',
+      color: '#000000',
+      textTransform: 'none',
+    }}
+  >
+    Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
+  </ListItemIcon>
+</Button>
+<Menu
+  id="design-menu"
+  anchorEl={designMenuAnchorEl}
+  open={openDesignMenu}
+  onMouseLeave={handleDesignMenuClose} // Close menu when mouse leaves the menu
+  onMouseEnter={() => setOpenDesignMenu(true)} // Prevent immediate close on hover
+  PaperProps={{
+    sx: {
+      width: menuWidth || 'auto',
+      backgroundColor: '#ffffff',
+      color: 'black',
+    },
+  }}
+>
+  <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
+    Chart
+  </MenuItem>
+  <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
+    Dashboard
+  </MenuItem>
+</Menu> */}
+
 
               <Button
                 onClick={() => handleNavigation('/Edit_Chart')}

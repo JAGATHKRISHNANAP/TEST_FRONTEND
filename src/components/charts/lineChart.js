@@ -10,7 +10,7 @@ import "./tooltip.css"; // Import the CSS for the tooltip
 import ContectMenu from "./contextMenu";
 import CustomToolTip from "./customToolTip";
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
-import {sendCategoryToBackend} from '../../utils/api';
+import {sendCategoryToBackend,fetchPredictionDataAPI} from '../../utils/api';
 import Draggable from "react-draggable";
 
 
@@ -114,51 +114,68 @@ const LineChart = ({ categories, values, aggregation }) => {
         };
     }, []);
 
-    // New function to handle predictions
-    const handlePredictData = async () => {
-        // Call backend to fetch prediction data with selected time period and number
-        try {
-            const response = await axios.post("http://localhost:5000/api/predictions", {
-                xAxis: xAxis, // replace with actual value
-                yAxis: yAxis, // replace with actual value
-                timePeriod: timePeriod,
-                number: number,
-            });
-            const predictionData = response.data;
+    // // New function to handle predictions
+    // const handlePredictData = async () => {
+    //     // Call backend to fetch prediction data with selected time period and number
+    //     try {
+    //         const response = await axios.post("http://localhost:5000/api/predictions", {
+    //             xAxis: xAxis, // replace with actual value
+    //             yAxis: yAxis, // replace with actual value
+    //             timePeriod: timePeriod,
+    //             number: number,
+    //         });
+    //         const predictionData = response.data;
 
-            // Update plot data with predictions
-            setPlotData({
-                categories: predictionData.map((item) => item.category),
-                values: predictionData.map((item) => item.value),
-            });
-            // setBarClicked(true);
-            handleCloseModal(); // Close modal after prediction
-        } catch (error) {
-            console.error("Error fetching prediction data:", error);
-        }
-    };
+    //         // Update plot data with predictions
+    //         setPlotData({
+    //             categories: predictionData.map((item) => item.category),
+    //             values: predictionData.map((item) => item.value),
+    //         });
+    //         // setBarClicked(true);
+    //         handleCloseModal(); // Close modal after prediction
+    //     } catch (error) {
+    //         console.error("Error fetching prediction data:", error);
+    //     }
+    // };
 
-// const handlePredictData = async () => {
-//     try {
-//         // Call the separated API function
-//         const predictionData = await fetchPredictionDataAPI({
-//             xAxis,
-//             yAxis,
-//             timePeriod,
-//             number,
-//         });
+    // const handlePredictData = async () => {
+    //     try {
+    //       // Fetch prediction data from the backend
+    //       const predictionData = await fetchPredictionData(xAxis, yAxis, timePeriod, number);
+      
+    //       // Update plot data with predictions
+    //       setPlotData({
+    //         categories: predictionData.map((item) => item.category),
+    //         values: predictionData.map((item) => item.value),
+    //       });
+      
+    //       handleCloseModal(); // Close modal after prediction
+    //     } catch (error) {
+    //       console.error("Error fetching prediction data:", error);
+    //     }
+    //   };
 
-//         // Update plot data with predictions
-//         setPlotData({
-//             categories: predictionData.map((item) => item.category),
-//             values: predictionData.map((item) => item.value),
-//         });
+const handlePredictData = async () => {
+    try {
+        // Call the separated API function
+        const predictionData = await fetchPredictionDataAPI({
+            xAxis,
+            yAxis,
+            timePeriod,
+            number,
+        });
 
-//         handleCloseModal(); // Close modal after prediction
-//     } catch (error) {
-//         console.error("Failed to fetch prediction data:", error);
-//     }
-// };
+        // Update plot data with predictions
+        setPlotData({
+            categories: predictionData.map((item) => item.category),
+            values: predictionData.map((item) => item.value),
+        });
+
+        handleCloseModal(); // Close modal after prediction
+    } catch (error) {
+        console.error("Failed to fetch prediction data:", error);
+    }
+};
 
 
     const handleOpenModal = () => setModalOpen(true);
@@ -184,6 +201,9 @@ const LineChart = ({ categories, values, aggregation }) => {
         },
         xaxis: {
             categories: plotData.categories || categories || [], // Display predicted or original categories
+            title: {
+                text: `${xAxis}`,
+              },
             labels: {
                 show: true,
                 style: {
@@ -194,6 +214,9 @@ const LineChart = ({ categories, values, aggregation }) => {
             }
         },
         yaxis: {
+            title: {
+                text: `${yAxis}`,
+              },
             labels: {
                 style: {
                     fontSize: '12px',
