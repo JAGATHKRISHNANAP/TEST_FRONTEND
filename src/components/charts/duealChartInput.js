@@ -1241,12 +1241,35 @@ function DuealChartInput() {
     event.preventDefault();
   };
 
+  // const handleDrop = (event, target) => {
+  //   event.preventDefault();
+  //   const columnName = event.dataTransfer.getData("columnName");
+  //   if (target === "x-axis") {
+  //     if (!xAxis.includes(columnName)) {
+  //       dispatch(setXAxis([...xAxis, columnName]));
+  //     }
+  //   } else if (target === "y-axis") {
+  //     if (!yAxis.includes(columnName)) {
+  //       dispatch(setYAxis([...yAxis, columnName]));
+  //     }
+  //   }
+  // };
   const handleDrop = (event, target) => {
     event.preventDefault();
+    console.log("chart type.............................................",chartType)
     const columnName = event.dataTransfer.getData("columnName");
+  
+    const singleColumnChartTypes = ["bar", "pie", "scatter", "line", "area", "polarArea"]; // List of chart types that allow only one column on the X-axis
+  
     if (target === "x-axis") {
-      if (!xAxis.includes(columnName)) {
-        dispatch(setXAxis([...xAxis, columnName]));
+      if (singleColumnChartTypes.includes(chartType)) {
+        // Replace the existing column for specified chart types
+        dispatch(setXAxis([columnName]));
+      } else {
+        // Allow multiple columns for other chart types
+        if (!xAxis.includes(columnName)) {
+          dispatch(setXAxis([...xAxis, columnName]));
+        }
       }
     } else if (target === "y-axis") {
       if (!yAxis.includes(columnName)) {
@@ -1254,6 +1277,8 @@ function DuealChartInput() {
       }
     }
   };
+  
+  
 
 
   const removeColumnFromXAxis = (columnNameToRemove) => {
