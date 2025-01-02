@@ -61,7 +61,7 @@ const PolarAreaChart = ({ categories, values, aggregation }) => {
             <div className="row">
                 <div className="polar-area-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}> */}
-                    <ResizableBox width={500} height={200} minConstraints={[500, 200]} maxConstraints={[800, 600]}>
+                    <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]} >
                     
                         <Chart
                             options={options}

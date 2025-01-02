@@ -30,6 +30,10 @@ const LineChart = ({ categories, values, aggregation }) => {
     const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
     const contextMenuRef = useRef(null);
 
+        const [sortedCategories, setSortedCategories] = useState(categories);
+        const [sortedValues, setSortedValues] = useState(values);
+        // const contextMenuRef = useRef(null);
+
     // const handleClicked = async (event, chartContext, config) => {
     //     const clickedCategoryIndex = config.dataPointIndex;
     //     const clickedCategory = categories[clickedCategoryIndex];
@@ -113,12 +117,67 @@ const LineChart = ({ categories, values, aggregation }) => {
         };
     }, []);
 
+    const handleSortAscending = () => {
+        const sortedData = [...sortedValues].map((value, index) => ({
+            category: sortedCategories[index],
+            value
+        }));
+        sortedData.sort((a, b) => a.value - b.value);
+        setSortedCategories(sortedData.map(item => item.category));
+        setSortedValues(sortedData.map(item => item.value));
+    };
+
+    const handleSortDescending = () => {
+        const sortedData = [...sortedValues].map((value, index) => ({
+            category: sortedCategories[index],
+            value
+        }));
+        sortedData.sort((a, b) => b.value - a.value);
+        setSortedCategories(sortedData.map(item => item.category));
+        setSortedValues(sortedData.map(item => item.value));
+    };
+
     const options = {
+        // chart: {
+        //     id: "basic-line",
+        //     events: {
+        //         dataPointSelection: handleClicked
+        //     },
+        // },
         chart: {
-            id: "basic-line",
             events: {
                 dataPointSelection: handleClicked
             },
+             
+            toolbar: {
+                tools: {
+                    customIcons: [
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▲</button>',
+                            index: 1, // Start with the first position in the toolbar
+                            title: 'Sort Ascending',
+                            class: 'custom-sort-ascending',
+                            click: handleSortAscending
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▼</button>',
+                            index: 2, // Position right after the previous custom icon
+                            title: 'Sort Descending',
+                            class: 'custom-sort-descending',
+                            click: handleSortDescending
+                        }
+                    ],
+                    download: true,
+                    selection: true,
+                    zoom: false,
+                    zoomin: false,
+                    zoomout: false,
+                    pan: true,
+                    reset: true,
+                },
+                offsetX: -10, // Adjusts horizontal position of the toolbar inside the chart
+                offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
+            }
         },
         xaxis: {
             title: {
@@ -212,7 +271,7 @@ const LineChart = ({ categories, values, aggregation }) => {
             <div className="row">
                 <div className="line-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
-                    <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
+                   <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
                     <div className="chart-title">{customHeadings}</div>
                         <Chart
                             options={options}

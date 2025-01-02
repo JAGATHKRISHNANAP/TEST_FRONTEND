@@ -65,10 +65,10 @@ const TextChart = (props) => {
     <div align="center">
     <Card sx={{ maxWidth:300}}>
     <CardContent>
-      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+      <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
       {toolTip.customHeading}
       </Typography>
-      <Typography variant="h5" component="div">
+      <Typography sx={{ fontSize: 32 }} component="div">
       {fetchedData ? (
         <p>{result}</p>
       ) : (

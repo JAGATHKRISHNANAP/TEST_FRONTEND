@@ -8,7 +8,7 @@ import { ResizableBox } from 'react-resizable';
 import AreaChart from '../ChartViews/areaChartView';
 import AnimatedTreemap from '../ChartViews/animatedTreeMapView';
 import MapViewChart from '../ChartViews/mapChartView';
-import PolarAreaChart from '../charts/polarArea';
+import PolarAreaChart from '../ChartViews/polarAreaChartView';
 import Scatter from '../ChartViews/scatterChartView';
 import TreeHierarchyView from '../ChartViews/treeHierarchyView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';

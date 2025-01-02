@@ -405,8 +405,8 @@ onClick={() => handleNavigation('/load_data')}
           PaperProps={{
             sx: {
               width: menuWidth || 'auto',
-              backgroundColor: '#ffffff',
-              color: 'black',
+              backgroundColor: '#424242',
+              color: '#fff',
             },
           }}
         >

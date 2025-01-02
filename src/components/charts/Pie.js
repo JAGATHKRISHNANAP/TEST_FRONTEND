@@ -121,7 +121,7 @@ const Pie = (props) => {
       <div className="row">
         <div className="pie-chart">
           {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
-          <ResizableBox width={500} height={200} minConstraints={[500, 200]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
+          <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
             <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
             <Chart
               options={options}

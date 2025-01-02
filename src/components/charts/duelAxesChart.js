@@ -93,55 +93,59 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                 }
             }
         },
+        
         yaxis: [
-            {
-                title: {
-                    text: yAxis[0] || 'Series 1'
-                },
-                labels: {
-                    style: {
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        colors: ['#000'],
-                    },
-                    formatter: (value) => {
-                        if (value >= 10000000) { // For values in crores (millions)
-                            return (value / 10000000).toFixed(1) + 'M';
-                        } else if (value >= 100000) { // For values in lakhs (hundred thousand)
-                            return (value / 100000).toFixed(1) + 'L';
-                        } else if (value >= 1000) { // For values in thousands
-                            return (value / 1000).toFixed(1) + 'K';
-                        } else {
-                            return value; // For smaller values
-                        }
-                    }
-                },
+    {
+        min: 0, // Start the left y-axis from 0
+        title: {
+            text: yAxis[0] || 'Series 1'
+        },
+        labels: {
+            style: {
+                fontSize: '12px',
+                fontWeight: 400,
+                colors: ['#000'],
             },
-            {
-                opposite: true,
-                title: {
-                    text: yAxis[1] || 'Series 2'
-                },
-                labels: {
-                    style: {
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        colors: ['#000'],
-                    },
-                    formatter: (value) => {
-                        if (value >= 10000000) { // For values in crores (millions)
-                            return (value / 10000000).toFixed(1) + 'M';
-                        } else if (value >= 100000) { // For values in lakhs (hundred thousand)
-                            return (value / 100000).toFixed(1) + 'L';
-                        } else if (value >= 1000) { // For values in thousands
-                            return (value / 1000).toFixed(1) + 'K';
-                        } else {
-                            return value; // For smaller values
-                        }
-                    }
-                },
+            formatter: (value) => {
+                if (value >= 10000000) {
+                    return (value / 10000000).toFixed(1) + 'M';
+                } else if (value >= 100000) {
+                    return (value / 100000).toFixed(1) + 'L';
+                } else if (value >= 1000) {
+                    return (value / 1000).toFixed(1) + 'K';
+                } else {
+                    return value;
+                }
             }
-        ],
+        },
+    },
+    {
+        min: 0, // Start the right y-axis from 0
+        opposite: true,
+        title: {
+            text: yAxis[1] || 'Series 2'
+        },
+        labels: {
+            style: {
+                fontSize: '12px',
+                fontWeight: 400,
+                colors: ['#000'],
+            },
+            formatter: (value) => {
+                if (value >= 10000000) {
+                    return (value / 10000000).toFixed(1) + 'M';
+                } else if (value >= 100000) {
+                    return (value / 100000).toFixed(1) + 'L';
+                } else if (value >= 1000) {
+                    return (value / 1000).toFixed(1) + 'K';
+                } else {
+                    return value;
+                }
+            }
+        },
+    }
+],
+
         plotOptions: {
             bar: {
                 distributed: false,
@@ -214,7 +218,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                
                
                 {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}> */}
-                <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}>
+                <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
                         <Chart
                             options={options}
                             series={series}
@@ -237,16 +241,6 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
           </div>
         </Draggable>
       )}
-            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
-             */}
-            {/* {barClicked && <DrillBarChart
-                categories={plotData.categories}
-                values={plotData.values}
-                aggregation={plotData.aggregation}
-                xAxis={xAxis}
-                yAxis={yAxis}
-                selectedTable={selectedTable}
-            />} */}
         </div>
     );
 };
