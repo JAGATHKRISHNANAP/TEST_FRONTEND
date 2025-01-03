@@ -7,7 +7,7 @@ import LoadData from '../pages/LoadDataPage/LoadDataPage';
 import EditDashboard from '../pages/EditChartPage/EditChartPage';
 import Charts from '../components/viewChart/displayChart';
 import LoadExcelFile from '../components/load/LoadExcelFile';
-
+import LoadDbFile from '../components/load/loadDb';
 import Chartsview from '../components/viewChart/chartsView';
 
 import LoadCsvFile from '../components/load/LoadCsvFile';
@@ -50,7 +50,7 @@ const AppRouter = () => {
       <Route path="/load_csv_data" element={<LoadCsvFile />} /> */}
 
       <Route path="/load_data" element={<LoadExcelFile />} />
-      {/* <Route path="/create_dashboard" element={<Charts />} /> */}
+       <Route path="/load_db" element={<LoadDbFile />} /> 
 
       {/* homepage Routes */}
       <Route path="/home" element={<IndexHomePage />} />

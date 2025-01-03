@@ -221,7 +221,7 @@ function Navbar() {
                 }}
               >
                 <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
-                  Data Source <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
+                  Data Source 
                 </ListItemIcon>
               </Button>
               <Menu
@@ -229,7 +229,7 @@ function Navbar() {
                 anchorEl={anchorEl}
                 open={openMenu}
                 // onClose={handleMenuClose}
-                onMouseLeave={handleMenuClose}
+                onClose={handleMenuClose}
                 PaperProps={{
                   sx: {
                     width: menuWidth || 'auto',
@@ -282,6 +282,19 @@ onClick={() => handleNavigation('/load_data')}
     </ListItemIcon>
   </Button>
   
+  <Button
+onClick={() => handleNavigation('/load_db')}
+    sx={{
+      backgroundColor: location.pathname === '/load_db' ? '#c5c5c9' : 'inherit',
+      maxWidth: '150px',
+      alignItems: 'center',
+      color: 'inherit',
+    }}
+  >
+    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+      Load Db 
+    </ListItemIcon>
+  </Button>
 <Button
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
           aria-haspopup="true"
@@ -306,14 +319,14 @@ onClick={() => handleNavigation('/load_data')}
               textTransform: 'none' 
             }}
           >
-            Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
+            Design 
           </ListItemIcon>
         </Button>
         <Menu
           id="design-menu"
           anchorEl={designMenuAnchorEl}
           open={openDesignMenu}
-          onMouseLeave={handleDesignMenuClose}
+          onClose={handleDesignMenuClose}
           PaperProps={{
             sx: {
               width: menuWidth || 'auto',
@@ -349,14 +362,14 @@ onClick={() => handleNavigation('/load_data')}
                 aria-expanded={openViewMenu ? 'true' : undefined}
                 onMouseOver={handleViewMenuClick}
                 sx={{
-                  backgroundColor: location.pathname === '/Create_Dashboard' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
+                  backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
                   maxWidth: '150px',
                   alignItems: 'center',
                   color: 'inherit',
                 }}
               >
                 <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' ,textTransform: 'none' }}>
-                  View <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
+                  View 
                 </ListItemIcon>
               </Button>
 
@@ -364,7 +377,7 @@ onClick={() => handleNavigation('/load_data')}
                 id="view-menu"
                 anchorEl={viewMenuAnchorEl}
                 open={openViewMenu}
-                onMouseLeave={handleViewMenuClose}
+                onClose={handleViewMenuClose}
                 PaperProps={{
                   sx: {
                     width: menuWidth || 'auto',

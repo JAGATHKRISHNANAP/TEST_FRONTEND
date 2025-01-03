@@ -30,9 +30,8 @@ import DualAxisChart from '../ChartViews/duelAxisChartView';
 
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 
-
-
 import MapChart from '../ChartViews/mapChartView';
+import WordCloud from '../ChartViews/wordCloudView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { HierarchialBarChart_chart, sendChartData } from "../../utils/api";
@@ -59,7 +58,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const [hierarchyData,setHierarchyData]=useState(null);
   const [aiChartData,setAiChartData]=useState(null);
   const database_name =localStorage.getItem("company_name");
-
+  const connectionType =localStorage.getItem("connectionType");
 
   const chart_id = data[0];
   const text_y_xis = data[2];
@@ -119,7 +118,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         chart_heading: data[7],
         filter_options: data[9],
         databaseName: data[10],
-        
+        connectionType,
         position, // Send position to backend
       });
   
@@ -342,7 +341,11 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
               return <MapChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} />;
             }
             break;
-  
+            case 'wordCloud':
+                if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
+                  return <WordCloud categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))}  />;
+                }
+                break;
 
         
       case 'singleValueChart':
@@ -354,13 +357,13 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
             width={300}
             height={200}
             minConstraints={[200, 90]}
-            maxConstraints={[800, 600]}
+            maxConstraints={[400, 600]}
             onResize={handleResize}
           >
             <div style={{ textAlign: 'center' }}>
-              <h4 style={{ fontSize: `${width / 15}px` }}>{heading.replace(/"/g, '')}</h4>
+              <h4 style={{ fontSize: `${width / 20}px` }}>{heading.replace(/"/g, '')}</h4>
               <div>
-                <h2 style={{ fontSize: `${width / 10}px` }}>
+                <h2 style={{ fontSize: `${width / 20}px` }}>
                   {fetchedData ? result : 'Loading data...'}
                 </h2>
               </div>

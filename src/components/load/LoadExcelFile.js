@@ -905,6 +905,7 @@ const LoadExcelFile = () => {
         try {
           const data = await fetchTableDetailsAPI(databaseName, selectedTable); // Send company name and selected table to backend
           setTableDetails(data); // Store table details in state
+          localStorage.setItem('connectionType', 'local'); 
         } catch (error) {
           console.error('Error fetching table details:', error);
         } finally {

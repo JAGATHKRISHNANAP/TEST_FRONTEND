@@ -92,8 +92,8 @@ function Chartsview() {
       const data = response.data;
 
       // Increase chart size based on window size
-      const chartWidth = windowSize.width * 0.8; // 80% of the window width
-      const chartHeight = windowSize.height * 0.6; // 60% of the window height
+      const chartWidth = windowSize.width * 0.6; // 80% of the window width
+      const chartHeight = windowSize.height * 0.4; // 60% of the window height
 
       setChartData([
         {

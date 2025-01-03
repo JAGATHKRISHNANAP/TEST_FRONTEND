@@ -23,8 +23,9 @@ export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company
 
 
 export const saveDataToDatabase = async ({
-  user_id,company_name,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
+  user_id,company_name,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName
 }) => {
+  
   const response = await axios.post(`${API_URL}/save_data`, {
     user_id,company_name,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),    saveName,
   });
@@ -34,7 +35,9 @@ export const saveDataToDatabase = async ({
 
 export const plot_chart = async (data) => {
   const response = await axios.post('http://localhost:5000/plot_chart', data);
+  console.log("response",response.data)
   return response.data;
+  
 };
 
 
@@ -444,5 +447,59 @@ export const fetchTableDetailsAPI = async (databaseName, selectedTable) => {
   } catch (error) {
     console.error('Error fetching table details:', error);
     throw new Error('Failed to fetch table details');
+  }
+};
+// utils/api.js
+
+export const fetchTableNamesFromExternalDB = async (databaseName) => {
+  const response = await fetch(`${API_URL}/external-db/tables?databaseName=${databaseName}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch table names');
+  }
+  return await response.json();
+};
+
+export const fetchTableDetailsFromExternalDB = async (databaseName, tableName) => {
+  const response = await fetch(`${API_URL}/external-db/tables/${tableName}?databaseName=${databaseName}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch table details');
+  }
+  return await response.json();
+};
+
+// export const fetchUsers = async (databaseName) => {
+//   try {
+//     console.log("Fetching users for database:", databaseName);
+//     const response = await axios.get(`${API_URL}/api/users`, {
+//     params: { databaseName }, // Check this
+
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching users:', error);
+//     throw error;
+//   }
+// };
+
+
+// export const fetchUsers = async (databaseName) => {
+//   const response = await fetch(`${API_URL}/api/users`);
+//   if (!response.ok) {
+//     throw new Error('Failed to fetch table names');
+//   }
+//   return await response.json();
+// };
+
+export const fetchUsers = async (databaseName) => {
+  try {
+    console.log("Fetching users for database:", databaseName);
+    const response = await axios.get(`${API_URL}/api/users`, {
+      params: { databaseName },
+    });
+    console.log("Fetched users:", response.data); // Log the response
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
   }
 };

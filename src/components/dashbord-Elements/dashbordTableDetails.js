@@ -17,7 +17,9 @@ function DashboardTableDetails({ handleTableChange }) {
 
   const fetchColumnInfo = async (checkedPaths) => {
     try {
-      const response = await fetch(`http://localhost:5000/column_names/${checkedPaths}?databaseName=${databaseName}`);
+      const connectionType = localStorage.getItem('connectionType'); // Get connection type from localStorage
+   
+      const response = await fetch(`http://localhost:5000/column_names/${checkedPaths}?databaseName=${databaseName}&connectionType=${connectionType}`);
       const data = await response.json();
       if (data && data.numeric_columns && Array.isArray(data.numeric_columns) &&
         data.text_columns && Array.isArray(data.text_columns)) {

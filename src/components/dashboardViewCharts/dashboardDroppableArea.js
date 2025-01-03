@@ -13,7 +13,7 @@ import Scatter from '../ChartViews/scatterChartView';
 import TreeHierarchyView from '../ChartViews/treeHierarchyView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
-
+import wordCloudChart from '../ChartViews/wordCloudView'
 const DroppableArea = () => {
   const droppableAreaRef = useRef(null);
   const chartdata = useSelector((state) => state.viewdashboard.dashboard_charts);
@@ -160,13 +160,16 @@ const DroppableArea = () => {
 
 
 
-{chart.chart_type === 'polarArea' && (
-                        <PolarAreaChart
-                          categories={chart.categories}
-                          values={chart.values}
-                        />
-                      )}
-          </div>
+            {chart.chart_type === 'polarArea' && (
+            <PolarAreaChart
+            categories={chart.categories}
+            values={chart.values}
+          />
+        )}
+        {chart.chart_type === 'wordCloudChart' && (
+          <wordCloudChart x_axis={chart.x_axis} categories={chart.categories} />
+        )}
+        </div>
         ))
       ) : (
         <p></p>

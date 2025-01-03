@@ -262,6 +262,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 </div> */}
             <div className="row">
                 <div className="mixed-chart">
+                
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
                     <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
                         <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3>

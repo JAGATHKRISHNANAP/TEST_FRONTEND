@@ -38,7 +38,7 @@ import {
 import { saveDataToDatabase } from '../../utils/api';
 import Treemap from '../charts/animatedTreeChart';
 import AiChart from '../charts/aiChart';
-
+import WordCloudChart from '../charts/wordCloudChart';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -129,6 +129,7 @@ function Dashboard() {
         dashboardBarColor,
         checkedOptions,
         saveName,
+        
       });
       console.log('Data saved successfully:', response);
       setOpen(false);
@@ -364,6 +365,18 @@ function Dashboard() {
                           </div>
                         </div>
                       )}
+                      {xAxis.length > 0 && chartType === "wordCloud" && (
+              <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <WordCloudChart categories={plotData?.categories} values={plotData?.values}  />
+                    </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={handleSaveButtonClick}>Save Data to Database</button>
+                </div>
+              </div>
+            )}
           </Grid>
           <Grid item xs={12} md={1.5}>
             <Item>

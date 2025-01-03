@@ -17,6 +17,7 @@ import AlignHorizontalLeftIcon from '@mui/icons-material/AlignHorizontalLeft';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 
+import CloudIcon from '@mui/icons-material/Cloud';
 import { FcComboChart } from "react-icons/fc";
 
 function DashboardCharts() {
@@ -195,6 +196,14 @@ return (
           >
             <PsychologyIcon/>
           </Button>
+          <Tooltip title="wordCloud" arrow></Tooltip>
+          <Button
+            sx={{ margin: "2px" }}
+            variant={chartType === 'wordCloud' ? 'contained' : 'outlined'}
+            onClick={() => handleChartTypeChange('wordCloud')}
+            >
+              <CloudIcon /> 
+            </Button>
         </Tooltip>
       </div>
     </Box>

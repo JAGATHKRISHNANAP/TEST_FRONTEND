@@ -3,7 +3,9 @@ import * as d3 from 'd3';
 import { useSelector } from 'react-redux';
 import './TextChart.css'; 
 import { ResizableBox } from 'react-resizable';
-
+import "./tooltip.css";
+import ContectMenu from './contextMenu';
+import CustomToolTip from './customToolTip';
 const Treemap = ({ categories = [], values = [] }) => {
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
@@ -12,10 +14,13 @@ const Treemap = ({ categories = [], values = [] }) => {
     const [animationId, setAnimationId] = useState(null);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-
+    const toolTipOptions = useSelector((state) => state.toolTip);
+    const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const chartColor = useSelector((state) => state.chartColor.chartColor);
     const [boxSize, setBoxSize] = useState({ width: 500, height: 400 });
-
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    const [popupVisible, setPopupVisible] = useState(false);
+        const contextMenuRef = useRef(null);
     const handleSliderChange = (event) => {
         setSliderValue(event.target.value);
     };
@@ -25,7 +30,25 @@ const Treemap = ({ categories = [], values = [] }) => {
         setContextMenuPosition({ x: event.pageX, y: event.pageY });
         setContextMenuVisible(true);
     };
-
+     const handleShowPopup = () => {
+            setPopupVisible(true);
+            setContextMenuVisible(false);
+        };
+        const handleClickOutside = (event) => {
+            if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+                setContextMenuVisible(false);
+            }
+        };
+        const handleClosePopup = () => {
+            setPopupVisible(false);
+        };
+    
+        useEffect(() => {
+            document.addEventListener('click', handleClickOutside);
+            return () => {
+                document.removeEventListener('click', handleClickOutside);
+            };
+        }, []);
     const handlePlayPause = () => {
         if (!isPlaying) {
             setIsPlaying(true);
@@ -157,32 +180,39 @@ const Treemap = ({ categories = [], values = [] }) => {
 
     return (
         <div>
-            <div>
-                <label>Adjust Data with Scrubber: </label>
-                <input
-                    type="range"
-                    min="0.1"
-                    max="5"
-                    step="0.01"
-                    value={sliderValue}
-                    onChange={handleSliderChange}
-                />
-                <span>{sliderValue}</span>
-                <button onClick={handlePlayPause}>
-                    {isPlaying ? "Pause" : "Play"}
-                </button>
-            </div> 
+            
+            <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+            
             <ResizableBox 
+            
                 width={boxSize.width} 
                 height={boxSize.height} 
                 minConstraints={[300, 300]} 
                 maxConstraints={[800, 600]} 
                 onResize={(event, { size }) => setBoxSize(size)}
                 onContextMenu={handleContextMenu}
-            >
+            ><div>  
+            <label>Adjust Data with Scrubber: </label>
+            <input
+                type="range"
+                min="0.1"
+                max="5"
+                step="0.01"
+                value={sliderValue}
+                onChange={handleSliderChange}
+            />
+            <span>{sliderValue}</span>
+            <button onClick={handlePlayPause}>
+                {isPlaying ? "Pause" : "Play"}
+            </button>
+        </div> 
                 <svg ref={svgRef}></svg>
                 <div ref={tooltipRef} className="maptooltip" style={{ display: 'none', position: 'absolute', opacity: 0 }}></div>
             </ResizableBox>
+            {contextMenuVisible && (
+                <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
+            )}
+            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
         </div>
     );
 };
