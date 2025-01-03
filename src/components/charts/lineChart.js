@@ -1022,11 +1022,16 @@ const LineChart = ({ categories, values, aggregation }) => {
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
                              {popupVisible && (
-        <Draggable>
+        // <Draggable>
           <div>
             <CustomToolTip onClose={handleClosePopup} />
           </div>
-        </Draggable>
+        // </Draggable>
+//         <Draggable handle=".drag-handle">
+//     <div>
+//         <CustomToolTip onClose={handleClosePopup} />
+//     </div>
+// </Draggable>
       )}
         </div>
     );

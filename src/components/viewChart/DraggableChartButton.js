@@ -80,17 +80,18 @@ const DraggableChartButton = ({ chartName, disabled, onRemove }) => {
     <div style={{ display: 'inline-flex', alignItems: 'center', margin: '4px' }} ref={drag}>
       <Button
         sx={{
-          margin: '4px',
-          minWidth: '90px',
+          margin: '1px',
+          minWidth: '80px',
           color: 'white',
           backgroundColor: 'primary.main',
           justifyContent: 'center',
-          maxHeight: '28px',
+          maxHeight: '38px',
           fontSize: '12px',
           textOverflow: 'ellipsis',
           padding: '6px',
           position: 'relative',
-          display: 'inline-flex',
+          display: 'flex',
+          marginBottom: '4px',
           borderRadius: '4px',
           '&:hover': {
             backgroundColor: 'primary.dark',

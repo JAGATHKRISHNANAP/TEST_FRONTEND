@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Divider ,Tooltip } from '@mui/material';
 import { BarChart as BarChartIcon, PieChart as PieChartIcon, ScatterPlot as ScatterPlotIcon, Timeline as TimelineIcon } from '@mui/icons-material';
@@ -20,9 +20,38 @@ import { FcComboChart } from "react-icons/fc";
 
 function DashboardCharts() {
   const dispatch = useDispatch();
-  const chartType = useSelector((state) => state.chartType.type);
-  const xAxis = useSelector((state) => state.chart.xAxis);
-  const yAxis = useSelector((state) => state.chart.yAxis);
+  const DchartType = useSelector((state) => state.chartType.type);
+  const DxAxis = useSelector((state) => state.chart.xAxis);
+  const DyAxis = useSelector((state) => state.chart.yAxis);
+
+  
+  const EchartType = useSelector((state) => state.chartdata.chartType);
+  const ExAxis = useSelector((state) => state.chartdata.xAxis);
+  const EyAxis = useSelector((state) => state.chartdata.yAxis);
+
+  const chartType = DchartType||EchartType;
+  const xAxis = (DxAxis && DxAxis.length > 0) ? DxAxis : ExAxis;
+  const yAxis = (DyAxis && DyAxis.length > 0) ? DyAxis : EyAxis;
+  
+
+
+  console.log("EchartType:", EchartType);
+  console.log("ExAxis:", ExAxis);
+  console.log("EyAxis:", EyAxis);
+
+
+  console.log("chartType:", chartType);
+  console.log("yAxis:", xAxis);
+  console.log("yAxis:", yAxis);
+
+  
+  useEffect(() => {
+      console.log("chartType:", chartType);
+  }, [chartType]);
+
+
+
+  
 
   const handleChartTypeChange = (selectedChartType) => {
     dispatch(setChartType(selectedChartType));
@@ -31,8 +60,9 @@ function DashboardCharts() {
   const isButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 1);
   const isdueaLButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 2);
   const isBARHIERARCHYButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length >= 1);
-  const isTreeButtonDisabled = !(xAxis?.length >= 1);
-  const isSingleValueButtonDisabled = !(xAxis?.length === 1);
+  const isTreeButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length===0 );
+  const isSingleValueButtonDisabled = !(xAxis?.length === 1  && yAxis?.length===0);
+  // const aiChartButtonDisabled = (xAxis?.length === 1 && yAxis?.length === 1);
 
 return (
   <div className="App">    
@@ -208,6 +238,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'sampleAitestChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('sampleAitestChart')}
+            // disabled={aiChartButtonDisabled}
           >
             <TipsAndUpdatesIcon/>
           </Button>
@@ -218,6 +249,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'AiCharts' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('AiCharts')}
+            // disabled={aiChartButtonDisabled}
           >
             <PsychologyIcon/>
           </Button>

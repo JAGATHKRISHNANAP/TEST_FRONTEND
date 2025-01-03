@@ -689,3 +689,55 @@ export const uploadJsonFile = async (file, primaryKeyColumnName, company_databas
     throw error;
   }
 };
+
+
+
+
+
+export const saveChartData = async ({
+  chartId,
+  selectedTable,
+  xAxis,
+  yAxis,
+  aggregate,
+  chartType,
+  plotData,
+  barColor,
+  dashboardPlotData,
+  dashboardBarColor,
+  checkedOptions,
+}) => {
+  try {
+    console.log('Sending data to save:', {
+      chartId,
+      selectedTable,
+      xAxis,
+      yAxis,
+      aggregate,
+      chartType,
+      chartData: plotData,
+      chartColor: barColor,
+      drilldownChartData: dashboardPlotData,
+      drillDownChartColor: dashboardBarColor,
+      filterOptions: checkedOptions.join(', '),
+    });
+
+    const response = await axios.post('http://localhost:5000/update_data', {
+      chartId,
+      selectedTable,
+      xAxis,
+      yAxis,
+      aggregate,
+      chartType,
+      chartData: plotData,
+      chartColor: barColor,
+      drilldownChartData: dashboardPlotData,
+      drillDownChartColor: dashboardBarColor,
+      filterOptions: checkedOptions.join(', '),
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error saving data:', error);
+    throw error; // Re-throw the error so the calling function can handle it
+  }
+};

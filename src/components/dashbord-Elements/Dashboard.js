@@ -194,7 +194,7 @@ function Dashboard() {
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
-                    <AreaChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
+                    <AreaChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
                   </div>
                 </Items>
                 <div className='btn-container'>

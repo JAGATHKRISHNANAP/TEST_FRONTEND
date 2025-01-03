@@ -73,3 +73,9 @@
     visibility: visible;
     opacity: 1;
 }
+
+
+
+.draggable-bar {
+    cursor: move;
+}

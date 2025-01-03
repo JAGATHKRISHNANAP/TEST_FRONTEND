@@ -178,6 +178,7 @@ function Chartsview() {
           left: 0,
           right: 0,
           bgcolor: "white",
+          overflowY: "auto",
           boxShadow: 3,
           height: "35px",
           marginBottom: "5px",

@@ -396,11 +396,37 @@ function Charts() {
             </Button>
           </DialogActions>
         </Dialog>
-        <Grid item xs={12} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', boxShadow: 3,height:'35px' ,marginBottom:'5px'}}>
+        {/* <Grid item xs={12} sx={{   overflowX: 'auto', 
+  overflowY: 'hidden',  position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', boxShadow: 3,height:'35px' ,marginBottom:'1px',marginLeft:'1px',marginRight:'1px'}}>
           <Box sx={{ display: 'flex', justifyContent: 'center',height:'30px', marginTop:'3px' }}>
             {renderedDraggableButtons}
           </Box>
-        </Grid>
+        </Grid> */}
+<Grid item xs={12} sx={{ 
+  overflowX: 'auto', 
+  overflowY: 'hidden', 
+  position: 'fixed', 
+  bottom: 0, 
+  left: 0, 
+  right: 0, 
+  bgcolor: 'white', 
+  boxShadow: 3, 
+  height: '35px', 
+  marginBottom: '1px', 
+  marginLeft: '1px', 
+  marginRight: '1px', 
+  paddingBottom: '15px' }}> {/* Increased paddingBottom */}
+  <Box sx={{ 
+    display: 'flex', 
+    justifyContent: 'flex-start', 
+    height: '30px', 
+    marginTop: '3px', 
+    whiteSpace: 'nowrap' }}>
+    {renderedDraggableButtons}
+  </Box>
+</Grid>
+
+
       </div>
     </DndProvider>
   );

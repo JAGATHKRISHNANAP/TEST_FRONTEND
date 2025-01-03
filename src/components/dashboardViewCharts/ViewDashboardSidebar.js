@@ -224,7 +224,6 @@ function ViewDashboardSidebar() {
       <Dialog open={openModal} onClose={() => setOpenModal(false)}>
         <DialogTitle>Delete Chart</DialogTitle>
         <DialogContent>
-          {/* Display chart name in the modal */}
           <p>Are you sure you want to delete the chart: <strong>{chartToDelete ? chartToDelete.chartName : ""}</strong>?</p>
         </DialogContent>
         <DialogActions>

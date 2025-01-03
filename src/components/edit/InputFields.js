@@ -14,7 +14,7 @@ import DuelAxisChart from "../charts/duelAxesChart";
 import TextChart from "../charts/textChart";
 import PolarAreaChart from "../charts/polarArea";
 
-import {fetchFilterOptionsAPI,generateChartData} from '../../utils/api';
+import {fetchFilterOptionsAPI,generateChartData,saveChartData} from '../../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -67,25 +67,6 @@ function EditDashboard() {
     }
   }, [xAxis, yAxis, aggregate, chartType, checkedOptions]);
 
-  // const generateChart = async () => {
-  //   setIsChartGenerationClicked(true);
-  //   try {
-  //     const xAxisColumns = xAxis.join(', ');
-  //     const response = await axios.post('http://localhost:5000/edit_plot_chart', {
-  //       selectedTable,
-  //       xAxis: xAxisColumns,
-  //       yAxis,
-  //       aggregate,
-  //       chartType,
-  //       filterOptions: checkedOptions.join(', '),
-  //       databaseName,
-  //     });
-  //     setPlotData(response.data);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };
-
   const generateChart = async () => {
     setIsChartGenerationClicked(true);
     try {
@@ -122,21 +103,6 @@ const fetchFilterOptions = async (columnName) => {
     console.error('Failed to fetch filter options:', error);
   }
 };
-
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`,{
-  //       params: { databaseName }
-  //     });
-  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-  //     setFilterOptions(options);
-  //     setCheckedOptions(chartData[9]);
-  //     setShowFilterDropdown(true);
-  //     setSelectAllChecked(false);
-  //   } catch (error) {
-  //     console.error('Error fetching filter options:', error);
-  //   }
-  // };
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
@@ -185,40 +151,29 @@ const fetchFilterOptions = async (columnName) => {
     }
   }, [xAxis]);
 
-  const saveDataToDatabase = async () => {
-    try {
-      console.log('Sending data to save:', {
-        chartId,
-        selectedTable,
-        xAxis,
-        yAxis,
-        aggregate,
-        chartType,
-        chartData: plotData,
-        chartColor: barColor,
-        drilldownChartData: dashboardPlotData,
-        drillDownChartColor: dashboardBarColor,
-        filterOptions: checkedOptions.join(', '),
-      });
-
-      const response = await axios.post('http://localhost:5000/update_data', {
-        chartId,
-        selectedTable,
-        xAxis,
-        yAxis,
-        aggregate,
-        chartType,
-        chartData: plotData,
-        chartColor: barColor,
-        drilldownChartData: dashboardPlotData,
-        drillDownChartColor: dashboardBarColor,
-        filterOptions: checkedOptions.join(', '),
-      });
-      console.log('Data saved successfully:', response.data);
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
+const saveDataToDatabase = async () => {
+  try {
+    const data = {
+      chartId,
+      selectedTable,
+      xAxis,
+      yAxis,
+      aggregate,
+      chartType,
+      plotData,
+      barColor,
+      dashboardPlotData,
+      dashboardBarColor,
+      checkedOptions,
+    };
+    const response = await saveChartData(data);
+    alert('saved successfully!');
+    console.log('Data saved successfully:', response);
+  } catch (error) {
+    alert('not Saved!');
+    console.error('Error saving data:', error);
+  }
+};
 
 
   return (
@@ -322,7 +277,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <Pie categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -332,7 +287,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <LineChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -342,7 +297,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <ScatterPlot categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -353,7 +308,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <BarChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -364,7 +319,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <AreaChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -374,7 +329,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <PolarAreaChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -384,7 +339,7 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <TextChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save</button>
               </Item>
             </div>
           )}
@@ -394,14 +349,10 @@ const fetchFilterOptions = async (columnName) => {
                 <div className="chart-container">
                   <DuelAxisChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
                 </div>
-                <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                <button className="save-button" onClick={saveDataToDatabase}>Save </button>
               </Item>
             </div>
           )}
-
-
-
-
     </div>
   );
 }

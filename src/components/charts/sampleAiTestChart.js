@@ -60,9 +60,9 @@ const AiChart = () => {
                   },
                 },
                 yaxis: {
-                  // title: {
-                  //   // text: data.y_axis_label || 'Y Axis',
-                  // },
+                  title: {
+                    text: data.y_axis_label || 'Frequency',
+                  },
                 },
                 title: {
                   // text: data.title,

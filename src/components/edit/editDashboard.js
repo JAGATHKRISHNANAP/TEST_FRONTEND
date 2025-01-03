@@ -3,6 +3,7 @@ import EditDashbordSidebar from "./editDashbordSidebar";
 import { Box, Checkbox, FormControl, Grid, InputLabel, List, ListItemButton, ListItemIcon, NativeSelect, Paper, styled } from "@mui/material";
 import DashboardCharts from "../dashbord-Elements/dashbord-chartComponent";
 import InputFields from "./InputFields";
+import { useSelector } from "react-redux";
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -14,7 +15,11 @@ const Item = styled(Paper)(({ theme }) => ({
 function EditDashboard() {
     const [chartData, setChartData] = useState(null);
     const [checkedOptions, setCheckedOptions] = useState([]);
-    console.log("1-----",checkedOptions)
+    // const chartType = useSelector((state) => state.chartType?.type||state.chartdata?.chartType);
+    // const xAxis = useSelector((state) => state.chart?.xAxis || state.chartdata?.xAxis);
+    // const yAxis = useSelector((state) => state.chart?.yAxis || state.chartdata?.yAxis);
+
+    // console.log("1-----",checkedOptions)
 
     if (chartData && chartData[10] && Array.isArray(chartData[10])) {
         setCheckedOptions(chartData[10]);
