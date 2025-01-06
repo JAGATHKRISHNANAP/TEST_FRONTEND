@@ -349,9 +349,9 @@ function DuealChartInput() {
   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
   const fetchFilterOptions = async (columnName) => {
     try {
-      const connectionType = localStorage.getItem('connectionType'); // Get connection type from localStorage
+      const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
       const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-        params: { databaseName,connectionType }
+        params: { databaseName,selectedUser }
       });
       const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
       dispatch(setFilterOptions(options));

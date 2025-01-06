@@ -58,8 +58,8 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const [hierarchyData,setHierarchyData]=useState(null);
   const [aiChartData,setAiChartData]=useState(null);
   const database_name =localStorage.getItem("company_name");
-  const connectionType =localStorage.getItem("connectionType");
-
+ 
+  const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
   const chart_id = data[0];
   const text_y_xis = data[2];
   const text_y_aggregate = data[4];
@@ -118,7 +118,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         chart_heading: data[7],
         filter_options: data[9],
         databaseName: data[10],
-        connectionType,
+        selectedUser,
         position, // Send position to backend
       });
   

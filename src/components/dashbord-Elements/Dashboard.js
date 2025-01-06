@@ -62,6 +62,9 @@ function Dashboard() {
   const [saveName, setSaveName] = useState('');
   const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
   const [company_name, setCompanyName] = React.useState(localStorage.getItem('company_name'));
+  const [previousState, setPreviousState] = useState({ xAxis: '', yAxis: '', chartType: '' });
+
+  const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
   console.log('user_id:', user_id); 
   console.log('company_name:', company_name);
 
@@ -82,7 +85,7 @@ function Dashboard() {
 
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
-      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
+      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
     }
   }, [SelectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
   const preventReload = (e) => {
@@ -98,8 +101,23 @@ function Dashboard() {
       window.removeEventListener('beforeunload', preventReload);
     };
   }, []);
+  // const handleSaveButtonClick = () => {
+  //   setSaveName('');
+  //   setOpen(true);
+  // };
+
+  useEffect(() => {
+    if (
+      previousState.xAxis !== xAxis ||
+      previousState.yAxis !== yAxis ||
+      previousState.chartType !== chartType
+    ) {
+      setSaveName('');
+      setPreviousState({ xAxis, yAxis, chartType });
+    }
+  }, [xAxis, yAxis, chartType, previousState]);
+
   const handleSaveButtonClick = () => {
-    setSaveName('');
     setOpen(true);
   };
 
@@ -118,6 +136,7 @@ function Dashboard() {
       const response = await saveDataToDatabase({
         user_id,
         company_name,
+        selectedUser,
         selectedTable,
         databaseName,
         xAxis,

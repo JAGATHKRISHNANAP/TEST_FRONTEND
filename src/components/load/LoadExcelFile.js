@@ -941,6 +941,7 @@ const LoadExcelFile = () => {
 
   const handleTableSelect = (event) => {
     setSelectedTable(event.target.value);
+    localStorage.removeItem('selectedUser'); 
   };
 
   const handleLoadTable = () => {

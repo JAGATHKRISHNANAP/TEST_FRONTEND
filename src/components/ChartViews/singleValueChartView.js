@@ -7,6 +7,7 @@ import { setToolTipOptions } from '../../features/ToolTip/toolTipSlice';
 import { sendChartData } from "../../utils/api";
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
 
+  const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
 const TextChart = (props) => {
 
   const [fetchedData, setFetchedData] = useState(null);
@@ -30,7 +31,7 @@ const TextChart = (props) => {
   useEffect(() => {
     const sendDataToBackend = async () => {
       try {
-        const response = await sendChartData(text_y_xis, text_y_database, text_y_table, text_y_aggregate);
+        const response = await sendChartData(text_y_xis, text_y_database, text_y_table, text_y_aggregate,selectedUser);
         console.log("Response from backend:", response);
 
         const fetchedData = response.data;
@@ -44,7 +45,7 @@ const TextChart = (props) => {
     };
 
     sendDataToBackend();
-  }, [text_y_xis, text_y_database, text_y_table, text_y_aggregate]); 
+  }, [text_y_xis, text_y_database, text_y_table, text_y_aggregate,selectedUser]); 
   
   useEffect(() => {
     const toolTipText = `Total ${text_y_aggregate} of ${text_y_xis}`;

@@ -25,7 +25,37 @@
   }
 
 
-
+  .card-container {
+    margin: 20px auto;
+    max-width: 400px;
+    width: 80%;
+    padding: 16px;
+  }
+  
+  .card-text {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .card-title {
+    font-size: 14px;
+    color: gray;
+  }
+  .react-resizable {
+    position: relative;
+  }
+  
+  .react-resizable-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+    z-index: 10;
+  }
+    
 
   .color-picker {
     width: 100%; /* Ensure the container takes the full width of the parent */

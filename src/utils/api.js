@@ -20,14 +20,13 @@ export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company
   
   return response.data;
 };
-
-
 export const saveDataToDatabase = async ({
-  user_id,company_name,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName
+  user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
 }) => {
-  
+
+
   const response = await axios.post(`${API_URL}/save_data`, {
-    user_id,company_name,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),    saveName,
+    user_id,company_name,selectedUser,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),    saveName,
   });
   return response.data;
 };
@@ -101,13 +100,15 @@ export const fetchChartData = createAsyncThunk('chart/fetchChartData', async (ch
 });
 
 
-export const sendTestChartData = async (text_y_xis, text_y_database,text_y_table, text_y_aggregate) => {
+export const sendTestChartData = async (text_y_xis, text_y_database,text_y_table, text_y_aggregate,selectedUser) => {
   try {
     const response = await axios.post(`${API_URL}/api/singlevalue_text_chart`, {
       text_y_xis,
       text_y_aggregate,
       text_y_table,
-      text_y_database
+      text_y_database,
+      selectedUser
+      
       
     });
     return response.data;
@@ -118,14 +119,15 @@ export const sendTestChartData = async (text_y_xis, text_y_database,text_y_table
 };
 
 
-export const sendChartData = async (chart_id,text_y_xis, text_y_database,text_y_table, text_y_aggregate) => {
+export const sendChartData = async (chart_id,text_y_xis, text_y_database,text_y_table, text_y_aggregate,selectedUser) => {
   try {
     const response = await axios.post(`${API_URL}/api/text_chart`, {
       chart_id,
       text_y_xis,
       text_y_aggregate,
       text_y_table,
-      text_y_database
+      text_y_database,
+      selectedUser
       
     });
     return response.data;
@@ -451,16 +453,16 @@ export const fetchTableDetailsAPI = async (databaseName, selectedTable) => {
 };
 // utils/api.js
 
-export const fetchTableNamesFromExternalDB = async (databaseName) => {
-  const response = await fetch(`${API_URL}/external-db/tables?databaseName=${databaseName}`);
+export const fetchTableNamesFromExternalDB = async (databaseName,selectedUser) => {
+  const response = await fetch(`${API_URL}/external-db/tables?databaseName=${databaseName}&user=${selectedUser}`);
   if (!response.ok) {
     throw new Error('Failed to fetch table names');
   }
   return await response.json();
 };
 
-export const fetchTableDetailsFromExternalDB = async (databaseName, tableName) => {
-  const response = await fetch(`${API_URL}/external-db/tables/${tableName}?databaseName=${databaseName}`);
+export const fetchTableDetailsFromExternalDB = async (selectedTable,databaseName, selectedUser) => {
+  const response = await fetch(`${API_URL}/external-db/tables/${selectedTable}?databaseName=${databaseName}&user=${selectedUser}`);
   if (!response.ok) {
     throw new Error('Failed to fetch table details');
   }
@@ -493,7 +495,7 @@ export const fetchTableDetailsFromExternalDB = async (databaseName, tableName) =
 export const fetchUsers = async (databaseName) => {
   try {
     console.log("Fetching users for database:", databaseName);
-    const response = await axios.get(`${API_URL}/api/users`, {
+    const response = await axios.get(`${API_URL}/api/dbusers`, {
       params: { databaseName },
     });
     console.log("Fetched users:", response.data); // Log the response

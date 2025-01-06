@@ -392,7 +392,14 @@ import ChartColor from '../charts/color';
 import TreeMap from '../charts/animatedTreeChart';
 import HierarchicalBarChart from'../charts/hierarchialBarChart';
 
+
+import DuelBarChart from '../charts/duelBarChart';
+
 import SampleAiTestChart from '../charts/sampleAiTestChart';
+import BoxPlotChart from '../charts/BoxPlotChart';
+import Treemap from '../charts/animatedTreeChart';
+import AiChart from '../charts/aiChart';
+import WordCloudChart from '../charts/wordCloudChart';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -401,6 +408,15 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+
+const Items = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  height: '635px',
+}));
 function EditDashboard() {
   const [plotData, setPlotData] = useState({});
   const [isChartGenerationClicked, setIsChartGenerationClicked] = useState(false);
@@ -427,7 +443,9 @@ function EditDashboard() {
   const chartId = chartData[0] || "";
   const databaseName = chartData[10] || "";
   const filterOptionss = chartData[9] || "";
+  const selectedUser=chartData[11]||"";
   const filterOptionsas = filterOptionss.split(', ');
+
   console.log("filterOptionsas--------------------------1",filterOptionsas)
 
   console.log("filterOptions-----------------------------2",filterOptions)
@@ -456,6 +474,8 @@ function EditDashboard() {
         chartType,
         filterOptions: checkedOptions.join(', '),
         databaseName,
+        selectedUser
+        
       });
       setPlotData(response.data);
     } catch (error) {
@@ -463,12 +483,28 @@ function EditDashboard() {
     }
   };
 
+  // const fetchFilterOptions = async (columnName) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`,{
+  //       params: { databaseName }
+  //     });
+  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+  //     setFilterOptions(options);
+  //     setCheckedOptions(chartData[9]);
+  //     setShowFilterDropdown(true);
+  //     setSelectAllChecked(false);
+  //   } catch (error) {
+  //     console.error('Error fetching filter options:', error);
+  //   }
+  // };
   const fetchFilterOptions = async (columnName) => {
     try {
-      const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`,{
-        params: { databaseName }
+       // Get connection type from localStorage
+      const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
+        params: { databaseName,selectedUser }
       });
       const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+      console.log("options",options)
       setFilterOptions(options);
       setCheckedOptions(chartData[9]);
       setShowFilterDropdown(true);
@@ -539,6 +575,7 @@ function EditDashboard() {
         drilldownChartData: dashboardPlotData,
         drillDownChartColor: dashboardBarColor,
         filterOptions: checkedOptions.join(', '),
+        selectedUser
       });
 
       const response = await axios.post('http://localhost:5000/update_data', {
@@ -553,6 +590,7 @@ function EditDashboard() {
         drilldownChartData: dashboardPlotData,
         drillDownChartColor: dashboardBarColor,
         filterOptions: checkedOptions.join(', '),
+        selectedUser
       });
       console.log('Data saved successfully:', response.data);
     } catch (error) {
@@ -863,9 +901,45 @@ function EditDashboard() {
                             </div>
                           </div>
                         )}
+{chartType === "AiCharts"  && (
+                          <div style={{ marginTop: '20px' }}>
+                            {/* <Items> */}
+                              <div className="chart-container">
+                                <AiChart/>
+                              </div>
+                              {/* </Items> */}
+                              <div className='btn-container'>
+                              <button className="save-button" onClick={saveDataToDatabase}>Save Chart</button>
+                            </div>
+                          </div>
+                        )}
 
 
+             {xAxis.length > 0 && chartType === "animatedTreeChart" && (
+             <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <Treemap categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
 
+                  </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={saveDataToDatabase}>Save Chart</button>
+                </div>
+              </div>
+            )}
+            {xAxis.length > 0 && chartType === "wordCloud" && (
+              <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <WordCloudChart categories={plotData?.categories} values={plotData?.values}  />
+                    </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
+                </div>
+              </div>
+            )}
     </div>
   );
 }
