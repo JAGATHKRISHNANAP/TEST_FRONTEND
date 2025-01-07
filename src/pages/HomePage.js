@@ -292,7 +292,7 @@ onClick={() => handleNavigation('/load_db')}
     }}
   >
     <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
-      Load Db 
+      Database Connection
     </ListItemIcon>
   </Button>
 <Button

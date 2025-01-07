@@ -683,7 +683,7 @@ const LoadDbFile = () => {
             {/* User Selection */}
             <Grid item xs={12} md={6}>
               <FormControl fullWidth>
-                <InputLabel id="user-select-label">Select User</InputLabel>
+                <InputLabel id="user-select-label">Select db connection</InputLabel>
                 <Select
                   labelId="user-select-label"
                   value={selectedUser}

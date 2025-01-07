@@ -319,12 +319,12 @@ export const fetchTableNamesAPI = async (databaseName) => {
     throw error; // Rethrow to handle in the caller
   }
 };
-
-
-export const fetchColumnsAPI = async (tableName, databaseName) => {
+// const connectionType = localStorage.getItem('connectionType');
+  
+export const fetchColumnsAPI = async (tableName, databaseName,connectionType) => {
   try {
     const response = await axios.get(`http://localhost:5000/column_names/${tableName}`, {
-      params: { databaseName },
+      params: { databaseName,connectionType },
     });
     return {
       numeric_columns: response.data.numeric_columns || [],

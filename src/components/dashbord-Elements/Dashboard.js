@@ -414,7 +414,7 @@ function Dashboard() {
 
       {/* Modal for saving data */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Save Data</DialogTitle>
+        <DialogTitle>Save Chart</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus

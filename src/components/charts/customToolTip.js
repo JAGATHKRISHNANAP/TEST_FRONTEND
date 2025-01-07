@@ -2,7 +2,7 @@
 // import { Checkbox, FormControlLabel, Button, TextField, Grid } from '@mui/material';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { setToolTipOptions } from '../../features/ToolTip/toolTipSlice'; // Adjust the import path as necessary
-// import Columns from '../dashbord-Elements/columns';
+// import Columns from '../dashbord-Elementsns';
 // import "./tooltip.css";
 
 // const CustomToolTip = ({ onClose }) => {

@@ -2821,8 +2821,7 @@
 // import d3Cloud from "d3-cloud";
 // import { ResizableBox } from "react-resizable";
 // import "react-resizable/css/styles.css"; // Import the CSS for the resizable box
-// import './WordCloud.css';
-
+// import './WordCloud.css'
 // const WordCloud = ({ categories = [], values = [] }) => {
 //     const wordCloudRef = useRef(null); // Reference to the SVG container
 //     const [wordData, setWordData] = useState([]);
@@ -2856,20 +2855,20 @@
 //     }, [wordData]);
 
 //     const drawWordCloud = () => {
-//         const { width, height } = { width: 600, height: 500 }; // Dimensions of the word cloud
+//         const { width, height } = { width: 400, height: 400 }; // Dimensions of the word cloud
 //         const svg = d3.select(wordCloudRef.current);
 //         svg.selectAll("*").remove(); // Clear existing content
 
 //         const fontSizeScale = d3
 //             .scaleLinear()
 //             .domain([Math.min(...wordData.map((d) => d.size)), Math.max(...wordData.map((d) => d.size))])
-//             .range([20, 60]); // Font size range
+//             .range([10, 50]); // Font size range
 
 //         const layout = d3Cloud()
 //             .size([width, height])
 //             .words(wordData)
 //             .padding(5)
-//             .rotate(() => (Math.random() > 0.5 ? 0 : 0)) // Random rotation
+//             .rotate(() => (Math.random() > 0.5 ? 0 : 90)) // Random rotation
 //             .fontSize((d) => fontSizeScale(d.size))
 //             .on("end", (words) => {
 //                 svg.append("g")
@@ -2888,18 +2887,17 @@
 //                             .style("cursor", "pointer")
 //                             .style("opacity", 0.7); // Add visual effect on hover
 //                         // Show the tooltip with word information
-//                         tooltipRef.current.style.visibility = "visible";
-//                     tooltipRef.current.textContent = `Word: ${d.text}, Frequency: ${d.size}`;
-//                     tooltipRef.current.style.left = `${event.pageX + 10}px`; // Offset to avoid overlap
-//                     tooltipRef.current.style.top = `${event.pageY + 10}px`;
-//                 })
+//                         tooltipRef.current.style("visibility", "visible")
+//                             .text(`Word: ${d.text}, Frequency: ${d.size}`)
+//                             .style("left", `${event.pageX + 10}px`) // Offset to avoid overlap
+//                             .style("top", `${event.pageY + 10}px`);
+//                     })
 //                     .on("mouseout", (event) => {
 //                         d3.select(event.target)
 //                             .style("cursor", "default")
 //                             .style("opacity", 1); // Reset visual effect
-//                         tooltipRef.current.style.visibility = "hidden"; // Hide tooltip on mouseout
+//                         tooltipRef.current.style("visibility", "hidden"); // Hide tooltip on mouseout
 //                     });
-                    
 //             });
 
 //         layout.start();
@@ -2911,22 +2909,8 @@
 
 //     return (
 //         <div className="word-cloud-container">
-//             <ResizableBox width={600} height={500} minConstraints={[300, 300]} maxConstraints={[800, 600]}>
-          
+//             <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}>
 //                 <svg ref={wordCloudRef} width="100%" height="100%" />
-//                 <div className="word-cloud-controls">
-//                 <label>
-//                     Display Top N Words:
-//                     <input
-//                         type="range"
-//                         min="1"
-//                         max={categories ? categories.length : 10}
-//                         value={displayCount}
-//                         onChange={handleSliderChange}
-//                     />
-//                     <span>{displayCount}</span>
-//                 </label>
-//             </div>
 //             </ResizableBox>
 //             {/* Tooltip div */}
 //             <div 
@@ -2943,7 +2927,19 @@
 //                     pointerEvents: "none", // Prevent tooltip from interfering with interactions
 //                 }} 
 //             />
-            
+//             <div className="word-cloud-controls">
+//                 <label>
+//                     Display Top N Words:
+//                     <input
+//                         type="range"
+//                         min="1"
+//                         max={categories ? categories.length : 10}
+//                         value={displayCount}
+//                         onChange={handleSliderChange}
+//                     />
+//                     <span>{displayCount}</span>
+//                 </label>
+//             </div>
 //         </div>
 //     );
 // };
@@ -2952,6 +2948,174 @@
 
 
 
+
+
+
+// // import React, { useEffect, useRef, useState } from 'react';
+// // import * as d3 from 'd3';
+// // import { useSelector } from 'react-redux';
+// // import d3Cloud from 'd3-cloud';
+// // import './WordCloud.css';
+
+// // const WordCloud = () => {
+// //     const areaColor = useSelector((state) => state.chartColor.chartColor);
+   
+// //     const chartRef = useRef(null);
+// //     const tooltipRef = useRef(null);
+// //     const [wordCloudData, setWordCloudData] = useState({ categories: [], values: [] });
+// //     const [displayCount, setDisplayCount] = useState(10);
+// //     const [hasAlerted, setHasAlerted] = useState(false);
+// // const chartColor = useSelector((state) => state.chartColor.chartColor);
+
+// //     const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
+// //     const xAxis = useSelector((state) => state.chart.xAxis); // categories
+// //     const databaseName = localStorage.getItem('company_name');
+// //     const chartDimensions = { width: 800, height: 500 };
+
+// //     useEffect(() => {
+// //         // Fetch word cloud data on component mount
+// //         const fetchWordCloudData = async () => {
+// //             try {
+// //                 const response = await fetch('http://localhost:5000/wordcloud-data', {
+// //                     method: 'POST',
+// //                     headers: {
+// //                         'Content-Type': 'application/json',
+// //                     },
+// //                     body: JSON.stringify({
+// //                         category: xAxis,
+// //                         tableName: selectedTable,
+// //                         databaseName: databaseName,
+// //                     }),
+// //                 });
+
+// //                 if (!response.ok) {
+// //                     throw new Error(`Error: ${response.status} ${response.statusText}`);
+// //                 }
+
+// //                 const data = await response.json();
+// //                 setWordCloudData(data);
+// //             } catch (error) {
+// //                 console.error('Error fetching word cloud data:', error);
+// //             }
+// //         };
+
+// //         fetchWordCloudData();
+// //     }, []);
+
+// //     useEffect(() => {
+// //         if (wordCloudData.categories.length > 0 && wordCloudData.values.length > 0) {
+// //             drawChart();
+// //         }
+// //     }, [wordCloudData, areaColor, displayCount]);
+
+// //     const getFilteredData = () => {
+// //         const words = wordCloudData.categories.map((category, index) => ({
+// //             text: category,
+// //             size: wordCloudData.values[index],
+// //         }));
+
+// //         // Sort and limit words based on the display count
+// //         return words.sort((a, b) => b.size - a.size).slice(0, displayCount);
+// //     };
+
+// //     const drawChart = () => {
+// //         d3.select(chartRef.current).select("svg").remove();
+// //         const { width, height } = chartDimensions;
+    
+// //         const svg = d3.select(chartRef.current)
+// //             .append("svg")
+// //             .attr("width", width)
+// //             .attr("height", height)
+// //             .append("g")
+// //             .attr("transform", `translate(${width / 2},${height / 2})`);
+    
+// //         const words = getFilteredData();
+    
+// //         // Define the font size range
+// //         const colorScale = d3.scaleLinear()
+// //         .domain([Math.min(...wordCloudData.values), Math.max(...wordCloudData.values)])
+// //         .range(["#ddd", chartColor]); // '#ddd' for light color, `chartColor` for main color
+
+// //         const fontSizeScale = d3.scaleLinear()
+// //             .domain([Math.min(...wordCloudData.values), Math.max(...wordCloudData.values)]) // Adjusted to use value range
+// //             .range([15, 35]);
+    
+// //         const layout = d3Cloud()
+// //             .size([width, height])
+// //             .words(words)
+// //             .padding(10)
+// //             .rotate(() => (Math.random() > 0.5 ? 0 : 90))
+// //             .fontSize(d => fontSizeScale(d.size)/2) // Dynamically adjust size based on data
+// //             .on("end", renderWords);
+    
+// //         layout.start();
+    
+// //         function renderWords(words) {
+// //             const textElements = svg.selectAll("text")
+// //                 .data(words)
+// //                 .enter()
+// //                 .append("text")
+// //                 .style("font-size", d => `${fontSizeScale(d.size)}px`)
+// //                 .style("font-family", "sans-serif")
+// //                 .attr("fill", d => colorScale(d.size))
+// //                 .attr("text-anchor", "middle")
+// //                 .attr("transform", d => `translate(${d.x},${d.y}) rotate(${d.rotate})`)
+// //                 .text(d => d.text);
+    
+// //             // Tooltip events
+// //             textElements
+// //                 .on("mouseover", (event, d) => {
+// //                     d3.select(tooltipRef.current)
+// //                         .style("opacity", 1)
+// //                         .html(`
+// //                             Word: ${d.text}<br>
+// //                             Original Size: ${wordCloudData.values[wordCloudData.categories.indexOf(d.text)]}<br>
+// //                             Rendered Font Size: ${fontSizeScale(d.size)}
+// //                         `)
+// //                         .style("left", (event.pageX + 5) + "px")
+// //                         .style("top", (event.pageY - 28) + "px");
+// //                 })
+// //                 .on("mouseout", () => {
+// //                     d3.select(tooltipRef.current).style("opacity", 0);
+// //                 });
+// //         }
+// //     };
+    
+
+// //     const handleSliderChange = (event) => {
+// //         const newCount = Number(event.target.value);
+// //         setDisplayCount(newCount);
+
+// //         if (!hasAlerted && newCount !== 10) {
+// //             alert(`Display mode changed to show top ${newCount} words`);
+// //             setHasAlerted(true);
+// //         }
+// //     };
+
+// //     return (
+// //         <div className="centered-container">
+// //             <div className="word-cloud" style={{ width: chartDimensions.width, height: chartDimensions.height }}>
+// //                 <div ref={chartRef} style={{ width: '100%', height: '100%' }} />
+// //                 <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
+// //             </div>
+// //             <div className="filter-options">
+// //                 <label>
+// //                     Display Mode (Top N Words):
+// //                     <input
+// //                         type="range"
+// //                         min="1"
+// //                         max={wordCloudData.categories.length}
+// //                         value={displayCount}
+// //                         onChange={handleSliderChange}
+// //                     />
+// //                     <span>{displayCount}</span>
+// //                 </label>
+// //             </div>
+// //         </div>
+// //     );
+// // };
+
+// // export default WordCloud;
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
@@ -2967,7 +3131,7 @@ const WordCloud = ({ categories = [], values = [] }) => {
 
     // Tooltip div
     const tooltipRef = useRef(null); 
-
+     
     useEffect(() => {
         if (categories && values) {
             // Combine categories and values into a single dataset for word cloud
@@ -2975,7 +3139,9 @@ const WordCloud = ({ categories = [], values = [] }) => {
                 text,
                 size: values[index],
             }));
-
+            console.log("values",combinedData 
+            )
+                
             // Sort and slice to display the top N words
             const filteredData = combinedData
                 .sort((a, b) => b.size - a.size)
@@ -2993,7 +3159,7 @@ const WordCloud = ({ categories = [], values = [] }) => {
     }, [wordData]);
 
     const drawWordCloud = () => {
-        const { width, height } = { width: 600, height: 500 }; // Dimensions of the word cloud
+        const { width, height } = { width: 400, height: 400 }; // Dimensions of the word cloud
         const svg = d3.select(wordCloudRef.current);
         svg.selectAll("*").remove(); // Clear existing content
 
@@ -3006,7 +3172,7 @@ const WordCloud = ({ categories = [], values = [] }) => {
             .size([width, height])
             .words(wordData)
             .padding(5)
-            .rotate(() => (Math.random() > 0.5 ? 0 : 0)) // Random rotation
+            .rotate(() => (Math.random() > 0.5 ? 0 : 90)) // Random rotation
             .fontSize((d) => fontSizeScale(d.size))
             .on("end", (words) => {
                 svg.append("g")
@@ -3018,7 +3184,7 @@ const WordCloud = ({ categories = [], values = [] }) => {
                     .style("font-size", (d) => `${d.size}px`)
                     .style("fill", () => d3.schemeCategory10[Math.floor(Math.random() * 10)])
                     .attr("text-anchor", "middle")
-                    .attr("transform", (d) => `translate(${d.x + 50},${d.y}) rotate(${d.rotate})`) // Added 50px padding on the left
+                    .attr("transform", (d) => `translate(${d.x},${d.y}) rotate(${d.rotate})`)
                     .text((d) => d.text)
                     .on("mouseover", (event, d) => {
                         d3.select(event.target)
@@ -3026,16 +3192,17 @@ const WordCloud = ({ categories = [], values = [] }) => {
                             .style("opacity", 0.7); // Add visual effect on hover
                         // Show the tooltip with word information
                         tooltipRef.current.style.visibility = "visible";
-                        tooltipRef.current.textContent = `Word: ${d.text}, Frequency: ${d.size}`;
-                        tooltipRef.current.style.left = `${event.pageX + 10}px`; // Offset to avoid overlap
-                        tooltipRef.current.style.top = `${event.pageY + 10}px`;
-                    })
+                    tooltipRef.current.textContent = `Word: ${d.text}, Frequency: ${d.size}`;
+                    tooltipRef.current.style.left = `${event.pageX + 10}px`; // Offset to avoid overlap
+                    tooltipRef.current.style.top = `${event.pageY + 10}px`;
+                })
                     .on("mouseout", (event) => {
                         d3.select(event.target)
                             .style("cursor", "default")
                             .style("opacity", 1); // Reset visual effect
                         tooltipRef.current.style.visibility = "hidden"; // Hide tooltip on mouseout
                     });
+                    
             });
 
         layout.start();
@@ -3047,21 +3214,22 @@ const WordCloud = ({ categories = [], values = [] }) => {
 
     return (
         <div className="word-cloud-container">
-            <ResizableBox width={600} height={500} minConstraints={[300, 300]} maxConstraints={[800, 600]}>
+            <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}>
+          
                 <svg ref={wordCloudRef} width="100%" height="100%" />
                 <div className="word-cloud-controls">
-                    <label>
-                        Display Top N Words:
-                        <input
-                            type="range"
-                            min="1"
-                            max={categories ? categories.length : 10}
-                            value={displayCount}
-                            onChange={handleSliderChange}
-                        />
-                        <span>{displayCount}</span>
-                    </label>
-                </div>
+                <label>
+                    Display Top N Words:
+                    <input
+                        type="range"
+                        min="1"
+                        max={categories ? categories.length : 10}
+                        value={displayCount}
+                        onChange={handleSliderChange}
+                    />
+                    <span>{displayCount}</span>
+                </label>
+            </div>
             </ResizableBox>
             {/* Tooltip div */}
             <div 
@@ -3078,6 +3246,7 @@ const WordCloud = ({ categories = [], values = [] }) => {
                     pointerEvents: "none", // Prevent tooltip from interfering with interactions
                 }} 
             />
+            
         </div>
     );
 };
