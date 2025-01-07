@@ -1395,7 +1395,7 @@ function DuealChartInput() {
                         <option value="count">Count</option>
                         <option value="minimum">Minimum</option>
                         <option value="maximum">Maximum</option>
-                        <option value="variance">Variance</option>
+                        {/* <option value="variance">Variance</option> */}
                       </NativeSelect>
                     </FormControl>
 

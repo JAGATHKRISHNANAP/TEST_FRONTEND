@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTotalRows } from "../../utils/api";
-import ResizableChart from "./ResizableChart";
+import ResizableChart from "./ResizableChartsView";
 import {fetchSingleChartData } from "../../utils/api";
 import {
   Box,
@@ -98,6 +98,8 @@ function Chartsview() {
     [windowSize]
   );
 
+
+  
   const updateChartDetails = useCallback((chartName, newDetails) => {
     setChartData((prevData) =>
       prevData.map((data) =>
@@ -163,8 +165,18 @@ function Chartsview() {
       <Box sx={{ flexGrow: 1, minHeight: "85vh", marginTop: "70px" }}>
         <Grid container spacing={2} wrap="wrap">
           <Grid item xs={12} md={12}>
-            {/* Render charts when the user clicks on the buttons */}
-            {renderedCharts}
+          <Box
+  sx={{
+    width: "100vw",
+    height: "100vh",
+    position: "relative",
+    overflow: "hidden", // Prevent any overflow content
+    justifyContent: "center",
+    backgroundColor: "white",
+  }}
+>
+  {renderedCharts}
+</Box>
           </Grid>
         </Grid>
       </Box>
