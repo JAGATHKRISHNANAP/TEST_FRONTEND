@@ -602,7 +602,7 @@ const CustomJoinWithFetchTables = () => {
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(localStorage.getItem('selectedUser'));
   const [isLoading, setIsLoading] = useState(false);
-  // const connectionType=localStorage.setItem('connectionType', 'local'); 
+  console.log("droppedTables",droppedTables)
         
   const connectionType = localStorage.getItem('connectionType');
   const [users, setUsers] = useState([]);
@@ -701,15 +701,46 @@ const CustomJoinWithFetchTables = () => {
   //     );
   //     setColumns(fetchedColumns);
   //   };
+  // useEffect(() => {
+  //   const fetchColumns = async () => {
+  //     const fetchedColumns = {};
+  //     await Promise.all(
+  //       tableNames.map(async (table) => {
+  //         try {
+  //           // Determine connection type based on droppedTables or user selection
+  //           const tableConnectionType = getTableConnectionType(table);
+
+  //           const columns = await fetchColumnsAPI(table, databaseName, tableConnectionType);
+  //           fetchedColumns[table] = columns;
+  //         } catch (error) {
+  //           console.error(`Error in fetchColumns for table ${table}:`, error);
+  //         }
+  //       })
+  //     );
+  //     setColumns(fetchedColumns);
+  //   };
+
+  //   fetchColumns();
+  // }, [tableNames, databaseName, droppedTables, selectedUser]); // Updated dependencies
+
+  // const getTableConnectionType = (table) => {
+  //   // Check for dropped table information first
+  //   const droppedTable = droppedTables.find((dt) => dt.name === table);
+  //   if (droppedTable) {
+  //     return droppedTable.connectionType;
+  //   }
+
+  //   // If not dropped, use connection type based on user selection
+  //   return connectionType === 'local' || !selectedUser ? 'local' : 'external';
+  // };
+
   useEffect(() => {
     const fetchColumns = async () => {
       const fetchedColumns = {};
       await Promise.all(
         tableNames.map(async (table) => {
           try {
-            // Determine connection type based on droppedTables or user selection
             const tableConnectionType = getTableConnectionType(table);
-
             const columns = await fetchColumnsAPI(table, databaseName, tableConnectionType);
             fetchedColumns[table] = columns;
           } catch (error) {
@@ -721,17 +752,11 @@ const CustomJoinWithFetchTables = () => {
     };
 
     fetchColumns();
-  }, [tableNames, databaseName, droppedTables, selectedUser]); // Updated dependencies
+  }, [tableNames, databaseName, droppedTables, selectedUser]); 
 
   const getTableConnectionType = (table) => {
-    // Check for dropped table information first
     const droppedTable = droppedTables.find((dt) => dt.name === table);
-    if (droppedTable) {
-      return droppedTable.connectionType;
-    }
-
-    // If not dropped, use connection type based on user selection
-    return connectionType === 'local' || !selectedUser ? 'local' : 'external';
+    return droppedTable ? droppedTable.connectionType : (connectionType === 'local' || !selectedUser ? 'local' : 'external');
   };
 
   
@@ -1028,6 +1053,31 @@ return (
                               {table.name}
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                              {columns[table.name] ? (
+                                [
+                                  ...(columns[table.name].text_columns || []),
+                                  ...(columns[table.name].numeric_columns || []),
+                                ].map((col, idx) => (
+                                  <FormControlLabel
+                                    key={idx}
+                                    control={
+                                      <Checkbox
+                                        checked={selectedColumns[table.name]?.includes(col)}
+                                        onChange={(e) =>
+                                          handleColumnSelection(table.name, col, e.target.checked)
+                                        }
+                                      />
+                                    }
+                                    label={col}
+                                  />
+                                ))
+                              ) : (
+                                <Typography variant="body2" sx={{ color: 'gray' }}>
+                                  No columns available for this table
+                                </Typography>
+                              )}
+                            </Box>
+                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                               {columns[table.name] ? (
                                 [
                                   ...(columns[table.name].text_columns || []),

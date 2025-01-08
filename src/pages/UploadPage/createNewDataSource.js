@@ -1491,17 +1491,28 @@ export default function ExternalDbConnection() {
               required
             />
           </Grid>
-
+          {dbType !== "Oracle" && (
+  <Grid item xs={12} md={6}>
+    <TextField
+      label="Database Name"
+      value={dbName}
+      onChange={(e) => setDbName(e.target.value)}
+      fullWidth
+      required
+    />
+  </Grid>
+)}
+{dbType === "Oracle" && (
           <Grid item xs={12} md={6}>
             <TextField
-              label="Database Name"
+              label="SID or Service Name"
               value={dbName}
               onChange={(e) => setDbName(e.target.value)}
               fullWidth
               required
             />
           </Grid>
-
+)}
           <Grid item xs={12}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
               <Button variant="outlined" onClick={handleTestConnection} sx={{ width: 180 }}>

@@ -20,7 +20,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const [drillStack, setDrillStack] = useState([]);
     const [chartDimensions, setChartDimensions] = useState({ width: 500, height: 300 });
     const tooltipRef = useRef(null);
-
+    const [selectedUser, setSelectedUser] = useState(localStorage.getItem('selectedUser'));
     useEffect(() => {
         // Update chartData whenever categories or values change
         setChartData({ categories, values });
@@ -40,6 +40,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
                 aggregation: aggregate,
                 databaseName: databaseName,
                 currentLevel: drillStack.length,
+                selectedUser
             });
 
             if (response.data.categories && response.data.values) {
