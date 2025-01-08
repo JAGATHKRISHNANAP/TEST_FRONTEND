@@ -611,7 +611,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const [height, setHeight] = useState(data.height);
   const [position, setPosition] = useState(data.position || { x: 0, y: 0 }); // Initialize unique position
   const [result, setResult] = useState(null);
-  const [isDataFetched, setIsDataFetched] = useState(false);
+  // const [isDataFetched, setIsDataFetched] = useState(false);
 
   const isDashboard = context === "dashboard";
   const minWidth = isDashboard ? 200 : 800;

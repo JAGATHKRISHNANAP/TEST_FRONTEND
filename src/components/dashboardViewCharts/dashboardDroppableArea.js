@@ -13,6 +13,7 @@ import Scatter from '../ChartViews/scatterChartView';
 import TreeHierarchyView from '../ChartViews/treeHierarchyView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
+import DashboardSingleValueChart from '../ChartViews/DashboardSingleValueChart';
 
 const DroppableArea = () => {
   const droppableAreaRef = useRef(null);
@@ -50,12 +51,16 @@ const DroppableArea = () => {
                 textChart.map((text, index) => (
                     <div key={index}>
                         {text.chart_type === 'singleValueChart' && (
-                        <div>
-                            <div style={{ textAlign: 'center' }}>
-                            <h3>{text.chart_heading.replace(/"/g, '')}</h3>
-                            <p>{text.value.total_x_axis}</p>
-                            </div>
-                        </div>
+                        // <div>
+                        //     <div style={{ textAlign: 'center' }}>
+                        //     <h3>{text.chart_heading.replace(/"/g, '')}</h3>
+                        //     <p>{text.value.total_x_axis}</p>
+                        //     </div>
+                        // </div>
+                        <DashboardSingleValueChart 
+  chartHeading={text.chart_heading} 
+  totalXAxis={text.value.total_x_axis} 
+/>
                         )}
                     </div>
                 ))

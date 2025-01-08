@@ -463,8 +463,21 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             title: {
                 text: `${xAxis}`,
               },
-            labels: {
+            // labels: {
 
+            //     show: true,
+            //     style: {
+            //         fontSize: '12px',
+            //         fontWeight: 400,
+            //         colors: ['#000']
+            //     },
+            //     rotate: -45,
+            //     formatter: function (val) {
+            //         if (!val) return '';
+            //         return val.length > 10 ? val.substring(0, 10) + "..." : val;
+            //     }
+            // },
+            labels: {
                 show: true,
                 style: {
                     fontSize: '12px',
@@ -474,9 +487,14 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 rotate: -45,
                 formatter: function (val) {
                     if (!val) return '';
+                    if (/\d{4}-\d{2}-\d{2}/.test(val)) {
+                        const [year, month, day] = val.split('-');
+                        val = `${day}-${month}-${year}`;
+                    }
                     return val.length > 10 ? val.substring(0, 10) + "..." : val;
                 }
             },
+            
             tickPlacement: 'on',
         },
         yaxis: {
@@ -499,16 +517,25 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         },
         colors: generateColors(categories.length),
         plotOptions: {
+            // bar: {
+            //     distributed: true,
+            //     dataLabels: {
+            //         hideOverflowingLabels: true
+            //     },
+            //     barHeight: '80%',
+            // }
             bar: {
                 distributed: true,
                 dataLabels: {
                     hideOverflowingLabels: true
                 },
                 barHeight: '80%',
+                // columnWidth: '60px', // Set a fixed width for each bar
             }
         },
         title: {
-            text: `${aggregation} of ${xAxis} vs ${yAxis}`,
+            // text: `${aggregation} of ${xAxis} vs ${yAxis}`,
+            text: `${xAxis} vs ${yAxis}`,
             align: 'left',
             margin: 10,
             offsetX: 0,

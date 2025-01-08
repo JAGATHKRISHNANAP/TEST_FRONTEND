@@ -1499,11 +1499,18 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
         setPopupVisible(false);
     };
 
+    // const isDateCategory = (category) => {
+    //     const datePattern1 = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    //     const datePattern2 = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+    //     return datePattern1.test(category) || datePattern2.test(category);
+    // };
     const isDateCategory = (category) => {
-        const datePattern1 = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
-        const datePattern2 = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-        return datePattern1.test(category) || datePattern2.test(category);
+        const datePattern1 = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/; // Matches "YYYY-MM-DD HH:mm:ss"
+        const datePattern2 = /^\d{1,2}\/\d{1,2}\/\d{4}$/; // Matches "MM/DD/YYYY" or "M/D/YYYY"
+        const datePattern3 = /^\d{4}-\d{2}-\d{2}$/; // Matches "YYYY-MM-DD"
+        return datePattern1.test(category) || datePattern2.test(category) || datePattern3.test(category);
     };
+    
 
     const areCategoriesDates = categories.some(isDateCategory);
     // const areCategoriesDates = (categories || []).some(isDateCategory);
@@ -1562,7 +1569,24 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
         xaxis: {
             categories: categories || [],
             title: { text: `${xAxis}` },
-            labels: { style: { fontSize: '12px', colors: ['#000'] } }
+            // labels: { style: { fontSize: '12px', colors: ['#000'] } }
+            labels: {
+                show: true,
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    colors: ['#000']
+                },
+                rotate: -45,
+                formatter: function (val) {
+                    if (!val) return '';
+                    if (/\d{4}-\d{2}-\d{2}/.test(val)) {
+                        const [year, month, day] = val.split('-');
+                        val = `${day}-${month}-${year}`;
+                    }
+                    return val.length > 10 ? val.substring(0, 10) + "..." : val;
+                }
+            },
         },
         yaxis: {
             title: { text: `${yAxis}` },
@@ -1586,24 +1610,27 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
             },
         },
         tooltip: {
-            custom: ({ series, seriesIndex, dataPointIndex }) => {
-                const category = plotData.categories[dataPointIndex];
-                const value = series[seriesIndex][dataPointIndex];
-                const currentAggregation = aggregation || 'Aggregation';
-                const currentXAxis = xAxis[0] || 'X-Axis';
-                const currentYAxis = yAxis || 'Y-Axis';
-                return `
-                <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
-                    ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>` : ''}
-                    <div>
-                        ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${category}</div>`
-                            : ''}
-                            ${toolTipOptions.value ? `<div><strong>Value:</strong> ${value}</div>` : ''}
+            enabled: true,
+            custom: toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+                ? function ({ series, seriesIndex, dataPointIndex, w }) {
+                    const category = plotData.categories ? plotData.categories[dataPointIndex] : categories[dataPointIndex];
+                    const value = series[seriesIndex][dataPointIndex];
+                    const currentAggregation = aggregation || 'Aggregation';
+                    const currentXAxis = xAxis[0] || 'X-Axis';
+                    const currentYAxis = yAxis || 'Y-Axis';
+
+                    return `
+                        <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                            ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>` : ''}
+                            <div>
+                                ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${category}</div>` : ''}
+                                ${toolTipOptions.value ? `<div><strong>Value:</strong> ${value}</div>` : ''}
+                            </div>
                         </div>
-                    </div>
                     `;
                 }
-            },
+                : undefined
+        },
             colors: [lineColor]
         };
     
