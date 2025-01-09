@@ -20,6 +20,67 @@ export const uploadExcelFile = async (user_id,file, primaryKeyColumnName,company
   
   return response.data;
 };
+
+export const fetchHierarchialDrilldownDataAPI = async ({
+  clickedCategory,
+  xAxis,
+  yAxis,
+  selectedTable,
+  aggregate,
+  databaseName,
+  currentLevel,
+  selectedUser
+}) => {
+  try {
+    const response = await axios.post(`${API_URL}/Hierarchial-backend-endpoint`, {
+      category: clickedCategory,
+      xAxis: xAxis,
+      yAxis: yAxis,
+      tableName: selectedTable,
+      aggregation: aggregate,
+      databaseName: databaseName,
+      currentLevel: currentLevel,
+      selectedUser
+    });
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Error sending category to backend:', error);
+    throw error; // Rethrow the error for handling
+  }
+};
+
+
+
+export const fetchPredictionDataAPI = async ({ xAxis, yAxis, timePeriod, number }) => {
+  try {
+      const response = await axios.post(`${API_URL}/api/predictions`, {
+          xAxis: xAxis,
+          yAxis: yAxis,
+          timePeriod: timePeriod,
+          number: number,
+      });
+      return response.data; // Return the response data to the calling function
+  } catch (error) {
+      console.error("Error fetching prediction data:", error);
+      throw error; // Rethrow the error for handling in the calling function
+  }
+};
+
+export const sendCategoryToBackend = async (category, xAxis, yAxis, tableName, aggregation) => {
+  try {
+    const response = await axios.post(`${API_URL}/your-backend-endpoint`, {
+      category,
+      xAxis,
+      yAxis,
+      tableName,
+      aggregation,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error in sendCategoryToBackend API:', error);
+    throw error;
+  }
+};
 export const saveDataToDatabase = async ({
   user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
 }) => {
@@ -137,6 +198,23 @@ export const sendChartData = async (chart_id,text_y_xis, text_y_database,text_y_
   }
 };
 
+
+export const sendChartDataview = async (chart_id,text_y_xis, text_y_database,text_y_table, text_y_aggregate) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/text_chart_view`, {
+      chart_id,
+      text_y_xis,
+      text_y_aggregate,
+      text_y_table,
+      text_y_database,
+      
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error sending chart data to the backend", error);
+    throw error;
+  }
+};
 
 export const sendClickedCategory = async (category,charts,x_axis) => {
   try {
@@ -321,10 +399,10 @@ export const fetchTableNamesAPI = async (databaseName) => {
 };
 // const connectionType = localStorage.getItem('connectionType');
   
-export const fetchColumnsAPI = async (tableName, databaseName,connectionType) => {
+export const fetchColumnsAPI = async (tableName, databaseName,connectionType,selectedUser) => {
   try {
     const response = await axios.get(`http://localhost:5000/column_names/${tableName}`, {
-      params: { databaseName,connectionType },
+      params: { databaseName,connectionType,selectedUser },
     });
     return {
       numeric_columns: response.data.numeric_columns || [],

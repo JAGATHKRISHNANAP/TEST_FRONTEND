@@ -302,6 +302,7 @@ onClick={() => handleNavigation('/load_db')}
           onMouseOver={handleDesignMenuClick}
           sx={{
             backgroundColor:
+            location.pathname === '/dashboard'||
             location.pathname === '/Create_Dashboard' ||
             location.pathname === '/dashboard_view'
                 ? '#c5c5c9'
@@ -335,13 +336,15 @@ onClick={() => handleNavigation('/load_db')}
             },
           }}
         >
-          
+          <MenuItem onClick={() => handleNavigation('/dashboard')}>
+          Chart
+          </MenuItem>
           <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
-            Chart
+          Dashboard 
           </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
+          {/* <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
           Dashboard
-          </MenuItem>
+          </MenuItem> */}
         </Menu>
 
               <Button

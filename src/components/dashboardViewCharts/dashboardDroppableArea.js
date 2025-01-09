@@ -11,9 +11,10 @@ import MapViewChart from '../ChartViews/mapChartView';
 import PolarAreaChart from '../charts/polarArea';
 import Scatter from '../ChartViews/scatterChartView';
 import TreeHierarchyView from '../ChartViews/treeHierarchyView';
+import TextChartView from '../ChartViews/textChartView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
-import wordCloudChart from '../ChartViews/wordCloudView'
+import WordCloud from '../ChartViews/wordCloudView'
 const DroppableArea = () => {
   const droppableAreaRef = useRef(null);
   const chartdata = useSelector((state) => state.viewdashboard.dashboard_charts);
@@ -166,9 +167,16 @@ const DroppableArea = () => {
             values={chart.values}
           />
         )}
-        {chart.chart_type === 'wordCloudChart' && (
-          <wordCloudChart x_axis={chart.x_axis} categories={chart.categories} />
+        {chart.chart_type === 'wordCloud' && (
+          <WordCloud categories={chart.categories}
+          values={chart.values} />
         )}
+        {chart.chart_type === 'textChart' && (
+              <TextChartView
+                categories={chart.categories}
+                values={chart.values}
+              />
+            )}
         </div>
         ))
       ) : (

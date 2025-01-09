@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css'; // Import the CSS for the resizable box
-import {updateSelectedCategory,updateChartData,setChartStatus} from '../../features/ViewChartSlice/viewChartSlice';
+import {updateSelectedCategory,updateChartData,setChartStatus,updateSelectedCategory_xaxis} from '../../features/ViewChartSlice/viewChartSlice';
 import "../charts/tooltip.css"; // Import the CSS for the tooltip
 import { sendClickedCategory } from "../../utils/api";
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
@@ -20,7 +20,7 @@ const Pie = (props) => {
   const charts = useSelector((state) => state.viewcharts.charts);
   const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
   const handleClicked = async (event, chartContext, config) => {
-    // if (!isFilterActive) return;
+    if (!isFilterActive) return;
     const clickedCategoryIndex = config.dataPointIndex;
     const clickedCategory = categories[clickedCategoryIndex];
     try {
@@ -40,10 +40,15 @@ const Pie = (props) => {
   } catch (error) {
       console.error(`Failed to send category ${clickedCategory}:`, error);
   }
-
-    dispatch(updateSelectedCategory(clickedCategory));
+        // Set the selected category and show the reset button
+        dispatch(updateSelectedCategory(clickedCategory));
+        dispatch(updateSelectedCategory_xaxis(x_axis));
+        dispatch(setChartStatus(true));
+        setShowResetButton(true);
+    };
+  //   dispatch(updateSelectedCategory(clickedCategory));
    
-  };
+  // };
  
   
 
@@ -110,7 +115,29 @@ const Pie = (props) => {
           </ResizableBox>
         </div>
       </div>
-
+      <button 
+                onClick={handleFilterToggle} 
+                style={{ 
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    padding: '8px', 
+                    borderRadius: '50%', 
+                    background: '#1976d2', 
+                    border: 'none', 
+                    color: '#fff', 
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', 
+                    cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#75ACE2'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#1976d2'}
+            >
+                {isFilterActive ? 
+                    <FilterAltIcon style={{ fontSize: '20px', marginRight: '5px', color: '#00000' }} onClick={handleReset} /> : 
+                    <FilterAltOffIcon style={{ fontSize: '20px', marginRight: '5px', color: '#00000' }}  />} 
+            </button>
 
     </div>
   );

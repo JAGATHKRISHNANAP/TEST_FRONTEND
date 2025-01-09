@@ -341,7 +341,8 @@ function DuealChartInput() {
   console.log('excelCheckedPaths:', excelCheckedPaths);
   console.log('csvCheckedPaths:', csvCheckedPaths);
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
-  const selectedTable=selectedTablearray.join(',')
+  
+  const selectedTable = localStorage.getItem('selectedTable'); 
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
@@ -349,6 +350,7 @@ function DuealChartInput() {
   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
   const fetchFilterOptions = async (columnName) => {
     try {
+      console.log("selectedTable",selectedTable)
       const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
       const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
         params: { databaseName,selectedUser }

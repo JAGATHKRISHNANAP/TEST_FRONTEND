@@ -1,5 +1,5 @@
 // src/components/dashbord-Elements/DashboardCharts.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Divider ,Tooltip } from '@mui/material';
 import { BarChart as BarChartIcon, PieChart as PieChartIcon, ScatterPlot as ScatterPlotIcon, Timeline as TimelineIcon } from '@mui/icons-material';
@@ -22,12 +22,47 @@ import { FcComboChart } from "react-icons/fc";
 
 function DashboardCharts() {
   const dispatch = useDispatch();
-  const chartType = useSelector((state) => state.chartType.type);
+  const DchartType = useSelector((state) => state.chartType.type);
+  const DxAxis = useSelector((state) => state.chart.xAxis);
+  const DyAxis = useSelector((state) => state.chart.yAxis);
+
+  
+  const EchartType = useSelector((state) => state.chartdata.chartType);
+  const ExAxis = useSelector((state) => state.chartdata.xAxis);
+  const EyAxis = useSelector((state) => state.chartdata.yAxis);
+
+  const chartType = DchartType||EchartType;
+  const xAxis = (DxAxis && DxAxis.length > 0) ? DxAxis : ExAxis;
+  const yAxis = (DyAxis && DyAxis.length > 0) ? DyAxis : EyAxis;
+  
+
+
+  console.log("EchartType:", EchartType);
+  console.log("ExAxis:", ExAxis);
+  console.log("EyAxis:", EyAxis);
+
+  console.log("chartType:", chartType);
+  console.log("yAxis:", xAxis);
+  console.log("yAxis:", yAxis);
+
+  
+  useEffect(() => {
+      console.log("chartType:", chartType);
+  }, [chartType]);
+
 
   const handleChartTypeChange = (selectedChartType) => {
     dispatch(setChartType(selectedChartType));
   };
 
+  const isButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 1);
+  const isdueaLButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 2);
+  const isdueaLXButtonDisabled = !(xAxis?.length === 2 && yAxis?.length === 1);
+  const isBARHIERARCHYButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length >= 1);
+  const isTreeButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length===0 );
+  const isSingleValueButtonDisabled = !(xAxis?.length === 1  && yAxis?.length===0);
+  
+  // const 
 
 return (
   <div className="App">    
@@ -39,6 +74,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'bar' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('bar')}
+            disabled={isButtonDisabled}
           >
             <BarChartIcon /> 
           </Button>
@@ -49,6 +85,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'pie' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('pie')}
+            disabled={isButtonDisabled}
           >
             <PieChartIcon /> 
           </Button>
@@ -59,6 +96,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'scatter' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('scatter')}
+            disabled={isButtonDisabled}
           >
             <ScatterPlotIcon />
           </Button>
@@ -69,6 +107,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'line' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('line')}
+            disabled={isButtonDisabled}
           >
             <TimelineIcon /> 
           </Button>
@@ -79,6 +118,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'area' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('area')}
+            disabled={isButtonDisabled}
           >
             <FaChartArea size={23}/>
           </Button>
@@ -89,6 +129,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'polarArea' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('polarArea')}
+            disabled={isButtonDisabled}
           >
             <PiChartPolarFill size={23}/>
           </Button>
@@ -103,6 +144,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'duealChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('duealChart')}
+            disabled={isdueaLButtonDisabled}
           >
             <FcComboChart size={23}/>
           </Button>
@@ -113,6 +155,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'duealbarChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('duealbarChart')}
+            disabled={isdueaLXButtonDisabled}
           >
             <FcComboChart size={23}/>
           </Button>
@@ -123,6 +166,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'textChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('textChart')}
+            disabled={isButtonDisabled}
           >
             <NotesIcon /> 
           </Button>
@@ -133,6 +177,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'mapchat' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('mapchart')}
+            disabled={isButtonDisabled}
           >
             <MapIcon/>
           </Button>
@@ -143,6 +188,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'singleValueChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('singleValueChart')}
+            disabled={isSingleValueButtonDisabled}
           >
             <LooksOneIcon/>
           </Button>
@@ -153,6 +199,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'treeHierarchy' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('treeHierarchy')}
+            disabled={isTreeButtonDisabled}
           >
             <AccountTreeIcon/>
           </Button>
@@ -163,6 +210,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'animatedTreeChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('animatedTreeChart')}
+            disabled={isButtonDisabled}
           >
             <SpaceDashboardIcon/>
           </Button>
@@ -173,6 +221,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'hierarchialBarChart' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('hierarchialBarChart')}
+            disabled={isBARHIERARCHYButtonDisabled}
           >
             <AlignHorizontalLeftIcon/>
           </Button>
@@ -201,6 +250,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'wordCloud' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('wordCloud')}
+            disabled={isTreeButtonDisabled}
             >
               <CloudIcon /> 
             </Button>

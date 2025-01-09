@@ -863,7 +863,9 @@ import {
   TableBody,
   TableContainer,
   Paper,
-  Skeleton, // Import Skeleton from MUI
+  Skeleton,
+  Snackbar,
+  Alert, // Import Skeleton from MUI
 } from '@mui/material';
 import { setShowDashboard, setCheckedPaths } from '../../features/excelFileSlice/LoadExcelFileSlice';
 import Dashboard from '../dashbord-Elements/Dashboard';
@@ -882,6 +884,7 @@ const LoadExcelFile = () => {
   const theamColor = localStorage.getItem('theamColor');
   const lighterColor = tinycolor(theamColor).lighten(10).toString();
   const databaseName = localStorage.getItem('company_name'); // Get the company name from localStorage
+  const [loadSuccess, setLoadSuccess] = useState(false); // New state for message
 
   useEffect(() => {
     const fetchTableNames = async () => {
@@ -900,6 +903,7 @@ const LoadExcelFile = () => {
 
   useEffect(() => {
     if (selectedTable) {
+      localStorage.setItem('selectedTable',selectedTable); 
       const fetchTableDetails = async () => {
         setIsLoading(true);
         try {
@@ -946,18 +950,25 @@ const LoadExcelFile = () => {
 
   const handleLoadTable = () => {
     if (selectedTable) {
-      dispatch(setShowDashboard(true));
+      dispatch(setShowDashboard(false));
       dispatch(setCheckedPaths([selectedTable]));
       console.log('Selected Table:', selectedTable);
+
+      // Show success message
+      setLoadSuccess(true);
     }
   };
 
+  // Close success message
+  const handleCloseSnackbar = () => {
+    setLoadSuccess(false);
+  };
   // Limit the table details to the first 5 rows
   const limitedTableDetails = tableDetails ? tableDetails.slice(0, 5) : [];
 
   return (
     <React.Fragment>
-      {!showDashboard ? (
+     
         <Container
           sx={{
             height: '85vh',
@@ -1209,9 +1220,16 @@ const LoadExcelFile = () => {
             </Box>
           </Grid>
         </Container>
-      ) : (
-        <Dashboard checkedPaths={checkedPaths} />
-      )}
+        <Snackbar
+        open={loadSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+          Load successful!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };

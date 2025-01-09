@@ -9,7 +9,7 @@ import Charts from '../components/viewChart/displayChart';
 import LoadExcelFile from '../components/load/LoadExcelFile';
 import LoadDbFile from '../components/load/loadDb';
 import Chartsview from '../components/viewChart/chartsView';
-
+import Dashboard from '../components/dashbord-Elements/Dashboard';
 import LoadCsvFile from '../components/load/LoadCsvFile';
 // import Dashboard from '../components/dashbord-Elements/Dashboard';
 import LoginPage from '../pages/loginPage/login';  
@@ -41,7 +41,7 @@ const AppRouter = () => {
       {/* <Route path="/load_data" element={<LoadData />} /> */}
       <Route path="/edit_chart" element={<EditDashboard />} />
       <Route path="/create_dashboard" element={<Charts />} />
-
+    
       <Route path="/Charts_view" element={<Chartsview />} />
       <Route path="/dashboard_view" element={<DashboardView />} />
 
@@ -56,7 +56,7 @@ const AppRouter = () => {
       <Route path="/home" element={<IndexHomePage />} />
       <Route path="/employeehome" element={<HomePage />} />
 
-
+      <Route path="/dashboard" element={<Dashboard />} />
 
 
       {/* Authentication Routes */}

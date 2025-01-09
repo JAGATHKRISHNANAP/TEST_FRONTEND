@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect,context, useRef } from 'react';
 import './resizable.css';
 import Draggable from 'react-draggable';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,14 +27,13 @@ import AreaChart from '../ChartViews/areaChartView';
 
 import AnimatedTreemap from '../ChartViews/animatedTreeMapView';
 import DualAxisChart from '../ChartViews/duelAxisChartView';
-
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
-
+import SingleValueChart from '../ChartViews/singleValueChartView';
 import MapChart from '../ChartViews/mapChartView';
 import WordCloud from '../ChartViews/wordCloudView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { HierarchialBarChart_chart, sendChartData } from "../../utils/api";
+import { HierarchialBarChart_chart, sendChartData,sendChartDataview } from "../../utils/api";
 import { addTextChart, addChartData, removeChartData, updateSelectedCategory,updateDuealAxisChartData } from '../../features/ViewChartSlice/viewChartSlice';
 import { ResizableBox } from 'react-resizable';
 import html2canvas from 'html2canvas';
@@ -42,7 +41,7 @@ import fileDownload from 'js-file-download';
 import ImageIcon from '@mui/icons-material/Image';
 import CloseIcon from '@mui/icons-material/CloseRounded';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button ,Box} from '@mui/material';
-
+import TextChartView from '../ChartViews/textChartView';
 const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAreaRef }) => {
   const [tableModalOpen, setTableModalOpen] = useState(false);
   
@@ -58,7 +57,9 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const [hierarchyData,setHierarchyData]=useState(null);
   const [aiChartData,setAiChartData]=useState(null);
   const database_name =localStorage.getItem("company_name");
- 
+  const isDashboard = context === "dashboard";
+  const minWidth = isDashboard ? 200 : 800;
+  const minHeight = isDashboard ? 50 : 300;
   const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
   const chart_id = data[0];
   const text_y_xis = data[2];
@@ -74,13 +75,32 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
 
   // console.log("--------------------------------------------------------------------------------------",chartDataFromStore.series1);
 
+  // const sendDataToBackend = async () => {
+  //   try {
+  //     if (dataFetchedRef.current) return; // Prevent re-fetching
+  //     dataFetchedRef.current = true; // Set the flag to prevent duplicate fetches
+
+  //     const response = await sendChartData(chart_id, text_y_xis, text_y_database, text_y_table, text_y_aggregate);
+
+  //     const fetchedData = response.data;
+  //     const textChartData = { fetchedData, chart_id };
+  //     dispatch(addTextChart(textChartData));
+  //     setResult(fetchedData.total_x_axis);
+  //     setFetchedData(fetchedData);
+  //   } catch (error) {
+  //     console.error("Error sending data to backend", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   updateChartDetails(data.chartName, { width, height, position });
+  //   sendChartDetailsToBackend();
+  // }, [width, height, position]);
   const sendDataToBackend = async () => {
     try {
       if (dataFetchedRef.current) return; // Prevent re-fetching
       dataFetchedRef.current = true; // Set the flag to prevent duplicate fetches
-
-      const response = await sendChartData(chart_id, text_y_xis, text_y_database, text_y_table, text_y_aggregate);
-
+      const response = await sendChartDataview(chart_id, text_y_xis, text_y_database, text_y_table, text_y_aggregate);
       const fetchedData = response.data;
       const textChartData = { fetchedData, chart_id };
       dispatch(addTextChart(textChartData));
@@ -94,7 +114,9 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   useEffect(() => {
     updateChartDetails(data.chartName, { width, height, position });
     sendChartDetailsToBackend();
+    sendDataToBackend();
   }, [width, height, position]);
+
 
   const handleResize = (e, { size }) => {
     if (size.width !== width || size.height !== height) {
@@ -311,11 +333,11 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} chartColor={data[6]} />;
             }
           break;
-    // case 'textChart':
-    //         if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-    //           return <TextChartView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} />;
-    //         }
-                // break;
+    case 'textChart':
+            if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
+              return <TextChartView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} />;
+            }
+                break;
       case 'sampleAitestChart':
         return <SampleAiTestChart data={aiChartData} />;
       case 'treeHierarchy':
@@ -348,28 +370,52 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
                 break;
 
         
+      // case 'singleValueChart':
+      //   if (!result) {
+      //     sendDataToBackend(); // Manually trigger the fetch
+      //   }
+      //   return (
+      //     <ResizableBox
+      //       width={300}
+      //       height={200}
+      //       minConstraints={[200, 90]}
+      //       maxConstraints={[400, 600]}
+      //       onResize={handleResize}
+      //     >
+      //       <div style={{ textAlign: 'center' }}>
+      //         <h4 style={{ fontSize: `${width / 20}px` }}>{heading.replace(/"/g, '')}</h4>
+      //         <div>
+      //           <h2 style={{ fontSize: `${width / 20}px` }}>
+      //             {fetchedData ? result : 'Loading data...'}
+      //           </h2>
+      //         </div>
+      //       </div>
+      //     </ResizableBox>
+      //   );
       case 'singleValueChart':
-        if (!result) {
-          sendDataToBackend(); // Manually trigger the fetch
-        }
+        // if (!result) {
+        //   // sendDataToBackend(); // Manually trigger the fetch
+        // }
+        // return (
+        //   <SingleValueChart
+        //     width={width}
+        //     heading={heading}
+        //     result={result}
+        //     fetchedData={fetchedData}
+        //     handleResize={handleResize}
+        //   />
+        // );
         return (
-          <ResizableBox
-            width={300}
-            height={200}
-            minConstraints={[200, 90]}
-            maxConstraints={[400, 600]}
-            onResize={handleResize}
-          >
-            <div style={{ textAlign: 'center' }}>
-              <h4 style={{ fontSize: `${width / 20}px` }}>{heading.replace(/"/g, '')}</h4>
-              <div>
-                <h2 style={{ fontSize: `${width / 20}px` }}>
-                  {fetchedData ? result : 'Loading data...'}
-                </h2>
-              </div>
-            </div>
-          </ResizableBox>
-        );
+                    <SingleValueChart
+                      width={width}
+                      heading={heading}
+                      result={result}
+                      fetchedData={fetchedData}
+                      handleResize={handleResize}
+                      minWidth={minWidth}
+                      minHeight={minHeight} // Pass minimum constraints
+                    />
+                  );
       default:
         return <div>No chart available</div>;
     }

@@ -546,7 +546,8 @@ import {
   TableBody,
   TableContainer,
   Paper,
-  Skeleton,
+  Skeleton,Snackbar,
+  Alert,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -572,6 +573,7 @@ const LoadDbFile = () => {
   const [selectedTable, setSelectedTable] = useState('');
   const [tableDetails, setTableDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadSuccess, setLoadSuccess] = useState(false); // New state for message
 
   // Theme Color from Local Storage
   const theamColor = localStorage.getItem('theamColor');
@@ -618,6 +620,7 @@ const LoadDbFile = () => {
   // Fetch Table Details for Selected Table
   useEffect(() => {
     if (selectedTable) {
+      localStorage.setItem('selectedTable',selectedTable); 
       const fetchTableDetails = async () => {
         setIsLoading(true);
         try {
@@ -645,20 +648,33 @@ const LoadDbFile = () => {
     setSelectedTable(event.target.value);
   };
 
+  // const handleLoadTable = () => {
+  //   if (selectedTable) {
+  //     dispatch(setShowDashboard(true));
+  //     dispatch(setCheckedPaths([selectedTable]));
+  //     console.log('Selected Table:', selectedTable);
+  //   }
+  // };
   const handleLoadTable = () => {
     if (selectedTable) {
-      dispatch(setShowDashboard(true));
+      dispatch(setShowDashboard(false));
       dispatch(setCheckedPaths([selectedTable]));
       console.log('Selected Table:', selectedTable);
+
+      // Show success message
+      setLoadSuccess(true);
     }
   };
+  const handleCloseSnackbar = () => {
+    setLoadSuccess(false);
+  };
+  
 
   // Display only the first 5 rows of table details
   const limitedTableDetails = tableDetails ? tableDetails.slice(0, 5) : [];
 
   return (
     <React.Fragment>
-      {!showDashboard ? (
         <Container
           sx={{
             height: '85vh',
@@ -781,9 +797,16 @@ const LoadDbFile = () => {
             </Button>
           </Box>
         </Container>
-      ) : (
-        <Dashboard />
-      )}
+        <Snackbar
+        open={loadSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+          Load successful!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };

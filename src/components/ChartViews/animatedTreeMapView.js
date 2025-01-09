@@ -1,8 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import '../charts/TextChart.css'; 
+import {updateSelectedCategory,updateChartData,setChartStatus,updateSelectedCategory_xaxis} from '../../features/ViewChartSlice/viewChartSlice';
+import "../charts/tooltip.css"; // Import the CSS for the tooltip
+import { sendClickedCategory } from "../../utils/api";
 import { ResizableBox } from 'react-resizable';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", otherChartCategories = [] }) => {
     const svgRef = useRef(null);
@@ -10,7 +15,54 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [boxSize, setBoxSize] = useState({ width: 300, height: 300 });
-
+    const [showResetButton, setShowResetButton] = useState(false);
+    const dispatch = useDispatch();
+     const charts = useSelector((state) => state.viewcharts.charts);
+    const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
+       const handleClicked = async (event, chartContext, config) => {
+          if (!isFilterActive) return;
+          const clickedCategoryIndex = config.dataPointIndex;
+          const clickedCategory = categories[clickedCategoryIndex];
+          try {
+            // Trigger the API call to send the clicked category
+            const response = await sendClickedCategory(clickedCategory,charts,x_axis);
+            console.log("chart_data_list:", response.chart_data_list)
+            response.chart_data_list.forEach((chartData) => {
+                const { chart_id, data } = chartData;
+                dispatch(updateChartData({
+                  chart_id,
+                  categories: data.categories,
+                  values: data.values,
+                  series1:data.series1,
+                  series2:data.series2,
+                }));
+              });
+        } catch (error) {
+            console.error(`Failed to send category ${clickedCategory}:`, error);
+        }
+              // Set the selected category and show the reset button
+              dispatch(updateSelectedCategory(clickedCategory));
+              dispatch(updateSelectedCategory_xaxis(x_axis));
+              dispatch(setChartStatus(true));
+              setShowResetButton(true);
+          };
+        //   dispatch(updateSelectedCategory(clickedCategory));
+         
+        // };
+       
+        
+        
+          const handleReset = () => {
+            // Reset the selected category and hide the reset button
+            dispatch(updateSelectedCategory(null));
+            dispatch(setChartStatus(false));
+            setShowResetButton(false);
+        };
+        
+        const handleFilterToggle = () => {
+            setIsFilterActive(prevState => !prevState); // Toggle the filter state
+        };
+        
     const handleContextMenu = (event) => {
         event.preventDefault();
         setContextMenuPosition({ x: event.pageX, y: event.pageY });
@@ -161,6 +213,29 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
                 <svg ref={svgRef}></svg>
                 <div ref={tooltipRef} className="maptooltip" style={{ display: 'none', position: 'absolute', opacity: 0 }}></div>
             </ResizableBox>
+            <button 
+                onClick={handleFilterToggle} 
+                style={{ 
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    padding: '8px', 
+                    borderRadius: '50%', 
+                    background: '#1976d2', 
+                    border: 'none', 
+                    color: '#fff', 
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', 
+                    cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#75ACE2'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#1976d2'}
+            >
+                {isFilterActive ? 
+                    <FilterAltIcon style={{ fontSize: '20px', marginRight: '5px', color: '#00000' }} onClick={handleReset} /> : 
+                    <FilterAltOffIcon style={{ fontSize: '20px', marginRight: '5px', color: '#00000' }}  />} 
+            </button>
         </div>
     );
 };
