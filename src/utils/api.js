@@ -413,7 +413,17 @@ export const fetchColumnsAPI = async (tableName, databaseName,connectionType,sel
     throw error; // Rethrow to handle in the caller
   }
 };
-
+export const fetchVustomColumnsAPI = async (tableName, databaseName,connectionType,selectedUser) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/column_names/${tableName}`, {
+      params: { databaseName,connectionType,selectedUser },
+    });
+    return response
+  } catch (error) {
+    console.error(`Error fetching columns for table ${tableName}:`, error);
+    throw error; // Rethrow to handle in the caller
+  }
+};
 
 export const performJoinOperation = async (payload) => {
   try {
@@ -502,6 +512,15 @@ export const checkIfTableInUse = async (selectedSheet) => {
   } catch (error) {
     console.error('Error checking table usage:', error);
     throw new Error('Failed to check table usage');
+  }
+};
+export const AiMLchartData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/ai_ml_chartdata`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching hello data:', error);
+    throw error;
   }
 };
 

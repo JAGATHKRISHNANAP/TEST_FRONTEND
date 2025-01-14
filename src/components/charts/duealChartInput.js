@@ -76,20 +76,20 @@
 //     }
 //   };
 
-//   const handleCheckboxChange = (option) => {
-//     let updatedOptions;
-//     if (checkedOptions.includes(option)) {
-//       updatedOptions = checkedOptions.filter(item => item !== option);
-//     } else {
-//       updatedOptions = [...checkedOptions, option];
-//     }
-//     dispatch(setCheckedOptions(updatedOptions));
-//     dispatch(setSelectAllChecked(updatedOptions.length === filterOptions.length));
-//   };
-//   const removeColumnFromYAxis = (columnNameToRemove) => {
-//     const updatedYAxis = yAxis.filter(column => column !== columnNameToRemove);
-//     dispatch(setYAxis(updatedYAxis));
-//   };
+  // const handleCheckboxChange = (option) => {
+  //   let updatedOptions;
+  //   if (checkedOptions.includes(option)) {
+  //     updatedOptions = checkedOptions.filter(item => item !== option);
+  //   } else {
+  //     updatedOptions = [...checkedOptions, option];
+  //   }
+  //   dispatch(setCheckedOptions(updatedOptions));
+  //   dispatch(setSelectAllChecked(updatedOptions.length === filterOptions.length));
+  // };
+  // const removeColumnFromYAxis = (columnNameToRemove) => {
+  //   const updatedYAxis = yAxis.filter(column => column !== columnNameToRemove);
+  //   dispatch(setYAxis(updatedYAxis));
+  // };
 
 
 //   const handleDragOver = (event) => {
@@ -345,9 +345,11 @@ function DuealChartInput() {
   const selectedTable = localStorage.getItem('selectedTable'); 
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
+      
       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
     }
   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
+
   const fetchFilterOptions = async (columnName) => {
     try {
       console.log("selectedTable",selectedTable)
@@ -358,7 +360,7 @@ function DuealChartInput() {
       const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
       dispatch(setFilterOptions(options));
       dispatch(setCheckedOptions(options));
-      dispatch(setShowFilterDropdown(true));
+      dispatch(setShowFilterDropdown(false));
       dispatch(setSelectAllChecked(true));
     } catch (error) {
       console.error('Error fetching filter options:', error);
@@ -374,14 +376,25 @@ function DuealChartInput() {
     }
   };
 
-  const handleFilterIconClick = (columnName) => {
+  // const handleFilterIconClick = (columnName) => {
+  //   if (showFilterDropdown) {
+  //     dispatch(setShowFilterDropdown(false));
+  //   } else {
+  //     fetchFilterOptions(columnName);
+  //   }
+  // };
+
+  const handleFilterIconClick = async (columnName) => {
     if (showFilterDropdown) {
+      // Close the dropdown if it's already open
       dispatch(setShowFilterDropdown(false));
     } else {
-      fetchFilterOptions(columnName);
+      // Fetch filter options for the selected column and open the dropdown
+      await fetchFilterOptions(columnName); // Ensure correct column name is passed
+      dispatch(setShowFilterDropdown(true));
     }
   };
-
+  
   // const handleCheckboxChange = (option) => {
   //   let updatedOptions;
   //   if (checkedOptions.includes(option)) {
@@ -420,20 +433,40 @@ function DuealChartInput() {
     event.preventDefault();
   };
 
+  // const handleDrop = (event, target) => {
+  //   event.preventDefault();
+  //   const columnName = event.dataTransfer.getData("columnName");
+  //   if (target === "x-axis") {
+  //     if (!xAxis.includes(columnName)) {
+  //       dispatch(setXAxis([...xAxis, columnName]));
+  //     }
+  //   } else if (target === "y-axis") {
+  //     if (!yAxis.includes(columnName)) {
+  //       dispatch(setYAxis([...yAxis, columnName]));
+  //     }
+  //   }
+  // };
+
   const handleDrop = (event, target) => {
     event.preventDefault();
     const columnName = event.dataTransfer.getData("columnName");
-    if (target === "x-axis") {
-      if (!xAxis.includes(columnName)) {
-        dispatch(setXAxis([...xAxis, columnName]));
-      }
-    } else if (target === "y-axis") {
-      if (!yAxis.includes(columnName)) {
-        dispatch(setYAxis([...yAxis, columnName]));
-      }
-    }
-  };
 
+    // Disable the filter dropdown
+    setShowFilterDropdown(false);
+
+    if (target === "x-axis") {
+        if (!xAxis.includes(columnName)) {
+            dispatch(setXAxis([...xAxis, columnName]));
+            fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+            
+        }
+    } else if (target === "y-axis") {
+        if (!yAxis.includes(columnName)) {
+            dispatch(setYAxis([...yAxis, columnName]));
+            // fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+        }
+    }
+};
 
   const removeColumnFromXAxis = (columnNameToRemove) => {
     const updatedXAxis = xAxis.filter(column => column !== columnNameToRemove);

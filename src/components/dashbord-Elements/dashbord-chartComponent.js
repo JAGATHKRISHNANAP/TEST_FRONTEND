@@ -254,6 +254,14 @@ return (
             >
               <CloudIcon /> 
             </Button>
+            <Tooltip title="boxPlot" arrow></Tooltip>
+            <Button
+            sx={{ margin: "2px" }}
+            variant={chartType === 'boxPlot' ? 'contained' : 'outlined'}
+            onClick={() => handleChartTypeChange('boxPlot')}
+            >
+              <TipsAndUpdatesIcon /> 
+            </Button>
         </Tooltip>
       </div>
     </Box>

@@ -28,7 +28,7 @@ import MapChart from '../charts/mapchart';
 import SingleValueChart from '../charts/singleValueChart';
 import ChartColor from '../charts/color';
 import DuelBarChart from '../charts/duelBarChart';
-
+import BoxPlot from '../charts/boxPlot';
 import SampleAiTestChart from '../charts/sampleAiTestChart';
 import BoxPlotChart from '../charts/BoxPlotChart';
 
@@ -172,7 +172,7 @@ function Dashboard() {
               <DuealChartInputsss/>
             </Item>
 
-            {xAxis.length > 0 && chartType === "pie" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "pie" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -184,7 +184,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {xAxis.length > 0 && chartType === "line" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "line" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -196,7 +196,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {xAxis.length > 0 && chartType === "scatter" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "scatter" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -208,7 +208,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {xAxis.length > 0 && chartType === "bar" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "bar" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -222,7 +222,7 @@ function Dashboard() {
             )}
 
             
-            {xAxis.length > 0 && chartType === "area" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "area" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -234,7 +234,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {xAxis.length > 0 && chartType === "polarArea" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "polarArea" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -246,7 +246,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {xAxis.length > 0 && chartType === "textChart" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "textChart" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -357,7 +357,7 @@ function Dashboard() {
                         )}
 
 
-             {xAxis.length > 0 && chartType === "animatedTreeChart" && (
+             {xAxis.length > 0 && yAxis.length>0 && chartType === "animatedTreeChart" && (
              <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -371,7 +371,7 @@ function Dashboard() {
               </div>
             )}
 
-          {xAxis.length > 0 && chartType === "hierarchialBarChart" && (
+          {xAxis.length > 0 && yAxis.length>0 && chartType === "hierarchialBarChart" && (
                       <div style={{ marginTop: '20px' }}>
                           <Items>
                             <div className="chart-container">
@@ -390,6 +390,18 @@ function Dashboard() {
                   <div className="chart-container">
                     <WordCloudChart categories={plotData?.categories} values={plotData?.values}  />
                     </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={handleSaveButtonClick}>Save Data to Database</button>
+                </div>
+              </div>
+            )}
+            {xAxis.length > 0 && chartType === "boxPlot" && (
+              <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <BoxPlot categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
+                  </div>
                 </Items>
                 <div className='btn-container'>
                   <button className="save-button" onClick={handleSaveButtonClick}>Save Data to Database</button>
