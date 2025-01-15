@@ -562,7 +562,7 @@
 
 // cleaned above code and added the below code
 
-import React, { useState,context, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './resizable.css';
 import Draggable from 'react-draggable';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -605,7 +605,11 @@ const TextContainer = ({ width, heading, fetchedData, result }) => {
   );
 };
 
-const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAreaRef }) => {
+// const ResizableChart = ({ data, context, onRemove, updateChartDetails }) => {
+//   // Context-aware minimum constraints
+//   const isDashboard = context === "dashboard";
+
+const ResizableChart = ({ data, context, onRemove, updateChartDetails}) => {
   const [tableModalOpen, setTableModalOpen] = useState(false);
   const [width, setWidth] = useState(data.width);
   const [height, setHeight] = useState(data.height);

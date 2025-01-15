@@ -395,6 +395,21 @@ export const sendClickedCategory = async (category,charts,x_axis) => {
 };
 
 
+
+export const sendaidashboardClickedCategory = async (category,x_axis) => {
+  try {
+    const response = await axios.post(`${API_URL}/ai_ml_filter_chartdata`, {
+      category,
+      x_axis
+    });
+    return response.data;  // Return the response data
+  } catch (error) {
+    console.error('Error sending clicked category to backend:', error);
+    throw error;  // Rethrow the error for handling in the calling component
+  }
+};
+
+
 export const saveAllCharts = async (user_id,chartData,dashboardfilterXaxis,selectedCategory,fileName,company_name) => {
   try {
     await axios.post(`${API_URL}/save_all_chart_details`, {

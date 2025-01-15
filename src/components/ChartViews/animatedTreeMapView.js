@@ -1,15 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import '../charts/TextChart.css'; 
 import { ResizableBox } from 'react-resizable';
+import {updateSelectedCategory,updateChartData,setChartStatus} from '../../features/ViewChartSlice/viewChartSlice';
+import { sendClickedCategory} from '../../utils/api';
 
-const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", otherChartCategories = [] }) => {
+
+const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis, y_axis="Y_axis", otherChartCategories = [] }) => {
+    const dispatch = useDispatch();
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [boxSize, setBoxSize] = useState({ width: 300, height: 300 });
+    const charts = useSelector((state) => state.viewcharts.charts);
 
     const handleContextMenu = (event) => {
         event.preventDefault();
@@ -32,6 +37,32 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
         };
 
         const { width, height } = boxSize;
+              const handleClicked = async (event, chartContext, config) => {
+                // if (!isFilterActive) return;
+                const clickedCategoryIndex = config.dataPointIndex;
+                const clickedCategory = categories[clickedCategoryIndex];
+                try {
+                  // Trigger the API call to send the clicked category
+                  const response = await sendClickedCategory(clickedCategory,charts,x_axis);
+                  console.log("chart_data_list:", response.chart_data_list)
+                  response.chart_data_list.forEach((chartData) => {
+                      const { chart_id, data } = chartData;
+                      dispatch(updateChartData({
+                        chart_id,
+                        categories: data.categories,
+                        values: data.values,
+                        series1:data.series1,
+                        series2:data.series2,
+                      }));
+                    });
+              } catch (error) {
+                  console.error(`Failed to send category ${clickedCategory}:`, error);
+              }
+            
+                dispatch(updateSelectedCategory(clickedCategory));
+               
+              };
+             
 
         const svg = d3.select(svgRef.current)
             .attr("width", width)
@@ -59,38 +90,92 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
                 chartColor
             ));
 
+        // const nodes = svg.selectAll("g")
+        //     .data(root.leaves())
+        //     .enter()
+        //     .append("g")
+        //     .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
+        //     .on("mouseover", function (event, d) {
+        //         tooltip.style("display", "block")
+        //             .style("opacity", 1)
+        //             .html(`<strong>${d.data.name}</strong>: ${d.data.value}`);
+
+        //         d3.select(this).select('rect')
+        //             .transition()
+        //             .duration(200)
+        //             .style("stroke", "blue")
+        //             .style("stroke-width", 3)
+        //             .style("fill-opacity", 1);
+        //     })
+        //     .on("mousemove", function (event) {
+        //         const svgElement = svgRef.current.getBoundingClientRect(); // Get the SVG bounding box
+        //         tooltip.style("left", `${event.clientX - svgElement.left + 10}px`)
+        //                .style("top", `${event.clientY - svgElement.top + 10}px`);
+        //     })
+        //     .on("mouseout", function () {
+        //         tooltip.style("display", "none");
+
+        //         d3.select(this).select('rect')
+        //             .transition()
+        //             .duration(200)
+        //             .style("stroke", "#fff") // Reset stroke to normal
+        //             .style("stroke-width", 1) // Reset stroke width
+        //             .style("fill-opacity", 0.8); // Reset opacity
+        //     });
         const nodes = svg.selectAll("g")
-            .data(root.leaves())
-            .enter()
-            .append("g")
-            .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
-            .on("mouseover", function (event, d) {
-                tooltip.style("display", "block")
-                    .style("opacity", 1)
-                    .html(`<strong>${d.data.name}</strong>: ${d.data.value}`);
+    .data(root.leaves())
+    .enter()
+    .append("g")
+    .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
+    .on("mouseover", function (event, d) {
+        tooltip.style("display", "block")
+            .style("opacity", 1)
+            .html(`<strong>${d.data.name}</strong>: ${d.data.value}`);
 
-                d3.select(this).select('rect')
-                    .transition()
-                    .duration(200)
-                    .style("stroke", "blue")
-                    .style("stroke-width", 3)
-                    .style("fill-opacity", 1);
-            })
-            .on("mousemove", function (event) {
-                const svgElement = svgRef.current.getBoundingClientRect(); // Get the SVG bounding box
-                tooltip.style("left", `${event.clientX - svgElement.left + 10}px`)
-                       .style("top", `${event.clientY - svgElement.top + 10}px`);
-            })
-            .on("mouseout", function () {
-                tooltip.style("display", "none");
+        d3.select(this).select('rect')
+            .transition()
+            .duration(200)
+            .style("stroke", "blue")
+            .style("stroke-width", 3)
+            .style("fill-opacity", 1);
+    })
+    .on("mousemove", function (event) {
+        const svgElement = svgRef.current.getBoundingClientRect(); // Get the SVG bounding box
+        tooltip.style("left", `${event.clientX - svgElement.left + 10}px`)
+               .style("top", `${event.clientY - svgElement.top + 10}px`);
+    })
+    .on("mouseout", function () {
+        tooltip.style("display", "none");
 
-                d3.select(this).select('rect')
-                    .transition()
-                    .duration(200)
-                    .style("stroke", "#fff") // Reset stroke to normal
-                    .style("stroke-width", 1) // Reset stroke width
-                    .style("fill-opacity", 0.8); // Reset opacity
+        d3.select(this).select('rect')
+            .transition()
+            .duration(200)
+            .style("stroke", "#fff") // Reset stroke to normal
+            .style("stroke-width", 1) // Reset stroke width
+            .style("fill-opacity", 0.8); // Reset opacity
+    })
+    // .on("click", function (event, d) {
+    //     console.log(`Category clicked: ${d.data.name}`);
+    // });
+    .on("click", async function (event, d) {
+        const clickedCategoryIndex = categories.findIndex(category => category === d.data.name);
+        const clickedCategory = categories[clickedCategoryIndex];
+    
+        try {
+            // Trigger the `handleClicked` function
+            await handleClicked(event, null, {
+                dataPointIndex: clickedCategoryIndex,
+                categoryName: clickedCategory
             });
+        } catch (error) {
+            console.error(`Failed to handle click for category ${clickedCategory}:`, error);
+        }
+    });
+    
+
+
+// Continue with adding rect and text to nodes
+
 
         // Animate the rectangles
         nodes.append("rect")

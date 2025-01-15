@@ -32,6 +32,22 @@
   .x-axis-column span {
     margin-right: 2px;
   }
+
+  .y-axis-column {
+    display: flex;
+    align-items: left;
+    padding: 5px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    background: linear-gradient(to right, #079b51, #11ce6f);
+    color: white;
+    border-radius: 10px;
+  }
+  
+  .y-axis-column span {
+    margin-right: 2px;
+  }
+  
   
   .btn-container {
     display: flex;

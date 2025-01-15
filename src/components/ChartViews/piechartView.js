@@ -19,6 +19,7 @@ const Pie = (props) => {
   const customHeadings = useSelector((state) => state.toolTip.customHeading); // Added customHeadings selector
   const charts = useSelector((state) => state.viewcharts.charts);
   const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
+  
   const handleClicked = async (event, chartContext, config) => {
     // if (!isFilterActive) return;
     const clickedCategoryIndex = config.dataPointIndex;

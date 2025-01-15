@@ -15,6 +15,7 @@ import MapIcon from '@mui/icons-material/Map';
 import AlignHorizontalLeftIcon from '@mui/icons-material/AlignHorizontalLeft';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import CloudIcon from '@mui/icons-material/Cloud';
 
 import { FcComboChart } from "react-icons/fc";
 
@@ -232,6 +233,16 @@ return (
             <AlignHorizontalLeftIcon/>
           </Button>
         </Tooltip>
+        <Tooltip title="wordCloud" arrow>
+          <Button
+            sx={{ margin: "2px" }}
+            variant={chartType === 'wordCloud' ? 'contained' : 'outlined'}
+            onClick={() => handleChartTypeChange('wordCloud')}
+            disabled={isTreeButtonDisabled}
+            >
+              <CloudIcon /> 
+            </Button>
+        </Tooltip>
 
         <Tooltip title="Sample AI Test Chart" arrow>
           <Button
@@ -254,6 +265,8 @@ return (
             <PsychologyIcon/>
           </Button>
         </Tooltip>
+
+
       </div>
     </Box>
   </div>

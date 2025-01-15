@@ -1,4 +1,4 @@
-import React, { useState,context, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './resizable.css';
 import Draggable from 'react-draggable';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -41,7 +41,7 @@ const TextContainer = ({ width, heading, fetchedData, result }) => {
   );
 };
 
-const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAreaRef }) => {
+const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAreaRef, context }) => {
   const [tableModalOpen, setTableModalOpen] = useState(false);
   const [width, setWidth] = useState(data.width);
   const [height, setHeight] = useState(data.height);

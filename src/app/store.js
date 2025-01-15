@@ -34,6 +34,7 @@ import  signupReducer  from '../features/signUp/signUpSlice';
 // import fetchedChartDataReducer from '../features/fetchChartDataForView/fetchChartDataSlice';
 
 import loginReducer from '../features/login/loginSlice';
+import aichartReducer from '../features/aiCharts/aiChartSlice'; 
 
 
 const store = configureStore({
@@ -80,7 +81,28 @@ const store = configureStore({
     signup: signupReducer,
 
     // fetchedChartData: fetchedChartDataReducer,
+    aicharts: aichartReducer,
   },
 });
 
 export default store;
+
+
+
+
+
+
+
+
+// import { configureStore } from '@reduxjs/toolkit';
+// import aichartReducer from '../features/aiCharts/aiChartSlice'; 
+
+
+// const store = configureStore({
+//   reducer: {
+//     // fetchedChartData: fetchedChartDataReducer,
+//     aicharts: aichartReducer,
+//   },
+// });
+
+// export default store;

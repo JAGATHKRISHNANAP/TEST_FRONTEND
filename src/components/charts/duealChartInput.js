@@ -1409,7 +1409,7 @@ function DuealChartInput() {
                   <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
                   <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {yAxis.map((column, index) => (
-                          <div key={index} className="x-axis-column" style={{maxHeight:"30px"}}>
+                          <div key={index} className="y-axis-column" style={{maxHeight:"30px"}}>
                             <span>{column}</span>
                             <ClearIcon style={{ marginLeft: '10px' }} onClick={() => removeColumnFromYAxis(column)} />
                           </div>

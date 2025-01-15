@@ -18,7 +18,7 @@ import SingleValueChart from '../charts/singleValueChart';
 
 
 import SampleAiTestChart from '../charts/sampleAiTestChart';
-import BoxPlotChart from '../charts/BoxPlotChart';
+import WordCloud from '../charts/wordCloudChart';
 
 
 import Treemap from '../charts/animatedTreeChart';
@@ -65,6 +65,8 @@ const ChartRenderer = ({ chartType, xAxis, plotData, handleSaveButtonClick }) =>
         return <Treemap {...plotData} />;
       case 'hierarchialBarChart':
         return <HierarchicalBarChart {...plotData} />;
+      case 'wordCloud':
+        return <WordCloud {...plotData} />; 
       default:
         return null;
     }
