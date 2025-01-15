@@ -602,3 +602,12 @@ export const fetchUsers = async (databaseName) => {
     throw error;
   }
 };
+// export const validateSaveName = async (saveName) => {
+//   try {
+//     const validationResponse = await axios.post(`${API_URL}/api/checkSaveName`, { saveName });
+//     return validationResponse.data.exists; // Return true if it exists, false otherwise
+//   } catch (error) {
+//     console.error("Error validating save name:", error);
+//     return false; // Assume it doesn't exist in case of an error
+//   }
+// };

@@ -198,7 +198,9 @@ const CsvUpload = () => {
         });
       } else {
         dispatch(setFile(null));
-        alert('Please select a CSV file.');
+        setSnackbarMessage('Please upload a valid Excel file.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
       }
     }
   };

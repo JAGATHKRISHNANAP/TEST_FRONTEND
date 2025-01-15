@@ -179,7 +179,8 @@ import { ResizableBox } from 'react-resizable';
 import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
 import './tooltip.css';
 import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
-
+import ContectMenu from './contextMenu';
+import CustomToolTip from './customToolTip';
 const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
@@ -194,10 +195,46 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const [chartData, setChartData] = useState({ categories, values });
     const [drillStack, setDrillStack] = useState([]);
     const [chartDimensions, setChartDimensions] = useState({ width: 500, height: 300 });
-
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    const [contextMenuVisible, setContextMenuVisible] = useState(false);
+    const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+    const [popupVisible, setPopupVisible] = useState(false);
+    const customHeadings = useSelector((state) => state.toolTip.customHeading);
+       
+        const contextMenuRef = useRef(null);
     useEffect(() => {
         setChartData({ categories, values });
     }, [categories, values]);
+
+    
+
+    const handleContextMenu = (event) => {
+        event.preventDefault();
+        setContextMenuPosition({ x: event.pageX, y: event.pageY });
+        setContextMenuVisible(true);
+    }
+
+    const handleClickOutside = (event) => {
+        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+            setContextMenuVisible(false);
+        }
+    };
+
+    const handleShowPopup = () => {
+        setPopupVisible(true);
+        setContextMenuVisible(false);
+    };
+
+    const handleClosePopup = () => {
+        setPopupVisible(false);
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     const handleClicked = async (event, clickedCategoryIndex) => {
         const clickedCategory = chartData.categories[clickedCategoryIndex];
@@ -335,10 +372,17 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
                         minConstraints={[300, 300]}
                         maxConstraints={[1200, 800]}
                         onResize={onResize}
-                    >
+                        onContextMenu={handleContextMenu}
+                    ><div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
                         <svg ref={svgRef} width="100%" height="100%" />
                         <div ref={tooltipRef} className="tooltip"></div>
                     </ResizableBox>
+                    
+
+            {contextMenuVisible && (
+                <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
+            )}
+            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
                 </div>
             </div>
         </div>

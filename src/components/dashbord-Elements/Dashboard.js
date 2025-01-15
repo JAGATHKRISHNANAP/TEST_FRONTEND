@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import TreeHierarchy from '../charts/treeHierarchy'; 
 import HierarchicalBarChart from '../charts/hierarchialBarChart';
+import axios from 'axios';
 
 import DashboardTableDetails from './dashbordTableDetails';
 import DashboardCharts from './dashbord-chartComponent';
@@ -81,8 +82,8 @@ function Dashboard() {
   const csvCheckedPaths = useSelector((state) => state.loadCsv.checkedPaths);
   const chart_heading = useSelector((state) => state.toolTip.customHeading);
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
-  const selectedTable = selectedTablearray.join(',');
-
+  // const selectedTable = selectedTablearray.join(',');
+  const selectedTable=localStorage.getItem("selectedTable")
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
@@ -125,14 +126,53 @@ function Dashboard() {
     setOpen(false);
   };
 
+  // const handleSaveToDatabase = async () => {
+  //   if (!saveName.trim()) {
+  //     alert("Please enter a save name before saving.");
+  //     return;
+  //   }
+
+  //   console.log('Sending data to save:', saveName);
+  //   try {
+  //     const response = await saveDataToDatabase({
+  //       user_id,
+  //       company_name,
+  //       selectedUser,
+  //       selectedTable,
+  //       databaseName,
+  //       xAxis,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       barColor,
+  //       chart_heading,
+  //       dashboardBarColor,
+  //       checkedOptions,
+  //       saveName,
+        
+  //     });
+  //     console.log('Data saved successfully:', response);
+  //     setOpen(false);
+  //   } catch (error) {
+  //     console.error('Error saving data:', error);
+  //   }
+  // };
   const handleSaveToDatabase = async () => {
     if (!saveName.trim()) {
       alert("Please enter a save name before saving.");
       return;
     }
-
-    console.log('Sending data to save:', saveName);
+  
     try {
+      // Check if the saveName already exists
+      const validationResponse = await axios.post(`http://localhost:5000/api/checkSaveName`, { saveName });
+      if (validationResponse.data.exists) {
+        alert("Save name already exists. Please choose a different name.");
+        return;
+      }
+  
+      console.log('Sending data to save:', saveName);
+      // Proceed to save the chart if saveName is unique
       const response = await saveDataToDatabase({
         user_id,
         company_name,
@@ -148,14 +188,15 @@ function Dashboard() {
         dashboardBarColor,
         checkedOptions,
         saveName,
-        
       });
+  
       console.log('Data saved successfully:', response);
       setOpen(false);
     } catch (error) {
       console.error('Error saving data:', error);
     }
   };
+  
   
 
   return (

@@ -362,6 +362,8 @@ function DuealChartInput() {
       dispatch(setCheckedOptions(options));
       dispatch(setShowFilterDropdown(false));
       dispatch(setSelectAllChecked(true));
+
+      localStorage.setItem('filterOptions', JSON.stringify(options));
     } catch (error) {
       console.error('Error fetching filter options:', error);
     }

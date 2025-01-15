@@ -327,6 +327,7 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
     const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
     const toolTipOptions = useSelector((state) => state.toolTip);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
 
     const [plotData, setPlotData] = useState({ categories, values });
     const [forecastData, setForecastData] = useState({ categories: [], values: [] });
@@ -520,7 +521,7 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
             {/* Parent Line Chart */}
             <div style={{ flex: 1 }}>
                 <ResizableBox width={600} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
-                    <div className="chart-title">{customHeadings}</div>
+                <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>               
                     <Chart options={options} series={[{ name: aggregation || 'Series', data: values || [] }]} type="line" width="100%" height="100%" />
                 </ResizableBox>
     

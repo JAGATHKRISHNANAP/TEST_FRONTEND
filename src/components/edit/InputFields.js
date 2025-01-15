@@ -375,7 +375,7 @@ import Pie from '../charts/Pie';
 import LineChart from '../charts/lineChart';
 import ScatterPlot from '../charts/scatterChart';
 import BarChart from '../charts/barChart';
-import { Box, Checkbox, FormControl, Grid, InputLabel, List, ListItemButton, ListItemIcon, NativeSelect, Paper, styled } from "@mui/material";
+import {Snackbar, Alert, Box, Checkbox, FormControl, Grid, InputLabel, List, ListItemButton, ListItemIcon, NativeSelect, Paper, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -426,6 +426,9 @@ function EditDashboard() {
   const [checkedOptions, setCheckedOptions] = useState([]);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(true);
+  const [showSnackbar, setShowSnackbar] = useState(false); // Snackbar visibility
+  const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Snackbar severity
 
   const [barColor, setBarColor] = useState("#2196f3");
   const [dashboardPlotData, setDashboardPlotData] = useState({});
@@ -592,10 +595,20 @@ function EditDashboard() {
         filterOptions: checkedOptions.join(', '),
         selectedUser
       });
-      console.log('Data saved successfully:', response.data);
+      console.log("Data saved successfully:", response.data);
+      setSnackbarMessage("Data saved successfully!");
+      setSnackbarSeverity("success");
+      setShowSnackbar(true);
     } catch (error) {
-      console.error('Error saving data:', error);
+      console.error("Error saving data:", error);
+      setSnackbarMessage("Failed to save data. Please try again.");
+      setSnackbarSeverity("error");
+      setShowSnackbar(true);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
   };
 
 
@@ -940,6 +953,20 @@ function EditDashboard() {
                 </div>
               </div>
             )}
+            <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

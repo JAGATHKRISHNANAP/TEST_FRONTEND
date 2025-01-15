@@ -13,6 +13,10 @@ import MuiAlert from '@mui/material/Alert';
 import { signIn, fetchCompanies } from '../../utils/api';
 import { MenuItem, FormControl, FormLabel, Select } from '@mui/material';
 import Card from '@mui/material/Card'; // Importing the Card for the styled UI component
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -25,6 +29,8 @@ export default function SignIn() {
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
   const [isUserLogin, setIsUserLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -221,16 +227,30 @@ return (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.1, width: '100%' }}>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                required
-                fullWidth
-                variant="outlined"
-              />
+  error={passwordError}
+  helperText={passwordErrorMessage}
+  name="password"
+  placeholder="••••••"
+  type={showPassword ? 'text' : 'password'} // Toggle between text and password
+  id="password"
+  required
+  fullWidth
+  variant="outlined"
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={() => setShowPassword(!showPassword)}
+          edge="end"
+          aria-label="toggle password visibility"
+        >
+          {showPassword ? <Visibility /> : <VisibilityOff />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  }}
+/>
+
             </Box>
           </FormControl>
           <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>

@@ -431,9 +431,9 @@ const ExcelUpload = () => {
         reader.readAsArrayBuffer(selectedFile); // Use readAsArrayBuffer
       } else {
         dispatch(setFile(null));
-        
-        document.getElementById("fileInput").value = "";
-        alert('Please upload a valid Excel file');
+        setSnackbarMessage('Please upload a valid Excel file.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
       }
     }
   };

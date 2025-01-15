@@ -334,6 +334,8 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [sortedCategories, setSortedCategories] = useState(categories);
     const [sortedValues, setSortedValues] = useState(values);
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+
     const contextMenuRef = useRef(null);
 
     useEffect(() => {
@@ -443,9 +445,9 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                     ],
                     download: true,
                     selection: true,
-                    zoom: false,
-                    zoomin: false,
-                    zoomout: false,
+                    zoom: true,
+                    zoomin: true,
+                    zoomout: true,
                     pan: true,
                     reset: true,
                 },
@@ -592,7 +594,8 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             <div className="row">
                 <div className="mixed-chart">
                     <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
-                        <div className="chart-title">{customHeadings}</div>
+                    <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3>
+                    </div>
                         <Chart
                             options={options}
                             series={series}

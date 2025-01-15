@@ -99,6 +99,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { plot_chart } from '../../utils/api'; // Import the API function
 const selectedTable=localStorage.getItem("selectedTable")
+
 // Async thunk to generate chart
 export const generateChart = createAsyncThunk(
   'chart/generateChart',
@@ -107,6 +108,8 @@ export const generateChart = createAsyncThunk(
 
     // Fetch company name and user from localStorage (or redux, depending on where you store it)
     const databaseName = localStorage.getItem('company_name');
+    
+    localStorage.setItem('filterOptions', JSON.stringify(checkedOptions));
     
     const data = {
       selectedTable:selectedTable,

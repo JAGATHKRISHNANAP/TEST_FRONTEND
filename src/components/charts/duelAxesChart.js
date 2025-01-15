@@ -284,6 +284,8 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [popupVisible, setPopupVisible] = useState(false);
     const contextMenuRef = useRef(null);
+    const customHeadings = useSelector((state) => state.toolTip.customHeading);
+    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
 
 
         const handleClicked = async (event, chartContext, config) => {
@@ -479,6 +481,8 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                
                 {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}> */}
                 <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
+                <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+
                         <Chart
                             options={options}
                             series={series}
@@ -488,8 +492,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                         />
                     </ResizableBox>
                 </div>
-                <div className="color-picker-container">
-                </div>
+                
             </div>
             {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
