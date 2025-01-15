@@ -326,7 +326,6 @@ const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x
 //     // Update the selected category in Redux
 //     dispatch(updateSelectedCategory(clickedCategory));
 //   };
-  
 
     const generateColors = (numColors) => {
         const colors = [];
