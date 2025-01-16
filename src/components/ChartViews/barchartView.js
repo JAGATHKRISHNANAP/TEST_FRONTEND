@@ -253,79 +253,83 @@ const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x
     const charts = useSelector((state) => state.viewcharts.charts);
     const chartType = useSelector((state) => state.chartType);
 
-    console.log("chartType:",chartType)
+    // console.log("chartType:",chartType)
     
     useEffect(() => {
         // console.log("Received categories:",categories);
         // console.log("Received values:", values);
       }, [categories, values]);
       
-  const handleClicked = async (event, chartContext, config) => {
-    const clickedCategoryIndex = config.dataPointIndex;
-    const clickedCategory = categories[clickedCategoryIndex];
-    console.log("clicked category:",clickedCategory)
-    try {
-
-      const response = await sendClickedCategory(clickedCategory,charts,x_axis);
-      console.log("chart_data_list:", response.chart_data_list)
-      response.chart_data_list.forEach((chartData) => {
-          const { chart_id, data } = chartData;
-          dispatch(updateChartData({
-            chart_id,
-            categories: data.categories,
-            values: data.values,
-            series1:data.series1,
-            series2:data.series2,
-          }));
-        });
-  } catch (error) {
-      console.error(`Failed to send category ${clickedCategory}:`, error);
-  }
-
-    dispatch(updateSelectedCategory(clickedCategory));
-   
-  };
-// const handleClicked = async (event, chartContext, config) => {
+//   const handleClicked = async (event, chartContext, config) => {
 //     const clickedCategoryIndex = config.dataPointIndex;
 //     const clickedCategory = categories[clickedCategoryIndex];
-//     console.log("clicked category:", clickedCategory);
-  
+//     console.log("clicked category:",clickedCategory)
 //     try {
-//       // Check if the chart type is 'aichart'
-//       if (chartType.type === 'AiCharts') {
-//         console.log("AI chart detected. Triggering handleSubmit...");
-//         try {
-//           const data = await sendaidashboardClickedCategory(clickedCategory, x_axis);
-//             console.log("AI dashboard chart data list:", data.ai_ml_charts_details);
-//             dispatch(update_Ai_Charts_Datas(data.ai_ml_charts_details));
-//         } catch (err) {
-//           console.error(err);
-//         //   setError('Failed to fetch chart data. Please try again.');
-//         }
-//       } else {
-//         // Handle non-AI charts
-//         const response = await sendClickedCategory(clickedCategory, charts, x_axis);
-//         console.log("chart_data_list:", response.chart_data_list);  
-//         response.chart_data_list.forEach((chartData) => {
+
+//       const response = await sendClickedCategory(clickedCategory,charts,x_axis);
+//       console.log("chart_data_list:", response.chart_data_list)
+//       response.chart_data_list.forEach((chartData) => {
 //           const { chart_id, data } = chartData;
-//           dispatch(
-//             updateChartData({
-//               chart_id,
-//               categories: data.categories,
-//               values: data.values,
-//               series1: data.series1,
-//               series2: data.series2,
-//             })
-//           );
+//           dispatch(updateChartData({
+//             chart_id,
+//             categories: data.categories,
+//             values: data.values,
+//             series1:data.series1,
+//             series2:data.series2,
+//           }));
 //         });
-//       }
-//     } catch (error) {
+//   } catch (error) {
 //       console.error(`Failed to send category ${clickedCategory}:`, error);
-//     }
-  
-//     // Update the selected category in Redux
+//   }
+
 //     dispatch(updateSelectedCategory(clickedCategory));
+   
 //   };
+
+
+
+
+const handleClicked = async (event, chartContext, config) => {
+    const clickedCategoryIndex = config.dataPointIndex;
+    const clickedCategory = categories[clickedCategoryIndex];
+    console.log("clicked category:", clickedCategory);
+  
+    try {
+      // Check if the chart type is 'aichart'
+      if (chartType.type === 'AiCharts') {
+        console.log("AI chart detected. Triggering handleSubmit...");
+        try {
+          const data = await sendaidashboardClickedCategory(clickedCategory, x_axis);
+            console.log("AI dashboard chart data list:", data.ai_ml_charts_details);
+            dispatch(update_Ai_Charts_Datas(data.ai_ml_charts_details));
+        } catch (err) {
+          console.error(err);
+        //   setError('Failed to fetch chart data. Please try again.');
+        }
+      } else {
+        // Handle non-AI charts
+        const response = await sendClickedCategory(clickedCategory, charts, x_axis);
+        console.log("chart_data_list:", response.chart_data_list);  
+        response.chart_data_list.forEach((chartData) => {
+          const { chart_id, data } = chartData;
+          dispatch(
+            updateChartData({
+              chart_id,
+              categories: data.categories,
+              values: data.values,
+              series1: data.series1,
+              series2: data.series2,
+            })
+          );
+        });
+      }
+    } catch (error) {
+      console.error(`Failed to send category ${clickedCategory}:`, error);
+    }
+  
+    // Update the selected category in Redux
+    dispatch(updateSelectedCategory(clickedCategory));
+  };
 
     const generateColors = (numColors) => {
         const colors = [];

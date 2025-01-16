@@ -27,6 +27,10 @@ const chartSlice = createSlice({
         update_Ai_Charts_Datas(state, action) {
             state.data = action.payload;
         },
+        delete_Ai_Charts_Datas: (state, action) => {
+            const idsToDelete = action.payload;
+            state.data = state.data.filter((_, index) => !idsToDelete.includes(index));
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -45,7 +49,7 @@ const chartSlice = createSlice({
     },
 });
 
-export const { update_Ai_Charts_Datas } = chartSlice.actions;
+export const { update_Ai_Charts_Datas ,delete_Ai_Charts_Datas} = chartSlice.actions;
 export default chartSlice.reducer;
 
 

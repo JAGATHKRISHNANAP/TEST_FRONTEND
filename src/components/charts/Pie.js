@@ -137,24 +137,14 @@ const Pie = (props) => {
         </div>
       </div>
       {contextMenuVisible && (
-        <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
-      )}
-      {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
-      {/* {barClicked && <DrillPieChart
-          categories={plotData.categories}
-          values={plotData.values}
-          aggregation={plotData.aggregation}
-          xAxis={xAxis}
-          yAxis={yAxis}
-          selectedTable={selectedTable}
-        />} */}
-              {popupVisible && (
-        <Draggable>
-          <div>
-            <CustomToolTip onClose={handleClosePopup} />
-          </div>
-        </Draggable>
-      )}
+                    <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
+                )}
+    
+                {popupVisible && (
+                    <div>
+                        <CustomToolTip onClose={handleClosePopup} />
+                    </div>
+                )}
     </div>
   );
 }

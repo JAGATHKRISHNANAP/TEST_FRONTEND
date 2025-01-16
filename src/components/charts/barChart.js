@@ -463,20 +463,6 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             title: {
                 text: `${xAxis}`,
               },
-            // labels: {
-
-            //     show: true,
-            //     style: {
-            //         fontSize: '12px',
-            //         fontWeight: 400,
-            //         colors: ['#000']
-            //     },
-            //     rotate: -45,
-            //     formatter: function (val) {
-            //         if (!val) return '';
-            //         return val.length > 10 ? val.substring(0, 10) + "..." : val;
-            //     }
-            // },
             labels: {
                 show: true,
                 style: {
@@ -517,24 +503,15 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         },
         colors: generateColors(categories.length),
         plotOptions: {
-            // bar: {
-            //     distributed: true,
-            //     dataLabels: {
-            //         hideOverflowingLabels: true
-            //     },
-            //     barHeight: '80%',
-            // }
             bar: {
                 distributed: true,
                 dataLabels: {
                     hideOverflowingLabels: true
                 },
                 barHeight: '80%',
-                // columnWidth: '60px', // Set a fixed width for each bar
             }
         },
         title: {
-            // text: `${aggregation} of ${xAxis} vs ${yAxis}`,
             text: `${xAxis} vs ${yAxis}`,
             align: 'left',
             margin: 10,
@@ -608,17 +585,15 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 </div>
 
             </div>
-            {contextMenuVisible && (
-                <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
-            )}
-
-                          {popupVisible && (
-        <Draggable>
-          <div>
-            <CustomToolTip onClose={handleClosePopup} />
-          </div>
-        </Draggable>
-      )}
+                      {contextMenuVisible && (
+                    <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
+                )}
+    
+                {popupVisible && (
+                    <div>
+                        <CustomToolTip onClose={handleClosePopup} />
+                    </div>
+                )}
         </div>
     );
 };

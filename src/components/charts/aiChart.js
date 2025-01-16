@@ -356,9 +356,532 @@
 
 
 
-import React, { useEffect } from 'react';
+// import React, { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchChartData } from '../../features/aiCharts/aiChartSlice';
+// import { lazy, Suspense } from 'react';
+
+// const BarChart = lazy(() => import('../ChartViews/barchartView'));
+
+// const AllCharts = () => {
+//     const dispatch = useDispatch();
+//     const { data, loading, error } = useSelector((state) => state.aicharts);
+
+//     useEffect(() => {
+//         dispatch(fetchChartData());
+//     }, [dispatch]);
+
+//     if (loading) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Charts are loading...</div>;
+//     }
+
+//     if (error) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
+//     }
+
+//     return (
+//         <Suspense fallback={<div>Loading Charts...</div>}>
+//             <div
+//                 style={{
+//                     display: 'flex',
+//                     flexWrap: 'wrap',
+//                     justifyContent: 'space-between',
+//                     gap: '10px',
+//                 }}
+//             >
+//                 {data.map((chartData, index) => (
+//                     <div
+//                         key={index}
+//                         style={{
+//                             backgroundColor: '#ffffff',
+//                             border: '1px solid #ddd',
+//                             padding: '5px',
+//                             borderRadius: '4px',
+//                             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+//                             display: 'flex',
+//                             flexDirection: 'column',
+//                             alignItems: 'center',
+//                             justifyContent: 'center',
+//                             width: '400px',
+//                             height: '360px',
+//                             overflow: 'hidden',
+//                         }}
+//                     >
+//                         {chartData.chart_type === "bar" && (
+//                             <BarChart
+//                                 categories={chartData.categories}
+//                                 values={chartData.values}
+//                                 aggregation={chartData.aggregation}
+//                                 x_axis={chartData.x_axis}
+//                                 y_axis={chartData.y_axis}
+//                             />
+//                         )}
+//                     </div>
+//                 ))}
+//             </div>
+//         </Suspense>
+//     );
+// };
+
+// export default AllCharts;
+
+// checkbox
+
+// import React, { useEffect, useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchChartData } from '../../features/aiCharts/aiChartSlice';
+// import { lazy, Suspense } from 'react';
+
+// const BarChart = lazy(() => import('../ChartViews/barchartView'));
+
+// const AllCharts = () => {
+//     const dispatch = useDispatch();
+//     const { data, loading, error } = useSelector((state) => state.aicharts);
+//     const [selectedCharts, setSelectedCharts] = useState([]);
+
+//     useEffect(() => {
+//         dispatch(fetchChartData());
+//     }, [dispatch]);
+
+//     const handleCheckboxChange = (chartId) => {
+//         setSelectedCharts((prevSelected) =>
+//             prevSelected.includes(chartId)
+//                 ? prevSelected.filter((id) => id !== chartId) // Remove if already selected
+//                 : [...prevSelected, chartId] // Add if not already selected
+//         );
+//     };
+
+//     if (loading) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Charts are loading...</div>;
+//     }
+
+//     if (error) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
+//     }
+
+//     return (
+//         <Suspense fallback={<div>Loading Charts...</div>}>
+//             <div
+//                 style={{
+//                     display: 'flex',
+//                     flexWrap: 'wrap',
+//                     justifyContent: 'space-between',
+//                     gap: '10px',
+//                 }}
+//             >
+//                 {data.map((chartData, index) => (
+//                     <div
+//                         key={chartData.id || index} // Use `chartData.id` if available; fallback to `index`
+//                         style={{
+//                             backgroundColor: '#ffffff',
+//                             border: '1px solid #ddd',
+//                             padding: '5px',
+//                             borderRadius: '4px',
+//                             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+//                             display: 'flex',
+//                             flexDirection: 'column',
+//                             alignItems: 'center',
+//                             justifyContent: 'center',
+//                             width: '400px',
+//                             height: '360px',
+//                             overflow: 'hidden',
+//                         }}
+//                     >
+//                         <div style={{ marginBottom: '10px' }}>
+//                             <label>
+//                                 <input
+//                                     type="checkbox"
+//                                     checked={selectedCharts.includes(chartData.id || index)}
+//                                     onChange={() => handleCheckboxChange(chartData.id || index)}
+//                                 />
+//                                 Select Chart
+//                             </label>
+//                         </div>
+//                         {chartData.chart_type === "bar" && (
+//                             <BarChart
+//                                 categories={chartData.categories}
+//                                 values={chartData.values}
+//                                 aggregation={chartData.aggregation}
+//                                 x_axis={chartData.x_axis}
+//                                 y_axis={chartData.y_axis}
+//                             />
+//                         )}
+//                     </div>
+//                 ))}
+//             </div>
+//             <div style={{ marginTop: '20px', textAlign: 'center' }}>
+//                 <button
+//                     onClick={() => console.log('Selected charts:', selectedCharts)}
+//                     style={{
+//                         padding: '10px 20px',
+//                         backgroundColor: '#007BFF',
+//                         color: '#fff',
+//                         border: 'none',
+//                         borderRadius: '5px',
+//                         cursor: 'pointer',
+//                     }}
+//                 >
+//                     Submit Selected Charts
+//                 </button>
+//             </div>
+//         </Suspense>
+//     );
+// };
+
+// export default AllCharts;
+
+
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchChartData } from '../../features/aiCharts/aiChartSlice';
+// import { lazy, Suspense } from 'react';
+
+// const BarChart = lazy(() => import('../ChartViews/barchartView'));
+
+// const AllCharts = () => {
+//     const dispatch = useDispatch();
+//     const { data, loading, error } = useSelector((state) => state.aicharts);
+//     const [selectedCharts, setSelectedCharts] = useState([]);
+
+//     useEffect(() => {
+//         dispatch(fetchChartData());
+//     }, [dispatch]);
+
+//     const handleCheckboxChange = (chartId) => {
+//         setSelectedCharts((prevSelected) =>
+//             prevSelected.includes(chartId)
+//                 ? prevSelected.filter((id) => id !== chartId) // Remove if already selected
+//                 : [...prevSelected, chartId] // Add if not already selected
+//         );
+//     };
+
+//     const handleSubmit = () => {
+//         // Filter the selected chart details
+//         const selectedChartDetails = data.filter((chart) =>
+//             selectedCharts.includes(chart.id)
+//         );
+
+//         // Log the details to the console
+//         console.log('Selected Charts Details:', selectedChartDetails);
+//     };
+
+//     if (loading) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Charts are loading...</div>;
+//     }
+
+//     if (error) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
+//     }
+
+//     return (
+//         <Suspense fallback={<div>Loading Charts...</div>}>
+//             <div
+//                 style={{
+//                     display: 'flex',
+//                     flexWrap: 'wrap',
+//                     justifyContent: 'space-between',
+//                     gap: '10px',
+//                 }}
+//             >
+//                 {data.map((chartData, index) => (
+//                     <div
+//                         key={chartData.id || index} // Use `chartData.id` if available; fallback to `index`
+//                         style={{
+//                             backgroundColor: '#ffffff',
+//                             border: '1px solid #ddd',
+//                             padding: '5px',
+//                             borderRadius: '4px',
+//                             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+//                             display: 'flex',
+//                             flexDirection: 'column',
+//                             alignItems: 'center',
+//                             justifyContent: 'center',
+//                             width: '400px',
+//                             height: '360px',
+//                             overflow: 'hidden',
+//                         }}
+//                     >
+//                         <div style={{ marginBottom: '10px' }}>
+//                             <label>
+//                                 <input
+//                                     type="checkbox"
+//                                     checked={selectedCharts.includes(chartData.id || index)}
+//                                     onChange={() => handleCheckboxChange(chartData.id || index)}
+//                                 />
+//                                 Select Chart
+//                             </label>
+//                         </div>
+//                         {chartData.chart_type === "bar" && (
+//                             <BarChart
+//                                 categories={chartData.categories}
+//                                 values={chartData.values}
+//                                 aggregation={chartData.aggregation}
+//                                 x_axis={chartData.x_axis}
+//                                 y_axis={chartData.y_axis}
+//                             />
+//                         )}
+//                     </div>
+//                 ))}
+//             </div>
+//             <div style={{ marginTop: '20px', textAlign: 'center' }}>
+//                 <button
+//                     onClick={handleSubmit}
+//                     style={{
+//                         padding: '10px 20px',
+//                         backgroundColor: '#007BFF',
+//                         color: '#fff',
+//                         border: 'none',
+//                         borderRadius: '5px',
+//                         cursor: 'pointer',
+//                     }}
+//                 >
+//                     Submit Selected Charts
+//                 </button>
+//             </div>
+//         </Suspense>
+//     );
+// };
+
+// export default AllCharts;
+
+
+
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchChartData } from '../../features/aiCharts/aiChartSlice';
+// import { lazy, Suspense } from 'react';
+
+// const BarChart = lazy(() => import('../ChartViews/barchartView'));
+
+// const AllCharts = () => {
+//     const dispatch = useDispatch();
+//     const { data, loading, error } = useSelector((state) => state.aicharts);
+//     const [selectedCharts, setSelectedCharts] = useState([]);
+
+//     useEffect(() => {
+//         dispatch(fetchChartData());
+//     }, [dispatch]);
+
+//     const handleCheckboxChange = (chartId) => {
+//         setSelectedCharts((prevSelected) =>
+//             prevSelected.includes(chartId)
+//                 ? prevSelected.filter((id) => id !== chartId) // Remove if already selected
+//                 : [...prevSelected, chartId] // Add if not already selected
+//         );
+//     };
+
+//     const handleSubmit = () => {
+//         // Access chart details directly from Redux state
+//         const selectedChartDetails = selectedCharts.map((chartId) =>
+//             data.find((chart) => chart.id === chartId)
+//         );
+
+//         // Log the details to the console
+//         console.log('Selected Charts Details:', selectedChartDetails);
+//     };
+
+//     if (loading) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Charts are loading...</div>;
+//     }
+
+//     if (error) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
+//     }
+
+//     return (
+//         <Suspense fallback={<div>Loading Charts...</div>}>
+//             <div
+//                 style={{
+//                     display: 'flex',
+//                     flexWrap: 'wrap',
+//                     justifyContent: 'space-between',
+//                     gap: '10px',
+//                 }}
+//             >
+//                 {data.map((chartData, index) => (
+//                     <div
+//                         key={chartData.id || index} // Use `chartData.id` if available; fallback to `index`
+//                         style={{
+//                             backgroundColor: '#ffffff',
+//                             border: '1px solid #ddd',
+//                             padding: '5px',
+//                             borderRadius: '4px',
+//                             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+//                             display: 'flex',
+//                             flexDirection: 'column',
+//                             alignItems: 'center',
+//                             justifyContent: 'center',
+//                             width: '400px',
+//                             height: '360px',
+//                             overflow: 'hidden',
+//                         }}
+//                     >
+//                         <div style={{ marginBottom: '10px' }}>
+//                             <label>
+//                                 <input
+//                                     type="checkbox"
+//                                     checked={selectedCharts.includes(chartData.id || index)}
+//                                     onChange={() => handleCheckboxChange(chartData.id || index)}
+//                                 />
+//                                 Select Chart
+//                             </label>
+//                         </div>
+//                         {chartData.chart_type === "bar" && (
+//                             <BarChart
+//                                 categories={chartData.categories}
+//                                 values={chartData.values}
+//                                 aggregation={chartData.aggregation}
+//                                 x_axis={chartData.x_axis}
+//                                 y_axis={chartData.y_axis}
+//                             />
+//                         )}
+//                     </div>
+//                 ))}
+//             </div>
+//             <div style={{ marginTop: '20px', textAlign: 'center' }}>
+//                 <button
+//                     onClick={handleSubmit}
+//                     style={{
+//                         padding: '10px 20px',
+//                         backgroundColor: '#007BFF',
+//                         color: '#fff',
+//                         border: 'none',
+//                         borderRadius: '5px',
+//                         cursor: 'pointer',
+//                     }}
+//                 >
+//                     Submit Selected Charts
+//                 </button>
+//             </div>
+//         </Suspense>
+//     );
+// };
+
+// export default AllCharts;
+
+
+// import React, { useEffect, useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchChartData } from '../../features/aiCharts/aiChartSlice';
+// import { lazy, Suspense } from 'react';
+
+// const BarChart = lazy(() => import('../ChartViews/barchartView'));
+
+// const AllCharts = () => {
+//     const dispatch = useDispatch();
+//     const { data, loading, error } = useSelector((state) => state.aicharts);
+//     const [selectedCharts, setSelectedCharts] = useState([]);
+
+//     useEffect(() => {
+//         dispatch(fetchChartData());
+//     }, [dispatch]);
+
+//     const handleCheckboxChange = (chartIndex) => {
+//         setSelectedCharts((prevSelected) =>
+//             prevSelected.includes(chartIndex)
+//                 ? prevSelected.filter((index) => index !== chartIndex) // Remove if already selected
+//                 : [...prevSelected, chartIndex] // Add if not already selected
+//         );
+//     };
+
+//     const handleSubmit = () => {
+//         // Access the corresponding pin data based on selected indices
+//         const selectedPinData = selectedCharts.map((chartIndex) => data[chartIndex]);
+
+//         // Log the selected pin data
+//         console.log('Selected Pins Data:', selectedPinData);
+//     };
+
+//     if (loading) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Charts are loading...</div>;
+//     }
+
+//     if (error) {
+//         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
+//     }
+
+//     return (
+//         <Suspense fallback={<div>Loading Charts...</div>}>
+//             <div
+//                 style={{
+//                     display: 'flex',
+//                     flexWrap: 'wrap',
+//                     justifyContent: 'space-between',
+//                     gap: '10px',
+//                 }}
+//             >
+//                 {data.map((chartData, index) => (
+//                     <div
+//                         key={index} // Using the index as the unique key
+//                         style={{
+//                             backgroundColor: '#ffffff',
+//                             border: '1px solid #ddd',
+//                             padding: '5px',
+//                             borderRadius: '4px',
+//                             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+//                             display: 'flex',
+//                             flexDirection: 'column',
+//                             alignItems: 'center',
+//                             justifyContent: 'center',
+//                             width: '400px',
+//                             height: '360px',
+//                             overflow: 'hidden',
+//                         }}
+//                     >
+//                         <div style={{ marginBottom: '10px' }}>
+//                             <label>
+//                                 <input
+//                                     type="checkbox"
+//                                     checked={selectedCharts.includes(index)}
+//                                     onChange={() => handleCheckboxChange(index)}
+//                                 />
+//                                 Select Chart
+//                             </label>
+//                         </div>
+//                         {chartData.chart_type === 'bar' && (
+//                             <BarChart
+//                                 categories={chartData.categories}
+//                                 values={chartData.values}
+//                                 aggregation={chartData.aggregation}
+//                                 x_axis={chartData.x_axis}
+//                                 y_axis={chartData.y_axis}
+//                             />
+//                         )}
+//                     </div>
+//                 ))}
+//             </div>
+//             <div style={{ marginTop: '20px', textAlign: 'center' }}>
+//                 <button
+//                     onClick={handleSubmit}
+//                     style={{
+//                         padding: '10px 20px',
+//                         backgroundColor: '#007BFF',
+//                         color: '#fff',
+//                         border: 'none',
+//                         borderRadius: '5px',
+//                         cursor: 'pointer',
+//                     }}
+//                 >
+//                     Submit Selected Charts
+//                 </button>
+//             </div>
+//         </Suspense>
+//     );
+// };
+
+// export default AllCharts;
+
+
+
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChartData } from '../../features/aiCharts/aiChartSlice';
+import { fetchChartData, delete_Ai_Charts_Datas } from '../../features/aiCharts/aiChartSlice';
 import { lazy, Suspense } from 'react';
 
 const BarChart = lazy(() => import('../ChartViews/barchartView'));
@@ -366,10 +889,28 @@ const BarChart = lazy(() => import('../ChartViews/barchartView'));
 const AllCharts = () => {
     const dispatch = useDispatch();
     const { data, loading, error } = useSelector((state) => state.aicharts);
+    const [selectedCharts, setSelectedCharts] = useState([]);
 
     useEffect(() => {
         dispatch(fetchChartData());
     }, [dispatch]);
+
+    const handleCheckboxChange = (chartIndex) => {
+        setSelectedCharts((prevSelected) =>
+            prevSelected.includes(chartIndex)
+                ? prevSelected.filter((index) => index !== chartIndex) // Remove if already selected
+                : [...prevSelected, chartIndex] // Add if not already selected
+        );
+    };
+
+    const handleDelete = () => {
+        if (selectedCharts.length === 0) {
+            alert('No charts selected for deletion.');
+            return;
+        }
+        dispatch(delete_Ai_Charts_Datas(selectedCharts));
+        setSelectedCharts([]); // Clear the selected charts
+    };
 
     if (loading) {
         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Charts are loading...</div>;
@@ -407,7 +948,17 @@ const AllCharts = () => {
                             overflow: 'hidden',
                         }}
                     >
-                        {chartData.chart_type === "bar" && (
+                        <div style={{ marginBottom: '10px' }}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCharts.includes(index)}
+                                    onChange={() => handleCheckboxChange(index)}
+                                />
+                                Select Chart
+                            </label>
+                        </div>
+                        {chartData.chart_type === 'bar' && (
                             <BarChart
                                 categories={chartData.categories}
                                 values={chartData.values}
@@ -418,6 +969,22 @@ const AllCharts = () => {
                         )}
                     </div>
                 ))}
+            </div>
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                <button
+                    onClick={handleDelete}
+                    style={{
+                        padding: '10px 20px',
+                        backgroundColor: '#FF0000',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        marginRight: '10px',
+                    }}
+                >
+                    Delete Selected Charts
+                </button>
             </div>
         </Suspense>
     );

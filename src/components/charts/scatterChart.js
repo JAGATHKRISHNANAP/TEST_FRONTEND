@@ -284,16 +284,14 @@ const LineChart = ({ categories, values, aggregation }) => {
                 </div>
             </div>
             {contextMenuVisible && (
-                <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
-            )}
-            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
-            {popupVisible && (
-        <Draggable>
-          <div>
-            <CustomToolTip onClose={handleClosePopup} />
-          </div>
-        </Draggable>
-      )}
+                    <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
+                )}
+    
+                {popupVisible && (
+                    <div>
+                        <CustomToolTip onClose={handleClosePopup} />
+                    </div>
+                )}
             {/* {barClicked && <DrillLineChart
                 categories={plotData.categories}
                 values={plotData.values}
