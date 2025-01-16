@@ -458,7 +458,27 @@ function EditDashboard() {
       dispatch(setChartType(chartType1));
     }
   }, [chartType1, dispatch]);
-
+  // useEffect(() => {
+  //   if (xAxis.length > 0) {
+  //     // Automatically fetch filter options for the first column in xAxis
+  //     fetchFilterOptions(xAxis[0]);
+     
+  //     generateChart();
+      
+  //   }
+  // }, [xAxis]);
+  
+  useEffect(() => {
+    if (xAxis.length > 0) {
+      const firstColumn = xAxis[0];
+  
+      // Fetch filter options asynchronously
+      fetchFilterOptions(firstColumn);
+      generateChart();
+    }
+  }, [xAxis, chartData]);
+  
+  
   useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType && barColor) {
       generateChart();
@@ -507,10 +527,13 @@ function EditDashboard() {
         params: { databaseName,selectedUser }
       });
       const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+
       console.log("options",options)
       setFilterOptions(options);
-      setCheckedOptions(chartData[9]);
-      setShowFilterDropdown(true);
+      // setCheckedOptions(chartData[9]); // Combine fetched options and existing chart data
+  
+      setCheckedOptions(options);
+      setShowFilterDropdown(false);
       setSelectAllChecked(false);
     } catch (error) {
       console.error('Error fetching filter options:', error);
@@ -528,13 +551,25 @@ function EditDashboard() {
     generateChart(); // Update chart when select all changes
   };
 
-  const handleFilterIconClick = (columnName) => {
-    if (showFilterDropdown) {
-      setShowFilterDropdown(false);
-    } else {
-      fetchFilterOptions(columnName);
-    }
-  };
+  // const handleFilterIconClick = (columnName) => {
+  //   if (showFilterDropdown) {
+  //     setShowFilterDropdown(false);
+  //   } else {
+      
+  //     fetchFilterOptions(columnName);
+  //   }
+  // };
+    const handleFilterIconClick = async (columnName) => {
+      if (showFilterDropdown) {
+        // Close the dropdown if it's already open
+        setShowFilterDropdown(false);
+      } else {
+        // Fetch filter options for the selected column and open the dropdown
+        await fetchFilterOptions(columnName); // Ensure correct column name is passed
+        setShowFilterDropdown(true);
+      }
+    };
+    
 
   const handleCheckboxChange = (option) => {
     let updatedOptions;
@@ -890,7 +925,7 @@ function EditDashboard() {
                    <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
                  </div>
                </div>)}
-               {xAxis.length > 0 && chartType === "hierarchicalBarChart" && (
+               {xAxis.length > 0 && chartType === "hierarchialBarChart" && (
               <div style={{ marginTop: '20px' }}>
                 <Item>
                   <div className="chart-container">

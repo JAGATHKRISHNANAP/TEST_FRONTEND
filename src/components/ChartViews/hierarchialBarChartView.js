@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as d3 from 'd3';
 import axios from 'axios';
@@ -65,89 +65,173 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
         }
     };
 
-    useEffect(() => {
-        if (!chartData.categories.length || !chartData.values.length) return;
+    // useEffect(() => {
+    //     if (!chartData.categories.length || !chartData.values.length) return;
     
-        const sortedData = chartData.categories
-            .map((category, index) => ({ category, value: chartData.values[index] }))
-            .sort((a, b) => b.value - a.value);
+    //     const sortedData = chartData.categories
+    //         .map((category, index) => ({ category, value: chartData.values[index] }))
+    //         .sort((a, b) => b.value - a.value);
     
-        const sortedCategories = sortedData.map((d) => d.category);
-        const sortedValues = sortedData.map((d) => d.value);
+    //     const sortedCategories = sortedData.map((d) => d.category);
+    //     const sortedValues = sortedData.map((d) => d.value);
     
-        const { width, height } = chartDimensions;
-        const margin = { top: 50, right: 30, bottom: 20, left: 100 };
-        const adjustedWidth = width - margin.left - margin.right;
-        const adjustedHeight = height - margin.top - margin.bottom;
+    //     const { width, height } = chartDimensions;
+    //     const margin = { top: 50, right: 30, bottom: 20, left: 100 };
+    //     const adjustedWidth = width - margin.left - margin.right;
+    //     const adjustedHeight = height - margin.top - margin.bottom;
     
-        const svg = d3.select(svgRef.current);
-        svg.selectAll('*').remove();
+    //     const svg = d3.select(svgRef.current);
+    //     svg.selectAll('*').remove();
     
-        const x = d3.scaleLinear()
-            .domain([0, d3.max(sortedValues)])
-            .range([0, adjustedWidth]);
+    //     const x = d3.scaleLinear()
+    //         .domain([0, d3.max(sortedValues)])
+    //         .range([0, adjustedWidth]);
     
-        const y = d3.scaleBand()
-            .domain(sortedCategories)
-            .range([0, adjustedHeight])
-            .padding(0.1);
+    //     const y = d3.scaleBand()
+    //         .domain(sortedCategories)
+    //         .range([0, adjustedHeight])
+    //         .padding(0.1);
     
-        const g = svg.append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+    //     const g = svg.append('g')
+    //         .attr('transform', `translate(${margin.left},${margin.top})`);
     
-        g.append('g')
-            .call(d3.axisTop(x).ticks(5))
-            .selectAll('text')
-            .attr('transform', 'rotate(-45)')
-            .style('text-anchor', 'start');
+    //     g.append('g')
+    //         .call(d3.axisTop(x).ticks(5))
+    //         .selectAll('text')
+    //         .attr('transform', 'rotate(-45)')
+    //         .style('text-anchor', 'start');
     
-        g.append('g')
-            .call(d3.axisLeft(y).tickSizeOuter(0));
+    //     g.append('g')
+    //         .call(d3.axisLeft(y).tickSizeOuter(0));
     
-        g.selectAll('rect')
-            .data(sortedData)
-            .enter()
-            .append('rect')
-            .attr('y', (d) => y(d.category))
-            .attr('height', y.bandwidth())
-            .attr('fill', lineColor)
-            .attr('width', 0)
-            .transition()
-            .duration(750)
-            .attr('width', d => x(d.value))
-            .ease(d3.easeCubicInOut);
+    //     g.selectAll('rect')
+    //         .data(sortedData)
+    //         .enter()
+    //         .append('rect')
+    //         .attr('y', (d) => y(d.category))
+    //         .attr('height', y.bandwidth())
+    //         .attr('fill', lineColor)
+    //         .attr('width', 0)
+    //         .transition()
+    //         .duration(750)
+    //         .attr('width', d => x(d.value))
+    //         .ease(d3.easeCubicInOut);
     
-        const tooltip = d3.select(tooltipRef.current);
+    //     const tooltip = d3.select(tooltipRef.current);
     
-        g.selectAll('rect')
-            .on('click', (event, d) => {
-                const clickedCategoryIndex = chartData.categories.indexOf(d.category);
-                handleClicked(event, clickedCategoryIndex);
-            })
-            .on('mouseover', (event, d) => {
-                tooltip
-                    .style('top', `${event.pageY}px`)
-                    .style('left', `${event.pageX}px`)
-                    .html(`<strong>Category:</strong> ${d.category}<br /><strong>Value:</strong> ${d.value}`)
-                    .attr('class', 'tooltip visible');
-            })
-            .on('mousemove', (event) => {
-                tooltip.style('top', `${event.pageY}px`).style('left', `${event.pageX}px`);
-            })
-            .on('mouseout', () => {
-                tooltip.attr('class', 'tooltip');
+    //     g.selectAll('rect')
+    //         .on('click', (event, d) => {
+    //             const clickedCategoryIndex = chartData.categories.indexOf(d.category);
+    //             handleClicked(event, clickedCategoryIndex);
+    //         })
+    //         .on('mouseover', (event, d) => {
+    //             tooltip
+    //                 .style('top', `${event.pageY}px`)
+    //                 .style('left', `${event.pageX}px`)
+    //                 .html(`<strong>Category:</strong> ${d.category}<br /><strong>Value:</strong> ${d.value}`)
+    //                 .attr('class', 'tooltip visible');
+    //         })
+    //         .on('mousemove', (event) => {
+    //             tooltip.style('top', `${event.pageY}px`).style('left', `${event.pageX}px`);
+    //         })
+    //         .on('mouseout', () => {
+    //             tooltip.attr('class', 'tooltip');
+    //         });
+    
+    //     // Click event to SVG to handle drilling up
+    //     svg.on("click", function(event) {
+    //         const clickedElement = event.target;
+    //         if (clickedElement.tagName !== 'rect') {
+    //             handleDrillUp();
+    //         }
+    //     });
+    
+    // }, [chartData, lineColor, chartDimensions, x_axis, y_axis,aggregation]);  // Add x_axis and y_axis as dependencies
+    
+    const sortedData = useMemo(() => {
+            return chartData.categories.map((category, index) => ({
+                category,
+                value: chartData.values[index],
+            })).sort((a, b) => b.value - a.value);
+        }, [chartData]);
+    
+        useEffect(() => {
+            if (!chartData.categories.length || !chartData.values.length) return;
+    
+            const { width, height } = chartDimensions;
+            const margin = { top: 50, right: 30, bottom: 20, left: 100 };
+            const adjustedWidth = width - margin.left - margin.right;
+            const adjustedHeight = height - margin.top - margin.bottom;
+    
+            const svg = d3.select(svgRef.current);
+            svg.selectAll('*').remove();
+    
+            const x = d3.scaleLinear()
+                .domain([0, d3.max(sortedData, (d) => d.value)])
+                .range([0, adjustedWidth]);
+    
+            const y = d3.scaleBand()
+                .domain(sortedData.map((d) => d.category))
+                .range([0, adjustedHeight])
+                .padding(0.1);
+    
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+    
+            g.append('g')
+                .call(d3.axisTop(x).ticks(5))
+                .selectAll('text')
+                .attr('transform', 'rotate(-45)')
+                .style('text-anchor', 'start');
+    
+            g.append('g')
+                .call(d3.axisLeft(y).tickSizeOuter(0));
+    
+            g.selectAll('rect')
+                .data(sortedData, (d) => d.category)
+                .join(
+                    (enter) =>
+                        enter.append('rect')
+                            .attr('y', (d) => y(d.category))
+                            .attr('height', y.bandwidth())
+                            .attr('fill', lineColor)
+                            .attr('width', 0)
+                            .transition()
+                            .duration(750)
+                            .attr('width', (d) => x(d.value)),
+                    (update) =>
+                        update.transition()
+                            .duration(750)
+                            .attr('width', (d) => x(d.value)),
+                    (exit) => exit.remove()
+                )
+                .on('click', (event, d) => {
+                    const clickedCategoryIndex = sortedData.findIndex((item) => item.category === d.category);
+                    handleClicked(event, clickedCategoryIndex);
+                    event.stopPropagation();
+                })
+                .on('mouseover', (event, d) => {
+                    d3.select(tooltipRef.current)
+                        .style('top', `${event.pageY - 20}px`)
+                        .style('left', `${event.pageX + 20}px`)
+                        .html(`<strong>Category:</strong> ${d.category}<br /><strong>Value:</strong> ${d.value}`)
+                        .attr('class', 'tooltiphierarchy visible');
+                })
+                .on('mousemove', (event) => {
+                    d3.select(tooltipRef.current)
+                        .style('top', `${event.pageY - 205}px`)
+                        .style('left', `${event.pageX - 248}px`);
+                })
+                .on('mouseout', () => {
+                    d3.select(tooltipRef.current).attr('class', 'tooltiphierarchy');
+                });
+    
+            svg.on('click', (event) => {
+                if (event.target.tagName !== 'rect') {
+                    handleDrillUp();
+                }
             });
-    
-        // Click event to SVG to handle drilling up
-        svg.on("click", function(event) {
-            const clickedElement = event.target;
-            if (clickedElement.tagName !== 'rect') {
-                handleDrillUp();
-            }
-        });
-    
-    }, [chartData, lineColor, chartDimensions, x_axis, y_axis,aggregation]);  // Add x_axis and y_axis as dependencies
-    
+        }, [sortedData, chartDimensions, lineColor]);
 
     const onResize = (event, { size }) => {
         setChartDimensions({ width: size.width, height: size.height });

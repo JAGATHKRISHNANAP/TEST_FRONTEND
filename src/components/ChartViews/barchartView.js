@@ -65,7 +65,7 @@ const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x
     const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
 
     const charts = useSelector((state) => 
-        state.viewcharts.charts || state.viewdashboard.dashboard_charts
+        state.viewcharts.charts
     );
     
     useEffect(() => {

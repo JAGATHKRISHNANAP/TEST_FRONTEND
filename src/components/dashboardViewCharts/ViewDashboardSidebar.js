@@ -11,12 +11,19 @@ function ViewDashboardSidebar() {
   const dispatch = useDispatch();
   const [chartNamesArray, setChartNamesArray] = useState([]);
   const chartData = useSelector((state) => state.viewdashboard.dashboard_charts);
+  useEffect(() => {
+    if (chartData) {
+      localStorage.setItem("charts", JSON.stringify(chartData));
+    }
+  }, [chartData]); // Runs whenever chartData changes
+
   const testchartData = useSelector((state) => state.viewdashboard.textChart);
   const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
   const [chartToDelete, setChartToDelete] = useState(null); // State to store the chart to delete
   const [anchorEl, setAnchorEl] = useState(null); // State to manage the context menu anchor
   const user_id = localStorage.getItem("user_id"); // Fetch user ID from localStorage
-  
+  // const testchartData = { chartData };
+  //       dispatch(addTextChart(textChartData));
   console.log("chartData:", chartData); 
   console.log("testchartData:", testchartData);
   console.log("user_id:", user_id);
