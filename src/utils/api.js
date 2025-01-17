@@ -399,6 +399,32 @@ export const fetchTableNamesAPI = async (databaseName) => {
 };
 // const connectionType = localStorage.getItem('connectionType');
   
+// export const fetchTableColumnsAPI = async (tableName, companyName) => {
+//   try {
+//     const response = await fetch(
+//       `http://localhost:5000/api/table-columns/${tableName}?companyName=${companyName}`
+//     );
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch table columns.");
+//     }
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error fetching table columns:", error);
+//     throw error;
+//   }
+// };
+export const fetchTableColumnsAPI = async (tableName, companyName) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/table-columns/${tableName}`,
+      { params: { companyName } }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching table columns:", error);
+    throw error;
+  }
+};
 export const fetchColumnsAPI = async (tableName, databaseName,connectionType,selectedUser) => {
   try {
     const response = await axios.get(`http://localhost:5000/column_names/${tableName}`, {

@@ -10,7 +10,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { Button, TextField, Typography, Grid, Snackbar, Alert, Select, MenuItem, FormGroup, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { fetchTableNamesAPI } from '../../utils/api';
+import { fetchTableNamesAPI ,fetchTableColumnsAPI,checkIfTableInUse} from '../../utils/api';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -209,8 +209,49 @@ const JsonUpload = () => {
         const tableName = file.name.toLowerCase().replace(/\s+/g, '_').replace(/\..+$/, '');
         
         if (existingTableNames.includes(tableName)) {
-          const userConfirmed = window.confirm(`The table "${tableName}" already exists. Do you want to update it?`);
-          if (userConfirmed) {
+// Check if table exists
+if (existingTableNames.includes(tableName)) {
+  const isTableInUse = await checkIfTableInUse(tableName);
+
+  if (isTableInUse) {
+    const userChoice = window.confirm(
+      `The table "${tableName}" is being used for chart creation. Do you want to update it?`
+    );
+    if (!userChoice) {
+      alert("Table update canceled.");
+      return;
+    }
+  } else {
+    const userChoice = window.confirm(`The table "${tableName}" already exists. Do you want to update it?`);
+    if (!userChoice) {
+      alert("Table creation skipped.");
+      return;
+    }
+  }
+
+  // Fetch existing columns and compare with uploaded columns
+  const existingColumns = await fetchTableColumnsAPI(tableName, company_database);
+  const uploadedColumns = columnHeadings.map((col) => col.toLowerCase());
+
+  // Check for column mismatches or missing columns
+  const mismatchedColumns = uploadedColumns.filter((col) => !existingColumns.includes(col));
+  const missingColumns = existingColumns.filter((col) => !uploadedColumns.includes(col));
+
+  if (mismatchedColumns.length > 0) {
+    alert(
+      `Column mismatch detected! The following columns in the uploaded file do not exist in the existing table "${tableName}": ${mismatchedColumns.join(", ")}.`
+    );
+    return;
+  }
+
+  if (missingColumns.length > 0) {
+    alert(
+      `Missing columns! The following columns are required but not found in the uploaded file: ${missingColumns.join(", ")}. Please update the file and upload again.`
+    );
+    return;
+  }
+
+
             dispatch(uploadJson({ file, primaryKeyColumnName: columnHeadings[primaryKeyColumn], company_database }));
           } else {
             alert('Table update canceled.');

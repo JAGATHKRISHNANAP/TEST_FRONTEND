@@ -104,7 +104,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-import { fetchTableNamesAPI,checkIfTableInUse } from '../../utils/api';
+import { fetchTableNamesAPI,checkIfTableInUse ,fetchTableColumnsAPI} from '../../utils/api';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
@@ -229,10 +229,9 @@ const handleSubmit = async (e) => {
   const existingTableNames = await fetchTableNamesAPI(databaseName);
   if (existingTableNames.includes(currentTableName)) {
     // Fetch columns from the existing table
-    const response = await fetch(
-      `http://localhost:5000/api/table-columns/${currentTableName}?companyName=${company_database}` // Replace with your backend endpoint
-    );
-    const existingColumns = await response.json(); // Assumes the API returns an array of column names
+    
+    
+    const existingColumns = await fetchTableColumnsAPI(currentTableName,company_database);// Assumes the API returns an array of column names
     console.log("existingColumns", existingColumns);
     const uploadedColumns = columnHeadings.map((col) => col.toLowerCase());
     const isTableInUse = await checkIfTableInUse(currentTableName);
@@ -245,14 +244,7 @@ const handleSubmit = async (e) => {
         alert('Table update canceled.');
         return;
       }
-    } else {
-      const userChoice = window.confirm(`The table "${currentTableName}" already exists. Do you want to update it?`);
-      if (!userChoice) {
-        alert('Table creation skipped.');
-        return;
-      }
-    }
-
+    
     // // Proceed to column check if the table exists
     // const uploadedColumns = Object.keys(columnHeadings); // Assuming `columnHeadings` is an object with column names
     // const existingColumns = await fetchExistingColumns(tableName); // Fetch the existing columns from the table
@@ -278,7 +270,7 @@ const handleSubmit = async (e) => {
       );
       return; // Stop the upload if there are missing columns
     }
-
+  }
     // Proceed with the upload after the checks pass
     dispatch(
       uploadCsv({

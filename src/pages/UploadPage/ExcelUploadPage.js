@@ -347,7 +347,7 @@ import FormGroup from '@mui/material/FormGroup';
 import { styled } from '@mui/material/styles';
 import { Button, TextField, Typography, Grid, Snackbar, Alert, Table, TableHead, TableBody, Dialog, DialogTitle, DialogContent, DialogActions,TableRow, TableCell,Select, MenuItem } from '@mui/material';
 import * as XLSX from 'xlsx';
-import { fetchTableNamesAPI ,checkIfTableInUse} from '../../utils/api';
+import { fetchTableNamesAPI ,checkIfTableInUse,fetchTableColumnsAPI} from '../../utils/api';
 import { PieChart } from '@mui/x-charts/PieChart';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -524,55 +524,95 @@ const ExcelUpload = () => {
   
       if (existingTableNames.includes(currentTableName)) {
         // Fetch columns from the existing table
-        const response = await fetch(
-          `http://localhost:5000/api/table-columns/${currentTableName}?companyName=${company_database}` // Replace with your backend endpoint
-        );
-        const existingColumns = await response.json(); // Assumes the API returns an array of column names
+        // const response = await fetch(
+        //   `http://localhost:5000/api/table-columns/${currentTableName}?companyName=${company_database}` // Replace with your backend endpoint
+        // );
+        
+        const existingColumns = await fetchTableColumnsAPI(
+          currentTableName,
+          company_database
+         );
+        // const existingColumns = await response.json(); // Assumes the API returns an array of column names
         console.log("existingColumns", existingColumns);
         const uploadedColumns = columnHeadings.map((col) => col.toLowerCase());
         const isTableInUse = await checkIfTableInUse(currentTableName);
+         console.log(isTableInUse)
+      //   if (isTableInUse == true) {
+      //     const userChoice = window.confirm(
+      //       `The table "${currentTableName}" is being used for chart creation. Do you want to proceed with updating it?`
+      //     );
+      //     if (!userChoice) {
+      //       alert("Upload skipped.");
+      //       return;
+      //     }
+      //    } 
+      //   // Check for mismatched and missing columns
+      //   const mismatchedColumns = uploadedColumns.filter(
+      //     (col) => !existingColumns.includes(col)
+      //   );
+      //   const missingColumns = existingColumns.filter(
+      //     (col) => !uploadedColumns.includes(col)
+      //   );
   
-        if (isTableInUse) {
-          const userChoice = window.confirm(
-            `The table "${currentTableName}" is being used for chart creation. Do you want to proceed with updating it?`
-          );
-          if (!userChoice) {
-            alert("Upload skipped.");
-            return;
-          }
-         } 
-        // Check for mismatched and missing columns
+      //   if (mismatchedColumns.length > 0) {
+      //     alert(
+      //       `Column mismatch detected! The following columns in the uploaded file do not exist in the existing table "${currentTableName}": ${mismatchedColumns.join(
+      //         ", "
+      //       )}.`
+      //     );
+      //   }
+  
+      //   if (missingColumns.length > 0) {
+      //     alert(
+      //       `Missing data !please rename the sheet and upload again 
+      //       )}.`
+      //     );
+      //     return; // Stop the upload if there are missing columns
+      //   }
+  
+      //   // Check if the table is being used for chart creation
+      
+      // }
+  
+      if (isTableInUse) {
+        const userChoice = window.confirm(
+          `The table "${currentTableName}" is being used for chart creation. Do you want to proceed with updating it?`
+        );
+      
+        if (!userChoice) {
+          alert("Upload skipped.");
+          return;
+        }
+      
+        // Check for column mismatches and missing columns
         const mismatchedColumns = uploadedColumns.filter(
           (col) => !existingColumns.includes(col)
         );
         const missingColumns = existingColumns.filter(
           (col) => !uploadedColumns.includes(col)
         );
-  
+      
         if (mismatchedColumns.length > 0) {
           alert(
             `Column mismatch detected! The following columns in the uploaded file do not exist in the existing table "${currentTableName}": ${mismatchedColumns.join(
               ", "
             )}.`
           );
+          return; // Stop the upload if there's a mismatch
         }
-  
+      
         if (missingColumns.length > 0) {
           alert(
-            `Missing data !please rename the sheet and upload again 
-            )}.`
+            `Missing columns detected! The following columns are required but not found in the uploaded file: ${missingColumns.join(
+              ", "
+            )}. Please rename the sheet and upload again.`
           );
           return; // Stop the upload if there are missing columns
         }
-  
-        // Check if the table is being used for chart creation
-        
-        else {
-          // Display message that the table exists but is not used for chart creation
-          alert(`Table "${currentTableName}" exists but is not used for chart creation.`);
-        }
+      
+        alert(`Table "${currentTableName}" is in use, but the uploaded file matches the required structure. Proceeding with upload.`);
       }
-  
+    }
       // Proceed with the upload
       dispatch(
         uploadExcel({
