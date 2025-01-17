@@ -881,10 +881,17 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChartData, delete_Ai_Charts_Datas } from '../../features/aiCharts/aiChartSlice';
+import { fetchChartData, delete_Ai_Charts_Datas  } from '../../features/aiCharts/aiChartSlice';
 import { lazy, Suspense } from 'react';
 
+// const BarChart = lazy(() => import('../ChartViews/barchartView'));
+const LineChart = lazy(() => import('../ChartViews/linechartview'));
 const BarChart = lazy(() => import('../ChartViews/barchartView'));
+const PieChart = lazy(() => import('../ChartViews/piechartView'));
+const AreaChart = lazy(() => import('../ChartViews/areaChartView'));
+const ScatterChart = lazy(() => import('../ChartViews/scatterChartView'));
+const DualAxisChart = lazy(() => import('../ChartViews/duelAxisChartView'));
+const MapChart = lazy(() => import('../ChartViews/mapChartView'));
 
 const AllCharts = () => {
     const dispatch = useDispatch();
@@ -908,7 +915,7 @@ const AllCharts = () => {
             alert('No charts selected for deletion.');
             return;
         }
-        dispatch(delete_Ai_Charts_Datas(selectedCharts));
+        dispatch(delete_Ai_Charts_Datas (selectedCharts));
         setSelectedCharts([]); // Clear the selected charts
     };
 
@@ -958,13 +965,67 @@ const AllCharts = () => {
                                 Select Chart
                             </label>
                         </div>
-                        {chartData.chart_type === 'bar' && (
+                        {/* {chartData.chart_type === 'bar' && (
                             <BarChart
                                 categories={chartData.categories}
                                 values={chartData.values}
                                 aggregation={chartData.aggregation}
                                 x_axis={chartData.x_axis}
                                 y_axis={chartData.y_axis}
+                            />
+                        )} */}
+                        {chartData.chart_type === "line" && (
+                            <LineChart
+                                categories={chartData.categories}
+                                values={chartData.values}
+                                aggregation={chartData.aggregation}
+                            />
+                        )}
+                        {chartData.chart_type === "bar" && (
+                            <BarChart
+                                categories={chartData.categories}
+                                values={chartData.values}
+                                aggregation={chartData.aggregation}
+                                x_axis={chartData.x_axis}
+                                y_axis={chartData.y_axis}
+                            />
+                        )}
+                        {chartData.chart_type === "pie" && (
+                            <PieChart
+                                categories={chartData.categories}
+                                values={chartData.values}
+                                aggregation={chartData.aggregation}
+                            />
+                        )}
+                        {chartData.chart_type === "area" && (
+                            <AreaChart
+                                categories={chartData.categories}
+                                values={chartData.values}
+                                aggregation={chartData.aggregation}
+                            />
+                        )}
+                        {chartData.chart_type === "scatter" && (
+                            <ScatterChart
+                                categories={chartData.categories}
+                                values={chartData.values}
+                                aggregation={chartData.aggregation}
+                                x_axis={chartData.x_axis}
+                                y_axis={chartData.y_axis}
+                            />
+                        )}
+                        {chartData.chart_type === "duelAxis" && (
+                            <DualAxisChart
+                                categories={chartData.categories}
+                                series1={chartData.series1}
+                                series2={chartData.series2}
+                                aggregation={chartData.aggregation}
+                            />
+                        )}
+                        {chartData.chart_type === "map" && (
+                            <MapChart
+                                categories={chartData.categories}
+                                values={chartData.values}
+                                aggregation={chartData.aggregation}
                             />
                         )}
                     </div>
