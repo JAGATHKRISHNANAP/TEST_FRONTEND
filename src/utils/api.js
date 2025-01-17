@@ -228,18 +228,7 @@ export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnN
     throw error; // Rethrow the error to handle it in the calling function
   }
 };
-// export const fetchFilterOptionsAPI = async (selectedTable, columnName, databaseName) => {
-//   try {
-//     const response = await axios.get(`${API_URL}/plot_chart/${selectedTable}/${columnName}`, {
-//       params: { databaseName },
-//     });
-//     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-//     return options;
-//   } catch (error) {
-//     console.error('Error in API call:', error);
-//     throw error;
-//   }
-// };
+
 
 
 export const sendChartDetails = async (data, position) => {

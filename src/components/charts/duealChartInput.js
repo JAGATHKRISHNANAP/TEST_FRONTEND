@@ -1241,19 +1241,6 @@ function DuealChartInput() {
     event.preventDefault();
   };
 
-  // const handleDrop = (event, target) => {
-  //   event.preventDefault();
-  //   const columnName = event.dataTransfer.getData("columnName");
-  //   if (target === "x-axis") {
-  //     if (!xAxis.includes(columnName)) {
-  //       dispatch(setXAxis([...xAxis, columnName]));
-  //     }
-  //   } else if (target === "y-axis") {
-  //     if (!yAxis.includes(columnName)) {
-  //       dispatch(setYAxis([...yAxis, columnName]));
-  //     }
-  //   }
-  // };
   const handleDrop = (event, target) => {
     event.preventDefault();
     console.log("chart type.............................................",chartType)
