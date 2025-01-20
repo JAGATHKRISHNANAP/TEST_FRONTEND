@@ -327,7 +327,7 @@ function Dashboard() {
                         )}
 
 
-            {xAxis.length > 0 && chartType === "duealChart" && (
+            {xAxis.length > 0 && yAxis.length>1 && chartType === "duealChart" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">

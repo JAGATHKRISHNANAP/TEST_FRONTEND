@@ -400,6 +400,7 @@ import BoxPlotChart from '../charts/BoxPlotChart';
 import Treemap from '../charts/animatedTreeChart';
 import AiChart from '../charts/aiChart';
 import WordCloudChart from '../charts/wordCloudChart';
+import {fetchFilterOptionsAPI,generateChartData} from '../../utils/api';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -485,26 +486,47 @@ function EditDashboard() {
     }
   }, [xAxis, yAxis, aggregate, chartType, checkedOptions]);
 
-  const generateChart = async () => {
-    setIsChartGenerationClicked(true);
-    try {
-      const xAxisColumns = xAxis.join(', ');
-      const response = await axios.post('http://localhost:5000/edit_plot_chart', {
-        selectedTable,
-        xAxis: xAxisColumns,
-        yAxis,
-        aggregate,
-        chartType,
-        filterOptions: checkedOptions.join(', '),
-        databaseName,
-        selectedUser
+  // const generateChart = async () => {
+  //   setIsChartGenerationClicked(true);
+  //   try {
+  //     const xAxisColumns = xAxis.join(', ');
+  //     const response = await axios.post('http://localhost:5000/edit_plot_chart', {
+  //       selectedTable,
+  //       xAxis: xAxisColumns,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       filterOptions: checkedOptions.join(', '),
+  //       databaseName,
+  //       selectedUser
         
-      });
-      setPlotData(response.data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+  //     });
+  //     setPlotData(response.data);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
+const generateChart = async () => {
+  setIsChartGenerationClicked(true);
+  try {
+    const data = {
+      selectedTable,
+      xAxis,
+      yAxis,
+      aggregate,
+      chartType,
+      checkedOptions,
+      databaseName,
+      selectedUser
+    };
+    
+    const chartData = await generateChartData(data);
+    setPlotData(chartData);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   // const fetchFilterOptions = async (columnName) => {
   //   try {
@@ -520,18 +542,31 @@ function EditDashboard() {
   //     console.error('Error fetching filter options:', error);
   //   }
   // };
+  // const fetchFilterOptions = async (columnName) => {
+  //   try {
+  //      // Get connection type from localStorage
+  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
+  //       params: { databaseName,selectedUser }
+  //     });
+  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+
+  //     console.log("options",options)
+  //     setFilterOptions(options);
+  //     // setCheckedOptions(chartData[9]); // Combine fetched options and existing chart data
+  
+  //     setCheckedOptions(options);
+  //     setShowFilterDropdown(false);
+  //     setSelectAllChecked(false);
+  //   } catch (error) {
+  //     console.error('Error fetching filter options:', error);
+  //   }
+  // };
   const fetchFilterOptions = async (columnName) => {
     try {
-       // Get connection type from localStorage
-      const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-        params: { databaseName,selectedUser }
-      });
-      const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-
-      console.log("options",options)
+      const options = await fetchFilterOptionsAPI( databaseName,selectedTable,columnName, selectedUser);
+      console.log("options", options);
+      
       setFilterOptions(options);
-      // setCheckedOptions(chartData[9]); // Combine fetched options and existing chart data
-  
       setCheckedOptions(options);
       setShowFilterDropdown(false);
       setSelectAllChecked(false);

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTotalRows } from "../../utils/api";
 import ResizableChart from "./ResizableChart";
-import { saveAllCharts } from "../../utils/api";
+import {fetchSingleChartData } from "../../utils/api";
 import {
   Box,
   Grid,
@@ -84,33 +84,59 @@ function Chartsview() {
       });
   }, [dispatch, user_id]);
 
-  const handleChartButtonClick = useCallback(async (chartName) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/chart_data/${chartName}`
-      );
-      const data = response.data;
+  // const handleChartButtonClick = useCallback(async (chartName) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:5000/chart_data/${chartName}`
+  //     );
+  //     const data = response.data;
 
-      // Increase chart size based on window size
-      const chartWidth = windowSize.width * 0.6; // 80% of the window width
-      const chartHeight = windowSize.height * 0.4; // 60% of the window height
+  //     // Increase chart size based on window size
+  //     const chartWidth = windowSize.width * 0.6; // 80% of the window width
+  //     const chartHeight = windowSize.height * 0.4; // 60% of the window height
 
-      setChartData([
-        {
-          ...data,
-          chartName,
-          width: chartWidth,
-          height: chartHeight,
-          position: { x: 0, y: 0 },
-        },
-      ]);
-      setDroppedCharts([chartName]);
-      setError(null);
-    } catch (error) {
-      console.error(`Error fetching data for Chart ${chartName}:`, error);
-      setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
-    }
-  }, [windowSize]);
+  //     setChartData([
+  //       {
+  //         ...data,
+  //         chartName,
+  //         width: chartWidth,
+  //         height: chartHeight,
+  //         position: { x: 0, y: 0 },
+  //       },
+  //     ]);
+  //     setDroppedCharts([chartName]);
+  //     setError(null);
+  //   } catch (error) {
+  //     console.error(`Error fetching data for Chart ${chartName}:`, error);
+  //     setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
+  //   }
+  // }, [windowSize]);
+  const handleChartButtonClick = useCallback(
+    async (chartName) => {
+      try {
+        const data = await fetchSingleChartData(chartName);
+  
+        // Increase chart size based on window size
+        const chartWidth = windowSize.width * 0.8; // 80% of the window width
+        const chartHeight = windowSize.height * 0.6; // 60% of the window height
+  
+        setChartData([
+          {
+            ...data,
+            chartName,
+            width: chartWidth,
+            height: chartHeight,
+            position: { x: 0, y: 0 },
+          },
+        ]);
+        setDroppedCharts([chartName]);
+        setError(null);
+      } catch (error) {
+        setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
+      }
+    },
+    [windowSize]
+  );
 
   const updateChartDetails = useCallback((chartName, newDetails) => {
     setChartData((prevData) =>
@@ -124,23 +150,23 @@ function Chartsview() {
     setDroppedCharts((prev) => prev.filter((name) => name !== chartName));
   }, []);
 
-  const handleSaveClick = () => {
-    setOpenDialog(true);
-  };
+  // const handleSaveClick = () => {
+  //   setOpenDialog(true);
+  // };
 
-  const handleDialogClose = (shouldSave) => {
-    setOpenDialog(false);
-    if (shouldSave && fileName) {
-      saveAllCharts(
-        user_id,
-        chartData,
-        dashboardfilterXaxis,
-        selectedCategory,
-        fileName
-      );
-      setFileName("");
-    }
-  };
+  // const handleDialogClose = (shouldSave) => {
+  //   setOpenDialog(false);
+  //   if (shouldSave && fileName) {
+  //     saveAllCharts(
+  //       user_id,
+  //       chartData,
+  //       dashboardfilterXaxis,
+  //       selectedCategory,
+  //       fileName
+  //     );
+  //     setFileName("");
+  //   }
+  // };
 
   const renderedChartButtons = useMemo(
     () =>

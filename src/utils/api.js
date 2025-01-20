@@ -637,3 +637,97 @@ export const fetchUsers = async (databaseName) => {
 //     return false; // Assume it doesn't exist in case of an error
 //   }
 // };
+
+
+export const sendaidashboardClickedCategory = async (category,x_axis) => {
+  try {
+    const response = await axios.post(`${API_URL}/ai_ml_filter_chartdata`, {
+      category,
+      x_axis
+    });
+    return response.data;  // Return the response data
+  } catch (error) {
+    console.error('Error sending clicked category to backend:', error);
+    throw error;  // Rethrow the error for handling in the calling component
+  }
+};
+
+
+export const fetchSingleChartData = async (chartName) => {
+  try {
+    const response = await axios.get(`${API_URL}/chart_data/${chartName}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching data for Chart ${chartName}:`, error);
+    throw new Error(`Failed to fetch data for Chart ${chartName}`);
+  }
+};
+
+
+// export const generateChartData = async (selectedTable, xAxis, yAxis, aggregate, chartType, filterOptions, databaseName) => {
+//   const xAxisColumns = xAxis.join(', ');
+//   const filterOptionsString = filterOptions.join(', ');
+
+//   try {
+//     const response = await axios.post(`${API_URL}/edit_plot_chart`, {
+//       selectedTable,
+//       xAxis: xAxisColumns,
+//       yAxis,
+//       aggregate,
+//       chartType,
+//       filterOptions: filterOptionsString,
+//       databaseName,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error in generateChartData API:', error);
+//     throw error;
+//   }
+// };
+export const generateChartData = async ({
+  selectedTable,
+  xAxis,
+  yAxis,
+  aggregate,
+  chartType,
+  checkedOptions,
+  databaseName,
+  selectedUser
+
+}) => {
+  
+  const xAxisColumns = Array.isArray(xAxis) ? xAxis.join(', ') : '';  // Default to empty string if xAxis is not an array
+  
+  try {
+    const response = await axios.post(`${API_URL}/edit_plot_chart`, {
+      selectedTable,
+      xAxis: xAxisColumns,
+      yAxis,
+      aggregate,
+      chartType,
+      filterOptions: checkedOptions.join(', '),
+      databaseName,
+      selectedUser
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error in generateChartData API:', error);
+    throw error;
+  }
+};
+
+
+
+export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnName,selectedUser) => {
+  console.log('Fetching filter options for:', databaseName, selectedTable, columnName);
+  try {
+    const response = await axios.get(`${API_URL}/plot_chart/${selectedTable}/${columnName}`, {
+      params: { databaseName,selectedUser }
+    });
+    const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+    return options; // Return options for handling in the calling function
+  } catch (error) {
+    console.error('Error fetching filter options:', error);
+    throw error; // Rethrow the error to handle it in the calling function
+  }
+};
