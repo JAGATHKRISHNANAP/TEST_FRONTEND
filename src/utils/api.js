@@ -199,6 +199,19 @@ export const fetchHierarchialDrilldownDataAPI = async ({
 };
 
 
+export const fetchTableColumnsAPI = async (tableName, companyName) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/table-columns/${tableName}`,
+      { params: { companyName } }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching table columns:", error);
+    throw error;
+  }
+};
+
 
 export const fetchPredictionDataAPI = async ({ xAxis, yAxis, timePeriod, number }) => {
   try {
@@ -657,10 +670,23 @@ export const isChartInDashboard = async (chartName) => {
   }
 };
 
+// export const checkIfTableInUse = async (selectedSheet) => {
+//   const response = await fetch(`${API_URL}/api/checkTableUsage?tableName=${selectedSheet}`);
+//   const data = await response.json();
+//   return data.isInUse; 
+// };
+
+
 export const checkIfTableInUse = async (selectedSheet) => {
-  const response = await fetch(`${API_URL}/api/checkTableUsage?tableName=${selectedSheet}`);
-  const data = await response.json();
-  return data.isInUse; 
+  try {
+    const response = await axios.get(`http://localhost:5000/api/checkTableUsage`, {
+      params: { tableName: selectedSheet }
+    });
+    return response.data.isInUse;
+  } catch (error) {
+    console.error('Error checking table usage:', error);
+    throw new Error('Failed to check table usage');
+  }
 };
 export const fetchReportingIds = async () => {
   try {

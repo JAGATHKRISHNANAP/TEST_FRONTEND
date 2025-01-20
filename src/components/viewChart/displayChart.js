@@ -670,8 +670,6 @@ function Charts() {
     {renderedDraggableButtons}
   </Box>
 </Grid>
-
-
       </div>
     </DndProvider>
   );

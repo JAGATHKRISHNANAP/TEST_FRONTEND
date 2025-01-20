@@ -12,7 +12,6 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import TreeHierarchy from '../charts/treeHierarchy'; 
 import HierarchicalBarChart from '../charts/hierarchialBarChart';
-
 import DashboardTableDetails from './dashbordTableDetails';
 import DashboardCharts from './dashbord-chartComponent';
 import Pie from '../charts/Pie';
@@ -27,11 +26,8 @@ import TextChart from '../charts/textChart';
 import MapChart from '../charts/mapchart';
 import SingleValueChart from '../charts/singleValueChart';
 import ChartColor from '../charts/color';
-
-
 import SampleAiTestChart from '../charts/sampleAiTestChart';
 import WordCloudChart from '../charts/wordCloudChart';
-
 import {
   generateChart
 } from '../../features/Dashboard-Slice/chartSlice';
