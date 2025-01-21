@@ -144,6 +144,18 @@ function DashboardTableDetails({ handleTableChange }) {
     }
   };
 
+  // Fetch column info at a regular interval
+  React.useEffect(() => {
+    if (selectedTableName) {
+      const intervalId = setInterval(() => {
+        fetchColumnInfo(selectedTableName);
+      }, 1000); // Executes every 5 seconds
+
+      // Cleanup interval on component unmount
+      return () => clearInterval(intervalId);
+    }
+  }, [selectedTableName]);
+
   const handleLocalTableChange = (event) => {
     const selectedTable = event.target.value;
     setSelectedTableName(selectedTable); // Update local state

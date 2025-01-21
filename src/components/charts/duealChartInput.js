@@ -318,7 +318,7 @@ import {setXAxis, setYAxis, setAggregate,setFilterOptions, setCheckedOptions, se
 } from '../../features/Dashboard-Slice/chartSlice';
 import axios from 'axios';
 import { Mic, StopCircleRounded } from '@mui/icons-material';
-import { uploadAudioFile } from '../../utils/api'; // Import the API function
+import { uploadAudioFile,fetchFilterOptionsAPI } from '../../utils/api'; // Import the API function
 
 
 function DuealChartInput() {
@@ -350,22 +350,34 @@ function DuealChartInput() {
     }
   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
 
+  // const fetchFilterOptions = async (columnName) => {
+  //   try {
+  //     console.log("selectedTable",selectedTable)
+  //     const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
+  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
+  //       params: { databaseName,selectedUser }
+  //     });
+  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+  //     dispatch(setFilterOptions(options));
+  //     dispatch(setCheckedOptions(options));
+  //     dispatch(setShowFilterDropdown(false));
+  //     dispatch(setSelectAllChecked(true));
+
+  //     localStorage.setItem('filterOptions', JSON.stringify(options));
+  //   } catch (error) {
+  //     console.error('Error fetching filter options:', error);
+  //   }
+  // };
   const fetchFilterOptions = async (columnName) => {
     try {
-      console.log("selectedTable",selectedTable)
-      const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
-      const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-        params: { databaseName,selectedUser }
-      });
-      const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+      console.log('fetchFilterOptions------------:', columnName);
+      const selectedUser = localStorage.getItem('selectedUser');
+      const options = await fetchFilterOptionsAPI(databaseName, selectedTable, columnName,selectedUser);
       dispatch(setFilterOptions(options));
       dispatch(setCheckedOptions(options));
-      dispatch(setShowFilterDropdown(false));
-      dispatch(setSelectAllChecked(true));
-
-      localStorage.setItem('filterOptions', JSON.stringify(options));
+      // Do not show the dropdown here, it will only be triggered on filter icon click
     } catch (error) {
-      console.error('Error fetching filter options:', error);
+      console.error('Failed to fetch filter options:', error);
     }
   };
   const handleSelectAllChange = (event) => {
@@ -397,6 +409,14 @@ function DuealChartInput() {
     }
   };
   
+
+  React.useEffect(() => {
+    if (xAxis.length > 0) {
+      const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+      fetchFilterOptions(columnName); // Fetch filter options but do not show the dropdown
+    }
+  }, [xAxis]); // Trigger whenever xAxis changes
+    
   // const handleCheckboxChange = (option) => {
   //   let updatedOptions;
   //   if (checkedOptions.includes(option)) {
@@ -452,15 +472,26 @@ function DuealChartInput() {
   const handleDrop = (event, target) => {
     event.preventDefault();
     const columnName = event.dataTransfer.getData("columnName");
-
+    const singleColumnChartTypes = ["bar", "pie", "scatter", "line", "area", "polarArea"]; // List of chart types that allow only one column on the X-axis
+  
     // Disable the filter dropdown
     setShowFilterDropdown(false);
 
     if (target === "x-axis") {
-        if (!xAxis.includes(columnName)) {
+        // if (!xAxis.includes(columnName)) {
+        //     dispatch(setXAxis([...xAxis, columnName]));
+        //     fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+            
+        // }
+        if (singleColumnChartTypes.includes(chartType)) {
+          // Replace the existing column for specified chart types
+          dispatch(setXAxis([columnName]));
+        } else {
+          // Allow multiple columns for other chart types
+          if (!xAxis.includes(columnName)) {
             dispatch(setXAxis([...xAxis, columnName]));
             fetchFilterOptions(columnName); // Fetch filter options for the dropped column
-            
+          }
         }
     } else if (target === "y-axis") {
         if (!yAxis.includes(columnName)) {
@@ -566,6 +597,18 @@ function DuealChartInput() {
       setIsRecording(false);
     }
   };
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      // Your periodic task here (e.g., update chart data or fetch new data)
+      if (xAxis.length > 0) {
+        const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+        
+        fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+      }
+    }, 1000); // This runs every 5 seconds (5000 ms)
+  
+    return () => clearInterval(interval); // Cleanup the interval when the component is unmounted or dependencies change
+  }, [xAxis]); // Trigger the effect whenever xAxis changes
   
 
   // const startRecording = () => {
@@ -610,6 +653,38 @@ function DuealChartInput() {
   //   }
   // };
 
+  React.useEffect(() => {
+    if (xAxis.length > 0) {
+      const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+      fetchFilterOptions(columnName);
+    }
+  }, [xAxis]); // Trigger whenever xAxis changes
+  
+  React.useEffect(() => {
+    
+    const selectedUser = localStorage.getItem('selectedUser');
+    if (
+      xAxis.length > 0 &&
+      yAxis.length > 0 &&
+      aggregate &&
+      chartType &&
+      checkedOptions.length > 0
+    ) {
+      dispatch(
+        generateChart({
+          selectedTable,
+          xAxis,
+          yAxis,
+          barColor,
+          aggregate,
+          chartType,
+          checkedOptions,
+          selectedUser
+        })
+      );
+    }
+  }, [xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch, selectedTable, barColor]);
+  
   return (
     <div className="App">
                 <div className="dash-right-side-container">

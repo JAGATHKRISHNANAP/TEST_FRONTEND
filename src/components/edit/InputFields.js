@@ -400,7 +400,7 @@ import BoxPlotChart from '../charts/BoxPlotChart';
 import Treemap from '../charts/animatedTreeChart';
 import AiChart from '../charts/aiChart';
 import WordCloudChart from '../charts/wordCloudChart';
-import {fetchFilterOptionsAPI,generateChartData} from '../../utils/api';
+import {fetchFilterOptionsAPI,generateChartData,saveChartData} from '../../utils/api';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -574,6 +574,13 @@ const generateChart = async () => {
       console.error('Error fetching filter options:', error);
     }
   };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchFilterOptions(xAxis);
+    }, 5000); 
+
+    return () => clearInterval(intervalId);
+  }, []); 
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
@@ -634,9 +641,52 @@ const generateChart = async () => {
     }
   }, [xAxis]);
 
+  // const saveDataToDatabase = async () => {
+  //   try {
+  //     console.log('Sending data to save:', {
+  //       chartId,
+  //       selectedTable,
+  //       xAxis,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       chartData: plotData,
+  //       chartColor: barColor,
+  //       drilldownChartData: dashboardPlotData,
+  //       drillDownChartColor: dashboardBarColor,
+  //       filterOptions: checkedOptions.join(', '),
+  //       selectedUser
+  //     });
+
+  //     const response = await axios.post('http://localhost:5000/update_data', {
+  //       chartId,
+  //       selectedTable,
+  //       xAxis,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       chartData: plotData,
+  //       chartColor: barColor,
+  //       drilldownChartData: dashboardPlotData,
+  //       drillDownChartColor: dashboardBarColor,
+  //       filterOptions: checkedOptions.join(', '),
+  //       selectedUser
+  //     });
+  //     console.log("Data saved successfully:", response.data);
+  //     setSnackbarMessage("Data saved successfully!");
+  //     setSnackbarSeverity("success");
+  //     setShowSnackbar(true);
+  //   } catch (error) {
+  //     console.error("Error saving data:", error);
+  //     setSnackbarMessage("Failed to save data. Please try again.");
+  //     setSnackbarSeverity("error");
+  //     setShowSnackbar(true);
+  //   }
+  // };
+
   const saveDataToDatabase = async () => {
     try {
-      console.log('Sending data to save:', {
+      const payload = {
         chartId,
         selectedTable,
         xAxis,
@@ -648,35 +698,22 @@ const generateChart = async () => {
         drilldownChartData: dashboardPlotData,
         drillDownChartColor: dashboardBarColor,
         filterOptions: checkedOptions.join(', '),
-        selectedUser
-      });
-
-      const response = await axios.post('http://localhost:5000/update_data', {
-        chartId,
-        selectedTable,
-        xAxis,
-        yAxis,
-        aggregate,
-        chartType,
-        chartData: plotData,
-        chartColor: barColor,
-        drilldownChartData: dashboardPlotData,
-        drillDownChartColor: dashboardBarColor,
-        filterOptions: checkedOptions.join(', '),
-        selectedUser
-      });
-      console.log("Data saved successfully:", response.data);
+        selectedUser,
+      };
+  
+      const responseData = await saveChartData(payload);
+      console.log("Data saved successfully:", responseData);
+  
       setSnackbarMessage("Data saved successfully!");
       setSnackbarSeverity("success");
       setShowSnackbar(true);
     } catch (error) {
-      console.error("Error saving data:", error);
       setSnackbarMessage("Failed to save data. Please try again.");
       setSnackbarSeverity("error");
       setShowSnackbar(true);
     }
   };
-
+  
   const handleSnackbarClose = () => {
     setShowSnackbar(false);
   };

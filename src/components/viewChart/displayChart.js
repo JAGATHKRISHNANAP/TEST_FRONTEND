@@ -121,13 +121,35 @@ function Charts() {
     setOpenDialog(true);
   };
 
-  const handleDialogClose = (shouldSave) => {
+  // const handleDialogClose = (shouldSave) => {
+  //   setOpenDialog(false);
+  //   if (shouldSave && fileName) {
+  //     saveAllCharts(user_id, chartData, dashboardfilterXaxis, selectedCategory, fileName,company_name);
+  //     setFileName(""); // Reset the file name after saving
+  //   }
+  // };
+  const handleDialogClose = async (shouldSave) => {
     setOpenDialog(false);
+  
     if (shouldSave && fileName) {
-      saveAllCharts(user_id, chartData, dashboardfilterXaxis, selectedCategory, fileName,company_name);
-      setFileName(""); // Reset the file name after saving
+      try {
+        // API call to check if the file name exists
+        const response = await axios.get(`http://localhost:5000/check_filename/${fileName}`);
+        if (response.data.exists) {
+          alert(`The file name "${fileName}" already exists. Please choose a different name.`);
+          return; // Stop further execution if the file name exists
+        }
+  
+        // Proceed to save if the file name does not exist
+        await saveAllCharts(user_id, chartData, dashboardfilterXaxis, selectedCategory, fileName, company_name);
+        setFileName(""); // Reset the file name after saving
+      } catch (error) {
+        console.error("Error checking file name existence:", error);
+        alert("An error occurred while checking the file name. Please try again later.");
+      }
     }
   };
+  
   const handleRemoveChartbutton = useCallback((chartName) => {
     setChartData((prevData) => prevData.filter((data) => data.chartName !== chartName));
     setDroppedCharts((prev) => prev.filter((name) => name !== chartName));

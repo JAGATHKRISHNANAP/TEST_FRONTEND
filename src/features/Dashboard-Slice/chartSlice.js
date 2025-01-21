@@ -140,8 +140,11 @@ const chartSlice = createSlice({
     showBarChart: false,
     isDrillDownEnabled: false,
     clickedCategory: null,
-    filterOptions: [],
-    checkedOptions: [],
+    // filterOptions: [],
+    // checkedOptions: [],
+    filterOptions: {}, // Store options as { column1: [...options], column2: [...options] }
+  checkedOptions: {},
+
     showFilterDropdown: false,
     selectAllChecked: true,
     barColor: "#2196f3",

@@ -81,6 +81,8 @@ export const sendCategoryToBackend = async (category, xAxis, yAxis, tableName, a
     throw error;
   }
 };
+
+
 export const saveDataToDatabase = async ({
   user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
 }) => {
@@ -92,6 +94,16 @@ export const saveDataToDatabase = async ({
   return response.data;
 };
 
+export const saveChartData = async (data) => {
+  try {
+    console.log('Sending data to save:', data);
+    const response = await axios.post('http://localhost:5000/update_data', data);
+    return response.data; // Return the response data for further use
+  } catch (error) {
+    console.error("Error saving data:", error);
+    throw error; // Propagate the error to handle it in the calling function
+  }
+};
 
 export const plot_chart = async (data) => {
   const response = await axios.post('http://localhost:5000/plot_chart', data);
@@ -730,4 +742,30 @@ export const fetchFilterOptionsAPI = async (databaseName, selectedTable, columnN
     console.error('Error fetching filter options:', error);
     throw error; // Rethrow the error to handle it in the calling function
   }
+};
+
+export const generateDualAxisChartApi = async ({
+  selectedTable,
+  xAxis,
+  yAxis,
+  barColor,
+  aggregate,
+  chartType,
+  checkedOptions,
+}) => {
+  const xAxisColumns = xAxis.join(', ');
+  const databaseName = localStorage.getItem('company_name');
+
+  const response = await axios.post(`${API_URL}/plot_dual_axis_chart`, {
+    selectedTable,
+    xAxis: xAxisColumns,
+    yAxis,
+    barColor,
+    aggregate,
+    chartType,
+    filterOptions: checkedOptions.join(', '),
+    databaseName,
+  });
+
+  return response.data;
 };
