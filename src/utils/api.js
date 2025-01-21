@@ -146,14 +146,50 @@ export const generateDualAxisChartApi = async ({
 };
 
 
+// export const saveDataToDatabase = async ({
+//   user_id,company_name,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions, ai_chart_data, saveName,
+// }) => {
+//   const response = await axios.post(`${API_URL}/save_data`, {
+//     user_id,company_name,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '), ai_chart_data,   saveName,
+//   });
+//   return response.data;
+// };
+
 export const saveDataToDatabase = async ({
-  user_id,company_name,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
+  user_id,
+  company_name,
+  selectedTable,
+  databaseName,
+  xAxis,
+  yAxis,
+  aggregate,
+  chartType,
+  barColor,
+  chart_heading,
+  dashboardBarColor,
+  checkedOptions,
+  ai_chart_data,
+  saveName,
 }) => {
   const response = await axios.post(`${API_URL}/save_data`, {
-    user_id,company_name,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),    saveName,
+    user_id,
+    company_name,
+    selectedTable,
+    databaseName,
+    xAxis,
+    yAxis,
+    aggregate,
+    chartType,
+    chartColor: barColor, // Renaming `barColor` to `chartColor` for API
+    chart_heading,
+    drillDownChartColor: dashboardBarColor, // Renaming `dashboardBarColor`
+    filterOptions: checkedOptions.join(', '), // Joining checkedOptions into a string
+    ai_chart_data,
+    saveName,
   });
   return response.data;
 };
+
 
 
 
@@ -258,6 +294,7 @@ export const sendChartDetails = async (data, position) => {
       databaseName: data[10],
       position, // Send position to backend
     });
+    console.log('Response ----------------from backend:', response.data);
 
     return response.data;
   } catch (error) {

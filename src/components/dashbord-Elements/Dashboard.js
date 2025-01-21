@@ -65,6 +65,8 @@ function Dashboard() {
     xAxis, yAxis, plotData, aggregate, checkedOptions, dashboardPlotData, dashboardBarColor
   } = useSelector(state => state.chart);
 
+
+  const data  = useSelector((state) => state.aicharts);
   const chartType = useSelector(state => state.chartType.type);
   const SelectedTable = useSelector((state) => state.dashboard.checkedPaths);
   const barColor = useSelector((state) => state.chartColor.chartColor);
@@ -87,16 +89,48 @@ function Dashboard() {
     setOpen(true);
   };
 
+  console.log('data from ai chart:', data.data);
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  // const handleSaveToDatabase = async () => {
+  //   if (!saveName.trim()) {
+  //     alert("Please enter a save name before saving.");
+  //     return;
+  //   }
+
+  //   console.log('Sending data to save:', saveName);
+  //   try {
+  //     const response = await saveDataToDatabase({
+  //       user_id,
+  //       company_name,
+  //       selectedTable,
+  //       databaseName,
+  //       xAxis,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       barColor,
+  //       chart_heading,
+  //       dashboardBarColor,
+  //       checkedOptions,
+  //       saveName,
+  //     });
+  //     console.log('Data saved successfully:', response);
+  //     setOpen(false);
+  //   } catch (error) {
+  //     console.error('Error saving data:', error);
+  //   }
+  // };
 
   const handleSaveToDatabase = async () => {
     if (!saveName.trim()) {
       alert("Please enter a save name before saving.");
       return;
     }
-
+  
     console.log('Sending data to save:', saveName);
     try {
       const response = await saveDataToDatabase({
@@ -112,6 +146,7 @@ function Dashboard() {
         chart_heading,
         dashboardBarColor,
         checkedOptions,
+        ai_chart_data: data.data,
         saveName,
       });
       console.log('Data saved successfully:', response);
@@ -120,6 +155,7 @@ function Dashboard() {
       console.error('Error saving data:', error);
     }
   };
+  
   
 
   return (
@@ -160,6 +196,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
+
             {xAxis.length > 0 && yAxis.length>0 && chartType === "scatter" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
@@ -172,6 +209,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
+
             {xAxis.length > 0 && yAxis.length>0 && chartType === "bar" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
@@ -184,7 +222,6 @@ function Dashboard() {
                 </div>
               </div>
             )}
-
             
             {xAxis.length > 0 && yAxis.length>0 && chartType === "area" && (
               <div style={{ marginTop: '20px' }}>
@@ -198,6 +235,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
+
             {xAxis.length > 0 && yAxis.length>0 && chartType === "polarArea" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
@@ -210,6 +248,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
+
             {xAxis.length > 0 && chartType === "textChart" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
@@ -222,6 +261,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
+            
              {xAxis.length > 0 && chartType === "singleValueChart" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
@@ -235,7 +275,6 @@ function Dashboard() {
               </div>
             )}
 
-
             {xAxis.length > 0 && chartType === "mapchart" && (
                           <div style={{ marginTop: '20px' }}>
                             <Items>
@@ -248,7 +287,6 @@ function Dashboard() {
                             </div>
                           </div>
                         )}
-
 
             {xAxis.length > 0 && yAxis.length>1 && chartType === "duealChart" && (
               <div style={{ marginTop: '20px' }}>
@@ -267,6 +305,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
+
             {chartType === "treeHierarchy"  && (
                           <div style={{ marginTop: '20px' }}>
                               <div >
@@ -278,33 +317,31 @@ function Dashboard() {
                           </div>
                         )}
 
+            {chartType === "sampleAitestChart"  && (
+                                      <div style={{ marginTop: '20px' }}>
+                                          <div >
+                                            <SampleAiTestChart/>
+                                          </div>
+                                          <div className='btn-container'>
+                                          <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+                                        </div>
+                                      </div>
+                                    )}
 
-{chartType === "sampleAitestChart"  && (
-                          <div style={{ marginTop: '20px' }}>
-                              <div >
-                                <SampleAiTestChart/>
-                              </div>
-                              <div className='btn-container'>
-                              <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
-                            </div>
-                          </div>
-                        )}
+            {chartType === "AiCharts"  && (
+                                      <div style={{ marginTop: '20px' }}>
+                                        {/* <Items> */}
+                                          <div className="chart-container">
+                                            <AiChart/>
+                                          </div>
+                                          {/* </Items> */}
+                                          <div className='btn-container'>
+                                          <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+                                        </div>
+                                      </div>
+                                    )}
 
-{chartType === "AiCharts"  && (
-                          <div style={{ marginTop: '20px' }}>
-                            {/* <Items> */}
-                              <div className="chart-container">
-                                <AiChart/>
-                              </div>
-                              {/* </Items> */}
-                              <div className='btn-container'>
-                              <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
-                            </div>
-                          </div>
-                        )}
-
-
-             {xAxis.length > 0 && yAxis.length>0&& chartType === "animatedTreeChart" && (
+            {xAxis.length > 0 && yAxis.length>0&& chartType === "animatedTreeChart" && (
              <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -318,7 +355,7 @@ function Dashboard() {
               </div>
             )}
 
-          {xAxis.length > 0 && yAxis.length>0 && chartType === "hierarchialBarChart" && (
+            {xAxis.length > 0 && yAxis.length>0 && chartType === "hierarchialBarChart" && (
                       <div style={{ marginTop: '20px' }}>
                           <Items>
                             <div className="chart-container">
@@ -332,18 +369,18 @@ function Dashboard() {
                         </div>
                       )}
 
-{xAxis.length > 0 && chartType === "wordCloud" && (
-              <div style={{ marginTop: '20px' }}>
-                <Items>
-                  <div className="chart-container">
-                    <WordCloudChart categories={plotData?.categories} values={plotData?.values}  />
-                    </div>
-                </Items>
-                <div className='btn-container'>
-                  <button className="save-button" onClick={handleSaveButtonClick}>Save Data to Database</button>
-                </div>
-              </div>
-            )}
+            {xAxis.length > 0 && chartType === "wordCloud" && (
+                          <div style={{ marginTop: '20px' }}>
+                            <Items>
+                              <div className="chart-container">
+                                <WordCloudChart categories={plotData?.categories} values={plotData?.values}  />
+                                </div>
+                            </Items>
+                            <div className='btn-container'>
+                              <button className="save-button" onClick={handleSaveButtonClick}>Save Data to Database</button>
+                            </div>
+                          </div>
+                        )}
 
           </Grid>
           <Grid item xs={12} md={1.5}>

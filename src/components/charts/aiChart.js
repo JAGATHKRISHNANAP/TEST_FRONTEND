@@ -882,6 +882,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChartData, delete_Ai_Charts_Datas  } from '../../features/aiCharts/aiChartSlice';
+import {setCheckedOptions} from '../../features/Dashboard-Slice/chartSlice';
 import { lazy, Suspense } from 'react';
 
 // const BarChart = lazy(() => import('../ChartViews/barchartView'));

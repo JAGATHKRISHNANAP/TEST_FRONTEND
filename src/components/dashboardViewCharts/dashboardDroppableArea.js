@@ -14,6 +14,7 @@ import TreeHierarchyView from '../ChartViews/treeHierarchyView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
 import DashboardSingleValueChart from '../ChartViews/DashboardSingleValueChart';
+import AiMlChartData from '../ChartViews/AiMLChartsView';
 
 const DroppableArea = () => {
   const droppableAreaRef = useRef(null);
@@ -75,6 +76,7 @@ const DroppableArea = () => {
           console.log("dataframe_dict-----------------------------------------------------", chart.histogram_details),
           console.log("X_axis-----------------------------------------------------", chart.aggregate),
           // console.log("Y_axis-----------------------------------------------------", chart.chart_type), 
+          // console.log("Ai related chat data-----------------------------------------------------", chart.histogram_details[0]),
           <div key={index} >
             {chart.chart_type === 'bar' && (
               <BarChart
@@ -137,6 +139,9 @@ const DroppableArea = () => {
           {chart.chart_type === 'sampleAitestChart' && (
                                   <SampleAiTestChart data={chart.histogram_details} />
                                 )}
+          {chart.chart_type === 'AiCharts' && (
+                                  <AiMlChartData data={chart.histogram_details} />  
+                                )}  
 
           {chart.chart_type === 'mapchart' && (
               <MapViewChart

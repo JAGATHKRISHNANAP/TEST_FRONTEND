@@ -582,6 +582,7 @@ import DualAxisChart from '../ChartViews/duelAxisChartView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import MapChart from '../ChartViews/mapChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
+import AiMlChartData from '../ChartViews/AiMLChartsView';
 import { useDispatch, useSelector } from 'react-redux';
 import SingleValueChart from '../ChartViews/singleValueChartView';
 import { HierarchialBarChart_chart, sendChartData ,sendChartDetails} from "../../utils/api";
@@ -628,6 +629,7 @@ const ResizableChart = ({ data, context, onRemove, updateChartDetails}) => {
   const [hierarchy,setHierarchy]=useState(null);
   const [hierarchyData,setHierarchyData]=useState(null);
   const [aiChartData,setAiChartData]=useState(null);
+  const [aiMlChartData,setAiMLChartData]=useState(null);
   const database_name =localStorage.getItem("company_name");
   const chart_id = data[0];
   const text_y_xis = data[2];
@@ -677,6 +679,10 @@ const ResizableChart = ({ data, context, onRemove, updateChartDetails}) => {
       }
       if (data[5] === 'sampleAitestChart') {
         setAiChartData(response['histogram_details']);
+      }
+      if (data[5] === 'AiCharts') {
+        console.log("response['histogram_details']",response['histogram_details'])
+        setAiMLChartData(response['histogram_details']);
       }
       const { categories, values, series1, series2 } = response;
       if (categories) {
@@ -857,6 +863,9 @@ const ResizableChart = ({ data, context, onRemove, updateChartDetails}) => {
           break;
       case 'sampleAitestChart':
         return <SampleAiTestChart data={aiChartData} />;
+
+        case 'AiCharts':
+          return <AiMlChartData data={aiMlChartData} />;
       case 'treeHierarchy':
         return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
         // break;  
