@@ -15,7 +15,8 @@ function DashboardTableDetails({ handleTableChange }) {
   const databaseName = localStorage.getItem('company_name');
 
   const checkedPathss = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
-
+  const selectedTable = localStorage.getItem('selectedTable');
+  const [selectedTableName, setSelectedTableName] = React.useState('');
   // const fetchColumnInfo = async (checkedPaths) => {
   //   try {
   //     const response = await fetch(`http://localhost:5000/column_names/${checkedPaths}?databaseName=${databaseName}`);
@@ -31,6 +32,15 @@ function DashboardTableDetails({ handleTableChange }) {
   //   }
   // };
 
+  React.useEffect(() => {
+    // Load selected table name from localStorage
+    const tableNameFromStorage = localStorage.getItem('selectedTableName');
+    if (tableNameFromStorage) {
+      setSelectedTableName(tableNameFromStorage);
+    }
+  }, []);
+
+
   const fetchColumnInfo = async (checkedPaths) => {
     try {
       const data = await fetchColumnNames(checkedPaths, databaseName);
@@ -41,6 +51,18 @@ function DashboardTableDetails({ handleTableChange }) {
       console.error('Error while fetching data:', error);
     }
   };
+
+  // React.useEffect(() => {
+  //   if (selectedTableName) {
+  //     const intervalId = setInterval(() => {
+  //       fetchColumnInfo(selectedTableName);
+  //     }, 1000); // Executes every 5 seconds
+
+  //     // Cleanup interval on component unmount
+  //     return () => clearInterval(intervalId);
+  //   }
+  // }, [selectedTableName]);
+
 
   const handleLocalTableChange = (event) => {
     const selectedTableName = event.target.value;

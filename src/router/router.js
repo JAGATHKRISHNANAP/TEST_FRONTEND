@@ -9,6 +9,7 @@ import Charts from '../components/viewChart/displayChart';
 import LoadExcelFile from '../components/load/LoadExcelFile';
 
 import Chartsview from '../components/viewChart/chartsView';
+import Dashboard from '../components/dashbord-Elements/Dashboard';
 
 import LoadCsvFile from '../components/load/LoadCsvFile';
 // import Dashboard from '../components/dashbord-Elements/Dashboard';
@@ -39,6 +40,7 @@ const AppRouter = () => {
 
 
       {/* <Route path="/load_data" element={<LoadData />} /> */}
+      <Route path="/create_charts" element={<Dashboard />} />
       <Route path="/edit_chart" element={<EditDashboard />} />
       <Route path="/create_dashboard" element={<Charts />} />
 

@@ -536,8 +536,44 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         grid: {
             borderColor: '#f1f3fa'
         },
+        // tooltip: {
+        //     enabled: true,
+        //     custom: toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+        //         ? function ({ series, seriesIndex, dataPointIndex, w }) {
+        //             const category = plotData.categories ? plotData.categories[dataPointIndex] : categories[dataPointIndex];
+        //             const value = series[seriesIndex][dataPointIndex];
+        //             const currentAggregation = aggregation || 'Aggregation';
+        //             const currentXAxis = xAxis[0] || 'X-Axis';
+        //             const currentYAxis = yAxis || 'Y-Axis';
+
+        //             return `
+        //                 <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+        //                     ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>` : ''}
+        //                     <div>
+        //                         ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${category}</div>` : ''}
+        //                         ${toolTipOptions.value ? `<div><strong>Value:</strong> ${value}</div>` : ''}
+        //                     </div>
+        //                 </div>
+        //             `;
+        //         }
+        //         : undefined
+        // },
         tooltip: {
             enabled: true,
+            // Default tooltip formatter for values
+            y: {
+                formatter: function (value) {
+                    // Determine the currency symbol dynamically
+                    const currencySymbol = value >= 100000 ? '₹' : '$'; // Example logic
+                    return `${currencySymbol} ${value.toLocaleString()}`;
+                },
+                title: {
+                    formatter: function (seriesName) {
+                        return `${seriesName}`; // Customize series title if needed
+                    }
+                }
+            },
+            // Custom tooltip logic
             custom: toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
                 ? function ({ series, seriesIndex, dataPointIndex, w }) {
                     const category = plotData.categories ? plotData.categories[dataPointIndex] : categories[dataPointIndex];
@@ -545,19 +581,24 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                     const currentAggregation = aggregation || 'Aggregation';
                     const currentXAxis = xAxis[0] || 'X-Axis';
                     const currentYAxis = yAxis || 'Y-Axis';
-
+        
+                    // Determine the currency symbol dynamically
+                    const currencySymbol = value >= 100000 ? '₹' : '$'; // Example logic
+                    const formattedValue = `${currencySymbol} ${value.toLocaleString()}`;
+        
                     return `
                         <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
                             ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>` : ''}
                             <div>
                                 ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${category}</div>` : ''}
-                                ${toolTipOptions.value ? `<div><strong>Value:</strong> ${value}</div>` : ''}
+                                ${toolTipOptions.value ? `<div><strong>Value:</strong> ${formattedValue}</div>` : ''}
                             </div>
                         </div>
                     `;
                 }
                 : undefined
         },
+        
         legend: {
             show: false
         }

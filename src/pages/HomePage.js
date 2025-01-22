@@ -376,7 +376,7 @@ onClick={() => handleNavigation('/load_data')}
           onClick={handleDesignMenuClick}
           sx={{
             backgroundColor:
-            location.pathname === '/Create_Dashboard' ||
+            location.pathname === '/create_charts' ||
             location.pathname === '/dashboard_view'
                 ? '#c5c5c9'
                 : 'inherit',
@@ -411,10 +411,10 @@ onClick={() => handleNavigation('/load_data')}
           }}
         >
           
-          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
+          <MenuItem onClick={() => handleNavigation('/create_charts')}>
             Chart
           </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
+          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
           Dashboard
           </MenuItem>
         </Menu>

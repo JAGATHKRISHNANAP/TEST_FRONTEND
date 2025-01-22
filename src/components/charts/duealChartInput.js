@@ -1159,11 +1159,22 @@ function DuealChartInput() {
   console.log('csvCheckedPaths:', csvCheckedPaths);
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   const selectedTable=selectedTablearray.join(',')
+  // React.useEffect(() => {
+  //   if (xAxis && yAxis && aggregate && chartType) {
+  //     dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
+  //   }
+  // }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
   React.useEffect(() => {
-    if (xAxis && yAxis && aggregate && chartType) {
-      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
-    }
-  }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
+    const interval = setInterval(() => {
+      if (xAxis && yAxis && aggregate && chartType) {
+        dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
+      }
+    }, 3000); // 3 seconds interval
+  
+    // Cleanup function to clear the interval when the component unmounts or dependencies change
+    return () => clearInterval(interval);
+  }, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
+  
 
   React.useEffect(() => {
     if (xAxis.length > 0) {
@@ -1437,7 +1448,7 @@ export default DuealChartInput;
 // } from '../../features/Dashboard-Slice/chartSlice';
 // import axios from 'axios';
 // import { Mic, StopCircleRounded } from '@mui/icons-material';
-// import { uploadAudioFile } from '../../utils/api'; // Import the API function
+// import { uploadAudioFile,fetchFilterOptionsAPI } from '../../utils/api'; // Import the API function
 
 
 // function DuealChartInput() {
@@ -1461,30 +1472,42 @@ export default DuealChartInput;
 //   console.log('csvCheckedPaths:', csvCheckedPaths);
 //   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   
-//   const selectedTable = SelectedTable;
+//   // const SelectedTable = localStorage.getItem('SelectedTable'); 
 //   React.useEffect(() => {
 //     if (xAxis && yAxis && aggregate && chartType) {
       
-//       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
+//       dispatch(generateChart({ SelectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
 //     }
 //   }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
 
+//   // const fetchFilterOptions = async (columnName) => {
+//   //   try {
+//   //     console.log("SelectedTable",SelectedTable)
+//   //     const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
+//   //     const response = await axios.get(`http://localhost:5000/plot_chart/${SelectedTable}/${columnName}`, {
+//   //       params: { databaseName,selectedUser }
+//   //     });
+//   //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+//   //     dispatch(setFilterOptions(options));
+//   //     dispatch(setCheckedOptions(options));
+//   //     dispatch(setShowFilterDropdown(false));
+//   //     dispatch(setSelectAllChecked(true));
+
+//   //     localStorage.setItem('filterOptions', JSON.stringify(options));
+//   //   } catch (error) {
+//   //     console.error('Error fetching filter options:', error);
+//   //   }
+//   // };
 //   const fetchFilterOptions = async (columnName) => {
 //     try {
-//       console.log("selectedTable",selectedTable)
-//       // const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
-//       const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-//         params: { databaseName,xAxis }
-//       });
-//       const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
+//       console.log('fetchFilterOptions------------:', columnName);
+//       const selectedUser = localStorage.getItem('selectedUser');
+//       const options = await fetchFilterOptionsAPI(databaseName, SelectedTable, columnName,selectedUser);
 //       dispatch(setFilterOptions(options));
 //       dispatch(setCheckedOptions(options));
-//       dispatch(setShowFilterDropdown(false));
-//       dispatch(setSelectAllChecked(true));
-
-//       localStorage.setItem('filterOptions', JSON.stringify(options));
+//       // Do not show the dropdown here, it will only be triggered on filter icon click
 //     } catch (error) {
-//       console.error('Error fetching filter options:', error);
+//       console.error('Failed to fetch filter options:', error);
 //     }
 //   };
 //   const handleSelectAllChange = (event) => {
@@ -1497,7 +1520,13 @@ export default DuealChartInput;
 //     }
 //   };
 
-
+//   // const handleFilterIconClick = (columnName) => {
+//   //   if (showFilterDropdown) {
+//   //     dispatch(setShowFilterDropdown(false));
+//   //   } else {
+//   //     fetchFilterOptions(columnName);
+//   //   }
+//   // };
 
 //   const handleFilterIconClick = async (columnName) => {
 //     if (showFilterDropdown) {
@@ -1511,6 +1540,23 @@ export default DuealChartInput;
 //   };
   
 
+//   React.useEffect(() => {
+//     if (xAxis.length > 0) {
+//       const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+//       fetchFilterOptions(columnName); // Fetch filter options but do not show the dropdown
+//     }
+//   }, [xAxis]); // Trigger whenever xAxis changes
+    
+//   // const handleCheckboxChange = (option) => {
+//   //   let updatedOptions;
+//   //   if (checkedOptions.includes(option)) {
+//   //     updatedOptions = checkedOptions.filter(item => item !== option);
+//   //   } else {
+//   //     updatedOptions = [...checkedOptions, option];
+//   //   }
+//   //   dispatch(setCheckedOptions(updatedOptions));
+//   //   dispatch(setSelectAllChecked(updatedOptions.length === filterOptions.length));
+//   // };
 //   const handleCheckboxChange = (option) => {
 //     let updatedOptions;
 
@@ -1539,20 +1585,43 @@ export default DuealChartInput;
 //     event.preventDefault();
 //   };
 
-
+//   // const handleDrop = (event, target) => {
+//   //   event.preventDefault();
+//   //   const columnName = event.dataTransfer.getData("columnName");
+//   //   if (target === "x-axis") {
+//   //     if (!xAxis.includes(columnName)) {
+//   //       dispatch(setXAxis([...xAxis, columnName]));
+//   //     }
+//   //   } else if (target === "y-axis") {
+//   //     if (!yAxis.includes(columnName)) {
+//   //       dispatch(setYAxis([...yAxis, columnName]));
+//   //     }
+//   //   }
+//   // };
 
 //   const handleDrop = (event, target) => {
 //     event.preventDefault();
 //     const columnName = event.dataTransfer.getData("columnName");
-
+//     const singleColumnChartTypes = ["bar", "pie", "scatter", "line", "area", "polarArea"]; // List of chart types that allow only one column on the X-axis
+  
 //     // Disable the filter dropdown
 //     setShowFilterDropdown(false);
 
 //     if (target === "x-axis") {
-//         if (!xAxis.includes(columnName)) {
+//         // if (!xAxis.includes(columnName)) {
+//         //     dispatch(setXAxis([...xAxis, columnName]));
+//         //     fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+            
+//         // }
+//         if (singleColumnChartTypes.includes(chartType)) {
+//           // Replace the existing column for specified chart types
+//           dispatch(setXAxis([columnName]));
+//         } else {
+//           // Allow multiple columns for other chart types
+//           if (!xAxis.includes(columnName)) {
 //             dispatch(setXAxis([...xAxis, columnName]));
 //             fetchFilterOptions(columnName); // Fetch filter options for the dropped column
-            
+//           }
 //         }
 //     } else if (target === "y-axis") {
 //         if (!yAxis.includes(columnName)) {
@@ -1567,6 +1636,47 @@ export default DuealChartInput;
 //     dispatch(setXAxis(updatedXAxis));
 //     dispatch(setShowFilterDropdown(false));
 //   };
+//   // const startRecording = () => {
+//   //   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//   //     navigator.mediaDevices.getUserMedia({ audio: true })
+//   //       .then((stream) => {
+//   //         mediaRecorderRef.current = new MediaRecorder(stream);
+//   //         audioChunksRef.current = [];
+
+//   //         mediaRecorderRef.current.ondataavailable = (event) => {
+//   //           audioChunksRef.current.push(event.data);
+//   //         };
+
+//   //         mediaRecorderRef.current.onstop = async () => {
+//   //           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+//   //           const audioUrl = URL.createObjectURL(audioBlob);
+//   //           setAudioUrl(audioUrl);
+
+//   //           try {
+//   //             // Upload the audio file to the backend
+//   //             const response = await uploadAudioFile(audioBlob);
+//   //             console.log('Audio uploaded successfully:', response);
+//   //           } catch (error) {
+//   //             console.error('Error uploading audio:', error);
+//   //           }
+//   //         };
+
+//   //         mediaRecorderRef.current.start();
+//   //         setIsRecording(true);
+//   //       })
+//   //       .catch((error) => {
+//   //         console.error('Error accessing microphone:', error);
+//   //       });
+//   //   }
+//   // };
+
+//   // const stopRecording = () => {
+//   //   if (mediaRecorderRef.current) {
+//   //     mediaRecorderRef.current.stop();
+//   //     setIsRecording(false);
+//   //   }
+//   // };
+
 
 //   const startRecording = () => {
 //     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -1590,7 +1700,7 @@ export default DuealChartInput;
 //             const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
 //             const formData = new FormData();
 //             formData.append('audio', audioFile);
-//             formData.append('tableName', selectedTable);
+//             formData.append('tableName', SelectedTable);
 //             formData.append('databaseName', databaseName);
 
 //             uploadAudioFile(formData)
@@ -1617,8 +1727,94 @@ export default DuealChartInput;
 //       setIsRecording(false);
 //     }
 //   };
+//   React.useEffect(() => {
+//     const interval = setInterval(() => {
+//       // Your periodic task here (e.g., update chart data or fetch new data)
+//       if (xAxis.length > 0) {
+//         const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+        
+//         fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+//       }
+//     }, 1000); // This runs every 5 seconds (5000 ms)
+  
+//     return () => clearInterval(interval); // Cleanup the interval when the component is unmounted or dependencies change
+//   }, [xAxis]); // Trigger the effect whenever xAxis changes
   
 
+//   // const startRecording = () => {
+//   //   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//   //     navigator.mediaDevices.getUserMedia({ audio: true })
+//   //       .then(stream => {
+//   //         mediaRecorderRef.current = new MediaRecorder(stream);
+//   //         audioChunksRef.current = [];
+
+//   //         mediaRecorderRef.current.ondataavailable = (event) => {
+//   //           audioChunksRef.current.push(event.data);
+//   //         };
+
+//   //         mediaRecorderRef.current.onstop = () => {
+//   //           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+//   //           const audioUrl = URL.createObjectURL(audioBlob);
+//   //           setAudioUrl(audioUrl);
+
+//   //           // Upload audio to backend
+//   //           uploadAudioFile(audioBlob, SelectedTable, databaseName)
+//   //             .then(response => {
+//   //               console.log('Audio uploaded successfully:', response.data);
+//   //             })
+//   //             .catch(error => {
+//   //               console.error('Error uploading audio:', error);
+//   //             });
+//   //         };
+
+//   //         mediaRecorderRef.current.start();
+//   //         setIsRecording(true);
+//   //       })
+//   //       .catch(error => {
+//   //         console.error('Error accessing microphone:', error);
+//   //       });
+//   //   }
+//   // };
+
+//   // const stopRecording = () => {
+//   //   if (mediaRecorderRef.current) {
+//   //     mediaRecorderRef.current.stop();
+//   //     setIsRecording(false);
+//   //   }
+//   // };
+
+//   React.useEffect(() => {
+//     if (xAxis.length > 0) {
+//       const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+//       fetchFilterOptions(columnName);
+//     }
+//   }, [xAxis]); // Trigger whenever xAxis changes
+  
+//   React.useEffect(() => {
+    
+//     const selectedUser = localStorage.getItem('selectedUser');
+//     if (
+//       xAxis.length > 0 &&
+//       yAxis.length > 0 &&
+//       aggregate &&
+//       chartType &&
+//       checkedOptions.length > 0
+//     ) {
+//       dispatch(
+//         generateChart({
+//           SelectedTable,
+//           xAxis,
+//           yAxis,
+//           barColor,
+//           aggregate,
+//           chartType,
+//           checkedOptions,
+//           selectedUser
+//         })
+//       );
+//     }
+//   }, [xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch, SelectedTable, barColor]);
+  
 //   return (
 //     <div className="App">
 //                 <div className="dash-right-side-container">
