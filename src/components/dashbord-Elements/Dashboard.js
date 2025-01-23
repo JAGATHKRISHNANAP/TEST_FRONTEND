@@ -261,7 +261,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {xAxis.length > 0 && yAxis.length>0 && chartType === "bar" && (
+            {/* {xAxis.length > 0 && yAxis.length>0 && chartType === "bar" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>
                   <div className="chart-container">
@@ -272,11 +272,44 @@ function Dashboard() {
                   <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
                 </div>
               </div>
-            )}
+            )} */}
 
-            
+{(xAxis.length > 0 && yAxis.length > 0  && chartType === "bar") ? (
+  <div style={{ marginTop: '20px' }}>
+    {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 X-axis values. Please remove 1.
+        </div>
+      )
+    }
+    
+    <Items>
+      <div className="chart-container">
+        <BarChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
+      </div>
+    </Items>
+    <div className='btn-container'>
+      <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+    </div>
+  </div>
+) : null}
+
+
+
+
             {xAxis.length > 0 && yAxis.length>0 && chartType === "area" && (
+
               <div style={{ marginTop: '20px' }}>
+                {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 X-axis values. Please remove 1.
+        </div>
+      )
+    }
                 <Items>
                   <div className="chart-container">
                     <AreaChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
@@ -289,6 +322,14 @@ function Dashboard() {
             )}
             {xAxis.length > 0 && yAxis.length>0 && chartType === "polarArea" && (
               <div style={{ marginTop: '20px' }}>
+                {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 X-axis values. Please remove 1.
+        </div>
+      )
+    }
                 <Items>
                   <div className="chart-container">
                     <PolarAreaChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
@@ -301,6 +342,14 @@ function Dashboard() {
             )}
             {xAxis.length > 0 && yAxis.length>0 && chartType === "textChart" && (
               <div style={{ marginTop: '20px' }}>
+                {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 X-axis values. Please remove 1.
+        </div>
+      )
+    }
                 <Items>
                   <div className="chart-container">
                     <TextChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />

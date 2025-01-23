@@ -51,9 +51,29 @@ function DashboardCharts() {
   }, [chartType]);
 
 
+  // const handleChartTypeChange = (selectedChartType) => {
+  //   dispatch(setChartType(selectedChartType));
+  // };
   const handleChartTypeChange = (selectedChartType) => {
     dispatch(setChartType(selectedChartType));
-  };
+  //   let message = `Chart of type ${selectedChartType} selected. Ensure proper axis selection.`;
+
+  //   // Custom message based on selected chart type and axis requirements
+  //   if (selectedChartType === 'bar' && xAxis?.length === 1 && yAxis?.length === 1) {
+  //     message = 'Select 1 for X-axis and 1 for Y-axis for Bar Chart creation.';
+  //   } else if (selectedChartType === 'duealChart' && xAxis?.length === 2 && yAxis?.length === 1) {
+  //     message = 'Select 2 for X-axis and 1 for Y-axis for Dual Chart creation.';
+  //   } else if (selectedChartType === 'duealbarChart' && xAxis?.length === 2 && yAxis?.length === 1) {
+  //     message = 'Select 2 for X-axis and 1 for Y-axis for Dual Bar Chart creation.';
+  //   } else if (selectedChartType === 'AiCharts') {
+  //     message = 'remove all x and y ';
+  //   } else {
+  //     message = `Chart of type ${selectedChartType} selected. Ensure proper axis selection.`;
+  //   }
+
+  //   // Show the alert message
+  //   alert(message);
+   };
 
   const isButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 1);
   const isdueaLButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 2);
