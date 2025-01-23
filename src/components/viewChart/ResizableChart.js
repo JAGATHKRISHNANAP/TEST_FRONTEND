@@ -39,6 +39,8 @@ import { ResizableBox } from 'react-resizable';
 import html2canvas from 'html2canvas';
 import fileDownload from 'js-file-download';
 import ImageIcon from '@mui/icons-material/Image';
+import AiMlChartData from '../ChartViews/AiMLChartsView';
+
 import CloseIcon from '@mui/icons-material/CloseRounded';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button ,Box} from '@mui/material';
 import TextChartView from '../ChartViews/textChartView';
@@ -67,7 +69,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const text_y_table = [data[1]];
   const text_y_database = data[10];
   const heading = data[7];
-
+  const [aiMlChartData,setAiMLChartData]=useState(null);
   const chartDataFromStore = useSelector((state) =>
     state.viewcharts.charts.find((chart) => chart.chart_id === chart_id)
   );
@@ -152,6 +154,10 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         setAiChartData(response.data['histogram_details']);
       }
 
+      if (data[5] === 'AiCharts') {
+        console.log("response['histogram_details']",response['histogram_details'])
+        setAiMLChartData(response['histogram_details']);
+      }
       const { categories, values, series1, series2 } = response.data;
 
       if (categories) {
@@ -227,6 +233,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         csvContent += `${heading},Value\n`;
         csvContent += `${text_y_xis},${result}\n`;
       }
+      
     } else {
       if (chartDataFromStore && chartDataFromStore.categories && chartDataFromStore.values) {
         csvContent += 'Category,Value\n';
@@ -340,6 +347,12 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
                 break;
       case 'sampleAitestChart':
         return <SampleAiTestChart data={aiChartData} />;
+      case 'AiCharts':
+          return <AiMlChartData data={aiMlChartData} />;
+        break;
+      // case 'treeHierarchy':
+      //   return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
+        // break;  
       case 'treeHierarchy':
         return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
         // break;  

@@ -328,7 +328,12 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
     const toolTipOptions = useSelector((state) => state.toolTip);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
-
+//    const xFontSize = useSelector((state) => state.toolTip.fontSizeX);
+//                const yFontSize= useSelector((state) => state.toolTip.fontSizeY);
+const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+    const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+    const valueColor= useSelector((state) => state.toolTip.valueColor);
     const [plotData, setPlotData] = useState({ categories, values });
     const [forecastData, setForecastData] = useState({ categories: [], values: [] });
     const [barClicked, setBarClicked] = useState(false);
@@ -455,9 +460,12 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000']
+                    // fontSize: '12px',
+                    // fontWeight: 400,
+                    // colors: ['#000']
+                    fontSize: `${xFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: categoryColor,
                 },
                 rotate: -45,
                 formatter: function (val) {
@@ -474,9 +482,12 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
             title: { text: `${yAxis}` },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    // fontSize: '12px',
+                    // fontWeight: 400,
+                    // colors: ['#000'],
+                    fontSize: `${yFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: [valueColor],
                 },
                 formatter: (value) => {
                     if (value >= 10000000) {

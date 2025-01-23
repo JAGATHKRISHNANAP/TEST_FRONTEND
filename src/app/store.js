@@ -36,6 +36,7 @@ import aichartReducer from '../features/aiCharts/aiChartSlice';
 
 
 const store = configureStore({
+  
   reducer: {
 
     csvFile: csvFileReducer,
@@ -78,6 +79,7 @@ const store = configureStore({
     aicharts: aichartReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(), // redux-thunk is included by default
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default store;

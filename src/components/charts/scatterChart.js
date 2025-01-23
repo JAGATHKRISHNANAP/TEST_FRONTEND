@@ -31,10 +31,15 @@ const LineChart = ({ categories, values, aggregation }) => {
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
+    //  const xFontSize = useSelector((state) => state.toolTip.fontSizeX);
+    //              const yFontSize= useSelector((state) => state.toolTip.fontSizeY);
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+    const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+    const valueColor= useSelector((state) => state.toolTip.valueColor);
     const contextMenuRef = useRef(null);
-
-        const [sortedCategories, setSortedCategories] = useState(categories);
-        const [sortedValues, setSortedValues] = useState(values);
+    const [sortedCategories, setSortedCategories] = useState(categories);
+    const [sortedValues, setSortedValues] = useState(values);
         // const contextMenuRef = useRef(null);
 
     // const handleClicked = async (event, chartContext, config) => {
@@ -190,9 +195,9 @@ const LineChart = ({ categories, values, aggregation }) => {
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000']
+                    fontSize: `${xFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: categoryColor,
                 }
             }
         },
@@ -202,9 +207,9 @@ const LineChart = ({ categories, values, aggregation }) => {
               },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    fontSize: `${yFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: [valueColor], // Use Redux state for label color
                 },
                 formatter: (value) => {
                     if (value >= 10000000) { // For values in crores (millions)

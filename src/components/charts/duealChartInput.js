@@ -341,33 +341,35 @@ function DuealChartInput() {
   console.log('excelCheckedPaths:', excelCheckedPaths);
   console.log('csvCheckedPaths:', csvCheckedPaths);
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
-  
+  const selectedUser = localStorage.getItem('selectedUser');
   const selectedTable = localStorage.getItem('selectedTable'); 
-  React.useEffect(() => {
-    if (xAxis && yAxis && aggregate && chartType) {
+  // React.useEffect(() => {
+  //   if (xAxis && yAxis && aggregate && chartType) {
       
-      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions }));
-    }
-  }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
-
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //     console.log("selectedTable",selectedTable)
-  //     const selectedUser = localStorage.getItem('selectedUser'); // Get connection type from localStorage
-  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-  //       params: { databaseName,selectedUser }
-  //     });
-  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-  //     dispatch(setFilterOptions(options));
-  //     dispatch(setCheckedOptions(options));
-  //     dispatch(setShowFilterDropdown(false));
-  //     dispatch(setSelectAllChecked(true));
-
-  //     localStorage.setItem('filterOptions', JSON.stringify(options));
-  //   } catch (error) {
-  //     console.error('Error fetching filter options:', error);
+  //     dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions ,selectedUser}));
   //   }
-  // };
+  // }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions,selectedUser, dispatch]);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (xAxis && yAxis && aggregate && chartType) {
+        dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
+      }
+    }, 3000); // 3 seconds interval
+  
+    // Cleanup function to clear the interval when the component unmounts or dependencies change
+    return () => clearInterval(interval);
+  }, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions,selectedUser, dispatch]);
+  
+
+  React.useEffect(() => {
+    if (xAxis.length > 0) {
+      // Automatically fetch filter options for the last added column
+      const lastAddedColumn = xAxis[xAxis.length - 1];
+      fetchFilterOptions(lastAddedColumn);
+    }
+  }, [xAxis]);
+  
+
   const fetchFilterOptions = async (columnName) => {
     try {
       console.log('fetchFilterOptions------------:', columnName);
@@ -390,14 +392,7 @@ function DuealChartInput() {
     }
   };
 
-  // const handleFilterIconClick = (columnName) => {
-  //   if (showFilterDropdown) {
-  //     dispatch(setShowFilterDropdown(false));
-  //   } else {
-  //     fetchFilterOptions(columnName);
-  //   }
-  // };
-
+ 
   const handleFilterIconClick = async (columnName) => {
     if (showFilterDropdown) {
       // Close the dropdown if it's already open
@@ -417,16 +412,6 @@ function DuealChartInput() {
     }
   }, [xAxis]); // Trigger whenever xAxis changes
     
-  // const handleCheckboxChange = (option) => {
-  //   let updatedOptions;
-  //   if (checkedOptions.includes(option)) {
-  //     updatedOptions = checkedOptions.filter(item => item !== option);
-  //   } else {
-  //     updatedOptions = [...checkedOptions, option];
-  //   }
-  //   dispatch(setCheckedOptions(updatedOptions));
-  //   dispatch(setSelectAllChecked(updatedOptions.length === filterOptions.length));
-  // };
   const handleCheckboxChange = (option) => {
     let updatedOptions;
 
@@ -455,99 +440,97 @@ function DuealChartInput() {
     event.preventDefault();
   };
 
-  // const handleDrop = (event, target) => {
-  //   event.preventDefault();
-  //   const columnName = event.dataTransfer.getData("columnName");
-  //   if (target === "x-axis") {
-  //     if (!xAxis.includes(columnName)) {
-  //       dispatch(setXAxis([...xAxis, columnName]));
-  //     }
-  //   } else if (target === "y-axis") {
-  //     if (!yAxis.includes(columnName)) {
-  //       dispatch(setYAxis([...yAxis, columnName]));
-  //     }
-  //   }
-  // };
 
-  const handleDrop = (event, target) => {
-    event.preventDefault();
-    const columnName = event.dataTransfer.getData("columnName");
-    const singleColumnChartTypes = ["bar", "pie", "scatter", "line", "area", "polarArea"]; // List of chart types that allow only one column on the X-axis
+//   const handleDrop = (event, target) => {
+//     event.preventDefault();
+//     const columnName = event.dataTransfer.getData("columnName");
+//     const singleColumnChartTypes = ["bar", "pie", "scatter", "line", "area", "polarArea"]; // List of chart types that allow only one column on the X-axis
   
-    // Disable the filter dropdown
-    setShowFilterDropdown(false);
+//     // Disable the filter dropdown
+//     setShowFilterDropdown(false);
 
-    if (target === "x-axis") {
-        // if (!xAxis.includes(columnName)) {
-        //     dispatch(setXAxis([...xAxis, columnName]));
-        //     fetchFilterOptions(columnName); // Fetch filter options for the dropped column
-            
-        // }
-        if (singleColumnChartTypes.includes(chartType)) {
-          // Replace the existing column for specified chart types
-          dispatch(setXAxis([columnName]));
-        } else {
-          // Allow multiple columns for other chart types
-          if (!xAxis.includes(columnName)) {
-            dispatch(setXAxis([...xAxis, columnName]));
-            fetchFilterOptions(columnName); // Fetch filter options for the dropped column
-          }
-        }
-    } else if (target === "y-axis") {
-        if (!yAxis.includes(columnName)) {
-            dispatch(setYAxis([...yAxis, columnName]));
-            // fetchFilterOptions(columnName); // Fetch filter options for the dropped column
-        }
-    }
+//     if (target === "x-axis") {
+        
+//         if (singleColumnChartTypes.includes(chartType)) {
+//           // Replace the existing column for specified chart types
+//           dispatch(setXAxis([columnName]));
+//         } else {
+//           // Allow multiple columns for other chart types
+//           if (!xAxis.includes(columnName)) {
+//             dispatch(setXAxis([...xAxis, columnName]));
+//             fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+//           }
+//         }
+//     } else if (target === "y-axis") {
+//         if (!yAxis.includes(columnName)) {
+//             dispatch(setYAxis([...yAxis, columnName]));
+//             // fetchFilterOptions(columnName); // Fetch filter options for the dropped column
+//         }
+//     }
+// };
+const handleDragStart = (event, columnName) => {
+  event.dataTransfer.setData("columnName", columnName);
+  event.dataTransfer.setData("origin", "x-axis"); // Specify origin
 };
+
+// const handleDrop = (event, target) => {
+//   event.preventDefault();
+//   const columnName = event.dataTransfer.getData("columnName");
+//   const origin = event.dataTransfer.getData("origin");
+
+//   if (target === "x-axis") {
+//     if (origin === "y-axis") {
+//       // Move column from Y-axis to X-axis
+//       dispatch(setYAxis(yAxis.filter((col) => col !== columnName)));
+//       dispatch(setXAxis([...xAxis, columnName]));
+//     } else if (!xAxis.includes(columnName)) {
+//       dispatch(setXAxis([...xAxis, columnName]));
+//     }
+//   } else if (target === "y-axis") {
+//     if (origin === "x-axis") {
+//       // Move column from X-axis to Y-axis
+//       dispatch(setXAxis(xAxis.filter((col) => col !== columnName)));
+//       dispatch(setYAxis([...yAxis, columnName]));
+//     } else if (!yAxis.includes(columnName)) {
+//       dispatch(setYAxis([...yAxis, columnName]));
+//     }
+//   }
+// };
+const handleDrop = (event, target) => {
+  event.preventDefault();
+  const columnName = event.dataTransfer.getData("columnName");
+  const origin = event.dataTransfer.getData("origin");
+
+  if (target === "x-axis") {
+    if (origin === "y-axis") {
+      // Move column from Y-axis to X-axis
+      dispatch(setYAxis(yAxis.filter((col) => col !== columnName)));
+      dispatch(setXAxis([...xAxis, columnName]));
+    } else if (!xAxis.includes(columnName)) {
+      // Add to X-axis and ensure it's removed from Y-axis if present
+      dispatch(setYAxis(yAxis.filter((col) => col !== columnName)));
+      dispatch(setXAxis([...xAxis, columnName]));
+    }
+  } else if (target === "y-axis") {
+    if (origin === "x-axis") {
+      // Move column from X-axis to Y-axis
+      dispatch(setXAxis(xAxis.filter((col) => col !== columnName)));
+      dispatch(setYAxis([...yAxis, columnName]));
+    } else if (!yAxis.includes(columnName)) {
+      // Add to Y-axis and ensure it's removed from X-axis if present
+      dispatch(setXAxis(xAxis.filter((col) => col !== columnName)));
+      dispatch(setYAxis([...yAxis, columnName]));
+    }
+  }
+};
+
+
 
   const removeColumnFromXAxis = (columnNameToRemove) => {
     const updatedXAxis = xAxis.filter(column => column !== columnNameToRemove);
     dispatch(setXAxis(updatedXAxis));
     dispatch(setShowFilterDropdown(false));
   };
-  // const startRecording = () => {
-  //   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  //     navigator.mediaDevices.getUserMedia({ audio: true })
-  //       .then((stream) => {
-  //         mediaRecorderRef.current = new MediaRecorder(stream);
-  //         audioChunksRef.current = [];
-
-  //         mediaRecorderRef.current.ondataavailable = (event) => {
-  //           audioChunksRef.current.push(event.data);
-  //         };
-
-  //         mediaRecorderRef.current.onstop = async () => {
-  //           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-  //           const audioUrl = URL.createObjectURL(audioBlob);
-  //           setAudioUrl(audioUrl);
-
-  //           try {
-  //             // Upload the audio file to the backend
-  //             const response = await uploadAudioFile(audioBlob);
-  //             console.log('Audio uploaded successfully:', response);
-  //           } catch (error) {
-  //             console.error('Error uploading audio:', error);
-  //           }
-  //         };
-
-  //         mediaRecorderRef.current.start();
-  //         setIsRecording(true);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error accessing microphone:', error);
-  //       });
-  //   }
-  // };
-
-  // const stopRecording = () => {
-  //   if (mediaRecorderRef.current) {
-  //     mediaRecorderRef.current.stop();
-  //     setIsRecording(false);
-  //   }
-  // };
-
-
   const startRecording = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ audio: true })
@@ -597,61 +580,6 @@ function DuealChartInput() {
       setIsRecording(false);
     }
   };
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      // Your periodic task here (e.g., update chart data or fetch new data)
-      if (xAxis.length > 0) {
-        const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
-        
-        fetchFilterOptions(columnName); // Fetch filter options for the dropped column
-      }
-    }, 1000); // This runs every 5 seconds (5000 ms)
-  
-    return () => clearInterval(interval); // Cleanup the interval when the component is unmounted or dependencies change
-  }, [xAxis]); // Trigger the effect whenever xAxis changes
-  
-
-  // const startRecording = () => {
-  //   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  //     navigator.mediaDevices.getUserMedia({ audio: true })
-  //       .then(stream => {
-  //         mediaRecorderRef.current = new MediaRecorder(stream);
-  //         audioChunksRef.current = [];
-
-  //         mediaRecorderRef.current.ondataavailable = (event) => {
-  //           audioChunksRef.current.push(event.data);
-  //         };
-
-  //         mediaRecorderRef.current.onstop = () => {
-  //           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-  //           const audioUrl = URL.createObjectURL(audioBlob);
-  //           setAudioUrl(audioUrl);
-
-  //           // Upload audio to backend
-  //           uploadAudioFile(audioBlob, selectedTable, databaseName)
-  //             .then(response => {
-  //               console.log('Audio uploaded successfully:', response.data);
-  //             })
-  //             .catch(error => {
-  //               console.error('Error uploading audio:', error);
-  //             });
-  //         };
-
-  //         mediaRecorderRef.current.start();
-  //         setIsRecording(true);
-  //       })
-  //       .catch(error => {
-  //         console.error('Error accessing microphone:', error);
-  //       });
-  //   }
-  // };
-
-  // const stopRecording = () => {
-  //   if (mediaRecorderRef.current) {
-  //     mediaRecorderRef.current.stop();
-  //     setIsRecording(false);
-  //   }
-  // };
 
   React.useEffect(() => {
     if (xAxis.length > 0) {
@@ -692,9 +620,9 @@ function DuealChartInput() {
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
                     <label htmlFor="x-axis-input">X-axis: </label>
                     <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "x-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '10px' }}>
-                      <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
+                      <div className="x-axis-columns"  style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {xAxis.map((column, index) => (
-                          <div key={index} className="x-axis-column" style={{maxHeight:"30px"}}>
+                          <div key={index} className="x-axis-column" draggable onDragStart={(event) => handleDragStart(event, column)} style={{maxHeight:"30px", cursor: "grab" }}>
                             <span>{column}</span>
                             <span className="filter-icon" onClick={() => handleFilterIconClick(column)} style={{cursor: "pointer"}}>
                               <FilterListIcon />
@@ -770,7 +698,9 @@ function DuealChartInput() {
                   <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
                   <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {yAxis.map((column, index) => (
-                          <div key={index} className="x-axis-column" style={{maxHeight:"30px"}}>
+                          <div key={index} className="y-axis-column" draggable
+                          onDragStart={(event) => handleDragStart(event, column)}
+                          style={{ maxHeight: "30px", cursor: "grab" }}>
                             <span>{column}</span>
                             <ClearIcon style={{ marginLeft: '10px' }} onClick={() => removeColumnFromYAxis(column)} />
                           </div>

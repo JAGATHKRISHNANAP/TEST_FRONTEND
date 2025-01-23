@@ -121,7 +121,14 @@ const AreaChart = ({ categories, values, aggregation }) => {
        
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
       const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-     const [popupVisible, setPopupVisible] = useState(false);  const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+     const [popupVisible, setPopupVisible] = useState(false); 
+   const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    //    const xFontSize = useSelector((state) => state.toolTip.fontSizeX);
+    //    const yFontSize= useSelector((state) => state.toolTip.fontSizeY);
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+        const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+       const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+       const valueColor= useSelector((state) => state.toolTip.valueColor);
 
 const contextMenuRef = useRef(null);
      
@@ -183,9 +190,9 @@ const contextMenuRef = useRef(null);
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
+                    fontSize: `${xFontSize}px`,
                     fontWeight: 400,
-                    colors: ['#000']
+                    colors: categoryColor
                 }
             }
         },

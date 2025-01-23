@@ -84,12 +84,12 @@ export const sendCategoryToBackend = async (category, xAxis, yAxis, tableName, a
 
 
 export const saveDataToDatabase = async ({
-  user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,  saveName,
+  user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,ai_chart_data, saveName,
 }) => {
 
 
   const response = await axios.post(`${API_URL}/save_data`, {
-    user_id,company_name,selectedUser,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),    saveName,
+    user_id,company_name,selectedUser,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),ai_chart_data,    saveName,
   });
   return response.data;
 };
@@ -640,15 +640,15 @@ export const fetchUsers = async (databaseName) => {
     throw error;
   }
 };
-// export const validateSaveName = async (saveName) => {
-//   try {
-//     const validationResponse = await axios.post(`${API_URL}/api/checkSaveName`, { saveName });
-//     return validationResponse.data.exists; // Return true if it exists, false otherwise
-//   } catch (error) {
-//     console.error("Error validating save name:", error);
-//     return false; // Assume it doesn't exist in case of an error
-//   }
-// };
+export const validateSaveName = async (saveName) => {
+  try {
+    const validationResponse = await axios.post(`${API_URL}/api/checkSaveName`, { saveName });
+    return validationResponse.data.exists; // Return true if it exists, false otherwise
+  } catch (error) {
+    console.error("Error validating save name:", error);
+    return false; // Assume it doesn't exist in case of an error
+  }
+};
 
 
 export const sendaidashboardClickedCategory = async (category,x_axis) => {
@@ -768,4 +768,50 @@ export const generateDualAxisChartApi = async ({
   });
 
   return response.data;
+};
+
+export const fetchColumnNames = async (selectedTable, databaseName,connectionType,selectedUser) => {
+  try {
+    const response = await fetch(`${API_URL}/column_names/${selectedTable}?databaseName=${databaseName}&connectionType=${connectionType}&selectedUser=${selectedUser}`);   
+      const data = await response.json();
+    
+    if (
+      data &&
+      data.numeric_columns &&
+      Array.isArray(data.numeric_columns) &&
+      data.text_columns &&
+      Array.isArray(data.text_columns)
+    ) {
+      return data;
+    } else {
+      console.error('Invalid data structure:', data);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching column information:', error);
+    throw error; // Rethrow error for handling in the calling code
+  }
+};
+
+export const sendChartDetails = async (data, position) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/send-chart-details`, {
+      chart_id: data[0],
+      tableName: data[1],
+      x_axis: data[2],
+      y_axis: data[3],
+      aggregate: data[4],
+      chart_type: data[5],
+      chart_heading: data[7],
+      filter_options: data[9],
+      databaseName: data[10],
+      position, // Send position to backend
+    });
+    console.log('Response ----------------from backend:', response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error('Error sending chart details to backend:', error);
+    throw error;
+  }
 };

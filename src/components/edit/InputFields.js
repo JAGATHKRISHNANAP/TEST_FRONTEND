@@ -574,13 +574,13 @@ const generateChart = async () => {
       console.error('Error fetching filter options:', error);
     }
   };
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchFilterOptions(xAxis);
-    }, 5000); 
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     fetchFilterOptions(xAxis);
+  //   }, 5000); 
 
-    return () => clearInterval(intervalId);
-  }, []); 
+  //   return () => clearInterval(intervalId);
+  // }, []); 
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
@@ -777,7 +777,16 @@ const generateChart = async () => {
                     <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>
                                           <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>
                                           <NativeSelect
-                                            style={{ marginRight: '10px' }} value={aggregate} onChange={(event) => dispatch(setAggregate(event.target.value))}
+                                            style={{ marginRight: '10px' }} value={aggregate} 
+                                            // onChange={(event) => dispatch(setAggregate(event.target.value))}
+                                            onChange={(event) => {
+                                              if (xAxis.length === 0) {
+                                                // Show an alert if no table is selected
+                                                alert("Please select a table before choosing an aggregation.");
+                                              } else {
+                                                // Proceed with updating the aggregation if a table is selected
+                                                dispatch(setAggregate(event.target.value));
+                                              }}}
                                             inputProps={{
                                               name: 'age',
                                               id: 'uncontrolled-native',
@@ -1035,19 +1044,7 @@ const generateChart = async () => {
                         )}
 
 
-             {xAxis.length > 0 && chartType === "animatedTreeChart" && (
-             <div style={{ marginTop: '20px' }}>
-                <Items>
-                  <div className="chart-container">
-                    <Treemap categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
-
-                  </div>
-                </Items>
-                <div className='btn-container'>
-                  <button className="save-button" onClick={saveDataToDatabase}>Save Chart</button>
-                </div>
-              </div>
-            )}
+            
             {xAxis.length > 0 && chartType === "wordCloud" && (
               <div style={{ marginTop: '20px' }}>
                 <Items>

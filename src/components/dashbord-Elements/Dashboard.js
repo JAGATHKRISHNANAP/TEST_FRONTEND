@@ -36,7 +36,7 @@ import BoxPlotChart from '../charts/BoxPlotChart';
 import {
   generateChart
 } from '../../features/Dashboard-Slice/chartSlice';
-import { saveDataToDatabase } from '../../utils/api';
+import { saveDataToDatabase,validateSaveName } from '../../utils/api';
 import Treemap from '../charts/animatedTreeChart';
 import AiChart from '../charts/aiChart';
 import WordCloudChart from '../charts/wordCloudChart';
@@ -64,7 +64,8 @@ function Dashboard() {
   const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
   const [company_name, setCompanyName] = React.useState(localStorage.getItem('company_name'));
   const [previousState, setPreviousState] = useState({ xAxis: '', yAxis: '', chartType: '' });
-
+  const data  = useSelector((state) => state.aicharts);
+  
   const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
   console.log('user_id:', user_id); 
   console.log('company_name:', company_name);
@@ -163,14 +164,23 @@ function Dashboard() {
       return;
     }
   
+    // try {
+    //   // Check if the saveName already exists
+    //   const validationResponse = await axios.post(`http://localhost:5000/api/checkSaveName`, { saveName });
+    //   if (validationResponse.data.exists) {
+    //     alert("Save name already exists. Please choose a different name.");
+    //     return;
+    //   }
+  
     try {
-      // Check if the saveName already exists
-      const validationResponse = await axios.post(`http://localhost:5000/api/checkSaveName`, { saveName });
-      if (validationResponse.data.exists) {
+      // Validate saveName
+      const isValid = await validateSaveName(saveName);
+      console.log("isValid",isValid)
+      if (isValid === true) {
         alert("Save name already exists. Please choose a different name.");
         return;
       }
-  
+      
       console.log('Sending data to save:', saveName);
       // Proceed to save the chart if saveName is unique
       const response = await saveDataToDatabase({
@@ -187,7 +197,9 @@ function Dashboard() {
         chart_heading,
         dashboardBarColor,
         checkedOptions,
+        ai_chart_data: data.data,
         saveName,
+
       });
   
       console.log('Data saved successfully:', response);

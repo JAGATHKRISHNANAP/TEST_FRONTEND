@@ -14,7 +14,7 @@ import TreeHierarchyView from '../ChartViews/treeHierarchyView';
 import TextChartView from '../ChartViews/textChartView';
 import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
 import SampleAiTestChart  from '../ChartViews/sampleAiTestChartView'; 
-
+import AiMlChartData from '../ChartViews/AiMLChartsView';
 import DashboardSingleValueChart from '../ChartViews/DashboardSingleValueChart';
 import WordCloud from '../ChartViews/wordCloudView'
 const DroppableArea = () => {
@@ -139,7 +139,9 @@ const DroppableArea = () => {
           {chart.chart_type === 'sampleAitestChart' && (
                                   <SampleAiTestChart data={chart.histogram_details} />
                                 )}
-
+{chart.chart_type === 'AiCharts' && (
+                                  <AiMlChartData data={chart.histogram_details} />  
+                                )} 
           {chart.chart_type === 'mapchart' && (
               <MapViewChart
                 categories={chart.categories}

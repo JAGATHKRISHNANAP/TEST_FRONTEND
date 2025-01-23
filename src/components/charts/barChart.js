@@ -335,7 +335,10 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
     const [sortedCategories, setSortedCategories] = useState(categories);
     const [sortedValues, setSortedValues] = useState(values);
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
-
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+    const categoryColor = useSelector((state) => state.toolTip.categoryColor || "#000000");
+    const valueColor= useSelector((state) => state.toolTip.valueColor || "#000000");
     const contextMenuRef = useRef(null);
 
     useEffect(() => {
@@ -478,9 +481,12 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
+                    // fontSize: '12px',
+                    // fontWeight: 400,
+                    // colors: ['#000']
+                    fontSize: `${xFontSize}px`,
                     fontWeight: 400,
-                    colors: ['#000']
+                    colors: categoryColor
                 },
                 rotate: -45,
                 formatter: function (val) {
@@ -501,9 +507,13 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
               },
             labels: {
                 style: {
-                    fontSize: '12px',
+                    fontSize: `${yFontSize}px`,
                     fontWeight: 400,
-                    colors: ['#000'],
+                    colors: valueColor,
+                    // fontSize: '12px',
+                    // fontWeight: 400,
+                    // colors: ['#000'],
+                    
                 },
                 formatter: (value) => {
                     if (value >= 10000000) return (value / 10000000).toFixed(1) + 'M';

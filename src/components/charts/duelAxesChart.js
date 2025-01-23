@@ -286,7 +286,10 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
     const contextMenuRef = useRef(null);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
-
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+    const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+    const valueColor= useSelector((state) => state.toolTip.valueColor);
 
         const handleClicked = async (event, chartContext, config) => {
             const clickedCategoryIndex = config.dataPointIndex;
@@ -349,9 +352,9 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
+                    fontSize:`${xFontSize}px` ,
                     fontWeight: 400,
-                    colors: ['#000']
+                    colors: categoryColor
                 }
             }
         },
@@ -364,9 +367,9 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
         },
         labels: {
             style: {
-                fontSize: '12px',
+                fontSize:`${yFontSize}px`,
                 fontWeight: 400,
-                colors: ['#000'],
+                colors: valueColor,
             },
             formatter: (value) => {
                 if (value >= 10000000) {
@@ -389,9 +392,9 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
         },
         labels: {
             style: {
-                fontSize: '12px',
+                fontSize: `${yFontSize}px`,
                 fontWeight: 400,
-                colors: ['#000'],
+                colors: valueColor,
             },
             formatter: (value) => {
                 if (value >= 10000000) {

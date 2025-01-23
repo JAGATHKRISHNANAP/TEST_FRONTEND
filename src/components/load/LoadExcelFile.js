@@ -930,14 +930,6 @@ const LoadExcelFile = () => {
   };
 
 
-  // // Debounced search function to optimize API calls
-  // const handleSearchChange = debounce((event) => {
-  //   setSearchQuery(event.target.value);
-  // }, 500);
-  // const handleSearchChange = (event) => {
-  //   const query = event.target.value;
-  //   debouncedSearch(query); // Call debounced function
-  // };
 
   const filteredTableNames = tableNames.filter((tableName) =>
     tableName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -991,55 +983,7 @@ const LoadExcelFile = () => {
 
           <Grid container spacing={4} sx={{ marginTop: '20px' }} justifyContent="center">
             <Grid item xs={12} md={12}>
-              {/* <FormControl fullWidth>
-                <InputLabel id="table-select-label"></InputLabel>
-                <Select
-                  labelId="table-select-label"
-                  value={selectedTable}
-                  onChange={handleTableSelect}
-                  displayEmpty
-                  renderValue={(selected) => selected}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        maxHeight: 300,
-                      },
-                    },
-                  }}
-                  sx={{
-                    backgroundColor: '#f9f9f9',
-                    borderRadius: '10px',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                  }}
-                >
-                  <MenuItem disableRipple>
-                    <TextField
-                      placeholder="Search..."
-                      required
-                      fullWidth
-                      variant="outlined"
-                      value={searchQuery}
-                      onChange={handleSearchChange} // Apply debounced search
-                      autoFocus
-                      onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing on search
-                      sx={{
-                        marginBottom: '10px',
-                        backgroundColor: '#ffffff',
-                        borderRadius: '8px',
-                      }}
-                    />
-                  </MenuItem>
-                  {filteredTableNames.length > 0 ? (
-                    filteredTableNames.map((tableName) => (
-                      <MenuItem key={tableName} value={tableName}>
-                        {tableName}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem disabled>No matching tables found</MenuItem>
-                  )}
-                </Select>
-              </FormControl> */}
+              
               <FormControl fullWidth>
   <InputLabel id="table-select-label"></InputLabel>
   <Select
@@ -1066,20 +1010,7 @@ const LoadExcelFile = () => {
   >
     {/* Search Field as the first item */}
     <MenuItem disableRipple>
-      {/* <TextField
-        placeholder="Search..."
-        fullWidth
-        variant="outlined"
-        value={searchQuery} // Always display the search query here
-        onChange={handleSearchChange}
-        autoFocus
-        onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing
-        sx={{
-          marginBottom: '10px',
-          backgroundColor: '#ffffff',
-          borderRadius: '8px',
-        }}
-      /> */}
+      
       <TextField
   placeholder="Search..."
   required
