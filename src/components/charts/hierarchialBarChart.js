@@ -200,7 +200,11 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [popupVisible, setPopupVisible] = useState(false);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
-       
+     const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+        const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+        const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+        const valueColor= useSelector((state) => state.toolTip.valueColor);
+    
         const contextMenuRef = useRef(null);
     useEffect(() => {
         setChartData({ categories, values });
@@ -208,33 +212,33 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
 
     
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    }
+    // const handleContextMenu = (event) => {
+    //     event.preventDefault();
+    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
+    //     setContextMenuVisible(true);
+    // }
 
-    const handleClickOutside = (event) => {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-            setContextMenuVisible(false);
-        }
-    };
+    // const handleClickOutside = (event) => {
+    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+    //         setContextMenuVisible(false);
+    //     }
+    // };
 
-    const handleShowPopup = () => {
-        setPopupVisible(true);
-        setContextMenuVisible(false);
-    };
+    // const handleShowPopup = () => {
+    //     setPopupVisible(true);
+    //     setContextMenuVisible(false);
+    // };
 
-    const handleClosePopup = () => {
-        setPopupVisible(false);
-    };
+    // const handleClosePopup = () => {
+    //     setPopupVisible(false);
+    // };
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside);
+    //     };
+    // }, []);
 
     const handleClicked = async (event, clickedCategoryIndex) => {
         const clickedCategory = chartData.categories[clickedCategoryIndex];
@@ -303,14 +307,29 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         const g = svg.append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        g.append('g')
-            .call(d3.axisTop(x).ticks(5))
-            .selectAll('text')
-            .attr('transform', 'rotate(-45)')
-            .style('text-anchor', 'start');
+        // g.append('g')
+        //     .call(d3.axisTop(x).ticks(5))
+        //     .selectAll('text')
+        //     .attr('transform', 'rotate(-45)')
+        //     .style('text-anchor', 'start');
 
+        // g.append('g')
+        //     .call(d3.axisLeft(y).tickSizeOuter(0));
         g.append('g')
-            .call(d3.axisLeft(y).tickSizeOuter(0));
+        .call(d3.axisTop(x).ticks(5))
+        .selectAll('text')
+        .attr('transform', 'rotate(-45)')
+        .style('text-anchor', 'start')
+        .style('font-size', `${xFontSize}px`) // Dynamic font size for x-axis
+        .style('fill', categoryColor); // Dynamic color for x-axis
+
+    // Y Axis with dynamic styles
+    g.append('g')
+        .call(d3.axisLeft(y).tickSizeOuter(0))
+        .selectAll('text')
+        .style('font-size', `${yFontSize}px`) // Dynamic font size for y-axis
+        .style('fill', valueColor); // Dynamic color for y-axis
+
 
         g.selectAll('rect')
             .data(sortedData, (d) => d.category)
@@ -372,17 +391,17 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
                         minConstraints={[300, 300]}
                         maxConstraints={[1200, 800]}
                         onResize={onResize}
-                        onContextMenu={handleContextMenu}
+                        // onContextMenu={handleContextMenu}
                     ><div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
                         <svg ref={svgRef} width="100%" height="100%" />
                         <div ref={tooltipRef} className="tooltip"></div>
                     </ResizableBox>
                     
-
+{/* 
             {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+            {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
                 </div>
             </div>
         </div>

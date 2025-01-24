@@ -602,6 +602,10 @@ const LoadDbFile = () => {
       
       localStorage.setItem('selectedUser', selectedUser); 
       localStorage.setItem('connectionType', 'external'); 
+      localStorage.removeItem('xAxis');
+      localStorage.removeItem('yAxis');
+      localStorage.removeItem('aggregate');
+      localStorage.removeItem('selectedChartType')
       const fetchTables = async () => {
         setIsLoading(true);
         try {

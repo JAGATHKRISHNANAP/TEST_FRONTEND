@@ -663,6 +663,10 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [sortedCategories, setSortedCategories] = useState(categories);
     const [sortedValues, setSortedValues] = useState(values);
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+    const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+    const valueColor= useSelector((state) => state.toolTip.valueColor);
     const contextMenuRef = useRef(null);
 
     useEffect(() => {
@@ -709,33 +713,33 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         }
       };
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    };
+    // const handleContextMenu = (event) => {
+    //     event.preventDefault();
+    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
+    //     setContextMenuVisible(true);
+    // };
 
-    const handleClickOutside = (event) => {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-            setContextMenuVisible(false);
-        }
-    };
+    // const handleClickOutside = (event) => {
+    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+    //         setContextMenuVisible(false);
+    //     }
+    // };
 
-    const handleShowPopup = () => {
-        setPopupVisible(true);
-        setContextMenuVisible(false);
-    };
+    // const handleShowPopup = () => {
+    //     setPopupVisible(true);
+    //     setContextMenuVisible(false);
+    // };
 
-    const handleClosePopup = () => {
-        setPopupVisible(false);
-    };
+    // const handleClosePopup = () => {
+    //     setPopupVisible(false);
+    // };
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside);
+    //     };
+    // }, []);
 
     const generateColors = (numColors) => {
         const colors = [];
@@ -791,9 +795,9 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000']
+                    fontSize: `${xFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: categoryColor,
                 },
                 rotate: -45,
                 formatter: function (val) {
@@ -805,8 +809,11 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                     return val.length > 10 ? val.substring(0, 10) + "..." : val;
                 }
             },
-            
+            scrollbar: {
+                enabled: sortedCategories.length > 15, // Enable scrolling if categories exceed 15
+            },
             tickPlacement: 'on',
+           
         },
         yaxis: {
             title: {
@@ -814,9 +821,9 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
               },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    fontSize: `${yFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: [valueColor],
                 },
                 formatter: (value) => {
                     if (value >= 10000000) return (value / 10000000).toFixed(1) + 'M';
@@ -834,6 +841,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                     hideOverflowingLabels: true
                 },
                 barHeight: '80%',
+                
             }
         },
         title: {
@@ -938,7 +946,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         <div className="app">
             <div className="row">
                 <div className="mixed-chart">
-                    <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
+                    <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
                         <div className="chart-title">{customHeadings}</div>
                         <Chart
                             options={options}
@@ -951,7 +959,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 </div>
 
             </div>
-                      {contextMenuVisible && (
+                      {/* {contextMenuVisible && (
                     <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
                 )}
     
@@ -959,7 +967,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                     <div>
                         <CustomToolTip onClose={handleClosePopup} />
                     </div>
-                )}
+                )} */}
         </div>
     );
 };

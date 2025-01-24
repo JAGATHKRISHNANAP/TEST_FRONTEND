@@ -13,7 +13,7 @@ const MapChart = lazy(() => import('../ChartViews/mapChartView'));
 
 const AllCharts = ({ data: initialData = [] }) => {
     const [data, setChartData] = useState([]);
-    console.log("data",data)
+    // console.log("data",data)
     useEffect(() => {
         if (initialData && Array.isArray(initialData) && initialData.length > 0) {
             setChartData(initialData[0] || []);

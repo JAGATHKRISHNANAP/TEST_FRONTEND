@@ -302,7 +302,7 @@
 // export default DuealChartInput;
 
 import React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef,useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -343,23 +343,37 @@ function DuealChartInput() {
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   const selectedUser = localStorage.getItem('selectedUser');
   const selectedTable = localStorage.getItem('selectedTable'); 
-  // React.useEffect(() => {
-  //   if (xAxis && yAxis && aggregate && chartType) {
-      
-  //     dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions ,selectedUser}));
-  //   }
-  // }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions,selectedUser, dispatch]);
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      if (xAxis && yAxis && aggregate && chartType) {
-        dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
-      }
-    }, 3000); // 3 seconds interval
+    if (xAxis && yAxis && aggregate && chartType) {
+      
+      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions ,selectedUser}));
+    }
+  }, [SelectedTable,xAxis, yAxis, aggregate, chartType, checkedOptions,selectedUser, dispatch]);
+  // React.useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (xAxis && yAxis && aggregate && chartType) {
+  //       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
+  //     }
+  //   }, 3000); // 3 seconds interval
   
-    // Cleanup function to clear the interval when the component unmounts or dependencies change
-    return () => clearInterval(interval);
-  }, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions,selectedUser, dispatch]);
+  //   // Cleanup function to clear the interval when the component unmounts or dependencies change
+  //   return () => clearInterval(interval);
+  // }, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions,selectedUser, dispatch]);
   
+
+  useEffect(() => {
+    const savedXAxis = JSON.parse(localStorage.getItem('xAxis'));
+    const savedYAxis = JSON.parse(localStorage.getItem('yAxis'));
+    const savedAggregate = JSON.parse(localStorage.getItem('aggregate'));
+    if (savedAggregate) dispatch(setAggregate(savedAggregate));
+    if (savedXAxis) dispatch(setXAxis(savedXAxis));
+    if (savedYAxis) dispatch(setYAxis(savedYAxis));
+  }, [dispatch]);
+  React.useEffect(() => {
+    localStorage.setItem('xAxis', JSON.stringify(xAxis));
+    localStorage.setItem('yAxis', JSON.stringify(yAxis));
+    localStorage.setItem('aggregate', JSON.stringify(aggregate));
+  }, [xAxis, yAxis, aggregate,chartType]);
 
   React.useEffect(() => {
     if (xAxis.length > 0) {

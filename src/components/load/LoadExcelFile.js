@@ -904,6 +904,10 @@ const LoadExcelFile = () => {
   useEffect(() => {
     if (selectedTable) {
       localStorage.setItem('selectedTable',selectedTable); 
+      localStorage.removeItem('xAxis');
+      localStorage.removeItem('yAxis');
+      localStorage.removeItem('aggregate');
+      localStorage.removeItem('selectedChartType')
       const fetchTableDetails = async () => {
         setIsLoading(true);
         try {

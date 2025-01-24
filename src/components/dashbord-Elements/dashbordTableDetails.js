@@ -116,6 +116,9 @@ function DashboardTableDetails({ handleTableChange }) {
     const tableNameFromStorage = localStorage.getItem('selectedTableName');
     if (tableNameFromStorage) {
       setSelectedTableName(tableNameFromStorage);
+      setChecked(true); // Automatically check the checkbox
+    fetchColumnInfo(tableNameFromStorage); // Fetch columns when a table is already selected
+ 
     }
   }, []);
 

@@ -133,33 +133,33 @@ const AreaChart = ({ categories, values, aggregation }) => {
 const contextMenuRef = useRef(null);
      
      
-       const handleContextMenu = (event) => {
-         event.preventDefault();
-         setContextMenuPosition({ x: event.pageX, y: event.pageY });
-         setContextMenuVisible(true);
-       };
+    //    const handleContextMenu = (event) => {
+    //      event.preventDefault();
+    //      setContextMenuPosition({ x: event.pageX, y: event.pageY });
+    //      setContextMenuVisible(true);
+    //    };
      
-       const handleClickOutside = (event) => {
-         if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-             setContextMenuVisible(false);
-         }
-       };
+    //    const handleClickOutside = (event) => {
+    //      if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+    //          setContextMenuVisible(false);
+    //      }
+    //    };
      
-       const handleShowPopup = () => {
-         setPopupVisible(true);
-         setContextMenuVisible(false); // Hide context menu when showing popup
-       };
+    //    const handleShowPopup = () => {
+    //      setPopupVisible(true);
+    //      setContextMenuVisible(false); // Hide context menu when showing popup
+    //    };
      
-       const handleClosePopup = () => {
-         setPopupVisible(false);
-       };
+    //    const handleClosePopup = () => {
+    //      setPopupVisible(false);
+    //    };
      
-       useEffect(() => {
-         document.addEventListener('click', handleClickOutside);
-         return () => {
-           document.removeEventListener('click', handleClickOutside);
-         };
-       }, []);
+    //    useEffect(() => {
+    //      document.addEventListener('click', handleClickOutside);
+    //      return () => {
+    //        document.removeEventListener('click', handleClickOutside);
+    //      };
+    //    }, []);
     const options = {
         chart: {
             type: 'area',
@@ -202,9 +202,9 @@ const contextMenuRef = useRef(null);
               },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    fontSize: `${yFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: [valueColor],
                 },
                 formatter: (value) => {
                     if (value >= 10000000) { // For values in crores (millions)
@@ -254,7 +254,7 @@ const contextMenuRef = useRef(null);
             <div className="row">
                 <div className="area-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}> */}
-                     <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu} >
+                     <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]}  >
                      <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3>
                      </div>
                         <Chart
@@ -270,9 +270,9 @@ const contextMenuRef = useRef(null);
                     {/* Additional content */}
                 </div>
             </div>
-            {contextMenuVisible && (
+            {/* {contextMenuVisible && (
         <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
-      )}
+      )} */}
       {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
       {/* {barClicked && <DrillPieChart
           categories={plotData.categories}
@@ -282,13 +282,13 @@ const contextMenuRef = useRef(null);
           yAxis={yAxis}
           selectedTable={selectedTable}
         />} */}
-              {popupVisible && (
+              {/* {popupVisible && (
         <Draggable>
           <div>
             <CustomToolTip onClose={handleClosePopup} />
           </div>
         </Draggable>
-      )}
+      )} */}
     </div>
     );
 };

@@ -45,7 +45,12 @@ function DashboardCharts() {
   console.log("yAxis:", xAxis);
   console.log("yAxis:", yAxis);
 
-  
+  useEffect(() => {
+    const savedChartType = localStorage.getItem('selectedChartType');
+    if (savedChartType) {
+      dispatch(setChartType(savedChartType));
+    }
+  }, [dispatch]);
   useEffect(() => {
       console.log("chartType:", chartType);
   }, [chartType]);
@@ -56,6 +61,8 @@ function DashboardCharts() {
   // };
   const handleChartTypeChange = (selectedChartType) => {
     dispatch(setChartType(selectedChartType));
+    localStorage.setItem('selectedChartType', selectedChartType); // Save to local storage
+
   //   let message = `Chart of type ${selectedChartType} selected. Ensure proper axis selection.`;
 
   //   // Custom message based on selected chart type and axis requirements

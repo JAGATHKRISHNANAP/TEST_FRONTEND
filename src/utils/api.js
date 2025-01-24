@@ -793,7 +793,7 @@ export const fetchColumnNames = async (selectedTable, databaseName,connectionTyp
   }
 };
 
-export const sendChartDetails = async (data, position) => {
+export const sendChartDetails = async (data, position,selectedUser) => {
   try {
     const response = await axios.post(`${API_URL}/api/send-chart-details`, {
       chart_id: data[0],
@@ -805,6 +805,7 @@ export const sendChartDetails = async (data, position) => {
       chart_heading: data[7],
       filter_options: data[9],
       databaseName: data[10],
+      selectedUser,
       position, // Send position to backend
     });
     console.log('Response ----------------from backend:', response.data);

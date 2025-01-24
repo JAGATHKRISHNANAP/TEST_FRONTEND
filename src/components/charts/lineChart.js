@@ -365,26 +365,26 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
         }
     };
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    };
+    // const handleContextMenu = (event) => {
+    //     event.preventDefault();
+    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
+    //     setContextMenuVisible(true);
+    // };
 
-    const handleClickOutside = (event) => {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-            setContextMenuVisible(false);
-        }
-    };
+    // const handleClickOutside = (event) => {
+    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+    //         setContextMenuVisible(false);
+    //     }
+    // };
 
-    const handleShowPopup = () => {
-        setPopupVisible(true);
-        setContextMenuVisible(false);
-    };
+    // const handleShowPopup = () => {
+    //     setPopupVisible(true);
+    //     setContextMenuVisible(false);
+    // };
 
-    const handleClosePopup = () => {
-        setPopupVisible(false);
-    };
+    // const handleClosePopup = () => {
+    //     setPopupVisible(false);
+    // };
 
     // const isDateCategory = (category) => {
     //     const datePattern1 = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
@@ -403,12 +403,12 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
     // const areCategoriesDates = (categories || []).some(isDateCategory);
 
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside);
+    //     };
+    // }, []);
 
     const handlePredictData = async () => {
         try {
@@ -531,7 +531,7 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
             <div style={{ display: "flex", gap: "20px" }}>
             {/* Parent Line Chart */}
             <div style={{ flex: 1 }}>
-                <ResizableBox width={600} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
+                <ResizableBox width={600} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
                 <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>               
                     <Chart options={options} series={[{ name: aggregation || 'Series', data: values || [] }]} type="line" width="100%" height="100%" />
                 </ResizableBox>
@@ -589,7 +589,7 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
                         </Button>
                     </Box>
                 </Modal>
-                {contextMenuVisible && (
+                {/* {contextMenuVisible && (
                     <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
                 )}
     
@@ -597,7 +597,7 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
                     <div>
                         <CustomToolTip onClose={handleClosePopup} />
                     </div>
-                )}
+                )} */}
             </div>
         );
     };

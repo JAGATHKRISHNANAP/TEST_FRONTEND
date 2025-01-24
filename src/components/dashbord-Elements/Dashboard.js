@@ -32,7 +32,7 @@ import DuelBarChart from '../charts/duelBarChart';
 import BoxPlot from '../charts/boxPlot';
 import SampleAiTestChart from '../charts/sampleAiTestChart';
 import BoxPlotChart from '../charts/BoxPlotChart';
-
+import DashboardFilter from'./dashboardFilter';
 import {
   generateChart
 } from '../../features/Dashboard-Slice/chartSlice';
@@ -94,15 +94,15 @@ function Dashboard() {
     e.preventDefault();
     e.returnValue = '';  // This triggers a confirmation prompt
   };
-  useEffect(() => {
-    // Listen for the beforeunload event
-    window.addEventListener('beforeunload', preventReload);
+  // useEffect(() => {
+  //   // Listen for the beforeunload event
+  //   window.addEventListener('beforeunload', preventReload);
     
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener('beforeunload', preventReload);
-    };
-  }, []);
+  //   // Cleanup the event listener on component unmount
+  //   return () => {
+  //     window.removeEventListener('beforeunload', preventReload);
+  //   };
+  // }, []);
   // const handleSaveButtonClick = () => {
   //   setSaveName('');
   //   setOpen(true);
@@ -516,9 +516,8 @@ function Dashboard() {
               <DashboardCharts />
             </Item>
             {xAxis.length > 0 && (
-              <div style={{ marginTop: '20px',marginRight:'25px'}}>
-                {/* <Item> */}
-                  <ChartColor />
+              <div style={{ marginTop: '20px',marginRight:'5px'}}>
+                {/* <Item> */} <DashboardFilter />
                 {/* </Item> */}
               </div>
             )}

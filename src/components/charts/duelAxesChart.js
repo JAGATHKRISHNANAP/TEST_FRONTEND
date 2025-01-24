@@ -311,33 +311,33 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
           };
     
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    };
+    // const handleContextMenu = (event) => {
+    //     event.preventDefault();
+    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
+    //     setContextMenuVisible(true);
+    // };
 
-    const handleClickOutside = (event) => {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-            setContextMenuVisible(false);
-        }
-    };
+    // const handleClickOutside = (event) => {
+    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+    //         setContextMenuVisible(false);
+    //     }
+    // };
 
-    const handleShowPopup = () => {
-        setPopupVisible(true);
-        setContextMenuVisible(false);
-    };
+    // const handleShowPopup = () => {
+    //     setPopupVisible(true);
+    //     setContextMenuVisible(false);
+    // };
 
-    const handleClosePopup = () => {
-        setPopupVisible(false);
-    };
+    // const handleClosePopup = () => {
+    //     setPopupVisible(false);
+    // };
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener('click', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('click', handleClickOutside);
+    //     };
+    // }, []);
 
     const options = {
         chart: {
@@ -483,7 +483,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                
                
                 {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}> */}
-                <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]} onContextMenu={handleContextMenu}>
+                <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]} >
                 <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
 
                         <Chart
@@ -497,7 +497,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                 </div>
                 
             </div>
-            {contextMenuVisible && (
+            {/* {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
                           {popupVisible && (
@@ -505,8 +505,8 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
           <div>
             <CustomToolTip onClose={handleClosePopup} />
           </div>
-        </Draggable>
-      )}
+        </Draggable> */}
+      {/* )} */}
         </div>
     );
 };

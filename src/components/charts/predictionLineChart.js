@@ -3,8 +3,13 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
+import { useDispatch, useSelector } from "react-redux";
 
 const PredictedLineChart = ({ forecastData, xAxis, yAxis }) => {
+  const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+  const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+  const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+  const valueColor= useSelector((state) => state.toolTip.valueColor);
   const forecastOptions = {
     chart: {
       toolbar: {
@@ -16,15 +21,15 @@ const PredictedLineChart = ({ forecastData, xAxis, yAxis }) => {
     xaxis: {
       categories: forecastData.categories || [],
       title: { text: `${xAxis}` },
-      labels: { style: { fontSize: "12px", colors: ["#000"] } },
+      labels: { style: { fontSize: `${xFontSize}px`, colors: [categoryColor] } },
     },
     yaxis: {
       title: { text: `${yAxis}` },
       labels: {
         style: {
-          fontSize: "12px",
+          fontSize: `${yFontSize}px`,
           fontWeight: 400,
-          colors: ["#000"],
+          colors: [valueColor],
         },
         formatter: (value) => {
           if (value >= 10000000) {
