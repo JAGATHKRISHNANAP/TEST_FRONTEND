@@ -324,6 +324,11 @@ export const fetchHelloData = async () => {
 
 
 
+
+export const createRole = async (roleData) => {
+  const response = await axios.post(`${API_URL}/updateroles`, roleData);
+  return response.data;
+};
 export const AichartData = async () => {
   try {
     const response = await axios.get(`${API_URL}/aichartdata`);

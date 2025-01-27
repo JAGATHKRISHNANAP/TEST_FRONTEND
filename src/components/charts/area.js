@@ -172,9 +172,9 @@ const contextMenuRef = useRef(null);
                 
                     download: true,
                     selection: true,
-                    zoom: true,
-                    zoomin: true,
-                    zoomout: true,
+                    zoom: false,
+                    zoomin: false,
+                    zoomout: false,
                     pan: true,
                     reset: true,
                 },
@@ -262,7 +262,7 @@ const contextMenuRef = useRef(null);
                             series={series}
                             type="area"
                             width="100%"
-                            height="100%"
+                            height="auto"
                         />
                     </ResizableBox>
                 </div>

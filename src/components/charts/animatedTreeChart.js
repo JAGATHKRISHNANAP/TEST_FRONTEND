@@ -209,12 +209,12 @@ const Treemap = ({ categories = [], values = [] }) => {
                 <svg ref={svgRef}></svg>
                 <div ref={tooltipRef} className="maptooltip" style={{ display: 'none', position: 'absolute', opacity: 0 }}></div>
             </ResizableBox>
-            <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+            {/* <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div> */}
 
-            {contextMenuVisible && (
+            {/* {contextMenuVisible && (
                 <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
             )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+            {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
         </div>
     );
 };

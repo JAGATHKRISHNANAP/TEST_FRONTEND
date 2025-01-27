@@ -961,7 +961,7 @@ const LoadExcelFile = () => {
   };
   // Limit the table details to the first 5 rows
   const limitedTableDetails = tableDetails ? tableDetails.slice(0, 5) : [];
-
+console.log("limitedTableDetails",limitedTableDetails)
   return (
     <React.Fragment>
      

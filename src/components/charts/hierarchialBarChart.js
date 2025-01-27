@@ -194,7 +194,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const tooltipRef = useRef(null);
     const [chartData, setChartData] = useState({ categories, values });
     const [drillStack, setDrillStack] = useState([]);
-    const [chartDimensions, setChartDimensions] = useState({ width: 500, height: 300 });
+    const [chartDimensions, setChartDimensions] = useState({ width: 600, height: 400 });
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
@@ -393,7 +393,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
                         onResize={onResize}
                         // onContextMenu={handleContextMenu}
                     ><div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
-                        <svg ref={svgRef} width="100%" height="100%" />
+                        <svg ref={svgRef} width="auto" height="auto" />
                         <div ref={tooltipRef} className="tooltip"></div>
                     </ResizableBox>
                     

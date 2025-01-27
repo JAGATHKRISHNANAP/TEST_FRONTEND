@@ -17,6 +17,7 @@ import { SketchPicker } from 'react-color'; // Import the Sketch color picker
 import PaletteIcon from '@mui/icons-material/Palette'; // Icon for the color picker toggle button
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { BiSolidFileJson } from "react-icons/bi";
+import UserProfile from "../components/profile/userProfile";
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
@@ -181,10 +182,12 @@ function Navbar() {
           )}
 
           {isLoggedIn && (
-            <Typography variant="body2" sx={{ height: '10px', marginLeft: 2, display: 'flex', alignItems: 'center' }}>
-              <Avatar src="/broken-image.jpg" sx={{ width: '30px', height: '30px', border: '2px solid white', backgroundColor: appBarColor, color: 'white', marginRight: 1 }} />
-              Hello, {username}
-            </Typography>
+            // <Typography variant="body2" sx={{ height: '10px', marginLeft: 2, display: 'flex', alignItems: 'center' }}>
+            //   <Avatar src="/broken-image.jpg" sx={{ width: '30px', height: '30px', border: '2px solid white', backgroundColor: appBarColor, color: 'white', marginRight: 1 }} />
+            //   Hello, {username}
+            // </Typography>
+        
+              <UserProfile username={username} appBarColor={appBarColor} />
           )}
 
           <Box sx={{ flexGrow: 1 }} />
@@ -229,8 +232,9 @@ function Navbar() {
                 anchorEl={anchorEl}
                 open={openMenu}
                 // onClose={handleMenuClose}
-                onClose={handleMenuClose}
+                // onClose={handleMenuClose}
                 PaperProps={{
+                  onMouseLeave: handleMenuClose, 
                   sx: {
                     width: menuWidth || 'auto',
                     backgroundColor: '#ffffff',
@@ -327,8 +331,9 @@ onClick={() => handleNavigation('/load_db')}
           id="design-menu"
           anchorEl={designMenuAnchorEl}
           open={openDesignMenu}
-          onClose={handleDesignMenuClose}
+          // onClose={handleDesignMenuClose}
           PaperProps={{
+            onMouseLeave: handleDesignMenuClose, 
             sx: {
               width: menuWidth || 'auto',
               backgroundColor: '#ffffff',
@@ -380,8 +385,9 @@ onClick={() => handleNavigation('/load_db')}
                 id="view-menu"
                 anchorEl={viewMenuAnchorEl}
                 open={openViewMenu}
-                onClose={handleViewMenuClose}
+                // onClose={handleViewMenuClose}
                 PaperProps={{
+                  onMouseLeave: handleViewMenuClose, 
                   sx: {
                     width: menuWidth || 'auto',
                     backgroundColor: '#ffffff',

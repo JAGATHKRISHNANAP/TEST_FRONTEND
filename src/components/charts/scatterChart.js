@@ -287,7 +287,7 @@ const LineChart = ({ categories, values, aggregation }) => {
                             series={series}
                             type="scatter"
                             width="100%"
-                            height="100%"
+                            height="auto"
                         />
                     </ResizableBox>
                 </div>

@@ -25,6 +25,7 @@ import CustomDataSource from '../pages/UploadPage/customDataSource';
 
 import User_input from '../components/user/user_input';
 import CreateDataSource from '../pages/UploadPage/createNewDataSource';
+import RoleCreation from '../pages/loginPage/role';
 const AppRouter = () => {
   return (
     <Routes>
@@ -63,7 +64,7 @@ const AppRouter = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signClient" element={<SignIn />} />
       <Route path="/clientEmpData" element={<ClientLoginHome />} />
-
+      <Route path="/roles" element={<RoleCreation />} />
      
 
 

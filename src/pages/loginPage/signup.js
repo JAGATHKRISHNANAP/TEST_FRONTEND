@@ -159,12 +159,18 @@ export default function SignUp() {
           <FormLabel htmlFor="retypePassword"  sx={{ whiteSpace: 'nowrap' }}>Retype Password</FormLabel>
           <TextField id="retypePassword" name="retypePassword" placeholder="••••••" type="password" required fullWidth />
         </FormControl>
-
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
   <Button type="submit" sx={{ width: '200px' }} variant="contained">
     Sign Up
   </Button>
 </Box>
+<Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+  <Typography sx={{ textAlign: 'center' }}>
+    Want to manage roles? <Link to="/roles">Go to Role Page</Link>
+  </Typography>
+</Box>
+
+      
 
         
         {/* <Typography sx={{ textAlign: 'center' }}>

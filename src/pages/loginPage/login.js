@@ -38,22 +38,207 @@ export default function SignIn() {
 
 
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   if (emailError || passwordError) return;
+
+  //   const data = new FormData(event.currentTarget);
+  //   const email = data.get('email');
+  //   const password = data.get('password');
+  //   const company = data.get('company');
+  //   // const isCompanyValid = companies.some((c) => c.name === company);
+
+  //   // // if (!isCompanyValid) {
+  //   // //   setErrorMessage('Please select the proper company.');
+  //   // //   setOpen(true);
+  //   // //   return;
+  //   // // }
+  
+  //   try {
+  //     // Fetch employee list from the selected company to check if the user exists
+  //   const employeeListResponse = await fetch(`http://localhost:5000/api/employee_list?company=${company}`);
+  //   const employeeList = await employeeListResponse.json();
+
+  //   // Check if the user exists in the employee list
+  //   const userExists = employeeList.some((user) => user.email === email);
+  //   if (!userExists) {
+  //     setErrorMessage('User not found in the selected company.');
+  //     setOpen(true);
+  //     return;
+  //   }
+
+  //   // Check if the password is valid
+  //   const userPasswordResponse = await fetch(`http://localhost:5000/api/validate_password?email=${email}&password=${password}`);
+  //   const passwordValid = await userPasswordResponse.json();
+  //   if (!passwordValid.isValid) {
+  //     setErrorMessage('Password is not valid.');
+  //     setOpen(true);
+  //     return;
+  //   }
+
+  //     const response = await signIn(email, password, company);
+  //     console.log(response);
+  //     if (response.data && response.data.tables) {
+  //       const tableNames = response.data.tables;
+  //       localStorage.setItem('tableNames', JSON.stringify(tableNames));
+  //     }
+
+  //     let user_id, user_name, user_role, user_email;
+
+  //     if (response.message === 'Login successful to admin page') {
+  //       user_id = '1';
+  //       user_name = 'Admin';
+  //       user_role = 'Admin';
+  //       user_email = 'superadmin@gmail.com';
+  //     } else {
+  //       user_id = response.data.user[0];
+  //       user_name = response.data.user[1];
+  //       user_role = response.data.user[2];
+  //       user_email = response.data.user[3];
+  //     }
+
+  //     localStorage.setItem('user_id', user_id);
+  //     localStorage.setItem('user_name', user_name);
+  //     localStorage.setItem('user_role', user_role);
+  //     localStorage.setItem('user_email', user_email);
+  //     localStorage.setItem('company_name', selectedCompany);
+  //     localStorage.setItem('data', JSON.stringify(response));
+
+  //     if (response.message.includes('Login successful')) {
+  //       sessionStorage.setItem('session_id', response.session_id);
+
+  //       if (response.message === 'Login successful to admin page') {
+  //         navigate('/signClient');
+  //       } else if (response.message === 'Login successful to user page') {
+  //         sessionStorage.setItem('show_second_navbar', true);
+  //         navigate('/user_input');
+  //       } else if (response.message === 'Login successful to user employee page') {
+  //         localStorage.setItem('show_second_navbar', true);
+  //         navigate('/employeehome');
+  //       }
+  //     } else {
+  //       setErrorMessage('Incorrect password or email');
+  //       setOpen(true);
+  //     }
+  //   } catch (error) {
+  //     console.error('Sign-in error:', error);
+  //     setErrorMessage('User Not Found.');
+  //     setOpen(true);
+  //   }
+  // };
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   if (emailError || passwordError) return;
+  
+  //   const data = new FormData(event.currentTarget);
+  //   const email = data.get('email');
+  //   const password = data.get('password');
+  //   const company = data.get('company');
+  
+  //   try {
+      
+  //   const userValidationResponse = await fetch(`http://localhost:5000/api/validate_user?email=${email}&password=${password}&company=${company}`);
+  //   const validationResult = await userValidationResponse.json();
+  //     console.log("validationResult",validationResult)
+  //   if (validationResult.message) {
+  //     setErrorMessage(validationResult.message);
+  //     setOpen(true);
+  //     return; // Skip further logic if there's an error message
+  //   }
+  
+  //   if (!validationResult.isValid) {
+  //     setErrorMessage('Password is not valid.');
+  //     setOpen(true);
+  //     return; // Skip further logic if the password is not valid
+  //   }
+  //     // Skip further logic if the checks pass and proceed with login
+  //     const response = await signIn(email, password, company);
+  //     console.log(response);
+  //     if (response.data && response.data.tables) {
+  //       const tableNames = response.data.tables;
+  //       localStorage.setItem('tableNames', JSON.stringify(tableNames));
+  //     }
+  
+  //     let user_id, user_name, user_role, user_email;
+  
+  //     if (response.message === 'Login successful to admin page') {
+  //       user_id = '1';
+  //       user_name = 'Admin';
+  //       user_role = 'Admin';
+  //       user_email = 'superadmin@gmail.com';
+  //     } else {
+  //       user_id = response.data.user[0];
+  //       user_name = response.data.user[1];
+  //       user_role = response.data.user[2];
+  //       user_email = response.data.user[3];
+  //     }
+  
+  //     localStorage.setItem('user_id', user_id);
+  //     localStorage.setItem('user_name', user_name);
+  //     localStorage.setItem('user_role', user_role);
+  //     localStorage.setItem('user_email', user_email);
+  //     localStorage.setItem('company_name', selectedCompany);
+  //     localStorage.setItem('data', JSON.stringify(response));
+  
+  //     if (response.message.includes('Login successful')) {
+  //       sessionStorage.setItem('session_id', response.session_id);
+  
+  //       if (response.message === 'Login successful to admin page') {
+  //         navigate('/signClient');
+  //       } else if (response.message === 'Login successful to user page') {
+  //         sessionStorage.setItem('show_second_navbar', true);
+  //         navigate('/user_input');
+  //       } else if (response.message === 'Login successful to user employee page') {
+  //         localStorage.setItem('show_second_navbar', true);
+  //         navigate('/employeehome');
+  //       }
+  //     } else {
+  //       setErrorMessage('Incorrect password or email');
+  //       setOpen(true);
+  //     }
+  //   } catch (error) {
+  //     console.error('Sign-in error:', error);
+  //     setErrorMessage('User Not Found.');
+  //     setOpen(true);
+  //   }
+  // };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (emailError || passwordError) return;
-
+  
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
     const company = data.get('company');
-    // const isCompanyValid = companies.some((c) => c.name === company);
-
-    // // if (!isCompanyValid) {
-    // //   setErrorMessage('Please select the proper company.');
-    // //   setOpen(true);
-    // //   return;
-    // // }
+    
+    if (company) {
+      // If a company is selected, validate the user using the API
+      try {
+        const userValidationResponse = await fetch(`http://localhost:5000/api/validate_user?email=${email}&password=${password}&company=${company}`);
+        const validationResult = await userValidationResponse.json();
+        console.log("validationResult", validationResult);
   
+        if (validationResult.message) {
+          setErrorMessage(validationResult.message);
+          setOpen(true);
+          return; // Skip further logic if there's an error message
+        }
+  
+        if (!validationResult.isValid) {
+          setErrorMessage('Password is not valid.');
+          setOpen(true);
+          return; // Skip further logic if the password is not valid
+        }
+      } catch (error) {
+        console.error("Error validating user:", error);
+        setErrorMessage('Error validating user.');
+        setOpen(true);
+        return; // Skip further logic if the validation request fails
+      }
+    }
+  
+    // Continue with the regular login logic
     try {
       const response = await signIn(email, password, company);
       console.log(response);
@@ -61,9 +246,9 @@ export default function SignIn() {
         const tableNames = response.data.tables;
         localStorage.setItem('tableNames', JSON.stringify(tableNames));
       }
-
+  
       let user_id, user_name, user_role, user_email;
-
+  
       if (response.message === 'Login successful to admin page') {
         user_id = '1';
         user_name = 'Admin';
@@ -75,17 +260,17 @@ export default function SignIn() {
         user_role = response.data.user[2];
         user_email = response.data.user[3];
       }
-
+  
       localStorage.setItem('user_id', user_id);
       localStorage.setItem('user_name', user_name);
       localStorage.setItem('user_role', user_role);
       localStorage.setItem('user_email', user_email);
       localStorage.setItem('company_name', selectedCompany);
       localStorage.setItem('data', JSON.stringify(response));
-
+  
       if (response.message.includes('Login successful')) {
         sessionStorage.setItem('session_id', response.session_id);
-
+  
         if (response.message === 'Login successful to admin page') {
           navigate('/signClient');
         } else if (response.message === 'Login successful to user page') {
@@ -105,6 +290,7 @@ export default function SignIn() {
       setOpen(true);
     }
   };
+  
 
   const validateInputs = () => {
     const email = document.getElementById('email');

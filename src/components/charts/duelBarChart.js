@@ -1378,8 +1378,20 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
         chart: {
             type: 'bar',
             height: 350,
+             
             toolbar: {
-                show: false,
+                tools: {
+                
+                    download: true,
+                    selection: true,
+                    zoom: false,
+                    zoomin: false,
+                    zoomout: false,
+                    pan: true,
+                    reset: true,
+                },
+                offsetX: -10, // Adjusts horizontal position of the toolbar inside the chart
+                offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
             },
         },
         title: {

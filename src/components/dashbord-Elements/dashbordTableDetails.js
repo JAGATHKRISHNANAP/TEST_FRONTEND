@@ -112,12 +112,12 @@ function DashboardTableDetails({ handleTableChange }) {
   const selectedTable = localStorage.getItem('selectedTable');
 
   React.useEffect(() => {
-    // Load selected table name from localStorage
-    const tableNameFromStorage = localStorage.getItem('selectedTableName');
-    if (tableNameFromStorage) {
-      setSelectedTableName(tableNameFromStorage);
+    // // Load selected table name from localStorage
+    // const tableNameFromStorage = localStorage.getItem('selectedTableName');
+    if (selectedTable) {
+      setSelectedTableName(selectedTable);
       setChecked(true); // Automatically check the checkbox
-    fetchColumnInfo(tableNameFromStorage); // Fetch columns when a table is already selected
+    fetchColumnInfo(selectedTable); // Fetch columns when a table is already selected
  
     }
   }, []);

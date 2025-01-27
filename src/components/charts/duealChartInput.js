@@ -343,6 +343,7 @@ function DuealChartInput() {
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   const selectedUser = localStorage.getItem('selectedUser');
   const selectedTable = localStorage.getItem('selectedTable'); 
+  
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
       
@@ -632,11 +633,11 @@ const handleDrop = (event, target) => {
                 <div className="dash-right-side-container">
                   {/* <h1>dueal axis</h1> */}
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
-                    <label htmlFor="x-axis-input">X-axis: </label>
-                    <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "x-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '10px' }}>
+                    <label htmlFor="x-axis-input">Columns: </label>
+                    <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "x-axis")} style={{ width: "1000px",  height: "40px", border: '1px solid #000', marginLeft: '10px' }}>
                       <div className="x-axis-columns"  style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {xAxis.map((column, index) => (
-                          <div key={index} className="x-axis-column" draggable onDragStart={(event) => handleDragStart(event, column)} style={{maxHeight:"30px", cursor: "grab" }}>
+                          <div key={index} className="x-axis-column" draggable onDragStart={(event) => handleDragStart(event, column)} style={{maxHeight:"30px", cursor: "grab",borderRadius: "1px" }}>
                             <span>{column}</span>
                             <span className="filter-icon" onClick={() => handleFilterIconClick(column)} style={{cursor: "pointer"}}>
                               <FilterListIcon />
@@ -684,7 +685,7 @@ const handleDrop = (event, target) => {
                     
                   <div className="input-fields">
                   {/* <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}> */}
-                    <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>
+                    <FormControl style={{ width: '200px', marginLeft: '30px', marginTop: '5px' }}>
                       <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>
                       <NativeSelect
                         style={{ marginRight: '10px' }} value={aggregate} onChange={(event) => dispatch(setAggregate(event.target.value))}
@@ -708,13 +709,13 @@ const handleDrop = (event, target) => {
                   
 
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
-                  <label htmlFor="y-axis-input" style={{ margin: '15px 10px 0px 0px' }}>Y-axis:</label>
-                  <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
+                  <label htmlFor="y-axis-input" style={{ margin: '15px 30px 0px 0px' }}>Rows:  </label>
+                  <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "1000px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
                   <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {yAxis.map((column, index) => (
                           <div key={index} className="y-axis-column" draggable
                           onDragStart={(event) => handleDragStart(event, column)}
-                          style={{ maxHeight: "30px", cursor: "grab" }}>
+                          style={{ maxHeight: "30px", cursor: "grab", borderRadius: "1px" }}>
                             <span>{column}</span>
                             <ClearIcon style={{ marginLeft: '10px' }} onClick={() => removeColumnFromYAxis(column)} />
                           </div>
@@ -723,7 +724,7 @@ const handleDrop = (event, target) => {
                   </div>
                   
                    </div>
-                   <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center' }}>
+                   <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center',width:'275px' }}>
           <button
             onClick={isRecording ? stopRecording : startRecording}
             style={{
@@ -735,7 +736,7 @@ const handleDrop = (event, target) => {
             }}
           >
             {isRecording ? <StopCircleRounded /> : <Mic />}
-            <span style={{ marginLeft: '8px' }}>{isRecording ? 'Stop Recording' : 'Record Audio'}</span>
+            <span style={{ marginLeft: '10px' }}>{isRecording ? 'Stop Recording' : 'Record Audio'}</span>
           </button>
           {audioUrl && (
             <audio controls src={audioUrl} style={{ marginLeft: '20px' }}>

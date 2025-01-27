@@ -33,7 +33,7 @@ import calculationReducer from '../features/calculation-Slice/calculation-Slice'
 import  signupReducer  from '../features/signUp/signUpSlice';
 // import fetchedChartDataReducer from '../features/fetchChartDataForView/fetchChartDataSlice';
 import aichartReducer from '../features/aiCharts/aiChartSlice';
-
+import userReducer from'../features/Dashboard-Slice/userSlice';
 
 const store = configureStore({
   
@@ -76,7 +76,8 @@ const store = configureStore({
     signup: signupReducer,
 
     // fetchedChartData: fetchedChartDataReducer,
-    aicharts: aichartReducer
+    aicharts: aichartReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(), // redux-thunk is included by default
   devTools: process.env.NODE_ENV !== 'production',
