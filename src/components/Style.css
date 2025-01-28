@@ -118,3 +118,9 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 .sidebar-section {
   margin-top: 20px;
 }
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}

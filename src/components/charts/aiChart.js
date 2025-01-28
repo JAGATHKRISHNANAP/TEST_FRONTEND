@@ -326,7 +326,11 @@ const AllCharts = () => {
     const [selectedCharts, setSelectedCharts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const chartsPerPage = 6; // Display 6 charts per page
-
+ const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+        const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
+        const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+       const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+       const valueColor= useSelector((state) => state.toolTip.valueColor);
     useEffect(() => {
         dispatch(fetchChartData());
     }, [dispatch]);

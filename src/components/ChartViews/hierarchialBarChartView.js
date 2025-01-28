@@ -266,7 +266,7 @@ import { setClickedCategory } from '../../features/drillDownChartSlice/drillDown
 import '../charts/tooltip.css';
 import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
 
-const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axis, y_axis ,tableName,chartColor}) => {
+const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axis, y_axis ,tableName,chartColor, xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor"}) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
     const databaseName = localStorage.getItem('company_name');
@@ -363,10 +363,17 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
             .call(d3.axisTop(x).ticks(5))
             .selectAll('text')
             .attr('transform', 'rotate(-45)')
-            .style('text-anchor', 'start');
-    
+            .style('text-anchor', 'start')
+        .style('font-size', xFontSize) // Apply xFontSize
+        .style('fill', valueColor)    // Apply valueColor
+        .style('font-family', fontStyle); // Apply fontStyle
+
         g.append('g')
-            .call(d3.axisLeft(y).tickSizeOuter(0));
+        .call(d3.axisLeft(y).tickSizeOuter(0))
+        .selectAll('text')
+        .style('font-size', yFontSize) // Apply yFontSize
+        .style('fill', categoryColor)  // Apply categoryColor
+        .style('font-family', fontStyle); // Apply fontStyle
     
         g.selectAll('rect')
             .data(sortedData)

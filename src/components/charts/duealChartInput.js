@@ -320,7 +320,7 @@ import axios from 'axios';
 import { Mic, StopCircleRounded } from '@mui/icons-material';
 import { uploadAudioFile,fetchFilterOptionsAPI } from '../../utils/api'; // Import the API function
 
-
+import { Snackbar, Alert } from '@mui/material';
 function DuealChartInput() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -343,7 +343,10 @@ function DuealChartInput() {
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   const selectedUser = localStorage.getItem('selectedUser');
   const selectedTable = localStorage.getItem('selectedTable'); 
-  
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const MAX_COLUMNS = 5;
+   const [errorMessage, setErrorMessage] = useState("");
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
       
@@ -488,35 +491,18 @@ const handleDragStart = (event, columnName) => {
   event.dataTransfer.setData("origin", "x-axis"); // Specify origin
 };
 
-// const handleDrop = (event, target) => {
-//   event.preventDefault();
-//   const columnName = event.dataTransfer.getData("columnName");
-//   const origin = event.dataTransfer.getData("origin");
 
-//   if (target === "x-axis") {
-//     if (origin === "y-axis") {
-//       // Move column from Y-axis to X-axis
-//       dispatch(setYAxis(yAxis.filter((col) => col !== columnName)));
-//       dispatch(setXAxis([...xAxis, columnName]));
-//     } else if (!xAxis.includes(columnName)) {
-//       dispatch(setXAxis([...xAxis, columnName]));
-//     }
-//   } else if (target === "y-axis") {
-//     if (origin === "x-axis") {
-//       // Move column from X-axis to Y-axis
-//       dispatch(setXAxis(xAxis.filter((col) => col !== columnName)));
-//       dispatch(setYAxis([...yAxis, columnName]));
-//     } else if (!yAxis.includes(columnName)) {
-//       dispatch(setYAxis([...yAxis, columnName]));
-//     }
-//   }
-// };
 const handleDrop = (event, target) => {
   event.preventDefault();
   const columnName = event.dataTransfer.getData("columnName");
   const origin = event.dataTransfer.getData("origin");
 
   if (target === "x-axis") {
+    if (xAxis.length >= MAX_COLUMNS) {
+      setErrorMessage("Error: Cannot drop more than 5 columns on the X-axis.");
+        setOpenSnackbar(true); // Open the Snackbar
+        return;
+    }
     if (origin === "y-axis") {
       // Move column from Y-axis to X-axis
       dispatch(setYAxis(yAxis.filter((col) => col !== columnName)));
@@ -527,6 +513,11 @@ const handleDrop = (event, target) => {
       dispatch(setXAxis([...xAxis, columnName]));
     }
   } else if (target === "y-axis") {
+    if (yAxis.length >= MAX_COLUMNS) {
+      setErrorMessage("Error: Cannot drop more than 5 columns on the Y-axis.");
+        setOpenSnackbar(true); // Open the Snackbar
+        return;
+    }
     if (origin === "x-axis") {
       // Move column from X-axis to Y-axis
       dispatch(setXAxis(xAxis.filter((col) => col !== columnName)));
@@ -595,6 +586,9 @@ const handleDrop = (event, target) => {
       setIsRecording(false);
     }
   };
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   React.useEffect(() => {
     if (xAxis.length > 0) {
@@ -631,6 +625,7 @@ const handleDrop = (event, target) => {
   return (
     <div className="App">
                 <div className="dash-right-side-container">
+             
                   {/* <h1>dueal axis</h1> */}
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
                     <label htmlFor="x-axis-input">Columns: </label>
@@ -743,6 +738,15 @@ const handleDrop = (event, target) => {
               Your browser does not support the audio element.
             </audio>
           )}
+          <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000} // Auto-hide after 3 seconds
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+            {errorMessage}
+          </Alert>
+        </Snackbar>
         </div>
                   </div>
 

@@ -1342,36 +1342,12 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const [popupVisible, setPopupVisible] = useState(false);
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
-
-    const contextMenuRef = useRef(null);
-
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    };
-
-    const handleClickOutside = (event) => {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-            setContextMenuVisible(false);
-        }
-    };
-
-    const handleShowPopup = () => {
-        setPopupVisible(true);
-        setContextMenuVisible(false);
-    };
-
-    const handleClosePopup = () => {
-        setPopupVisible(false);
-    };
-
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+    const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+           const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+           const valueColor= useSelector((state) => state.toolTip.valueColor);
+    
 
     // Chart Options
     const options = {
@@ -1409,9 +1385,10 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    colors: ['#333'],
+                    fontFamily: fontStyle,
+                    fontSize: `${xFontSize}px`,
+                    fontWeight: 400,
+                    colors: categoryColor
                 },
             },
         },
@@ -1426,9 +1403,10 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
             },
             labels: {
                 style: {
-                    fontSize: '10px',
-                    fontWeight: 400,
-                    colors: ['#333'],
+                    fontFamily: fontStyle,
+                    fontSize: `${yFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: [valueColor],
                 },
                 formatter: (value) => {
                     if (value >= 10000000) return (value / 10000000).toFixed(1) + 'M';
@@ -1506,7 +1484,6 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                         height={600}
                         minConstraints={[300, 300]}
                         maxConstraints={[1100, 600]}
-                        onContextMenu={handleContextMenu}
                     >
                          <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
                                        
@@ -1520,14 +1497,6 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                     </ResizableBox>
                 </div>
             </div>
-            {contextMenuVisible && (
-                <ContectMenu
-                    ref={contextMenuRef}
-                    position={contextMenuPosition}
-                    onShowPopup={handleShowPopup}
-                />
-            )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
         </div>
     );
 };

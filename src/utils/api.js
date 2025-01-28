@@ -84,12 +84,20 @@ export const sendCategoryToBackend = async (category, xAxis, yAxis, tableName, a
 
 
 export const saveDataToDatabase = async ({
-  user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,ai_chart_data, saveName,
+  user_id,company_name,selectedUser,selectedTable,  databaseName,  xAxis,  yAxis,  aggregate,  chartType,  barColor,  chart_heading,  dashboardBarColor,  checkedOptions,ai_chart_data, saveName,xFontSize,          // Dynamic font size for x-axis
+  fontStyle,          // Font style for chart labels
+  categoryColor,      // Dynamic color for x-axis categories
+  yFontSize,          // Dynamic font size for y-axis
+  valueColor,   
 }) => {
 
 
   const response = await axios.post(`${API_URL}/save_data`, {
-    user_id,company_name,selectedUser,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),ai_chart_data,    saveName,
+    user_id,company_name,selectedUser,selectedTable,    databaseName,    xAxis,    yAxis,    aggregate,    chartType,    chartColor: barColor,    chart_heading: chart_heading,    drillDownChartColor: dashboardBarColor,    filterOptions: checkedOptions.join(', '),ai_chart_data,    saveName,xFontSize,          // Dynamic font size for x-axis
+    fontStyle,          // Font style for chart labels
+    categoryColor,      // Dynamic color for x-axis categories
+    yFontSize,          // Dynamic font size for y-axis
+    valueColor,   
   });
   return response.data;
 };

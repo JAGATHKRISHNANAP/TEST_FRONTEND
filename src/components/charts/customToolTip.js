@@ -488,21 +488,22 @@
 
 // export default CustomToolTip;
 
-import React, { useState } from "react";
-import {
-  Checkbox,
-  FormControlLabel,
-  Button,
-  TextField,
-  Grid,
-  Typography,
-  Box,
-  Tooltip,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { setToolTipOptions } from "../../features/ToolTip/toolTipSlice";
-import Columns from "../dashbord-Elements/columns";
-import "./tooltip.css";
+// import React, { useState } from "react";
+// import {
+//   Checkbox,
+//   FormControlLabel,
+//   Button,
+//   TextField,
+//   Grid,
+//   Typography,
+//   Box,
+//   Tooltip,
+// } from "@mui/material";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setToolTipOptions } from "../../features/ToolTip/toolTipSlice";
+// import Columns from "../dashbord-Elements/columns";
+// import "./tooltip.css";
+
 
 // const CustomToolTip = ({ onClose }) => {
 //   const dispatch = useDispatch();
@@ -539,7 +540,7 @@ import "./tooltip.css";
 //         valueColor,
 //       })
 //     );
-//     onClose();
+//     onClose(); // Close the tooltip after submitting
 //   };
 
 //   return (
@@ -589,6 +590,7 @@ import "./tooltip.css";
 //         <Typography variant="h5" gutterBottom>
 //           Customize Tooltip
 //         </Typography>
+//         {/* Rest of the component remains the same */}
 //         <Grid container spacing={3}>
 //           <Grid item xs={12} md={6}>
 //             <Columns />
@@ -692,9 +694,7 @@ import "./tooltip.css";
 //       />
 //     </Tooltip>
 //   </Box>
-
-//           </Grid>
-//         </Grid>
+//    </Grid>     </Grid>
 //         <Box display="flex" justifyContent="flex-end" marginTop={3}>
 //           <Button
 //             variant="contained"
@@ -712,6 +712,22 @@ import "./tooltip.css";
 
 // export default CustomToolTip;
 
+import React, { useState } from "react";
+import {
+  Checkbox,
+  FormControlLabel,
+  Button,
+  TextField,
+  Grid,
+  Typography,
+  Box,
+  Tooltip,
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setToolTipOptions } from "../../features/ToolTip/toolTipSlice";
+import Columns from "../dashbord-Elements/columns";
+import "./tooltip.css";
+
 const CustomToolTip = ({ onClose }) => {
   const dispatch = useDispatch();
   const toolTipOptions = useSelector((state) => state.toolTip);
@@ -722,6 +738,7 @@ const CustomToolTip = ({ onClose }) => {
   const [fontSizeY, setFontSizeY] = useState(toolTipOptions.fontSizeY || 16);
   const [categoryColor, setCategoryColor] = useState(toolTipOptions.categoryColor || "#000000");
   const [valueColor, setValueColor] = useState(toolTipOptions.valueColor || "#000000");
+  const [fontStyle, setFontStyle] = useState(toolTipOptions.fontStyle || "Arial"); // New state for font style
 
   const handleChange = (event) => {
     const { name, checked, value } = event.target;
@@ -745,6 +762,7 @@ const CustomToolTip = ({ onClose }) => {
         fontSizeY,
         categoryColor,
         valueColor,
+        fontStyle, // Add fontStyle to the dispatched state
       })
     );
     onClose(); // Close the tooltip after submitting
@@ -797,7 +815,6 @@ const CustomToolTip = ({ onClose }) => {
         <Typography variant="h5" gutterBottom>
           Customize Tooltip
         </Typography>
-        {/* Rest of the component remains the same */}
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Columns />
@@ -844,7 +861,6 @@ const CustomToolTip = ({ onClose }) => {
               fullWidth
               margin="normal"
             />
-            
             <Box marginY={2}>
               <TextField
                 label="Font Size for X (px)"
@@ -863,45 +879,60 @@ const CustomToolTip = ({ onClose }) => {
                 margin="normal"
               />
             </Box>
-            
-            
+
             <Box marginY={2} display="flex" justifyContent="space-between" alignItems="center">
-  <Box display="flex" alignItems="center" marginRight={2}>
-    <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Category Color</Typography>
-    <Tooltip title="Pick a color for the category">
-      <input
-        type="color"
-        value={categoryColor}
-        onChange={(e) => setCategoryColor(e.target.value)}
-        style={{ cursor: "pointer" }}
-      />
-    </Tooltip>
-  </Box>
-  <Box display="flex" alignItems="center" marginRight={2}>
-    <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Value Color</Typography>
-    <Tooltip title="Pick a color for the value">
-      <input
-        type="color"
-        value={valueColor}
-        onChange={(e) => setValueColor(e.target.value)}
-        style={{ cursor: "pointer" }}
-      />
-    </Tooltip>
-  </Box>
-  
-</Box>
-<Box display="flex" alignItems="center">
-    <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Heading Color</Typography>
-    <Tooltip title="Pick a color for the heading">
-      <input
-        type="color"
-        value={headingColor}
-        onChange={(e) => setHeadingColor(e.target.value)}
-        style={{ cursor: "pointer" }}
-      />
-    </Tooltip>
-  </Box>
-   </Grid>     </Grid>
+              <Box display="flex" alignItems="center" marginRight={2}>
+                <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Category Color</Typography>
+                <Tooltip title="Pick a color for the category">
+                  <input
+                    type="color"
+                    value={categoryColor}
+                    onChange={(e) => setCategoryColor(e.target.value)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              </Box>
+              <Box display="flex" alignItems="center" marginRight={2}>
+                <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Value Color</Typography>
+                <Tooltip title="Pick a color for the value">
+                  <input
+                    type="color"
+                    value={valueColor}
+                    onChange={(e) => setValueColor(e.target.value)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              </Box>
+            </Box>
+
+            <Box display="flex" alignItems="center">
+              <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Heading Color</Typography>
+              <Tooltip title="Pick a color for the heading">
+                <input
+                  type="color"
+                  value={headingColor}
+                  onChange={(e) => setHeadingColor(e.target.value)}
+                  style={{ cursor: "pointer" }}
+                />
+              </Tooltip>
+            </Box>
+
+            {/* Font Style Dropdown */}
+            <Box marginY={2}>
+              <Typography variant="subtitle1" style={{ marginRight: "8px" }}>Font Style</Typography>
+              <select
+                value={fontStyle}
+                onChange={(e) => setFontStyle(e.target.value)}
+                style={{ padding: "8px", fontSize: "16px", width: "100%" }}
+              >
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Verdana">Verdana</option>
+              </select>
+            </Box>
+          </Grid>
+        </Grid>
         <Box display="flex" justifyContent="flex-end" marginTop={3}>
           <Button
             variant="contained"

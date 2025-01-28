@@ -330,7 +330,8 @@ const LineChart = ({ categories = [], values = [], aggregation }) => {
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
 //    const xFontSize = useSelector((state) => state.toolTip.fontSizeX);
 //                const yFontSize= useSelector((state) => state.toolTip.fontSizeY);
-const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+    const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
     const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
     const categoryColor = useSelector((state) => state.toolTip.categoryColor);
     const valueColor= useSelector((state) => state.toolTip.valueColor);
@@ -466,6 +467,7 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
                     fontSize: `${xFontSize}px`, // Use Redux state for font size
                 fontWeight: 400,
                 colors: categoryColor,
+                fontFamily: fontStyle,
                 },
                 rotate: -45,
                 formatter: function (val) {
@@ -488,6 +490,7 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
                     fontSize: `${yFontSize}px`, // Use Redux state for font size
                 fontWeight: 400,
                 colors: [valueColor],
+                fontFamily: fontStyle,
                 },
                 formatter: (value) => {
                     if (value >= 10000000) {
@@ -531,9 +534,20 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
             <div style={{ display: "flex", gap: "20px" }}>
             {/* Parent Line Chart */}
             <div style={{ flex: 1 }}>
-                <ResizableBox width={600} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
+                {/* <ResizableBox width={600} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
                 <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>               
                     <Chart options={options} series={[{ name: aggregation || 'Series', data: values || [] }]} type="line" width="100%" height="90%" />
+                </ResizableBox> */}
+                <ResizableBox
+                  width={Math.max(values.length * 50, 600)} // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
+                  height='100px'
+                  minConstraints={[600, 300]} // Minimum width and height
+                  maxConstraints={[800, 500]} // Maximum width and height
+                  resizeHandles={['e', 'w']} // Allow horizontal resizing
+                  className="resizable-chart"
+                ><Chart options={options} series={[{ name: aggregation || 'Series', data: values || [] }]} type="line" height={500} />
+                
+                  {/* <Chart options={options} series={[{ data: sortedValues }]} type="bar" height={500} /> */}
                 </ResizableBox>
     
                 {areCategoriesDates && (

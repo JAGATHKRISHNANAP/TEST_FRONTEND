@@ -83,6 +83,11 @@ function Dashboard() {
   const excelCheckedPaths = useSelector((state) => state.loadExcel.checkedPaths);
   const csvCheckedPaths = useSelector((state) => state.loadCsv.checkedPaths);
   const chart_heading = useSelector((state) => state.toolTip.customHeading);
+   const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+      const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
+      const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+      const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+      const valueColor= useSelector((state) => state.toolTip.valueColor);
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   // const selectedTable = selectedTablearray.join(',');
   const selectedTable=localStorage.getItem("selectedTable")
@@ -182,8 +187,26 @@ function Dashboard() {
         return;
       }
       
-      console.log('Sending data to save:', saveName);
-      // Proceed to save the chart if saveName is unique
+      // console.log('Sending data to save:', saveName);
+      // // Proceed to save the chart if saveName is unique
+      // const response = await saveDataToDatabase({
+      //   user_id,
+      //   company_name,
+      //   selectedUser,
+      //   selectedTable,
+      //   databaseName,
+      //   xAxis,
+      //   yAxis,
+      //   aggregate,
+      //   chartType,
+      //   barColor,
+      //   chart_heading,
+      //   dashboardBarColor,
+      //   checkedOptions,
+      //   ai_chart_data: data.data,
+      //   saveName,
+
+      // });
       const response = await saveDataToDatabase({
         user_id,
         company_name,
@@ -200,9 +223,13 @@ function Dashboard() {
         checkedOptions,
         ai_chart_data: data.data,
         saveName,
-
+        // Add font-related data here
+        xFontSize,          // Dynamic font size for x-axis
+        fontStyle,          // Font style for chart labels
+        categoryColor,      // Dynamic color for x-axis categories
+        yFontSize,          // Dynamic font size for y-axis
+        valueColor,         // Dynamic color for y-axis values
       });
-  
       console.log('Data saved successfully:', response);
       setOpen(false);
     } catch (error) {

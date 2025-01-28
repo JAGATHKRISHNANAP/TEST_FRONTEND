@@ -181,6 +181,7 @@ import './tooltip.css';
 import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
+// import { fontStyle } from 'html2canvas/dist/types/css/property-descriptors/font-style';
 const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
@@ -200,7 +201,8 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
     const [popupVisible, setPopupVisible] = useState(false);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
-     const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+      const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+         const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
         const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
         const categoryColor = useSelector((state) => state.toolTip.categoryColor);
         const valueColor= useSelector((state) => state.toolTip.valueColor);
@@ -321,6 +323,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         .attr('transform', 'rotate(-45)')
         .style('text-anchor', 'start')
         .style('font-size', `${xFontSize}px`) // Dynamic font size for x-axis
+        .style('font-family', fontStyle)
         .style('fill', categoryColor); // Dynamic color for x-axis
 
     // Y Axis with dynamic styles
@@ -328,8 +331,8 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         .call(d3.axisLeft(y).tickSizeOuter(0))
         .selectAll('text')
         .style('font-size', `${yFontSize}px`) // Dynamic font size for y-axis
-        .style('fill', valueColor); // Dynamic color for y-axis
-
+        .style('fill', valueColor) // Dynamic color for y-axis
+        .style('font-family', fontStyle)
 
         g.selectAll('rect')
             .data(sortedData, (d) => d.category)
@@ -375,7 +378,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
                 handleDrillUp();
             }
         });
-    }, [sortedData, chartDimensions, lineColor]);
+    }, [sortedData, chartDimensions, lineColor,xFontSize, fontStyle, categoryColor, yFontSize, valueColor]);
 
     const onResize = (event, { size }) => {
         setChartDimensions({ width: size.width, height: size.height });
@@ -393,7 +396,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
                         onResize={onResize}
                         // onContextMenu={handleContextMenu}
                     ><div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
-                        <svg ref={svgRef} width="auto" height="auto" />
+                        <svg ref={svgRef} width="100%" height="1000 %" />
                         <div ref={tooltipRef} className="tooltip"></div>
                     </ResizableBox>
                     

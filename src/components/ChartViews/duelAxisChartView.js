@@ -232,7 +232,7 @@ import { updateSelectedCategory,setChartStatus,updateChartData ,updateSelectedCa
 import { sendClickedCategory } from '../../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 
-const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_axis1,y_axis2, aggregation }) => {
+const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_axis1,y_axis2, aggregation, xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor" }) => {
     const dispatch = useDispatch();
     console.log("aggregation",aggregation)
     console.log("xaxis",y_axis1,)
@@ -293,9 +293,10 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000']
+                    fontSize:`${xFontSize}px`,// Use dynamic font size
+            fontStyle: fontStyle, // Apply dynamic font style
+             fontWeight: 400,
+            colors:categoryColor, // Apply dynamic category color
                 }
             }
         },
@@ -308,9 +309,10 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
         },
         labels: {
             style: {
-                fontSize: '12px',
-                fontWeight: 400,
-                colors: ['#000'],
+                fontSize:`${yFontSize}px`,// Use dynamic font size
+                fontStyle: fontStyle, // Apply dynamic font style
+                 fontWeight: 400,
+                colors:valueColor, 
             },
             formatter: (value) => {
                 if (value >= 10000000) {
@@ -333,9 +335,10 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
         },
         labels: {
             style: {
-                fontSize: '12px',
-                fontWeight: 400,
-                colors: ['#000'],
+                fontSize:`${yFontSize}px`,// Use dynamic font size
+                fontStyle: fontStyle, // Apply dynamic font style
+                 fontWeight: 400,
+                colors:valueColor, 
             },
             formatter: (value) => {
                 if (value >= 10000000) {

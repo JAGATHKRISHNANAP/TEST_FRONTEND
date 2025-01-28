@@ -336,6 +336,14 @@ const ChartRenderer = ({
   }));
   return (
     <div className="chart-renderer">
+      {xAxis.length >1 &&
+        (chartType === "wordCloud" ) && (
+          renderError("Please select only 1 X-axis values for this chart type.")
+        )}
+       {xAxis.length >1 &&
+        (chartType === "Hierarachy") && (
+          renderError("Please select only X-axis values for this chart type.")
+        )}
       {xAxis.length > 2 &&
         (chartType === "bar" ||
           chartType === "area" ||

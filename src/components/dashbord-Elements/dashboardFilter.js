@@ -292,6 +292,7 @@ import ChartColor from '../charts/color'; // Update the path if necessary
 import { Button, IconButton, Box, Typography, Grid } from '@mui/material';
 import ColorLensIcon from '@mui/icons-material/ColorLens'; // Icon for color picker
 import FilterListIcon from '@mui/icons-material/FilterList'; // Filter icon
+import SettingsIcon from '@mui/icons-material/Settings';
 import CustomToolTip from '../charts/customToolTip'; // Importing customToolTip.js
 
 const ChartColorPage = () => {
@@ -341,9 +342,9 @@ const ChartColorPage = () => {
                   onClick={handleFilterToggle}
                   sx={{ marginBottom: '8px' }}
                 >
-                  <FilterListIcon />
+                  <SettingsIcon />
                 </IconButton>
-                <Typography variant="caption">Filter</Typography>
+                <Typography variant="caption">customToolTip</Typography>
               </Box>
             </Grid>
           </Grid>

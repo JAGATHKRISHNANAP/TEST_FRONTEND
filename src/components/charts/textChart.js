@@ -15,6 +15,13 @@ const TextChart = (props) => {
   console.log("excelCheckedPaths from textchart:", table_Name);
   console.log("databaseName from textchart:", databaseName);
   console.log("x_axis from textchart:", x_axis);
+ const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+    const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
+    const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+           const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+           const valueColor= useSelector((state) => state.toolTip.valueColor);
+    
 
   const MAX_WIDTH = 1200; // Set your maximum width
   const MAX_HEIGHT = 600; // Set your maximum height
@@ -123,7 +130,8 @@ const TextChart = (props) => {
             categories.map((category, index) => (
               <div key={index}><pre className="left-align">
                 <pre className="display">
-                <strong className="catagory">{category}: </strong><p className="value">{values[index]}{" "}</p>{aggregationLabel} of {cleanYAxis}</pre>
+                <strong className="catagory" style={{fontSize: `${xFontSize}px`,fontFamily: fontStyle,color: categoryColor}}>{category}: 
+               </strong><p className="value" style={{fontSize: `${yFontSize}px`,fontFamily: fontStyle,color: valueColor}}>{values[index]}{" "}</p>{aggregationLabel} of {cleanYAxis}</pre>
                 </pre>
               </div>
             ))

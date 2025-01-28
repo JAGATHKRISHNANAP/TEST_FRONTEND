@@ -286,7 +286,8 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
     const contextMenuRef = useRef(null);
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
-    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+     const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+        const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
     const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
     const categoryColor = useSelector((state) => state.toolTip.categoryColor);
     const valueColor= useSelector((state) => state.toolTip.valueColor);
@@ -352,6 +353,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
             labels: {
                 show: true,
                 style: {
+                    fontFamily: fontStyle,
                     fontSize:`${xFontSize}px` ,
                     fontWeight: 400,
                     colors: categoryColor
@@ -367,6 +369,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
         },
         labels: {
             style: {
+                fontFamily: fontStyle,
                 fontSize:`${yFontSize}px`,
                 fontWeight: 400,
                 colors: valueColor,
@@ -392,6 +395,7 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
         },
         labels: {
             style: {
+                fontFamily: fontStyle,
                 fontSize: `${yFontSize}px`,
                 fontWeight: 400,
                 colors: valueColor,

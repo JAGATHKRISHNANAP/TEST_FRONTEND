@@ -20,35 +20,16 @@ const Treemap = ({ categories = [], values = [] }) => {
     const [boxSize, setBoxSize] = useState({ width: 500, height: 400 });
     const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
     const [popupVisible, setPopupVisible] = useState(false);
-        const contextMenuRef = useRef(null);
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+         const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
+        const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+        const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+        const valueColor= useSelector((state) => state.toolTip.valueColor);
     const handleSliderChange = (event) => {
         setSliderValue(event.target.value);
     };
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    };
-     const handleShowPopup = () => {
-            setPopupVisible(true);
-            setContextMenuVisible(false);
-        };
-        const handleClickOutside = (event) => {
-            if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-                setContextMenuVisible(false);
-            }
-        };
-        const handleClosePopup = () => {
-            setPopupVisible(false);
-        };
-    
-        useEffect(() => {
-            document.addEventListener('click', handleClickOutside);
-            return () => {
-                document.removeEventListener('click', handleClickOutside);
-            };
-        }, []);
+   
     const handlePlayPause = () => {
         if (!isPlaying) {
             setIsPlaying(true);
@@ -87,8 +68,11 @@ const Treemap = ({ categories = [], values = [] }) => {
         const svg = d3.select(svgRef.current)
             .attr("width", width)
             .attr("height", height)
-            .style("font-family", "Arial")
-            .style("font-size", "12px");
+            .style('text-anchor', 'start')
+        .style('font-size', `${xFontSize}px`) // Dynamic font size for x-axis
+        .style('font-family', fontStyle)
+        .style('fill', categoryColor); // Dynamic color for x-axis
+           
 
         const tooltip = d3.select(tooltipRef.current);
 
@@ -150,6 +134,7 @@ const Treemap = ({ categories = [], values = [] }) => {
             .attr("height", d => d.y1 - d.y0) // Set the height based on the data
             .attr("fill", (d, i) => colorScale(i))
             .attr("stroke", "#fff")
+            
             .attr("fill-opacity", 0.8)
             .transition()
             .duration(1000)
@@ -160,11 +145,7 @@ const Treemap = ({ categories = [], values = [] }) => {
         nodes.append("text")
             .attr("x", 5)
             .attr("y", 15)
-            .attr("fill", d => {
-                const bgColor = d3.rgb(colorScale(d.index));
-                const brightness = bgColor.r * 0.299 + bgColor.g * 0.587 + bgColor.b * 0.114;
-                return brightness > 110 ? "#000000" : "#FFFFFF";
-            })
+            .style('fill', categoryColor)
             .style("font-size", d => {
                 const availableWidth = d.x1 - d.x0;
                 const availableHeight = d.y1 - d.y0;
@@ -172,11 +153,12 @@ const Treemap = ({ categories = [], values = [] }) => {
                 return `${minFontSize}px`;
             })
             .text(d => `${d.data.name}: ${d.data.value}`)
+            .style('font-family', fontStyle)
             .transition()
             .duration(4000)
             .style("opacity", 1);
 
-    }, [categories, values, sliderValue, chartColor, boxSize]);
+    }, [categories, values, sliderValue, chartColor, boxSize,xFontSize,fontStyle,categoryColor]);
 
     return (
         <div>
@@ -190,7 +172,7 @@ const Treemap = ({ categories = [], values = [] }) => {
                 minConstraints={[300, 300]} 
                 maxConstraints={[800, 600]} 
                 onResize={(event, { size }) => setBoxSize(size)}
-                onContextMenu={handleContextMenu}
+              
             ><div>  
             <label>Adjust Data with Scrubber: </label>
             <input

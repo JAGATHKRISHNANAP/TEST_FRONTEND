@@ -316,7 +316,7 @@ import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Selec
 // import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import { sendClickedCategory,fetchPredictionDataAPI } from '../../utils/api';
 
-const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChartCategories = []  }) => {
+const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = []  }) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
     const xAxis = useSelector((state) => state.chart.xAxis);
@@ -373,33 +373,6 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
       };
      
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        setContextMenuPosition({ x: event.pageX, y: event.pageY });
-        setContextMenuVisible(true);
-    };
-
-    const handleClickOutside = (event) => {
-        if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-            setContextMenuVisible(false);
-        }
-    };
-
-    const handleShowPopup = () => {
-        setPopupVisible(true);
-        setContextMenuVisible(false); // Hide context menu when showing popup
-    };
-
-    const handleClosePopup = () => {
-        setPopupVisible(false);
-    };
-
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
 
 
     const handlePredictData = async () => {
@@ -479,19 +452,22 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
             labels: {
                 show: true,
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000']
+                    fontSize: `${xFontSize}px`, // Use Redux state for font size
+                fontWeight: 400,
+                colors: categoryColor,
+                fontFamily: fontStyle,
                 }
                 // show:false,
             }
         },
         yaxis: {
             labels: {
+                
                 style: {
-                    fontSize: '12px',
+                    fontSize: `${yFontSize}px`, // Use Redux state for font size
                     fontWeight: 400,
-                    colors: ['#000'],
+                    colors: valueColor,
+                    fontFamily: fontStyle,
                 },
                 formatter: (value) => {
                     if (value >= 10000000) { // For values in crores (millions)
@@ -540,7 +516,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
         <div className="app">
             <div className="row">
                 <div className="line-chart">
-                    <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}>
+                    <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} >
                     <div className="chart-title">{customHeadings}</div>
                         <Chart
                             options={options}
@@ -593,10 +569,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, otherChar
                 </Box>
             </Modal>
 
-            {contextMenuVisible && (
-                <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
-            )}
-            {popupVisible && <CustomToolTip onClose={handleClosePopup} />}
+            
             {/* {barClicked && <DrillLineChart
                 categories={plotData.categories}
                 values={plotData.values}

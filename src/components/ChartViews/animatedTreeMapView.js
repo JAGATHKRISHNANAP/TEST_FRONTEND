@@ -251,7 +251,7 @@ import {updateSelectedCategory,updateChartData,setChartStatus} from '../../featu
 import { sendClickedCategory} from '../../utils/api';
 
 
-const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis, y_axis="Y_axis", otherChartCategories = [] }) => {
+const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis, y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
@@ -307,12 +307,15 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
                
               };
              
-
-        const svg = d3.select(svgRef.current)
+ const svg = d3.select(svgRef.current)
             .attr("width", width)
             .attr("height", height)
-            .style("font-family", "Arial")
-            .style("font-size", "12px");
+            .style('text-anchor', 'start')
+        .style('font-size', `${xFontSize}px`) // Dynamic font size for x-axis
+        .style('font-family', fontStyle)
+        .style('fill', categoryColor); // Dynamic color for x-axis
+           
+
 
         const tooltip = d3.select(tooltipRef.current);
 

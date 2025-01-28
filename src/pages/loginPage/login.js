@@ -240,6 +240,21 @@ export default function SignIn() {
   
     // Continue with the regular login logic
     try {
+       const userValidationResponse = await fetch(`http://localhost:5000/api/validate_user?email=${email}&password=${password}&company=${company}`);
+        const validationResult = await userValidationResponse.json();
+        console.log("validationResult", validationResult);
+  
+        if (validationResult.message) {
+          setErrorMessage(validationResult.message);
+          setOpen(true);
+          return; // Skip further logic if there's an error message
+        }
+  
+        if (!validationResult.isValid) {
+          setErrorMessage('Password is not valid.');
+          setOpen(true);
+          return; // Skip further logic if the password is not valid
+        }
       const response = await signIn(email, password, company);
       console.log(response);
       if (response.data && response.data.tables) {

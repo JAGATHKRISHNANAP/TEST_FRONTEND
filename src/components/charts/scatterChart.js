@@ -33,7 +33,8 @@ const LineChart = ({ categories, values, aggregation }) => {
     const [popupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
     //  const xFontSize = useSelector((state) => state.toolTip.fontSizeX);
     //              const yFontSize= useSelector((state) => state.toolTip.fontSizeY);
-    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+    const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+        const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
     const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
     const categoryColor = useSelector((state) => state.toolTip.categoryColor);
     const valueColor= useSelector((state) => state.toolTip.valueColor);
@@ -153,6 +154,7 @@ const LineChart = ({ categories, values, aggregation }) => {
         //     },
         // },
         chart: {
+            
             events: {
                 dataPointSelection: handleClicked
             },
@@ -198,6 +200,7 @@ const LineChart = ({ categories, values, aggregation }) => {
                     fontSize: `${xFontSize}px`, // Use Redux state for font size
                 fontWeight: 400,
                 colors: categoryColor,
+                fontFamily: fontStyle,
                 }
             }
         },
@@ -210,6 +213,7 @@ const LineChart = ({ categories, values, aggregation }) => {
                     fontSize: `${yFontSize}px`, // Use Redux state for font size
                 fontWeight: 400,
                 colors: [valueColor], // Use Redux state for label color
+                fontFamily: fontStyle,
                 },
                 formatter: (value) => {
                     if (value >= 10000000) { // For values in crores (millions)
@@ -279,7 +283,7 @@ const LineChart = ({ categories, values, aggregation }) => {
             <div className="row">
                 <div className="line-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
-                   <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
+                   {/* <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
                    <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
                                     
                         <Chart
@@ -289,7 +293,19 @@ const LineChart = ({ categories, values, aggregation }) => {
                             width="100%"
                             height="auto"
                         />
-                    </ResizableBox>
+                    </ResizableBox> */}
+                     <ResizableBox
+                                       width={Math.max((values?.length || 0) * 50, 600)}  // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
+                                      height='100px'
+                                      minConstraints={[600, 300]} // Minimum width and height
+                                      maxConstraints={[800, 500]} // Maximum width and height
+                                      resizeHandles={['e', 'w']} // Allow horizontal resizing
+                                      className="resizable-chart"
+                                    > <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+                                    <Chart options={options}series={series} type="scatter" height={500} />
+                                    
+                                      {/* <Chart options={options} series={[{ data: sortedValues }]} type="bar" height={500} /> */}
+                                    </ResizableBox>
                 </div>
             </div>
             {/* {contextMenuVisible && (

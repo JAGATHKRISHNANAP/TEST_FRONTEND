@@ -6,7 +6,8 @@ import "react-resizable/css/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const PredictedLineChart = ({ forecastData, xAxis, yAxis }) => {
-  const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+   const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+  const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
   const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
   const categoryColor = useSelector((state) => state.toolTip.categoryColor);
   const valueColor= useSelector((state) => state.toolTip.valueColor);
@@ -21,7 +22,7 @@ const PredictedLineChart = ({ forecastData, xAxis, yAxis }) => {
     xaxis: {
       categories: forecastData.categories || [],
       title: { text: `${xAxis}` },
-      labels: { style: { fontSize: `${xFontSize}px`, colors: [categoryColor] } },
+      labels: { style: { fontSize: `${xFontSize}px`, colors: [categoryColor],fontFamily: fontStyle, } },
     },
     yaxis: {
       title: { text: `${yAxis}` },
@@ -30,6 +31,7 @@ const PredictedLineChart = ({ forecastData, xAxis, yAxis }) => {
           fontSize: `${yFontSize}px`,
           fontWeight: 400,
           colors: [valueColor],
+          fontFamily: fontStyle,
         },
         formatter: (value) => {
           if (value >= 10000000) {

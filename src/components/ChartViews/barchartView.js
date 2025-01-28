@@ -272,7 +272,7 @@ import { sendClickedCategory,sendaidashboardClickedCategory } from '../../utils/
 
 import { update_Ai_Charts_Datas } from '../../features/aiCharts/aiChartSlice';
 
-const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", otherChartCategories = [] }) => {
+const BarChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     // const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
 
@@ -382,9 +382,13 @@ const handleClicked = async (event, chartContext, config) => {
               },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    // fontSize: '12px',
+                    // fontWeight: 400,
+                    // colors: ['#000'],
+                    fontSize:`${xFontSize}px`,// Use dynamic font size
+            fontStyle: fontStyle, // Apply dynamic font style
+             fontWeight: 400,
+            colors:categoryColor, // Apply dynamic category color
                 },
                 rotate: -45,
                 show:true
@@ -396,9 +400,12 @@ const handleClicked = async (event, chartContext, config) => {
               },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    fontSize:`${12}px`,// Use dynamic font size
+                    fontStyle: fontStyle, // Apply dynamic font style
+                     fontWeight: 400,
+                    colors:valueColor, // Apply dynamic category color
+                  
+                    
                 },
                 formatter: (value) => {
                     if (value >= 10000000) { // For values in crores (millions)

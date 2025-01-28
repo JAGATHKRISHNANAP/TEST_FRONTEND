@@ -204,7 +204,7 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { sendClickedCategory } from '../../utils/api';
 
-const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", otherChartCategories = [] }) => {
+const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
     const [showResetButton, setShowResetButton] = useState(false); // State to show/hide the reset button
@@ -257,9 +257,10 @@ const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", 
               },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    fontSize:`${xFontSize}px`,// Use dynamic font size
+            fontStyle: fontStyle, // Apply dynamic font style
+             fontWeight: 400,
+            colors:categoryColor, // Apply dynamic category color
                 },
                 rotate: -45,
                 show:true
@@ -272,9 +273,11 @@ const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", 
             },
             labels: {
                 style: {
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    colors: ['#000'],
+                    fontSize:`${yFontSize}px`,// Use dynamic font size
+                    fontStyle: fontStyle, // Apply dynamic font style
+                     fontWeight: 400,
+                    colors:valueColor, // Apply dynamic category color
+                  
                 },
                 formatter: (value) => {
                     if (value >= 10000000) {

@@ -147,7 +147,7 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import '../charts/tooltip.css';
 
-const TextChart = ({ categories, values, title }) => {
+const TextChart = ({ categories, values, title, xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor" }) => {
     const svgRef = useRef();
 
     useEffect(() => {

@@ -125,7 +125,8 @@ const AreaChart = ({ categories, values, aggregation }) => {
    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
     //    const xFontSize = useSelector((state) => state.toolTip.fontSizeX);
     //    const yFontSize= useSelector((state) => state.toolTip.fontSizeY);
-    const xFontSize = useSelector((state) => state.toolTip.fontSizeXc|| "12");
+        const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+        const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
         const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
        const categoryColor = useSelector((state) => state.toolTip.categoryColor);
        const valueColor= useSelector((state) => state.toolTip.valueColor);
@@ -190,6 +191,7 @@ const contextMenuRef = useRef(null);
             labels: {
                 show: true,
                 style: {
+                    fontFamily: fontStyle,
                     fontSize: `${xFontSize}px`,
                     fontWeight: 400,
                     colors: categoryColor
@@ -202,6 +204,7 @@ const contextMenuRef = useRef(null);
               },
             labels: {
                 style: {
+                    fontFamily: fontStyle,
                     fontSize: `${yFontSize}px`, // Use Redux state for font size
                 fontWeight: 400,
                 colors: [valueColor],
@@ -254,15 +257,23 @@ const contextMenuRef = useRef(null);
             <div className="row">
                 <div className="area-chart">
                     {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}> */}
-                     <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]}  >
+                      <ResizableBox
+                      width={Math.max((values?.length || 0) * 50, 600)}  // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
+                      height='100px'
+                      minConstraints={[600, 300]} // Minimum width and height
+                      maxConstraints={[800, 500]} // Maximum width and height
+                      resizeHandles={['e', 'w']} // Allow horizontal resizing
+                      className="resizable-chart"
+                    >
+                     
                      <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3>
                      </div>
-                        <Chart
+                         <Chart
                             options={options}
                             series={series}
                             type="area"
-                            width="100%"
-                            height="auto"
+                        
+                            height="550"
                         />
                     </ResizableBox>
                 </div>

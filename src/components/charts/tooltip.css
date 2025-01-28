@@ -48,3 +48,7 @@
 }
 
 
+.chart-container {
+    max-width: 100%; /* Set a maximum width */
+    overflow-x: auto; /* Enable horizontal scrolling */
+}
