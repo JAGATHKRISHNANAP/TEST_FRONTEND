@@ -106,7 +106,10 @@ function EditDashboard() {
       <Box sx={{ flexGrow: 1, marginTop: "80px" }}>
         <Grid container spacing={2} wrap="wrap">
           {/* Sidebar */}
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} sx={{
+            position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', overflowX: 'auto',
+            boxShadow: 3, height: '60px', display: 'flex', flexWrap: 'nowrap', alignItems: 'center',marginRight:'200PX' 
+          }}>
             <Item>
               <EditDashbordSidebar />
             </Item>

@@ -18,6 +18,8 @@ import PaletteIcon from '@mui/icons-material/Palette'; // Icon for the color pic
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { BiSolidFileJson } from "react-icons/bi";
 import UserProfile from "../components/profile/userProfile";
+import { AiOutlineCloudServer } from "react-icons/ai";
+import { IoIosPaper } from 'react-icons/io'; 
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
@@ -128,18 +130,9 @@ function Navbar() {
   };
 
 
-  // const handleLoginLogout = () => {
-  //   if (isLoggedIn) {
-  //     sessionStorage.removeItem('session_id');
-  //     sessionStorage.removeItem('username');
-  //     setIsLoggedIn(false);
-  //     navigate('/login');
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // };
   const handleLoginLogout = () => {
     if (isLoggedIn) {
+      localStorage.clear();
       sessionStorage.removeItem('session_id');
       sessionStorage.removeItem('username');
       setIsLoggedIn(false);
@@ -176,18 +169,17 @@ function Navbar() {
       <MuiAppBar position="fixed" open={false} sx={{ height: '40px', display: 'flex', justifyContent: 'center', backgroundColor: appBarColor }}>
         <Toolbar>
           {isLoggedIn && (
-            <IconButton color="inherit" aria-label="open drawer" edge="start" sx={{ marginRight: 5 }}>
+            <IconButton color="inherit" aria-label="open drawer" edge="start" >
               <MenuIcon />
             </IconButton>
           )}
 
           {isLoggedIn && (
-            // <Typography variant="body2" sx={{ height: '10px', marginLeft: 2, display: 'flex', alignItems: 'center' }}>
-            //   <Avatar src="/broken-image.jpg" sx={{ width: '30px', height: '30px', border: '2px solid white', backgroundColor: appBarColor, color: 'white', marginRight: 1 }} />
-            //   Hello, {username}
-            // </Typography>
-        
-              <UserProfile username={username} appBarColor={appBarColor} />
+           
+            <>
+           
+              <UserProfile username={username} appBarColor={appBarColor}/>
+               <Box sx={{ flexGrow: 1 }} /></>
           )}
 
           <Box sx={{ flexGrow: 1 }} />
@@ -221,57 +213,81 @@ function Navbar() {
                   maxWidth: '150px',
                   alignItems: 'center',
                   color: 'inherit',
+                  fontSize: "16px", 
                 }}
               >
-                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+                <ListItemIcon sx={{ display: 'flex',alignItems: 'center', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
                   Data Source 
                 </ListItemIcon>
               </Button>
+              
               <Menu
-                id="data-source-menu"
-                anchorEl={anchorEl}
-                open={openMenu}
-                // onClose={handleMenuClose}
-                // onClose={handleMenuClose}
-                PaperProps={{
-                  onMouseLeave: handleMenuClose, 
-                  sx: {
-                    width: menuWidth || 'auto',
-                    backgroundColor: '#ffffff',
-                    color: 'black',
-                  },
-                }}
-              >
-                <MenuItem onClick={() => handleNavigation('/excel_upload')}>
-                  <FaFileExcel style={{ marginRight: 8 }} /> Excel
-                </MenuItem>
-                <MenuItem onClick={() => handleNavigation('/csv_upload')}>
-                  <FaFileCsv style={{ marginRight: 8 }} /> CSV
-                </MenuItem>
-                <MenuItem onClick={() => handleNavigation('/Audio_upload')}>
-                  <AudioFileIcon style={{ marginRight: 8 }} /> Audio
-                </MenuItem>
-                <MenuItem onClick={() => handleNavigation('/json_upload')}>
-                  <BiSolidFileJson     style={{ marginRight: 8 ,fontSize: 20}} /> Json
-                </MenuItem>
-                <MenuItem onClick={() => handleNavigation('/custom_data_source')}>
-                  <DashboardCustomizeIcon  style={{ marginRight: 8 ,fontSize: 20}} /> CustomJoin
-                </MenuItem>
-                <MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
-                  <DashboardCustomizeIcon  style={{ marginRight: 8 ,fontSize: 20}} /> Create Data Source
-                </MenuItem>
-              </Menu>
-              {/* <Button
-                onClick={() => handleNavigation('/load_data')}
-                sx={{
-                  backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
-                  alignItems: 'center',
-                }}
-              >
-                <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000' }}>
-                  design
-                </ListItemIcon>
-              </Button> */}
+  id="data-source-menu"
+  anchorEl={anchorEl}
+  open={openMenu}
+  anchorOrigin={{
+    vertical: "bottom",
+    horizontal: "center",
+  }}
+  transformOrigin={{
+    vertical: "top",
+    horizontal: "center",
+  }}
+  PaperProps={{
+    onMouseLeave: handleMenuClose,
+    sx: {
+      // width: menuWidth || 'auto',
+      minWidth: 200,
+      backgroundColor: '#ffffff',
+      color: 'black',
+    },
+  }}
+>
+ {/* <MenuItem onClick={() => handleNavigation('/excel_upload')}>
+  <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
+  Excel
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/csv_upload')}>
+  <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+  CSV
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/json_upload')}>
+  <ListItemIcon><BiSolidFileJson size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+  JSON
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/custom_data_source')}>
+  <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
+  Custom Join
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
+  <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+  Create DataSource
+</MenuItem>
+
+</Menu>
+ */}
+<MenuItem onClick={() => handleNavigation('/excel_upload')}>
+  <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
+  Excel
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/csv_upload')}>
+  <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+  CSV
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/json_upload')}>
+  <ListItemIcon><IoIosPaper size={20} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+  JSON
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/custom_data_source')}>
+  <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
+  Custom Join
+</MenuItem>
+<MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
+  <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+  Create DataSource
+</MenuItem>
+</Menu>
+           
 <Button
 onClick={() => handleNavigation('/load_data')}
     sx={{
@@ -279,6 +295,7 @@ onClick={() => handleNavigation('/load_data')}
       maxWidth: '150px',
       alignItems: 'center',
       color: 'inherit',
+      fontSize: "16px", 
     }}
   >
     <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
@@ -290,12 +307,13 @@ onClick={() => handleNavigation('/load_data')}
 onClick={() => handleNavigation('/load_db')}
     sx={{
       backgroundColor: location.pathname === '/load_db' ? '#c5c5c9' : 'inherit',
-      maxWidth: '150px',
+      maxWidth: '200px',
       alignItems: 'center',
       color: 'inherit',
+      fontSize: "16px", 
     }}
   >
-    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '200px', color: '#000000',textTransform: 'none'  }}>
       Database Connection
     </ListItemIcon>
   </Button>
@@ -321,7 +339,8 @@ onClick={() => handleNavigation('/load_db')}
               width: '150px',
               justifyContent: 'center',
               color: '#000000',
-              textTransform: 'none' 
+              textTransform: 'none' ,
+              fontSize: "16px"
             }}
           >
             Design 
@@ -335,9 +354,10 @@ onClick={() => handleNavigation('/load_db')}
           PaperProps={{
             onMouseLeave: handleDesignMenuClose, 
             sx: {
-              width: menuWidth || 'auto',
+              width: '170px',
               backgroundColor: '#ffffff',
               color: 'black',
+              
             },
           }}
         >
@@ -357,10 +377,11 @@ onClick={() => handleNavigation('/load_db')}
                 sx={{
                   backgroundColor: location.pathname === '/Edit_Chart' ? '#c5c5c9' : 'inherit',
                   alignItems: 'center',
+                  fontSize: "16px", 
                 }}
               >
                 <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000',textTransform: 'none'  }}>
-                  edit
+                  Edit
                 </ListItemIcon>
               </Button>
 
@@ -374,6 +395,7 @@ onClick={() => handleNavigation('/load_db')}
                   maxWidth: '150px',
                   alignItems: 'center',
                   color: 'inherit',
+                  fontSize: "16px", 
                 }}
               >
                 <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' ,textTransform: 'none' }}>

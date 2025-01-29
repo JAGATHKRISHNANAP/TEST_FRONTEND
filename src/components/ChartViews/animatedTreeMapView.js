@@ -257,7 +257,7 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
     const tooltipRef = useRef(null);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-    const [boxSize, setBoxSize] = useState({ width: 300, height: 300 });
+    const [boxSize, setBoxSize] = useState({ width: 400, height: 400 });
     const charts = useSelector((state) => state.viewcharts.charts);
 
     const handleContextMenu = (event) => {
@@ -308,8 +308,8 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
               };
              
  const svg = d3.select(svgRef.current)
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", width-50)
+            .attr("height", height-50)
             .style('text-anchor', 'start')
         .style('font-size', `${xFontSize}px`) // Dynamic font size for x-axis
         .style('font-family', fontStyle)
@@ -320,7 +320,7 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
         const tooltip = d3.select(tooltipRef.current);
 
         const treemapLayout = d3.treemap()
-            .size([width, height])
+            .size([width, height-50])
             .padding(5);
 
         const root = d3.hierarchy(data)
@@ -490,8 +490,8 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
                 onResize={(event, { size }) => setBoxSize(size)}
                 onContextMenu={handleContextMenu}
             >
-                <svg ref={svgRef}></svg>
-                <div ref={tooltipRef} className="maptooltip" style={{ display: 'none', position: 'absolute', opacity: 0 }}></div>
+                <svg ref={svgRef}  width="100%" height="80%" style={{ flex: "1 1 auto" }}></svg>
+                {/* <div ref={tooltipRef} className="maptooltip" style={{ display: 'none', position: 'absolute', opacity: 0 }}></div> */}
             </ResizableBox>
         </div>
     );

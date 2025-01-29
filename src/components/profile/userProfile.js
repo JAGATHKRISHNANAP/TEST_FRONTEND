@@ -58,10 +58,10 @@ import { Avatar, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setProfilePic } from "../../features/Dashboard-Slice/userSlice";
 
-const UserProfile = ({ appBarColor }) => {
+const UserProfile = ({ appBarColor,username }) => {
   const dispatch = useDispatch();
   const profilePic = useSelector((state) => state.user.profilePic);
-  const username = useSelector((state) => state.user.username);
+  // const username = useSelector((state) => state.user.username);
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];

@@ -207,21 +207,21 @@ const Dendrogram = ({ x_axis, treeData }) => {
         backgroundColor: 'white',
         marginLeft: '1px',
         width: '100%',
-        height: '50%',
         overflow: 'hidden',
       }}
     >
+      
       <ResizableBox
-        width={boxSize.width}
-        height={boxSize.height}
+        width={400}
+        height={400}
         minConstraints={[300, 300]}
-        maxConstraints={[800, 600]}
+        maxConstraints={[1200, 600]}
         onResize={(event, { size }) => {
           setBoxSize(size);
         }}
         style={{ outline: "none" }}
       >
-        <svg ref={svgRef} width={boxSize.width} height={boxSize.height} />
+        <svg ref={svgRef} width='100%' height='100%' />
       </ResizableBox>
     </div>
   );

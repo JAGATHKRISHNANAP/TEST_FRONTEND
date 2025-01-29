@@ -23,7 +23,7 @@ const DroppableArea = ({ onDrop, children }) => {
         backgroundColor: 'white',
         padding: '10px',
         border: isOver ? '2px solid #007bff' : '2px solid #ccc',  // Blue border on hover
-        minHeight: '82vh',
+        minHeight: '86vh',
         display: 'flex',
         flexWrap: 'wrap',
         gap: '10px',

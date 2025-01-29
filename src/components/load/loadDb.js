@@ -742,63 +742,99 @@ const LoadDbFile = () => {
           {/* Table Details Section */}
           {selectedTable && tableDetails && (
             <Grid item xs={12} sx={{ marginTop: '20px' }}>
-              <Typography variant="h6" align="center">
+              {/* <Typography variant="h6" align="center">
                 Table Details for {selectedTable}:
-              </Typography>
-              <TableContainer component={Paper} sx={{
-                    maxHeight: 320,
-                    overflow: 'auto',
-                    borderRadius: '10px',
-                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-                    marginTop: '15px',
-                    padding: '16px',
-                    width: '100%', // Center the table
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}>
-                {isLoading ? (
-                  <Box sx={{ padding: '20px' }}>
-                    <Skeleton variant="text" width="100%" height={40} />
-                  </Box>
-                ) : (
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        {Object.keys(limitedTableDetails[0] || {}).map((key) => (
-                          <TableCell key={key} sx={{ fontWeight: 'bold' }}>
-                            {key}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {limitedTableDetails.map((row, index) => (
-                        <TableRow key={index}>
-                          {Object.values(row).map((value, colIndex) => (
-                            <TableCell key={colIndex}>{value}</TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </TableContainer>
-            </Grid>
-          )}
+              </Typography> */}
+              <TableContainer component={Paper} 
+                    sx={{
+                      maxHeight: 320,
+                      overflow: 'auto',
+                      borderRadius: '10px',
+                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                      marginTop: '15px',
+                      padding: '16px',
+                      width: '100%', // Center the table
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}>
+               {isLoading ? (
+                                  <Box sx={{ padding: '20px' }}>
+                                    <Skeleton variant="text" width="100%" height={40} sx={{ marginBottom: '10px' }} />
+                                    <Skeleton variant="text" width="80%" height={40} sx={{ marginBottom: '10px' }} />
+                                    <Skeleton variant="text" width="60%" height={40} sx={{ marginBottom: '10px' }} />
+                                    {/* Add more Skeleton components for rows */}
+                                  </Box>
+                                ) : (
+                                  <Table sx={{ minWidth: 650 }}>
+                                    <TableHead sx={{ backgroundColor: theamColor }}>
+                                      <TableRow>
+                                        {Object.keys(limitedTableDetails[0] || {}).map((key) => (
+                                          <TableCell
+                                            key={key}
+                                            sx={{
+                                              color: '#fff',
+                                              fontWeight: 'bold',
+                                              textAlign: 'center',
+                                              padding: '10px 16px',
+                                            }}
+                                          >
+                                            {key}
+                                          </TableCell>
+                                        ))}
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {limitedTableDetails.map((row, rowIndex) => (
+                                        <TableRow
+                                          key={rowIndex}
+                                          sx={{
+                                            '&:nth-of-type(odd)': {
+                                              backgroundColor: '#f9f9f9',
+                                            },
+                                            '&:hover': {
+                                              backgroundColor: '#e0f7fa',
+                                              cursor: 'pointer',
+                                            },
+                                          }}
+                                        >
+                                          {Object.values(row).map((value, colIndex) => (
+                                            <TableCell
+                                              key={colIndex}
+                                              sx={{
+                                                textAlign: 'center',
+                                                padding: '10px 16px',
+                                                fontSize: '14px',
+                                              }}
+                                            >
+                                              {value}
+                                            </TableCell>
+                                          ))}
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                )}
+                              </TableContainer>
+                            </Grid>
+                          )}
 
           {/* Load Table Button */}
           <Box sx={{ marginTop: '20px', textAlign: 'center' }}>
-            <Button
-              variant="contained"
-              onClick={handleLoadTable}
-              sx={{
-                backgroundColor: theamColor,
-                '&:hover': { backgroundColor: lighterColor },
-              }}
-              disabled={!selectedTable}
-            >
-              Load Table
-            </Button>
+          <Button
+  variant="contained"
+  onClick={handleLoadTable}
+  sx={{
+    backgroundColor: theamColor,
+    '&:hover': {
+      backgroundColor: lighterColor,
+    },
+    textTransform: 'none', // Prevents the text from being capitalized
+  }}
+  disabled={!selectedTable}
+>
+  Load
+</Button>
+
           </Box>
         </Container>
         <Snackbar

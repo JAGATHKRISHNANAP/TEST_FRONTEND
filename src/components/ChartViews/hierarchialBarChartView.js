@@ -427,16 +427,15 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
     return (
         <div className="app">
             <div className="row">
-                <div className="d3-bar-chart">
+                
+                <div className="d3-bar-chart" style={{ position: 'relative', width: '90%' }}>
                     <ResizableBox
-                        width={chartDimensions.width}
-                        height={chartDimensions.height}
-                        minConstraints={[300, 300]}
-                        maxConstraints={[1200, 800]}
+                         width={400} height={400}
+                         minConstraints={[300, 300]} maxConstraints={[1200, 800]}
                         onResize={onResize}
                     >
-                        <svg ref={svgRef} width="100%" height="100%" />
-                        <div ref={tooltipRef} className="tooltip"></div>
+                        <svg ref={svgRef} width="100%" height="90%" />
+                        {/* <div ref={tooltipRef} className="tooltip"></div> */}
                     </ResizableBox>
                 </div>
             </div>

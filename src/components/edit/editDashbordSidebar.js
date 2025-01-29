@@ -146,7 +146,7 @@ function EditDashbordSidebar() {
           overflowX: "auto", // Enables horizontal scroll
           whiteSpace: "nowrap", // Prevents buttons from wrapping to the next line
           maxWidth: "100vw", // Prevents buttons from wrapping to the next line
-
+ justifyContent: 'flex-start'
           // backgroundColor: "#3f51b5",
         }}
       >

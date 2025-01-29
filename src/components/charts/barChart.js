@@ -646,6 +646,7 @@ import CustomToolTip from './customToolTip';
 import "./tooltip.css";
 import { sendCategoryToBackend } from '../../utils/api';
 import Draggable from 'react-draggable';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 const BarChart = ({ categories = [], values = [], aggregation }) => {
     const dispatch = useDispatch();
@@ -658,9 +659,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
     const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const [plotData, setPlotData] = useState({});
     const [barClicked, setBarClicked] = useState(false);
-    const [contextMenuVisible, setContextMenuVisible] = useState(false);
-    const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-    const [popupVisible, setPopupVisible] = useState(false);
+   
     const [sortedCategories, setSortedCategories] = useState(categories);
     const [sortedValues, setSortedValues] = useState(values);
     const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
@@ -668,7 +667,14 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
     const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
     const categoryColor = useSelector((state) => state.toolTip.categoryColor);
     const valueColor= useSelector((state) => state.toolTip.valueColor);
+    const [isFiltered, setIsFiltered] = useState(false); // Track if Top 10 or Bottom 10 is applied
+
     const contextMenuRef = useRef(null);
+
+    // useEffect(() => {
+    //     // Call the handleTop10 on initial render
+    //     handleTop10();
+    // }, []);
 
     useEffect(() => {
         setSortedCategories(categories);
@@ -714,34 +720,30 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         }
       };
 
-    // const handleContextMenu = (event) => {
-    //     event.preventDefault();
-    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
-    //     setContextMenuVisible(true);
-    // };
+    const handleTop10 = () => {
+        const sortedData = [...sortedValues].map((value, index) => ({
+            category: sortedCategories[index],
+            value
+        }));
+        sortedData.sort((a, b) => b.value - a.value); // Sort descending
+        const top10 = sortedData.slice(0, 10); // Get top 10
+        setSortedCategories(top10.map(item => item.category));
+        setSortedValues(top10.map(item => item.value));
 
-    // const handleClickOutside = (event) => {
-    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-    //         setContextMenuVisible(false);
-    //     }
-    // };
-
-    // const handleShowPopup = () => {
-    //     setPopupVisible(true);
-    //     setContextMenuVisible(false);
-    // };
-
-    // const handleClosePopup = () => {
-    //     setPopupVisible(false);
-    // };
-
-    // useEffect(() => {
-    //     document.addEventListener('click', handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener('click', handleClickOutside);
-    //     };
-    // }, []);
-
+    setIsFiltered(true); // Mark as filtered
+    };
+    
+    const handleBottom10 = () => {
+        const sortedData = [...sortedValues].map((value, index) => ({
+            category: sortedCategories[index],
+            value
+        }));
+        sortedData.sort((a, b) => a.value - b.value); // Sort ascending
+        const bottom10 = sortedData.slice(0, 10); // Get bottom 10
+        setSortedCategories(bottom10.map(item => item.category));
+        setSortedValues(bottom10.map(item => item.value));
+        setIsFiltered(true); // Mark as filtered
+    };
     const generateColors = (numColors) => {
         const colors = [];
         for (let i = 0; i < numColors; i++) {
@@ -773,7 +775,32 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                             title: 'Sort Descending',
                             class: 'custom-sort-descending',
                             click: handleSortDescending
-                        }
+                        },
+                         {
+                        icon: '<button style="background:none;border:none;color:#28a745;font-size:20px;">⬆️</button>',
+                        index: 3, // Top 10
+                        title: 'Show Top 10',
+                        class: 'custom-top-10',
+                        click: handleTop10,
+                    },
+                    {
+                        icon: '<button style="background:none;border:none;color:#dc3545;font-size:20px;">⬇️</button>',
+                        index: 4, // Bottom 10
+                        title: 'Show Bottom 10',
+                        class: 'custom-bottom-10',
+                        click: handleBottom10,
+                    },
+                    {
+                        icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
+                        index: 5, // Reset
+                        title: 'Reset Chart',
+                        class: 'custom-reset',
+                        click: () => {
+                            setSortedCategories(categories); // Reset categories
+                            setSortedValues(values);         // Reset values
+                            setIsFiltered(false);            // Clear filter state
+                        },
+                    },
                     ],
                     download: true,
                     selection: true,
@@ -960,7 +987,8 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                         />
                     </ResizableBox> */}
                       <ResizableBox
-  width={Math.max(values.length * 50, 600)} // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
+                      width={isFiltered ? Math.max(10 * 30, 600) : Math.max(values.length * 30, 600)}
+//   width={Math.max(values.length * 30, 600)} // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
   height='100px'
   minConstraints={[600, 300]} // Minimum width and height
   maxConstraints={[800, 500]} // Maximum width and height

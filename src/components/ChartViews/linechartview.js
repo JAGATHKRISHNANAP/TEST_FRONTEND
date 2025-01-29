@@ -516,14 +516,14 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize
         <div className="app">
             <div className="row">
                 <div className="line-chart">
-                    <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[800, 600]} >
+                    <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[600, 600]} >
                     <div className="chart-title">{customHeadings}</div>
                         <Chart
                             options={options}
                             series={series}
                             type="line"
                             width="100%"
-                            height="100%"
+                            height="90%"
                         />
                     </ResizableBox>
                 </div>

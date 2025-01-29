@@ -499,6 +499,7 @@ export const deleteChart = async (chartName) => {
   try {
     const response = await axios.delete(`http://localhost:5000/api/charts/${chartName}`);
     return response.data;
+    
   } catch (error) {
     console.error(`Error deleting chart "${chartName}":`, error);
     throw error;

@@ -259,7 +259,7 @@ const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", 
                 style: {
                     fontSize:`${xFontSize}px`,// Use dynamic font size
             fontStyle: fontStyle, // Apply dynamic font style
-             fontWeight: 400,
+             fontWeight: 100,
             colors:categoryColor, // Apply dynamic category color
                 },
                 rotate: -45,
@@ -335,13 +335,13 @@ const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", 
 
     return (
         <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
-            <ResizableBox width={300} height={300} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+            <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
                 <Chart
                     options={options}
                     series={series}
                     type="area" // Change from "line" to "area"
                     width="100%"
-                    height="100%"
+                    height="90%"
                 />
             </ResizableBox>
 

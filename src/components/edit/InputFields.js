@@ -725,7 +725,7 @@ const generateChart = async () => {
           <Item>
                 <div className="dash-right-side-container">
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
-                    <label htmlFor="x-axis-input">X-axis: </label>
+                  <label htmlFor="x-axis-input">Columns: </label>
                     <div className="input-fields" style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '10px' }}>
                       <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
                         {xAxis.map((column, index) => (
@@ -810,7 +810,7 @@ const generateChart = async () => {
                     <input type="text" className="input_edit" value={yAxis}  onChange={(event) => dispatch(setYAxis(event.target.value))} readOnly style={{ backgroundColor: '#ffffff', border: '1px solid #000' }} />
                   </div> */}
                   <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
-                    <label htmlFor="y-axis-input" style={{ margin: '15px 10px 0px 0px' }}>Y-axis: </label>
+                  <label htmlFor="y-axis-input" style={{ margin: '15px 30px 0px 0px' }}>Rows:  </label>
                     <div className="input-fields"  style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' ,marginTop:'5px'}}>
                     {/* <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "1px", marginLeft: "5px",marginRight : "5px" }}> */}
                     <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>

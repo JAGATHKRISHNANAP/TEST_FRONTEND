@@ -1054,9 +1054,9 @@ console.log("limitedTableDetails",limitedTableDetails)
             {/* Table Details Section */}
             {selectedTable && tableDetails && (
               <Grid item xs={12} sx={{ marginTop: '5px' }}>
-                <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                {/* <Typography variant="h6" sx={{ textAlign: 'center' }}>
                   Table Details for <>{selectedTable}</>:
-                </Typography>
+                </Typography> */}
                 <TableContainer
                   component={Paper}
                   sx={{
@@ -1140,18 +1140,20 @@ console.log("limitedTableDetails",limitedTableDetails)
               }}
             >
               <Button
-                variant="contained"
-                onClick={handleLoadTable}
-                sx={{
-                  backgroundColor: theamColor,
-                  '&:hover': {
-                    backgroundColor: lighterColor,
-                  },
-                }}
-                disabled={!selectedTable}
-              >
-                Load
-              </Button>
+  variant="contained"
+  onClick={handleLoadTable}
+  sx={{
+    backgroundColor: theamColor,
+    '&:hover': {
+      backgroundColor: lighterColor,
+    },
+    textTransform: 'none', // Prevents the text from being capitalized
+  }}
+  disabled={!selectedTable}
+>
+  Load
+</Button>
+
             </Box>
           </Grid>
         </Container>

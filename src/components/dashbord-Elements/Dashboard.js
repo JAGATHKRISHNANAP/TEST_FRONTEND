@@ -10,36 +10,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import TreeHierarchy from '../charts/treeHierarchy'; 
-import HierarchicalBarChart from '../charts/hierarchialBarChart';
-import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 import DashboardTableDetails from './dashbordTableDetails';
 import DashboardCharts from './dashbord-chartComponent';
-import Pie from '../charts/Pie';
-import LineChart from '../charts/lineChart';
-import ScatterPlot from '../charts/scatterChart';
-import BarChart from '../charts/barChart';
-import AreaChart from '../charts/area';
-import PolarAreaChart from '../charts/polarArea';
+
 import DuealChartInputsss from '../charts/duealChartInput';
-import DuelAxisChart from '../charts/duelAxesChart';
-import TextChart from '../charts/textChart';
-import MapChart from '../charts/mapchart';
-import SingleValueChart from '../charts/singleValueChart';
-import ChartColor from '../charts/color';
-import DuelBarChart from '../charts/duelBarChart';
-import BoxPlot from '../charts/boxPlot';
-import SampleAiTestChart from '../charts/sampleAiTestChart';
-import BoxPlotChart from '../charts/BoxPlotChart';
+
 import DashboardFilter from'./dashboardFilter';
 import {
   generateChart
 } from '../../features/Dashboard-Slice/chartSlice';
 import { saveDataToDatabase,validateSaveName } from '../../utils/api';
-import Treemap from '../charts/animatedTreeChart';
-import AiChart from '../charts/aiChart';
-import WordCloudChart from '../charts/wordCloudChart';
+
 import ChartDisplay from '../chartDisplay';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -83,11 +68,16 @@ function Dashboard() {
   const excelCheckedPaths = useSelector((state) => state.loadExcel.checkedPaths);
   const csvCheckedPaths = useSelector((state) => state.loadCsv.checkedPaths);
   const chart_heading = useSelector((state) => state.toolTip.customHeading);
-   const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
-      const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
-      const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
-      const categoryColor = useSelector((state) => state.toolTip.categoryColor);
-      const valueColor= useSelector((state) => state.toolTip.valueColor);
+  const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
+  const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
+  const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
+  const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+  const valueColor= useSelector((state) => state.toolTip.valueColor);
+  const [saveStatus, setSaveStatus] = useState(''); // State to manage save status message
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [snackbarMessage, setSnackbarMessage] = useState('');
+const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' or 'error'
+
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   // const selectedTable = selectedTablearray.join(',');
   const selectedTable=localStorage.getItem("selectedTable")
@@ -186,27 +176,7 @@ function Dashboard() {
         alert("Save name already exists. Please choose a different name.");
         return;
       }
-      
-      // console.log('Sending data to save:', saveName);
-      // // Proceed to save the chart if saveName is unique
-      // const response = await saveDataToDatabase({
-      //   user_id,
-      //   company_name,
-      //   selectedUser,
-      //   selectedTable,
-      //   databaseName,
-      //   xAxis,
-      //   yAxis,
-      //   aggregate,
-      //   chartType,
-      //   barColor,
-      //   chart_heading,
-      //   dashboardBarColor,
-      //   checkedOptions,
-      //   ai_chart_data: data.data,
-      //   saveName,
-
-      // });
+     
       const response = await saveDataToDatabase({
         user_id,
         company_name,
@@ -223,18 +193,23 @@ function Dashboard() {
         checkedOptions,
         ai_chart_data: data.data,
         saveName,
-        // Add font-related data here
-        xFontSize,          // Dynamic font size for x-axis
-        fontStyle,          // Font style for chart labels
-        categoryColor,      // Dynamic color for x-axis categories
-        yFontSize,          // Dynamic font size for y-axis
-        valueColor,         // Dynamic color for y-axis values
+        xFontSize,         
+        fontStyle,          
+        categoryColor,   
+        yFontSize,          
+        valueColor,        
       });
       console.log('Data saved successfully:', response);
-      setOpen(false);
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
+    setSnackbarSeverity('success');
+    setSnackbarMessage('Data saved successfully!');
+    setSnackbarOpen(true); // Show snackbar on success
+    setOpen(false);
+  } catch (error) {
+    console.error('Error saving data:', error);
+    setSnackbarSeverity('error');
+    setSnackbarMessage('Error saving data. Please try again.');
+    setSnackbarOpen(true); // Show snackbar on error
+  }
   };
   
   
@@ -254,14 +229,14 @@ function Dashboard() {
             </Item>
 
             <Grid item xs={12}>
-        <ChartDisplay
-          xAxis={xAxis}
-          yAxis={yAxis}
-          chartType={chartType}
-          plotData={plotData}
-          handleSaveButtonClick={handleSaveButtonClick}
-        />
-      </Grid>
+              <ChartDisplay
+                xAxis={xAxis}
+                yAxis={yAxis}
+                chartType={chartType}
+                plotData={plotData}
+                handleSaveButtonClick={handleSaveButtonClick}
+              />
+            </Grid>
           </Grid>
           <Grid item xs={12} md={1.5}>
             <Item>
@@ -269,6 +244,7 @@ function Dashboard() {
             </Item>
             {xAxis.length > 0 && (
               <div style={{ marginTop: '20px',marginRight:'5px'}}>
+                
                 {/* <Item> */} <DashboardFilter />
                 {/* </Item> */}
               </div>
@@ -295,6 +271,16 @@ function Dashboard() {
           <Button onClick={handleSaveToDatabase} color="primary">Save</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={6000} // Auto-hide after 6 seconds
+  onClose={() => setSnackbarOpen(false)}
+>
+  <MuiAlert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+    {snackbarMessage}
+  </MuiAlert>
+</Snackbar>
+
     </div>
   );
 }

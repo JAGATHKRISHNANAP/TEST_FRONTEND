@@ -542,7 +542,7 @@ return (
     >
       <div 
         className="chart-container" 
-        style={{ width: '100%', height: '100%', position: 'relative' }}
+        style={{ width: 'auto', height: 'auto', position: 'relative' }}
       >
         <div className="header">
           <IconButton onClick={toggleTableModal} aria-label="view">

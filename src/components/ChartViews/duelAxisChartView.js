@@ -425,13 +425,13 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
             <div className="row">
                 <div className="mixed-chart">  
                 {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[1100, 600]} onContextMenu={handleContextMenu}> */}
-                <ResizableBox width={400} height={300} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+                <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
                         <Chart
                             options={options}
                             series={series}
                             type="line"
                             width="100%"
-                            height="100%"
+                            height="90%"
                         />
                     </ResizableBox>
                 </div>

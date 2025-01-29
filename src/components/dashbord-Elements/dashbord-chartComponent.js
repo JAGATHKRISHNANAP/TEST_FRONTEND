@@ -19,7 +19,7 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 
 import CloudIcon from '@mui/icons-material/Cloud';
 import { FcComboChart } from "react-icons/fc";
-
+import { FcBarChart } from 'react-icons/fc'; 
 function DashboardCharts() {
   const dispatch = useDispatch();
   const DchartType = useSelector((state) => state.chartType.type);
@@ -184,7 +184,7 @@ return (
             onClick={() => handleChartTypeChange('duealbarChart')}
             disabled={isdueaLXButtonDisabled}
           >
-            <FcComboChart size={23}/>
+            <FcBarChart size={23}/>
           </Button>
         </Tooltip>
 
@@ -281,14 +281,14 @@ return (
             >
               <CloudIcon /> 
             </Button>
-            <Tooltip title="boxPlot" arrow></Tooltip>
+            {/* <Tooltip title="boxPlot" arrow></Tooltip>
             <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'boxPlot' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('boxPlot')}
             >
               <TipsAndUpdatesIcon /> 
-            </Button>
+            </Button> */}
         </Tooltip>
       </div>
     </Box>
