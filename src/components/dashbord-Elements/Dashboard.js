@@ -90,19 +90,7 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
     e.preventDefault();
     e.returnValue = '';  // This triggers a confirmation prompt
   };
-  // useEffect(() => {
-  //   // Listen for the beforeunload event
-  //   window.addEventListener('beforeunload', preventReload);
-    
-  //   // Cleanup the event listener on component unmount
-  //   return () => {
-  //     window.removeEventListener('beforeunload', preventReload);
-  //   };
-  // }, []);
-  // const handleSaveButtonClick = () => {
-  //   setSaveName('');
-  //   setOpen(true);
-  // };
+ 
 
   useEffect(() => {
     if (
@@ -123,50 +111,13 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
     setOpen(false);
   };
 
-  // const handleSaveToDatabase = async () => {
-  //   if (!saveName.trim()) {
-  //     alert("Please enter a save name before saving.");
-  //     return;
-  //   }
-
-  //   console.log('Sending data to save:', saveName);
-  //   try {
-  //     const response = await saveDataToDatabase({
-  //       user_id,
-  //       company_name,
-  //       selectedUser,
-  //       selectedTable,
-  //       databaseName,
-  //       xAxis,
-  //       yAxis,
-  //       aggregate,
-  //       chartType,
-  //       barColor,
-  //       chart_heading,
-  //       dashboardBarColor,
-  //       checkedOptions,
-  //       saveName,
-        
-  //     });
-  //     console.log('Data saved successfully:', response);
-  //     setOpen(false);
-  //   } catch (error) {
-  //     console.error('Error saving data:', error);
-  //   }
-  // };
   const handleSaveToDatabase = async () => {
     if (!saveName.trim()) {
       alert("Please enter a save name before saving.");
       return;
     }
   
-    // try {
-    //   // Check if the saveName already exists
-    //   const validationResponse = await axios.post(`http://localhost:5000/api/checkSaveName`, { saveName });
-    //   if (validationResponse.data.exists) {
-    //     alert("Save name already exists. Please choose a different name.");
-    //     return;
-    //   }
+  
   
     try {
       // Validate saveName

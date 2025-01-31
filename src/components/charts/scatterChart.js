@@ -41,28 +41,8 @@ const LineChart = ({ categories, values, aggregation }) => {
     const contextMenuRef = useRef(null);
     const [sortedCategories, setSortedCategories] = useState(categories);
     const [sortedValues, setSortedValues] = useState(values);
-        // const contextMenuRef = useRef(null);
+  const [isFiltered, setIsFiltered] = useState(false); // Track if Top 10 or Bottom 10 is applied
 
-    // const handleClicked = async (event, chartContext, config) => {
-    //     const clickedCategoryIndex = config.dataPointIndex;
-    //     const clickedCategory = categories[clickedCategoryIndex];
-    //     dispatch(setClickedCategory(clickedCategory));
-    //     try {
-    //         // Make an HTTP request to your backend
-    //         const response = await axios.post('http://localhost:5000/your-backend-endpoint', {
-    //             category: clickedCategory,
-    //             xAxis: xAxis,
-    //             yAxis: yAxis,
-    //             tableName: selectedTable,
-    //             aggregation: aggregate
-    //         });
-
-    //         setPlotData(response.data);
-    //         setBarClicked(true);
-    //     } catch (error) {
-    //         console.error('Error sending category to backend:', error);
-    //     }
-    // };
         const handleClicked = async (event, chartContext, config) => {
             const clickedCategoryIndex = config.dataPointIndex;
             const clickedCategory = categories[clickedCategoryIndex];
@@ -81,51 +61,35 @@ const LineChart = ({ categories, values, aggregation }) => {
               console.error('Error handling click event:', error);
             }
           };
-        // const handleClicked = async (event, chartContext, config) => {
-        //     const clickedCategoryIndex = config.dataPointIndex;
-        //     const clickedCategory = categories[clickedCategoryIndex];
-        //     dispatch(setClickedCategory(clickedCategory));
-        
-        //     try {
-        //         // Call the API function
-        //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
-        
-        //         setPlotData(responseData); // Update the state with the response
-        //         setBarClicked(true);
-        //     } catch (error) {
-        //         console.error('Failed to send category data:', error);
-        //     }
-        // };
-    
+ useEffect(() => {
+             setSortedCategories(categories);
+             setSortedValues(values);
+         }, [categories, values]);
+     
+const handleTop10 = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => b.value - a.value); // Sort descending
+    const top10 = sortedData.slice(0, 10); // Get top 10
+    setSortedCategories(top10.map(item => item.category));
+    setSortedValues(top10.map(item => item.value));
 
-    // const handleContextMenu = (event) => {
-    //     event.preventDefault();
-    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
-    //     setContextMenuVisible(true);
-    // };
+setIsFiltered(true); // Mark as filtered
+};
 
-    // const handleClickOutside = (event) => {
-    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-    //         setContextMenuVisible(false);
-    //     }
-    // };
-
-    // const handleShowPopup = () => {
-    //     setPopupVisible(true);
-    //     setContextMenuVisible(false); // Hide context menu when showing popup
-    // };
-
-    // const handleClosePopup = () => {
-    //     setPopupVisible(false);
-    // };
-
-    // useEffect(() => {
-    //     document.addEventListener('click', handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener('click', handleClickOutside);
-    //     };
-    // }, []);
-
+const handleBottom10 = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => a.value - b.value); // Sort ascending
+    const bottom10 = sortedData.slice(0, 10); // Get bottom 10
+    setSortedCategories(bottom10.map(item => item.category));
+    setSortedValues(bottom10.map(item => item.value));
+    setIsFiltered(true); // Mark as filtered
+}
     const handleSortAscending = () => {
         const sortedData = [...sortedValues].map((value, index) => ({
             category: sortedCategories[index],
@@ -175,8 +139,33 @@ const LineChart = ({ categories, values, aggregation }) => {
                             title: 'Sort Descending',
                             class: 'custom-sort-descending',
                             click: handleSortDescending
-                        }
-                    ],
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#28a745;font-size:20px;">⬆️</button>',
+                            index: 3, // Top 10
+                            title: 'Show Top 10',
+                            class: 'custom-top-10',
+                            click: handleTop10,
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#dc3545;font-size:20px;">⬇️</button>',
+                            index: 4, // Bottom 10
+                            title: 'Show Bottom 10',
+                            class: 'custom-bottom-10',
+                            click: handleBottom10,
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
+                            index: 5, // Reset
+                            title: 'Reset Chart',
+                            class: 'custom-reset',
+                            click: () => {
+                                setSortedCategories(categories); // Reset categories
+                                setSortedValues(values);         // Reset values
+                                setIsFiltered(false);            // Clear filter state
+                            },
+                        },
+                        ],
                     download: true,
                     selection: true,
                     zoom: false,
@@ -193,7 +182,7 @@ const LineChart = ({ categories, values, aggregation }) => {
             title: {
                 text: `${xAxis}`,
               },
-            categories: categories || [], // Make sure this array has the correct category names
+            categories:setSortedCategories || [], // Make sure this array has the correct category names
             labels: {
                 show: true,
                 style: {
@@ -275,58 +264,29 @@ const LineChart = ({ categories, values, aggregation }) => {
 
     const series = [{
         name: seriesName,
-        data: values || []
+        data: sortedValues || []
     }];
 
     return (
         <div className="app">
             <div className="row">
                 <div className="line-chart">
-                    {/* <ResizableBox width={500} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]} onContextMenu={handleContextMenu}> */}
-                   {/* <ResizableBox width={800} height={550} minConstraints={[300, 300]} maxConstraints={[800, 550]} >
-                   <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
-                                    
-                        <Chart
-                            options={options}
-                            series={series}
-                            type="scatter"
-                            width="100%"
-                            height="auto"
-                        />
-                    </ResizableBox> */}
+                
                      <ResizableBox
-                                       width={Math.max((values?.length || 0) * 50, 600)}  // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
-                                      height='100px'
-                                      minConstraints={[600, 300]} // Minimum width and height
-                                      maxConstraints={[800, 500]} // Maximum width and height
-                                      resizeHandles={['e', 'w']} // Allow horizontal resizing
-                                      className="resizable-chart"
-                                    > <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
-                                    <Chart options={options}series={series} type="scatter" height={500} />
-                                    
-                                      {/* <Chart options={options} series={[{ data: sortedValues }]} type="bar" height={500} /> */}
-                                    </ResizableBox>
+                       width={isFiltered ? Math.max(10 * 30, 600) : Math.max(values.length * 30, 600)} // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
+                       height='100px'
+                       minConstraints={[600, 300]} // Minimum width and height
+                       maxConstraints={[800, 500]} // Maximum width and height
+                       resizeHandles={['e', 'w']} // Allow horizontal resizing
+                       className="resizable-chart"
+                     > <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+                     <Chart options={options}series={series} type="scatter" height={500} />
+                     
+                       {/* <Chart options={options} series={[{ data: sortedValues }]} type="bar" height={500} /> */}
+                     </ResizableBox>
                 </div>
             </div>
-            {/* {contextMenuVisible && (
-                <ContectMenu ref={contextMenuRef} position={contextMenuPosition} onShowPopup={handleShowPopup} />
-            )} */}
-            {/* {popupVisible && <CustomToolTip onClose={handleClosePopup} />} */}
-            {/* {popupVisible && (
-        <Draggable>
-          <div>
-            <CustomToolTip onClose={handleClosePopup} />
-          </div>
-        </Draggable>
-      )} */}
-            {/* {barClicked && <DrillLineChart
-                categories={plotData.categories}
-                values={plotData.values}
-                aggregation={plotData.aggregation}
-                xAxis={xAxis}
-                yAxis={yAxis}
-                selectedTable={selectedTable}
-            />} */}
+            
         </div>
     );
 };

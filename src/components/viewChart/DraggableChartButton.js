@@ -264,15 +264,15 @@ const DraggableChartButton = ({ chartName, disabled, onRemove }) => {
   
 
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', margin: '4px' }} ref={drag}>
+    <div style={{ display: 'flex', alignItems: 'center', margin: '4px'}} ref={drag}>
       <Tooltip title={chartInUse ? "This chart is in use and cannot be deleted" : "Right-click to delete chart"}>
         <span>
-          <Button
+          {/* <Button
             sx={{
               margin: '4px',
               minWidth: '90px',
               color: 'white',
-              backgroundColor: 'primary.main',
+              backgroundColor: 'grey',
               justifyContent: 'center',
               maxHeight: '28px',
               fontSize: '12px',
@@ -294,6 +294,35 @@ const DraggableChartButton = ({ chartName, disabled, onRemove }) => {
           >
            <span> {chartName}</span>
           </Button>
+           */}
+           <Button
+  sx={{
+    margin: '4px',
+    minWidth: '90px',
+    color: 'white',
+    backgroundColor: '#B0B0B0', // Light grey color
+    justifyContent: 'center',
+    maxHeight: '28px',
+    fontSize: '12px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    padding: '6px',
+    position: 'relative',
+    display: 'inline-flex',
+    borderRadius: '4px',
+    textTransform: 'none',
+    '&:hover': {
+      backgroundColor: '#A0A0A0', // Slightly darker grey for hover
+      transform: 'scale(1.05)', // Slight zoom effect for hover
+    },
+    opacity: disabled ? 0.5 : isDragging ? 0.5 : 1, // Visual feedback on drag or disable
+  }}
+  disabled={disabled} // Disable button based on the disabled prop
+  onContextMenu={handleRightClick}
+>
+  <span>{chartName}</span>
+</Button>
+
         </span>
       </Tooltip>
 

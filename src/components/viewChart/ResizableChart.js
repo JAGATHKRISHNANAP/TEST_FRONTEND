@@ -2,7 +2,8 @@ import React, { useState, useEffect,context, useRef } from 'react';
 import './resizable.css';
 import Draggable from 'react-draggable';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
+import { IconButton,Menu,
+  MenuItem, } from '@mui/material';
 import axios from 'axios';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -62,6 +63,8 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const isDashboard = context === "dashboard";
   const minWidth = isDashboard ? 200 : 800;
   const minHeight = isDashboard ? 50 : 300;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuPosition, setMenuPosition] = useState(null);
   const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
   const chart_id = data[0];
   const text_y_xis = data[2];
@@ -75,29 +78,6 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   );
 
 
-  // console.log("--------------------------------------------------------------------------------------",chartDataFromStore.series1);
-
-  // const sendDataToBackend = async () => {
-  //   try {
-  //     if (dataFetchedRef.current) return; // Prevent re-fetching
-  //     dataFetchedRef.current = true; // Set the flag to prevent duplicate fetches
-
-  //     const response = await sendChartData(chart_id, text_y_xis, text_y_database, text_y_table, text_y_aggregate);
-
-  //     const fetchedData = response.data;
-  //     const textChartData = { fetchedData, chart_id };
-  //     dispatch(addTextChart(textChartData));
-  //     setResult(fetchedData.total_x_axis);
-  //     setFetchedData(fetchedData);
-  //   } catch (error) {
-  //     console.error("Error sending data to backend", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   updateChartDetails(data.chartName, { width, height, position });
-  //   sendChartDetailsToBackend();
-  // }, [width, height, position]);
   const sendDataToBackend = async () => {
     try {
       if (dataFetchedRef.current) return; // Prevent re-fetching
@@ -132,19 +112,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
 
   const sendChartDetailsToBackend = async () => {
     try {
-      // const response = await axios.post('http://localhost:5000/api/send-chart-details', {
-      //   chart_id: data[0],
-      //   tableName: data[1],
-      //   x_axis: data[2],
-      //   y_axis: data[3],
-      //   aggregate: data[4],
-      //   chart_type: data[5],
-      //   chart_heading: data[7],
-      //   filter_options: data[9],
-      //   databaseName: data[10],
-      //   selectedUser,
-      //   position, // Send position to backend
-      // });
+    
       const response = await sendChartDetails(data, position, selectedUser);
   
       if (data[5] === 'treeHierarchy') {
@@ -269,7 +237,9 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
       try {
         await axios.post('http://localhost:5000/api/update-chart-position', {
           chart_id: data[0],
+          
           position: newPosition, // Sending updated position to backend
+         
         });
       } catch (error) {
         console.error('Error updating chart position:', error);
@@ -277,15 +247,47 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
     }
   };
 
-  const toggleTableModal = () => {
-    setTableModalOpen(!tableModalOpen);
+  // const toggleTableModal = () => {
+  //   setTableModalOpen(!tableModalOpen);
+  // };
+
+  // const handleRemove = () => {
+  //   onRemove(data.chartName);
+  //   dispatch(removeChartData(data[0]));
+  //   dispatch(updateSelectedCategory(null));
+  // };
+  // const handleContextMenu = (event) => {
+  //   event.preventDefault();
+    
+  // };
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+    setMenuPosition({
+      top: event.clientY,
+      left: event.clientX,
+    });
   };
 
+  // Close the context menu
+  const handleCloseMenu = () => {
+    setMenuPosition(null);
+  };
+
+
+  const toggleTableModal = () => {
+    setTableModalOpen(!tableModalOpen);
+    // handleCloseMenu();
+  };
   const handleRemove = () => {
     onRemove(data.chartName);
     dispatch(removeChartData(data[0]));
     dispatch(updateSelectedCategory(null));
+    console.log("Chart removed!");
+    handleCloseMenu();
   };
+  
+
 
   const renderChart = () => {
     switch (data[5]) {
@@ -331,19 +333,19 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         break;
         case 'area':
           if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-            return <AreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+            return <AreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
           }
           break;
       case 'animatedTreeChart':
         if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
         //   return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} />;
         // }
-        return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} chartColor={data[6]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+        return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} chartColor={data[6]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
             }
           break;
     case 'textChart':
             if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-              return <TextChartView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+              return <TextChartView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
             }
                 break;
       case 'sampleAitestChart':
@@ -540,37 +542,52 @@ return (
       // bounds={false} 
       position={position}
     >
-      <div 
-        className="chart-container" 
-        style={{ width: 'auto', height: 'auto', position: 'relative' }}
+      
+        <div
+      className="chart-container"
+      style={{ width: "auto", height: "auto", position: "relative" }}
+      onContextMenu={handleContextMenu} // Handle right-click
+    >
+      <div className="chart-area">{renderChart()}</div>
+
+      {/* Context Menu */}
+      <Menu
+      open={Boolean(menuPosition)}
+        onClose={handleCloseMenu} // Automatically close when clicking outside
+        anchorReference="anchorPosition"
+        anchorPosition={menuPosition ? { top: menuPosition.top, left: menuPosition.left } : undefined}
+     
       >
-        <div className="header">
-          <IconButton onClick={toggleTableModal} aria-label="view">
-            <VisibilityIcon />
-          </IconButton>
-          
-          <IconButton onClick={handleRemove} aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </div>
-        <div className="chart-area">
-          {renderChart()}
-        </div>
+        <MenuItem onClick={toggleTableModal}>
+          <VisibilityIcon sx={{ marginRight: "8px" }} /> View Data
+        </MenuItem>
+        <MenuItem onClick={handleRemove}>
+        
+          <DeleteIcon sx={{ marginRight: "8px" }} /> Delete Chart
+        </MenuItem>
+      </Menu>
 
-        <Dialog 
-          open={tableModalOpen} 
-          onClose={toggleTableModal} 
-          PaperProps={{ style: { minWidth: '400px', width: 'auto', maxWidth: '90%', maxHeight: '90%' } }}
+      {/* Dialog for viewing data */}
+      <Dialog
+        open={tableModalOpen}
+        onClose={toggleTableModal}
+        PaperProps={{
+          style: {
+            minWidth: "400px",
+            width: "auto",
+            maxWidth: "90%",
+            maxHeight: "90%",
+          },
+        }}
+      >
+        <IconButton
+          onClick={toggleTableModal}
+          aria-label="close"
+          style={{ position: "absolute", right: 8, top: 8 }}
         >
-          <IconButton 
-            onClick={toggleTableModal}
-            aria-label="close" 
-            style={{ position: 'absolute', right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-
-          <IconButton 
+          <CloseIcon />
+        </IconButton>
+        <IconButton 
             onClick={downloadChartAsImage} 
             aria-label="download image" 
             style={{ position: 'absolute', left: '50px', top: '16px' }}
@@ -588,14 +605,18 @@ return (
             </IconButton>
           </div>
 
-          <DialogTitle style={{ textAlign: 'center' }}>Chart Data</DialogTitle>
-
-          <DialogContent>
-            <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-              {renderTableData()}
-            </Box>
-          </DialogContent>
-        </Dialog>
+        <DialogTitle style={{ textAlign: "center" }}>Chart Data</DialogTitle>
+        <DialogContent>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            {renderTableData()}
+          </Box>
+        </DialogContent>
+      </Dialog>
       </div>
     </Draggable>
   </div>

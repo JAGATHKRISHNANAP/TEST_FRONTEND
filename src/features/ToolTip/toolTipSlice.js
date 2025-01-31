@@ -10,6 +10,7 @@ const initialState = {
     yFontSize: 12,        // Default font size for y-axis
     categoryColor: '#000', // Default color for x-axis labels
     valueColor: '#000',  
+    
 };
 
 const toolTipSlice = createSlice({

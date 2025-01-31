@@ -29,20 +29,16 @@ function DashboardView() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2} wrap="wrap">
           <Grid item xs={12} md={12} style={{marginTop:'80px'}}>
+            
             <DashboardDroppableArea />
           </Grid>
         </Grid>
       </Box>
-  <Grid container sx={{
-    width: '100%',
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    bgcolor: 'white',
-    p: 1,
-    maxHeight: '50px',
-    marginBottom: '5px',
-  }}justifyContent="center">
+     <Grid item xs={12} sx={{
+   position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', overflowX: 'auto',
+   boxShadow: 3, height: '60px', display: 'flex', flexWrap: 'nowrap', alignItems: 'flex-start',borderTop:` 2px solid grey` , paddingLeft: "10px"
+ }}>
+   {/* <Box sx={{ display: 'flex', justifyContent: 'flex-start', height: '40px', marginTop: '5px' ,borderTop:` 2px solid grey` , paddingLeft: "10px"}}> */}
     <ViewDashboardSidebar />
   </Grid>
     </div>

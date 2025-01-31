@@ -341,6 +341,7 @@ const Pie = (props) => {
   const [sortedCategories, setSortedCategories] = useState(categories);
   const [sortedValues, setSortedValues] = useState(values);
   const headingColor = useSelector((state) => state.toolTip.headingColor);
+ const [isFiltered, setIsFiltered] = useState(false); // Track if Top 10 or Bottom 10 is applied
 
   useEffect(() => {
     setSortedCategories(categories);
@@ -367,6 +368,30 @@ const Pie = (props) => {
     setSortedValues(sortedData.map((item) => item.value));
   };
 
+  const handleTop10 = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => b.value - a.value); // Sort descending
+    const top10 = sortedData.slice(0, 10); // Get top 10
+    setSortedCategories(top10.map(item => item.category));
+    setSortedValues(top10.map(item => item.value));
+
+setIsFiltered(true); // Mark as filtered
+};
+
+const handleBottom10 = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => a.value - b.value); // Sort ascending
+    const bottom10 = sortedData.slice(0, 10); // Get bottom 10
+    setSortedCategories(bottom10.map(item => item.category));
+    setSortedValues(bottom10.map(item => item.value));
+    setIsFiltered(true); // Mark as filtered
+};
   const handleClicked = async (event, chartContext, config) => {
     const clickedCategoryIndex = config.dataPointIndex;
     const clickedCategory = categories[clickedCategoryIndex];
@@ -406,6 +431,31 @@ const Pie = (props) => {
               class: 'custom-sort-descending',
               click: handleSortDescending,
             },
+            {
+              icon: '<button style="background:none;border:none;color:#28a745;font-size:20px;">⬆️</button>',
+              index: 3, // Top 10
+              title: 'Show Top 10',
+              class: 'custom-top-10',
+              click: handleTop10,
+          },
+          {
+              icon: '<button style="background:none;border:none;color:#dc3545;font-size:20px;">⬇️</button>',
+              index: 4, // Bottom 10
+              title: 'Show Bottom 10',
+              class: 'custom-bottom-10',
+              click: handleBottom10,
+          },
+          {
+              icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
+              index: 5, // Reset
+              title: 'Reset Chart',
+              class: 'custom-reset',
+              click: () => {
+                  setSortedCategories(categories); // Reset categories
+                  setSortedValues(values);         // Reset values
+                  setIsFiltered(false);            // Clear filter state
+              },
+          },
           ],
           download: true,
           selection: true,

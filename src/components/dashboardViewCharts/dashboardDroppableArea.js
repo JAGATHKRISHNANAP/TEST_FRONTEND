@@ -37,14 +37,14 @@ const DroppableArea = () => {
       style={{ 
         position: 'relative', 
         backgroundColor: 'white', 
-        padding: '10px', 
+        padding: '5px', 
         border: '1px solid #ccc', 
         minHeight: '85vh',
         display: 'flex',
         flexWrap: 'wrap', 
-        gap: '10px',
+        gap: '20px',
         overflow: 'hidden',  // Prevent overflow of dragged items outside the area
-      marginTop: '2px'
+      marginTop: 'px'
 
       }}
     >
@@ -73,6 +73,7 @@ const DroppableArea = () => {
 
       {chartdata && chartdata.length > 0 ? (
         chartdata.map((chart, index) => (
+          console.log("chart",chart),
           // console.log("dataframe_dict-----------------------------------------------------", chart.dataframe_dict),
           console.log("dataframe_dict-----------------------------------------------------", chart.histogram_details),
           console.log("X_axis-----------------------------------------------------", chart.aggregate),
@@ -155,17 +156,17 @@ const DroppableArea = () => {
                 chartColor={chart.chart_color}
               />
             )}
-            {chart.chart_type === 'duealChart' && (
-              <DualAxisChart
-                categories={chart.categories}
-                series1={chart.series1}
-                series2={chart.series2}
-                aggregation={chart.aggregate}
-                x_axis={chart.x_axis}
-                y_axis1={chart.y_axis1}
-                y_axis2={chart.y_axis2}
-              />
-            )}
+           {chart.chart_type === 'duealChart' && (
+  <DualAxisChart
+    categories={chart.categories}
+    series1={chart.series1}
+    series2={chart.series2}
+    x_axis={chart.x_axis}
+    y_axis1={chart.y_axis[0]}
+    y_axis2={chart.y_axis[1]}
+    aggregation={chart.aggregate}
+  />
+)}
 
 
 

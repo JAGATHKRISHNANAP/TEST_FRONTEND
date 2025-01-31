@@ -19,7 +19,10 @@ import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { BiSolidFileJson } from "react-icons/bi";
 import UserProfile from "../components/profile/userProfile";
 import { AiOutlineCloudServer } from "react-icons/ai";
-import { IoIosPaper } from 'react-icons/io'; 
+import { IoIosPaper } from 'react-icons/io';
+import { useDispatch } from 'react-redux'; // Import useDispatch
+import { resetState } from '../features/Dashboard-Slice/chartSlice'; // Import resetState
+
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
@@ -40,6 +43,8 @@ function Navbar() {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize dispatch
+
   const buttonRef = React.useRef(null);
 
   const theamColor=localStorage.setItem('theamColor',appBarColor);
@@ -95,10 +100,10 @@ function Navbar() {
   };
 
    const handleViewMenuMouseLeave = () => {
-    setTimeout(() => {
+    // setTimeout(() => {
       setOpenViewMenu(false); // Close the View menu after delay
-      setViewMenuAnchorEl(null);
-    }, 1000); // Adjust delay time as needed
+    //   setViewMenuAnchorEl(null);
+    // }, 1000); // Adjust delay time as needed
   };
   
 
@@ -114,10 +119,10 @@ function Navbar() {
   };
   
   const handleDesignMenuMouseLeave = () => {
-    setTimeout(() => {
+    // setTimeout(() => {
       setOpenDesignMenu(false); // Close the Design menu after delay
-      setDesignMenuAnchorEl(null);
-    }, 1000); // Adjust delay time as needed
+    //   setDesignMenuAnchorEl(null);
+    // }, 1000); // Adjust delay time as needed
   };
   
  
@@ -133,11 +138,16 @@ function Navbar() {
   const handleLoginLogout = () => {
     if (isLoggedIn) {
       localStorage.clear();
+      localStorage.removeItem('yAxis');
+      localStorage.removeItem('xAxis');
       sessionStorage.removeItem('session_id');
       sessionStorage.removeItem('username');
       setIsLoggedIn(false);
+      dispatch(resetState());
       navigate('/login');
+
     } else {
+     
       navigate('/login');
     }
   };
@@ -234,7 +244,8 @@ function Navbar() {
     horizontal: "center",
   }}
   PaperProps={{
-    onMouseLeave: handleMenuClose,
+    onChangeComplete:handleMenuClose,
+    onMouseLeave: handleMenuMouseLeave,
     sx: {
       // width: menuWidth || 'auto',
       minWidth: 200,
@@ -352,7 +363,9 @@ onClick={() => handleNavigation('/load_db')}
           open={openDesignMenu}
           // onClose={handleDesignMenuClose}
           PaperProps={{
-            onMouseLeave: handleDesignMenuClose, 
+            // onMouseLeave: handleDesignMenuMouseLeave, 
+            onChangeComplete:handleDesignMenuClose,
+            onMouseLeave: handleDesignMenuMouseLeave,
             sx: {
               width: '170px',
               backgroundColor: '#ffffff',
@@ -409,7 +422,9 @@ onClick={() => handleNavigation('/load_db')}
                 open={openViewMenu}
                 // onClose={handleViewMenuClose}
                 PaperProps={{
-                  onMouseLeave: handleViewMenuClose, 
+                  // onMouseLeave: handleViewMenuMouseLeave, 
+                  onChangeComplete:handleViewMenuClose,
+                onMouseLeave: handleViewMenuMouseLeave,
                   sx: {
                     width: menuWidth || 'auto',
                     backgroundColor: '#ffffff',

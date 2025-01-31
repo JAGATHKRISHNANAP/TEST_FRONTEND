@@ -379,7 +379,9 @@ import {Snackbar, Alert, Box, Checkbox, FormControl, Grid, InputLabel, List, Lis
 import { useDispatch, useSelector } from "react-redux";
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType } from "../../features/EditChart/EditChartSlice";
+import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
+  setFontStyles,
+  setColorStyles, } from "../../features/EditChart/EditChartSlice";
 import AreaChart from "../charts/area";
 import DuelAxisChart from "../charts/duelAxesChart";
 import TextChart from "../charts/textChart";
@@ -407,6 +409,7 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  
 }));
 
 
@@ -448,6 +451,17 @@ function EditDashboard() {
   const databaseName = chartData[10] || "";
   const filterOptionss = chartData[9] || "";
   const selectedUser=chartData[11]||"";
+  const xFontSize= useSelector(state => state.chartdata.xFontSize)|| "";
+  const fontStyle=useSelector(state => state.chartdata.fontStyle)|| "";
+  const categoryColor=useSelector(state => state.chartdata.categoryColor)|| "";
+  const yFontSize=useSelector(state => state.chartdata.yFontSize)|| "";
+  const valueColor=useSelector(state => state.chartdata.valueColor)|| "";
+  // const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "");
+  // const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "");
+  // const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"");
+  // const categoryColor = useSelector((state) => state.toolTip.categoryColor||"");
+  // const valueColor= useSelector((state) => state.toolTip.valueColor);  
+    
   const filterOptionsas = filterOptionss.split(', ');
 
   console.log("filterOptionsas--------------------------1",filterOptionsas)
@@ -508,6 +522,7 @@ function EditDashboard() {
   // };
 
 const generateChart = async () => {
+  const filterOptionsString = filterOptions.join(', ');
   setIsChartGenerationClicked(true);
   try {
     const data = {
@@ -516,9 +531,12 @@ const generateChart = async () => {
       yAxis,
       aggregate,
       chartType,
-      checkedOptions,
+      filterOptions: checkedOptions.join(', '),
       databaseName,
-      selectedUser
+      selectedUser,
+      xFontSize,
+      yFontSize,
+      categoryColor,valueColor,fontStyle
     };
     
     const chartData = await generateChartData(data);
@@ -528,39 +546,7 @@ const generateChart = async () => {
   }
 };
 
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`,{
-  //       params: { databaseName }
-  //     });
-  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-  //     setFilterOptions(options);
-  //     setCheckedOptions(chartData[9]);
-  //     setShowFilterDropdown(true);
-  //     setSelectAllChecked(false);
-  //   } catch (error) {
-  //     console.error('Error fetching filter options:', error);
-  //   }
-  // };
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //      // Get connection type from localStorage
-  //     const response = await axios.get(`http://localhost:5000/plot_chart/${selectedTable}/${columnName}`, {
-  //       params: { databaseName,selectedUser }
-  //     });
-  //     const options = typeof response.data === 'string' ? response.data.split(', ') : response.data;
-
-  //     console.log("options",options)
-  //     setFilterOptions(options);
-  //     // setCheckedOptions(chartData[9]); // Combine fetched options and existing chart data
-  
-  //     setCheckedOptions(options);
-  //     setShowFilterDropdown(false);
-  //     setSelectAllChecked(false);
-  //   } catch (error) {
-  //     console.error('Error fetching filter options:', error);
-  //   }
-  // };
+ 
   const fetchFilterOptions = async (columnName) => {
     try {
       const options = await fetchFilterOptionsAPI( databaseName,selectedTable,columnName, selectedUser);
@@ -574,13 +560,7 @@ const generateChart = async () => {
       console.error('Error fetching filter options:', error);
     }
   };
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     fetchFilterOptions(xAxis);
-  //   }, 5000); 
 
-  //   return () => clearInterval(intervalId);
-  // }, []); 
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
@@ -641,48 +621,6 @@ const generateChart = async () => {
     }
   }, [xAxis]);
 
-  // const saveDataToDatabase = async () => {
-  //   try {
-  //     console.log('Sending data to save:', {
-  //       chartId,
-  //       selectedTable,
-  //       xAxis,
-  //       yAxis,
-  //       aggregate,
-  //       chartType,
-  //       chartData: plotData,
-  //       chartColor: barColor,
-  //       drilldownChartData: dashboardPlotData,
-  //       drillDownChartColor: dashboardBarColor,
-  //       filterOptions: checkedOptions.join(', '),
-  //       selectedUser
-  //     });
-
-  //     const response = await axios.post('http://localhost:5000/update_data', {
-  //       chartId,
-  //       selectedTable,
-  //       xAxis,
-  //       yAxis,
-  //       aggregate,
-  //       chartType,
-  //       chartData: plotData,
-  //       chartColor: barColor,
-  //       drilldownChartData: dashboardPlotData,
-  //       drillDownChartColor: dashboardBarColor,
-  //       filterOptions: checkedOptions.join(', '),
-  //       selectedUser
-  //     });
-  //     console.log("Data saved successfully:", response.data);
-  //     setSnackbarMessage("Data saved successfully!");
-  //     setSnackbarSeverity("success");
-  //     setShowSnackbar(true);
-  //   } catch (error) {
-  //     console.error("Error saving data:", error);
-  //     setSnackbarMessage("Failed to save data. Please try again.");
-  //     setSnackbarSeverity("error");
-  //     setShowSnackbar(true);
-  //   }
-  // };
 
   const saveDataToDatabase = async () => {
     try {
@@ -699,6 +637,12 @@ const generateChart = async () => {
         drillDownChartColor: dashboardBarColor,
         filterOptions: checkedOptions.join(', '),
         selectedUser,
+        xFontSize,         
+        fontStyle,          
+        categoryColor,   
+        yFontSize,          
+        valueColor,   
+        
       };
   
       const responseData = await saveChartData(payload);
@@ -780,7 +724,7 @@ const generateChart = async () => {
                                             style={{ marginRight: '10px' }} value={aggregate} 
                                             // onChange={(event) => dispatch(setAggregate(event.target.value))}
                                             onChange={(event) => {
-                                              if (xAxis.length === 0) {
+                                              if (!xAxis.length === 0) {
                                                 // Show an alert if no table is selected
                                                 alert("Please select a table before choosing an aggregation.");
                                               } else {
@@ -814,24 +758,7 @@ const generateChart = async () => {
                     <div className="input-fields"  style={{ width: "1000px", borderRadius: "10px", height: "40px", border: '1px solid #000', marginLeft: '1px' ,marginTop:'5px'}}>
                     {/* <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "1px", marginLeft: "5px",marginRight : "5px" }}> */}
                     <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
-                        {/* {yAxis.map((columnName) => (
-                        <ListItemButton
-                          key={columnName}
-                          // onClick={() => removeColumnFromYAxis(columnName)}
-                          value={yAxis} onChange={(event) => dispatch(setYAxis(event.target.value))} readOnly style={{ backgroundColor: '#ffffff', border: '1px solid #000', width: '50px',
-                            margin:'1px',
-                            borderRadius: '5px'
-                          }}
-                        >
-                          {columnName}
-                          <ListItemIcon>
-                            <ClearIcon />
-                          </ListItemIcon>
-                        </ListItemButton>
-                        ))} */}
-
-
-
+                       
                         {yAxis.map((columnName) => (
                           <div key={columnName} className="x-axis-column" value={yAxis} onChange={(event) => dispatch(setYAxis(event.target.value))} style={{maxHeight:"30px"}}>
                             <span>{columnName}</span>
@@ -844,25 +771,7 @@ const generateChart = async () => {
                     </div>
                     </div>
 
-                  {/* <div className="input-fields">
-                    <FormControl style={{ width: '200px', marginRight: '200px', marginTop: '10px' }}>
-                      <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>
-                      <NativeSelect
-                        style={{ marginRight: '10px' }} value={aggregate} onChange={(event) => dispatch(setAggregate(event.target.value))}
-                        inputProps={{
-                          name: 'age',
-                          id: 'uncontrolled-native',
-                        }}
-                      >
-                        <option value="sum">Sum</option>
-                        <option value="average">Average</option>
-                        <option value="count">Count</option>
-                        <option value="minimum">Minimum</option>
-                        <option value="maximum">Maximum</option>
-                        <option value="variance">Variance</option>
-                      </NativeSelect>
-                    </FormControl>
-                  </div> */}
+                
                 </div>
                 </Item>
                 {xAxis.length > 0 && chartType === "pie" && (
@@ -941,8 +850,13 @@ const generateChart = async () => {
             <div style={{ marginTop: '20px' }}>
               <Item>
                 <div className="chart-container">
-                  <DuelAxisChart categories={plotData && plotData.categories} values={plotData && plotData.values} aggregation={plotData && plotData.aggregation} />
-                </div>
+                <DuelAxisChart
+                      categories={plotData?.categories}
+                      series1={plotData?.series1}
+                      series2={plotData?.series2}
+                      aggregation={plotData?.aggregation}
+                    />
+                  </div>
                 <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
               </Item>
             </div>
@@ -1006,11 +920,28 @@ const generateChart = async () => {
                    <button className="save-button" onClick={saveDataToDatabase}>Save Data to Database</button>
                  </div>
                </div>)}
+               {xAxis.length > 0 && chartType === "duealbarChart" && (
+              <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <DuelBarChart
+                      categories={plotData?.categories}
+                      series1={plotData?.series1}
+                      series2={plotData?.series2}
+                      aggregation={plotData?.aggregation}
+                    />
+                  </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={saveDataToDatabase}>Save Chart</button>
+                </div>
+              </div>
+            )}
                {xAxis.length > 0 && chartType === "hierarchialBarChart" && (
               <div style={{ marginTop: '20px' }}>
                 <Item>
                   <div className="chart-container">
-                    <HierarchicalBarChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
+                  <HierarchicalBarChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
                   </div>
                 </Item>
                 <div className='btn-container'>

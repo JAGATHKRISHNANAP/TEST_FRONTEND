@@ -234,9 +234,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_axis1,y_axis2, aggregation, xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor" }) => {
     const dispatch = useDispatch();
+    console.log("categories",categories)
+    console.log("series1",series1)
+    console.log("series2",series2,)
     console.log("aggregation",aggregation)
-    console.log("xaxis",y_axis1,)
-    console.log("yaxis",y_axis2,)
+    console.log("y1",y_axis1,)
+    console.log("y2",y_axis2,)
     console.log("xaxis",x_axis)
 
     const charts = useSelector((state) => state.viewcharts.charts);
@@ -315,14 +318,14 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
                 colors:valueColor, 
             },
             formatter: (value) => {
-                if (value >= 10000000) {
+                if (value >= 10000000) { // For values in crores (millions)
                     return (value / 10000000).toFixed(1) + 'M';
-                } else if (value >= 100000) {
+                } else if (value >= 100000) { // For values in lakhs (hundred thousand)
                     return (value / 100000).toFixed(1) + 'L';
-                } else if (value >= 1000) {
+                } else if (value >= 1000) { // For values in thousands
                     return (value / 1000).toFixed(1) + 'K';
                 } else {
-                    return value;
+                    return value; // For smaller values
                 }
             }
         },
@@ -341,14 +344,14 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
                 colors:valueColor, 
             },
             formatter: (value) => {
-                if (value >= 10000000) {
+                if (value >= 10000000) { // For values in crores (millions)
                     return (value / 10000000).toFixed(1) + 'M';
-                } else if (value >= 100000) {
+                } else if (value >= 100000) { // For values in lakhs (hundred thousand)
                     return (value / 100000).toFixed(1) + 'L';
-                } else if (value >= 1000) {
+                } else if (value >= 1000) { // For values in thousands
                     return (value / 1000).toFixed(1) + 'K';
                 } else {
-                    return value;
+                    return value; // For smaller values
                 }
             }
         },
@@ -406,20 +409,33 @@ const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], x_axis, y_
         
     };
 
+    // const series = [
+    //     {
+    //         name: y_axis1 || 'Series 1',
+    //         type: 'bar',
+    //         data: series1,
+    //         // color: '#008FFB'
+    //     },
+    //     {
+    //         name: y_axis2 || 'Series 2',
+    //         type: 'line',
+    //         data: series2,
+    //         color: '#00E356'
+    //     }
+    // ];
     const series = [
-        {
-            name: y_axis1 || 'Series 1',
-            type: 'bar',
-            data: series1,
-            // color: '#008FFB'
-        },
-        {
-            name: y_axis2 || 'Series 2',
-            type: 'line',
-            data: series2,
-            color: '#00E356'
-        }
-    ];
+  {
+    name: y_axis1 || 'Series 1',
+    type: 'bar',
+    data: series1.length > 0 ? series1 : [0], // Fallback value
+  },
+  {
+    name: y_axis2 || 'Series 2',
+    type: 'line',
+    data: series2.length > 0 ? series2 : [0], // Fallback value
+  },
+];
+
     return (
         <div className="app">
             <div className="row">

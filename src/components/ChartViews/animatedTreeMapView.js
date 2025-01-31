@@ -313,7 +313,7 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
             .style('text-anchor', 'start')
         .style('font-size', `${xFontSize}px`) // Dynamic font size for x-axis
         .style('font-family', fontStyle)
-        .style('fill', categoryColor); // Dynamic color for x-axis
+        .style('fill', categoryColor);
            
 
 

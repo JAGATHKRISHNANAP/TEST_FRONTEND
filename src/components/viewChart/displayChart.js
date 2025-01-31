@@ -480,28 +480,133 @@ function Charts() {
       });
   }, [dispatch, user_id]);
 
+  // const handleChartButtonClick = useCallback(async (chartName) => {
+  //   console.log(`Chart Name: ${chartName}`);
+  
+  //   try {
+  //     const data = await fetchSingleChartData(chartName);
+  //     console.log("Data fetched from chartdata:", data);
+  
+  //     // Calculate position based on existing charts
+  //     const margin = 20; // Space between charts
+  //     const chartWidth = 500;
+  //     const chartHeight = 400;
+  //     const chartsPerRow = 4; // Number of charts per row
+  
+  //     const existingCharts = [...chartData];
+  //     const totalCharts = existingCharts.length;
+  
+  //     // Calculate new chart's row and column
+  //     const row = Math.floor(totalCharts / chartsPerRow);
+  //     const col = totalCharts % chartsPerRow;
+  
+  //     const newPosition = {
+  //       x: col * (chartWidth + margin) + margin, // Horizontal position
+  //       y: row * (chartHeight + margin) + margin, // Vertical position
+  //     };
+  
+  //     setChartData((prevData) => [
+  //       ...prevData,
+  //       {
+  //         ...data,
+  //         chartName,
+  //         width: chartWidth,
+  //         height: chartHeight,
+  //         position: newPosition,
+  //       },
+  //     ]);
+  
+  //     setDroppedCharts((prev) => [...prev, chartName]);
+  //     setError(null);
+  //   } catch (error) {
+  //     console.error(`Error fetching data for Chart ${chartName}:`, error);
+  //     setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
+  //   }
+  // }, [chartData]);
+  
   const handleChartButtonClick = useCallback(async (chartName) => {
     console.log(`Chart Name: ${chartName}`);
-  
+
     try {
       const data = await fetchSingleChartData(chartName);
-      console.log('Data fetched from chartdata:', data);
-  
-      setChartData((prevData) => {
-        const newData = [
+      console.log("Data fetched from chartdata:", data);
+
+      // Define dimensions and spacing
+      const margin = 20; // Space between charts
+      const chartWidth = 500;
+      const chartHeight = 400;
+      const chartsPerRow = 4; // Number of charts per row
+
+      const existingCharts = [...chartData];
+      const totalCharts = existingCharts.length;
+
+      // Calculate new chart's row and column
+      const row = Math.floor(totalCharts / chartsPerRow);
+      const col = totalCharts % chartsPerRow;
+
+      // Calculate new position
+      const newPosition = {
+        x: col * (chartWidth + margin) + margin, // Horizontal position
+        y: row * (chartHeight + margin) + margin, // Vertical position
+      };
+
+      // Check if the new position is already taken
+      const isPositionTaken = existingCharts.some((chart) =>
+        chart.position.x === newPosition.x && chart.position.y === newPosition.y
+      );
+
+      // If position is taken, find a new available position (you can create a function to search for available spots)
+      if (isPositionTaken) {
+        let foundAvailablePosition = false;
+        let tempPosition = newPosition;
+        let i = 1;
+
+        // Try finding an empty spot
+        while (!foundAvailablePosition) {
+          tempPosition = {
+            x: (col + i) * (chartWidth + margin) + margin,
+            y: row * (chartHeight + margin) + margin,
+          };
+          foundAvailablePosition = !existingCharts.some(
+            (chart) => chart.position.x === tempPosition.x && chart.position.y === tempPosition.y
+          );
+          i++;
+        }
+
+        // Use the found position
+        setChartData((prevData) => [
           ...prevData,
-          { ...data, chartName, width: 500, height: 400, position: { x: 0, y: 0 } },
-        ];
-        return newData;
-      });
-  
+          {
+            ...data,
+            chartName,
+            width: chartWidth,
+            height: chartHeight,
+            position: tempPosition, // Use the new position
+          },
+        ]);
+      } else {
+        // If position is available, simply add the chart at the new position
+        setChartData((prevData) => [
+          ...prevData,
+          {
+            ...data,
+            chartName,
+            width: chartWidth,
+            height: chartHeight,
+            position: newPosition, // Use the calculated position
+          },
+        ]);
+      }
+
       setDroppedCharts((prev) => [...prev, chartName]);
       setError(null);
     } catch (error) {
       console.error(`Error fetching data for Chart ${chartName}:`, error);
       setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
     }
-  }, []);
+  }, [chartData]);
+
+  
 
   const handleRemoveChart = useCallback((chartName) => {
     setChartData((prevData) => prevData.filter((data) => data.chartName !== chartName));
@@ -561,11 +666,12 @@ function Charts() {
 
   const renderedCharts = useMemo(() => (
     chartData.map((data) => (
-      <Grid item xs={12} sm={5} md={4} lg={3} key={data.chartName} sx={{ padding: '16px' }}>
+      <Grid item xs={12} sm={5} md={5} lg={3} key={data.chartName} sx={{ padding: '16px' }}>
         <ResizableChart
           data={data}
           onRemove={handleCloseChart}
           updateChartDetails={updateChartDetails}
+          position={data.position}
         />
       </Grid>
     ))
@@ -599,18 +705,19 @@ function Charts() {
           </Box> 
         </Grid> */}
         <Grid item xs={12} sx={{
-  position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', overflowX: 'auto',
-  boxShadow: 3, height: '60px', display: 'flex', flexWrap: 'nowrap', alignItems: 'center',marginRight:'200PX' 
+  position: 'fixed', bottom: 0, left: 0, right: 0, bgcolor: 'white', overflowX: 'auto',justifyContent: "flex-start",
+  boxShadow: 3, height: '60px', display: 'flex', flexWrap: 'nowrap', alignItems: 'center',marginRight:'200PX' ,borderTop:` 2px solid grey` 
 }}>
-  <Box sx={{ display: 'flex', justifyContent: 'flex-start', height: '40px', marginTop: '5px' }}>
-    {renderedDraggableButtons}
-  </Box>
-  <Grid item xs={12} sx={{position: 'fixed', bottom: '0px', right: '0px', zIndex: 1000, bgcolor: 'white', height: '60px', display: 'flex', alignItems: 'center',width:'200PX'
+  {/* <Box sx={{ display: 'flex', justifyContent: 'flex-start', height: '40px', marginTop: '4px' }}>
+    
+  {/* </Box> */}
+  {renderedDraggableButtons} </Grid>
+  <Grid item xs={12} sx={{position: 'fixed', bottom: '0px', right: '0px', zIndex: 1000, bgcolor: 'white', height: '60px', display: 'flex', alignItems: 'center',justifyContent: "center",width:'200PX',borderTop: '2px solid grey'
 }}>
       
           <SaveDashboardButton onSaveClick={handleSaveClick}  />
         </Grid>
-</Grid>
+{/* </Grid> */}
 
 
         {error && <div className="error-message">{error}</div>}

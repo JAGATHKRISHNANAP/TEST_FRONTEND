@@ -59,30 +59,6 @@ function ViewDashboardSidebar() {
   }, [dispatch, user_id]);
 
 
-  // const handleChartButtonClick = (chartNumber, chartName) => {
-  //   dispatch(fetchDashboardData(chartName))
-  //     .unwrap()
-  //     .then((response) => {
-  //       console.log("Chart datas:", response); // Logging only chart_datas
-          
-  //       response.chart_datas.forEach((chartData) => {
-  //         if (chartData.chart_type === "singleValueChart") {
-  //           dispatch(addTextChart(chartData));
-  //         }
-  //       });
-
-  //       const filteredChartData = response.chart_datas.filter(
-  //         (chartData) => chartData.chart_type !== "singleValueChart"
-  //       );
-  //       filteredChartData.forEach((chartData, index) => {
-  //         console.log("addChartData",addChartData)
-  //         dispatch(addChartData({ ...chartData, index }));
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error fetching chart data:", err);
-  //     });
-  // };
   const handleChartButtonClick = (chartNumber, chartName) => {
     dispatch(fetchDashboardData(chartName))
       .unwrap()
@@ -114,36 +90,7 @@ function ViewDashboardSidebar() {
         console.error("Error fetching chart data:", err);
       });
   };
-  
-  // const handleChartButtonClick = (chartNumber, chartName) => {
-  //   dispatch(fetchDashboardData(chartName))
-  //     .unwrap()
-  //     .then((response) => {
-  //       console.log("API Response:", response);  // Log the full response
-  //       // const { chart_datas } = response;
-  //       if (chart_datas && chart_datas.length > 0) {
-  //         // Handle data
-  //         chart_datas.forEach((chartData) => {
-  //           if (chartData.chart_type === "singleValueChart") {
-  //             dispatch(addTextChart(chartData));
-  //           }
-  //         });
-  
-  //         const filteredChartData = chart_datas.filter(
-  //           (chartData) => chartData.chart_type !== "singleValueChart"
-  //         );
-  //         filteredChartData.forEach((chartData, index) => {
-  //           dispatch(addChartData({ ...chartData, index }));
-  //         });
-  //       } else {
-  //         console.log("No chart data found.");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error fetching chart data:", err);
-  //     });
-  // };
-  
+
   
   const handleContextMenu = (event, chartName, index) => {
     event.preventDefault(); // Prevent default context menu
@@ -197,46 +144,54 @@ function ViewDashboardSidebar() {
     setOpenModal(false);
   };
 
-  return (
-    <div className="App">
-      <Box
-        className="editdashsidebar11"
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          overflowX: 'auto',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        <ButtonGroup
-          variant="contained"
-          color="primary"
-          aria-label="outlined primary button group"
-        >
-          {chartNamesArray.map((name, index) => (
-            <Button
-              sx={{
-                marginLeft: '2px',
-                marginRight: '2px',
-                minWidth: '100px',
-                color: "white",
-                justifyContent: "center",
-                maxHeight: '30px',
-                fontSize: '12px',
-                textOverflow: 'ellipsis',
-              }}
-              className="x-axis-column"
-              key={index + 1}
-              onClick={() => handleChartButtonClick(index + 1, name)}
+return (
+      <div className="App" style={{ height: '100vh' }}>
+        {/* Sidebar fixed at the bottom */}
+        <Box sx={{ 
+            position: 'fixed', 
+            bottom: 0, 
+            left: 0, 
+            right: 0, 
+            padding: '10px', 
+            backgroundColor: 'white', 
+            display: 'flex', 
+            justifyContent: 'flex-start',
+            overflowY: 'auto',  
+            // zIndex: 1000, // Ensure it's above other elements
+           
+        }}>
+         
+          
+            {chartNamesArray.map((name, index) => (
+              <Button
+                sx={{ 
+                  margin: '4px',
+              minWidth: '90px',
+              color: 'white',
+              backgroundColor: 'primary.main',
+              justifyContent: 'center',
+              maxHeight: '28px',
+              fontSize: '12px',
+              textOverflow: 'ellipsis',
+              whiteSpace: "nowrap",
+              padding: '6px',
+              position: 'relative',
+              display: 'inline-flex',
+              borderRadius: '4px',
+              textTransform: 'none',
+                  '&:hover': { backgroundColor: 'bgcolour' }
+                }}
+                className="x-axis-column"
+                key={index + 1}
+                onClick={() => handleChartButtonClick(index + 1, name)}
               onContextMenu={(event) => handleContextMenu(event, name, index)} // Right-click to open context menu
               >
-              {name}
-            </Button>
-          ))}
-        </ButtonGroup>
-      </Box>
-      <Menu
+                {name}
+              </Button>
+            ))}
+          </Box>
+        {/* </Box> */}
+        <Menu
   anchorReference="anchorPosition"
   anchorPosition={
     anchorEl
@@ -263,7 +218,7 @@ function ViewDashboardSidebar() {
       display: "flex",
       alignItems: "center",
       "&:hover": {
-        backgroundColor: "#f5f5f5", // Subtle gray hover effect for a cleaner look
+        backgroundColor: "#f5f5f5", 
       },
     }}
   >

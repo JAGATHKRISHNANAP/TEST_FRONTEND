@@ -515,7 +515,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize
     return (
         <div className="app">
             <div className="row">
-                <div className="line-chart">
+                {/* <div className="line-chart"> */}
                     <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[600, 600]} >
                     <div className="chart-title">{customHeadings}</div>
                         <Chart
@@ -526,7 +526,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize
                             height="90%"
                         />
                     </ResizableBox>
-                </div>
+                {/* </div> */}
             </div>
 
             {/* Button to trigger prediction */}

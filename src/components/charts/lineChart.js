@@ -316,6 +316,7 @@ import CustomToolTip from "./customToolTip";
 import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
 import { sendCategoryToBackend, fetchPredictionDataAPI } from '../../utils/api';
 import PredictedLineChart from "./predictionLineChart"; // Import the new component
+import { sort } from "d3";
 
 // const LineChart = ({ categories, values, aggregation }) => {
 const LineChart = ({ categories = [], values = [], aggregation }) => {
@@ -341,12 +342,11 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
     const [modalOpen, setModalOpen] = useState(false);
     const [timePeriod, setTimePeriod] = useState("");
     const [number, setNumber] = useState("");
+    const [isFiltered, setIsFiltered] = useState(false); // Track if Top 10 or Bottom 10 is applied
 
-    const [contextMenuVisible, setContextMenuVisible] = useState(false);
-    const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-    const [popupVisible, setPopupVisible] = useState(false);
-    const contextMenuRef = useRef(null);
-
+    const [sortedCategories, setSortedCategories] = useState(categories);
+    const [sortedValues, setSortedValues] = useState(values);
+    
     const handleClicked = async (event, chartContext, config) => {
         const clickedCategoryIndex = config.dataPointIndex;
         const clickedCategory = categories[clickedCategoryIndex];
@@ -365,33 +365,53 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
             console.error('Error handling click event:', error);
         }
     };
+ useEffect(() => {
+             setSortedCategories(categories);
+             setSortedValues(values);
+         }, [categories, values]);
+     
+const handleTop10 = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => b.value - a.value); // Sort descending
+    const top10 = sortedData.slice(0, 10); // Get top 10
+    setSortedCategories(top10.map(item => item.category));
+    setSortedValues(top10.map(item => item.value));
 
-    // const handleContextMenu = (event) => {
-    //     event.preventDefault();
-    //     setContextMenuPosition({ x: event.pageX, y: event.pageY });
-    //     setContextMenuVisible(true);
-    // };
+setIsFiltered(true); // Mark as filtered
+};
 
-    // const handleClickOutside = (event) => {
-    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-    //         setContextMenuVisible(false);
-    //     }
-    // };
+const handleBottom10 = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => a.value - b.value); // Sort ascending
+    const bottom10 = sortedData.slice(0, 10); // Get bottom 10
+    setSortedCategories(bottom10.map(item => item.category));
+    setSortedValues(bottom10.map(item => item.value));
+    setIsFiltered(true); // Mark as filtered
+}; const handleSortAscending = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => a.value - b.value);
+    setSortedCategories(sortedData.map(item => item.category));
+    setSortedValues(sortedData.map(item => item.value));
+};
 
-    // const handleShowPopup = () => {
-    //     setPopupVisible(true);
-    //     setContextMenuVisible(false);
-    // };
-
-    // const handleClosePopup = () => {
-    //     setPopupVisible(false);
-    // };
-
-    // const isDateCategory = (category) => {
-    //     const datePattern1 = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
-    //     const datePattern2 = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-    //     return datePattern1.test(category) || datePattern2.test(category);
-    // };
+const handleSortDescending = () => {
+    const sortedData = [...sortedValues].map((value, index) => ({
+        category: sortedCategories[index],
+        value
+    }));
+    sortedData.sort((a, b) => b.value - a.value);
+    setSortedCategories(sortedData.map(item => item.category));
+    setSortedValues(sortedData.map(item => item.value));
+};
     const isDateCategory = (category) => {
         const datePattern1 = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/; // Matches "YYYY-MM-DD HH:mm:ss"
         const datePattern2 = /^\d{1,2}\/\d{1,2}\/\d{4}$/; // Matches "MM/DD/YYYY" or "M/D/YYYY"
@@ -444,6 +464,47 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
             },
             toolbar: {
                 tools: {
+                    customIcons: [
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▲</button>',
+                            index: 1, // Start with the first position in the toolbar
+                            title: 'Sort Ascending',
+                            class: 'custom-sort-ascending',
+                            click: handleSortAscending
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▼</button>',
+                            index: 2, // Position right after the previous custom icon
+                            title: 'Sort Descending',
+                            class: 'custom-sort-descending',
+                            click: handleSortDescending
+                        },
+                         {
+                        icon: '<button style="background:none;border:none;color:#28a745;font-size:20px;">⬆️</button>',
+                        index: 3, // Top 10
+                        title: 'Show Top 10',
+                        class: 'custom-top-10',
+                        click: handleTop10,
+                    },
+                    {
+                        icon: '<button style="background:none;border:none;color:#dc3545;font-size:20px;">⬇️</button>',
+                        index: 4, // Bottom 10
+                        title: 'Show Bottom 10',
+                        class: 'custom-bottom-10',
+                        click: handleBottom10,
+                    },
+                    {
+                        icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
+                        index: 5, // Reset
+                        title: 'Reset Chart',
+                        class: 'custom-reset',
+                        click: () => {
+                            setSortedCategories(categories); // Reset categories
+                            setSortedValues(values);         // Reset values
+                            setIsFiltered(false);            // Clear filter state
+                        },
+                    },
+                    ],
                     download: true,
                     selection: true,
                     zoom: false,
@@ -455,7 +516,7 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
             }
         },
         xaxis: {
-            categories: categories || [],
+            categories: sortedCategories || [],
             title: { text: `${xAxis}` },
             // labels: { style: { fontSize: '12px', colors: ['#000'] } }
             labels: {
@@ -539,13 +600,13 @@ const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
                     <Chart options={options} series={[{ name: aggregation || 'Series', data: values || [] }]} type="line" width="100%" height="90%" />
                 </ResizableBox> */}
                 <ResizableBox
-                  width={Math.max(values.length * 50, 600)} // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
+                 width={isFiltered ? Math.max(10 * 30, 600) : Math.max(values.length * 30, 600)} // Adjust the multiplier (e.g., 50) and the minimum width (e.g., 300) as needed
                   height='100px'
                   minConstraints={[600, 300]} // Minimum width and height
                   maxConstraints={[800, 500]} // Maximum width and height
                   resizeHandles={['e', 'w']} // Allow horizontal resizing
                   className="resizable-chart"
-                ><Chart options={options} series={[{ name: aggregation || 'Series', data: values || [] }]} type="line" height={500} />
+                ><Chart options={options} series={[{ name: aggregation || 'Series', data: sortedValues || [] }]} type="line" height={500} />
                 
                   {/* <Chart options={options} series={[{ data: sortedValues }]} type="bar" height={500} /> */}
                 </ResizableBox>

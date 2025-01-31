@@ -716,10 +716,11 @@ export const generateChartData = async ({
   yAxis,
   aggregate,
   chartType,
-  checkedOptions,
+  filterOptions,
   databaseName,
-  selectedUser
-
+  selectedUser,xFontSize,
+  yFontSize,
+  categoryColor,valueColor,fontStyle
 }) => {
   
   const xAxisColumns = Array.isArray(xAxis) ? xAxis.join(', ') : '';  // Default to empty string if xAxis is not an array
@@ -731,9 +732,11 @@ export const generateChartData = async ({
       yAxis,
       aggregate,
       chartType,
-      filterOptions: checkedOptions.join(', '),
+      filterOptions,
       databaseName,
-      selectedUser
+      selectedUser,xFontSize,
+      yFontSize,
+      categoryColor,valueColor,fontStyle
     });
     return response.data;
   } catch (error) {

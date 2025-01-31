@@ -122,31 +122,6 @@ function DashboardTableDetails({ handleTableChange }) {
     }
   }, []);
 
-  // const fetchColumnInfo = async (selectedTable) => {
-  //   try {
-  //     const connectionType = localStorage.getItem('connectionType'); // Get connection type from localStorage
-  //     const selectedUser = localStorage.getItem('selectedUser');
-  //     // const response = await fetch(
-  //     //   `http://localhost:5000/column_names/${checkedPaths}?databaseName=${databaseName}&connectionType=${connectionType}&selectedUser=${selectedUser}`
-  //     // );
-  //     const response = await fetch(`http://localhost:5000/column_names/${selectedTable}?databaseName=${databaseName}&connectionType=${connectionType}&selectedUser=${selectedUser}`);   
-  //     const data = await response.json();
-  //     if (
-  //       data &&
-  //       data.numeric_columns &&
-  //       Array.isArray(data.numeric_columns) &&
-  //       data.text_columns &&
-  //       Array.isArray(data.text_columns)
-  //     ) {
-  //       dispatch(setColumnInfo(data));
-  //     } else {
-  //       console.error('Invalid data structure:', data);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching column information:', error);
-  //   }
-  // };
-  
   const fetchColumnInfo = async (selectedTable) => {
     try {
       const connectionType = localStorage.getItem('connectionType'); // Get connection type from localStorage
@@ -159,18 +134,6 @@ function DashboardTableDetails({ handleTableChange }) {
       console.error('Error while fetching data:', error);
     }
   };
-
-  // // Fetch column info at a regular interval
-  // React.useEffect(() => {
-  //   if (selectedTableName) {
-  //     const intervalId = setInterval(() => {
-  //       fetchColumnInfo(selectedTableName);
-  //     }, 5000); // Executes every 5 seconds
-
-  //     // Cleanup interval on component unmount
-  //     return () => clearInterval(intervalId);
-  //   }
-  // }, [selectedTableName]);
 
   const handleLocalTableChange = (event) => {
     const selectedTable = event.target.value;
