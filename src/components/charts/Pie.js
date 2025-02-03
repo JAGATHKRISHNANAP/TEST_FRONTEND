@@ -342,6 +342,21 @@ const Pie = (props) => {
   const [sortedValues, setSortedValues] = useState(values);
   const headingColor = useSelector((state) => state.toolTip.headingColor);
  const [isFiltered, setIsFiltered] = useState(false); // Track if Top 10 or Bottom 10 is applied
+const [legendPosition, setLegendPosition] = useState("right");
+    const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
+
+    // Function to toggle legend position
+    const toggleLegendPosition = () => {
+        setLegendPosition((prev) => {
+            const positions = ["top", "bottom", "left", "right", "hide"];
+            const newIndex = (positions.indexOf(prev) + 1) % positions.length;
+            return positions[newIndex];
+        });
+    };
+
+    useEffect(() => {
+        setChartKey((prev) => prev + 1); // Update chart key to force re-render
+    }, [legendPosition]);
 
   useEffect(() => {
     setSortedCategories(categories);
@@ -418,45 +433,54 @@ const handleBottom10 = () => {
         tools: {
           customIcons: [
             {
-              icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▲</button>',
-              index: 1,
-              title: 'Sort Ascending',
-              class: 'custom-sort-ascending',
-              click: handleSortAscending,
+                icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
+                index: 1, // Start with the first position in the toolbar
+                title: 'Sort Ascending',
+                class: 'custom-sort-ascending',
+                click: handleSortAscending
             },
             {
-              icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▼</button>',
-              index: 2,
-              title: 'Sort Descending',
-              class: 'custom-sort-descending',
-              click: handleSortDescending,
+                icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
+                index: 2, // Position right after the previous custom icon
+                title: 'Sort Descending',
+                class: 'custom-sort-descending',
+                click: handleSortDescending
             },
             {
-              icon: '<button style="background:none;border:none;color:#28a745;font-size:20px;">⬆️</button>',
-              index: 3, // Top 10
-              title: 'Show Top 10',
-              class: 'custom-top-10',
-              click: handleTop10,
-          },
-          {
-              icon: '<button style="background:none;border:none;color:#dc3545;font-size:20px;">⬇️</button>',
-              index: 4, // Bottom 10
-              title: 'Show Bottom 10',
-              class: 'custom-bottom-10',
-              click: handleBottom10,
-          },
-          {
-              icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
-              index: 5, // Reset
-              title: 'Reset Chart',
-              class: 'custom-reset',
-              click: () => {
-                  setSortedCategories(categories); // Reset categories
-                  setSortedValues(values);         // Reset values
-                  setIsFiltered(false);            // Clear filter state
-              },
-          },
-          ],
+                // Top 10: Using an upward double arrow symbol
+                icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
+                index: 3,
+                title: 'Show Top 10',
+                class: 'custom-top-10',
+                click: handleTop10,
+            },
+            {
+                // Bottom 10: Using a downward double arrow symbol
+                icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
+                index: 4,
+                title: 'Show Bottom 10',
+                class: 'custom-bottom-10',
+                click: handleBottom10,
+            },
+        {
+            icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
+            index: 5, // Reset
+            title: 'Reset Chart',
+            class: 'custom-reset',
+            click: () => {
+                setSortedCategories(categories); // Reset categories
+                setSortedValues(values);         // Reset values
+                setIsFiltered(false);            // Clear filter state
+            },
+        },
+        {
+          icon: '<button style="background:none;border:none;color:#007bff;font-size:16px;">📍</button>',
+          index: 6,
+          title: "Toggle Legend Position",
+          class: "custom-legend-toggle",
+          click: toggleLegendPosition,
+        },
+        ],
           download: true,
           selection: true,
           zoom: false,
@@ -469,6 +493,10 @@ const handleBottom10 = () => {
         offsetY: 0,
       },
     },
+    legend: {
+      show: legendPosition !== "hide",
+      position: legendPosition === "hide" ? "right" : legendPosition,
+  },
     labels: sortedCategories || [],
   };
 
@@ -519,7 +547,7 @@ const handleBottom10 = () => {
             />
           </ResizableBox>
         </div>
-        <div className="color-picker">{/* Additional content */}</div>
+        <div className="color-picker"></div>
       </div>
     </div>
   );

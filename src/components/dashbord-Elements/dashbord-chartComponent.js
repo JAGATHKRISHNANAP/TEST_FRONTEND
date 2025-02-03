@@ -85,7 +85,9 @@ function DashboardCharts() {
   const isButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 1);
   const isdueaLButtonDisabled = !(xAxis?.length === 1 && yAxis?.length === 2);
   const isdueaLXButtonDisabled = !(xAxis?.length === 2 && yAxis?.length === 1);
-  const isBARHIERARCHYButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length >= 1);
+
+  
+  const isBARHIERARCHYButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length === 1);
   const isTreeButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length===0 );
   const isSingleValueButtonDisabled = !(xAxis?.length === 1  && yAxis?.length===0);
   

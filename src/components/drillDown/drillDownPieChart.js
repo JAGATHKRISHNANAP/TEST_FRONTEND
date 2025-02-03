@@ -95,7 +95,7 @@ const DrillPieChart = ({ categories, values, aggregation, xAxis, yAxis, selected
         <div className="app">
             <div className="row">
                 <div className="mixed-chart">
-                    <ResizableBox width={500} height={250} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+                    <ResizableBox width={500} height={250} minConstraints={[300, 300]}  maxConstraints={[1200, 800]} style={{ border: '2px solid black' }}>
                         <Chart
                             options={options}
                             series={series}
@@ -106,7 +106,7 @@ const DrillPieChart = ({ categories, values, aggregation, xAxis, yAxis, selected
                     </ResizableBox>
                     {drilldownData && (
                         <div className="drilldown-chart">
-                            <ResizableBox width={500} height={250} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+                            <ResizableBox width={500} height={250} minConstraints={[300, 300]}  maxConstraints={[1200, 800]} style={{ border: '2px solid black' }}>
                                 <Chart
                                     options={{
                                         ...options,

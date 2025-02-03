@@ -204,7 +204,7 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { sendClickedCategory } from '../../utils/api';
 
-const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = [] }) => {
+const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",chartColor="chartColor", otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
     const [showResetButton, setShowResetButton] = useState(false); // State to show/hide the reset button
@@ -292,6 +292,7 @@ const AreaChart = ({ categories = [], values = [], aggregation = "Aggregation", 
                 }
             },
         },
+        colors: [chartColor],
         tooltip: {
             y: {
                 formatter: (value) => {

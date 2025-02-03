@@ -218,7 +218,7 @@ function Chartsview() {
 
   return (
     <div className="App">
-      <Box sx={{ flexGrow: 1, minHeight: "90vh", marginTop: "70px" ,backgroundColor:"white"}}>
+      <Box sx={{ flexGrow: 1, minHeight: "89vh", marginTop: "70px" ,backgroundColor:"white"}}>
         <Grid container spacing={2} wrap="wrap">
           <Grid item xs={12} md={12}>
             {/* Render charts when the user clicks on the buttons */}

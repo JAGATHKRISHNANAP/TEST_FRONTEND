@@ -444,7 +444,7 @@ const handleClicked = async (event, chartContext, config) => {
             },
         },
         dataLabels: {
-            enabled: false,
+            enabled: true,
         },
         grid: {
             borderColor: '#f1f3fa',
@@ -461,7 +461,7 @@ const handleClicked = async (event, chartContext, config) => {
 
     return (
         <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
-            <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+            <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]} >
                 <Chart
                     options={options}
                     series={series}

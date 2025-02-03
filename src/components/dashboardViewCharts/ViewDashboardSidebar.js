@@ -11,6 +11,8 @@ function ViewDashboardSidebar() {
   const dispatch = useDispatch();
   const [chartNamesArray, setChartNamesArray] = useState([]);
   const chartData = useSelector((state) => state.viewdashboard.dashboard_charts);
+  const [chartPositions, setChartPositions] = useState({});
+
   useEffect(() => {
     if (chartData) {
       localStorage.setItem("charts", JSON.stringify(chartData));
@@ -66,10 +68,17 @@ function ViewDashboardSidebar() {
         console.log("Chart data:", response); // Logging the chart data
   
         // Save the chart data in localStorage
-        if (response && response.chart_datas) {
-          // Save the chart data by chart name (or use another identifier)
-          localStorage.setItem(`chartData_${chartName}`, JSON.stringify(response.chart_datas));
-        }
+        if (response && response.chart_ids && response.position) {
+          const chartIds = response.chart_ids.replace(/[{}]/g, "").split(",");
+          const parsedPositions = JSON.parse(response.position.replace(/'/g, '"'));
+  
+          // Create a mapping of chart ID to its position
+          const chartPositionMap = chartIds.reduce((acc, chartId, index) => {
+            acc[chartId] = parsedPositions[index] || { x: 0, y: 0 }; // Default (0,0) if missing
+            return acc;
+          }, {});
+          setChartPositions(chartPositionMap);
+      }
   
         // Process the chart data as needed
         response.chart_datas.forEach((chartData) => {
@@ -162,7 +171,7 @@ return (
         }}>
          
           
-            {chartNamesArray.map((name, index) => (
+            {/* {chartNamesArray.map((name, index) => (
               <Button
                 sx={{ 
                   margin: '4px',
@@ -187,9 +196,40 @@ return (
               onContextMenu={(event) => handleContextMenu(event, name, index)} // Right-click to open context menu
               >
                 {name}
-              </Button>
-            ))}
-          </Box>
+              </Button> */}
+            
+      {chartNamesArray.map((name, index) => {
+        const position = chartPositions[index] || { x: 0, y: 0 }; // Default to (0,0) if not found
+        return (
+          <Button
+                sx={{ 
+                  margin: '4px',
+              minWidth: '90px',
+              color: 'white',
+              backgroundColor: 'primary.main',
+              justifyContent: 'center',
+              maxHeight: '28px',
+              fontSize: '12px',
+              textOverflow: 'ellipsis',
+              whiteSpace: "nowrap",
+              padding: '6px',
+              position: 'relative',
+              display: 'inline-flex',
+              borderRadius: '4px',
+              textTransform: 'none',
+                  '&:hover': { backgroundColor: 'bgcolour' }
+                }}
+                className="x-axis-column"
+                key={index + 1}
+                onClick={() => handleChartButtonClick(index + 1, name)}
+              onContextMenu={(event) => handleContextMenu(event, name, index)} // Right-click to open context menu
+              >
+                {name}
+              </Button> 
+            
+        );
+      })}
+        </Box>
         {/* </Box> */}
         <Menu
   anchorReference="anchorPosition"

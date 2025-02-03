@@ -201,7 +201,7 @@ import { updateSelectedCategory,setChartStatus,updateChartData ,updateSelectedCa
 import { useDispatch, useSelector } from 'react-redux';
 import { sendClickedCategory } from '../../utils/api';
 
-const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = [] }) => {
+const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",chartColor="chartColor", otherChartCategories = [] }) => {
     const dispatch = useDispatch();
 
     const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
@@ -328,6 +328,7 @@ const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_
                 }
             },
         },
+        colors: [chartColor],
         tooltip: {
             y: {
                 formatter: (value) => {
@@ -336,7 +337,7 @@ const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_
                 }
             }
         },
-        // colors: generateColors(categories.length),
+        // colors: chartColor,
         plotOptions: {
             line: {
                 distributed: true,

@@ -316,7 +316,7 @@ import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Selec
 // import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import { sendClickedCategory,fetchPredictionDataAPI } from '../../utils/api';
 
-const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = []  }) => {
+const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", chartColor="chartColor" ,otherChartCategories = []  }) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
     const xAxis = useSelector((state) => state.chart.xAxis);
@@ -483,7 +483,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize
             },
         },
 
-    colors: [lineColor],
+    colors: [chartColor],
 };
 
     let seriesName = '';

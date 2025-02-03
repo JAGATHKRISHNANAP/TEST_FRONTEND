@@ -29,6 +29,54 @@
     margin-bottom: 10px;
 }
 
+.toolbar button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s ease-in-out;
+}
+.toolbar button:hover {
+    transform: scale(1.2);
+}
+.toolbar {
+    position: relative;
+}
+
+.download-menu {
+    display: none;
+    position: absolute;
+    top: 40px; /* Adjust this to position the menu below the button */
+    right:530px;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.download-menu.show {
+    display: block;
+}
+
+.download-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.download-menu ul li {
+    margin: 10px 0;
+}
+
+.download-menu button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color:black;
+}
+
 
 
 
@@ -51,4 +99,18 @@
 .chart-container {
     max-width: 100%; /* Set a maximum width */
     overflow-x: auto; /* Enable horizontal scrolling */
+}
+.download-menu1 {
+    display: none;
+    position: absolute;
+    top: 50px; /* Adjust this value based on where you want the menu */
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 10;
+}
+
+.download-menu.show1 {
+    display: block;
 }

@@ -196,11 +196,22 @@ function Navbar() {
           <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
             {isLoggedIn ? 'Logout' : 'Login'}
           </Typography>
-
           {/* Toggle button for Color Picker */}
-          <IconButton color="inherit" onClick={handleColorPickerToggle}>
+          {/* <IconButton color="inherit" onClick={handleColorPickerToggle}>
             <PaletteIcon />
           </IconButton>
+           */}
+          {isLoggedIn && (
+  <>
+
+    {/* Color picker button displayed only when logged in */}
+    <IconButton color="inherit" onClick={handleColorPickerToggle}>
+      <PaletteIcon />
+    </IconButton>
+  </>
+)}
+
+
 
     
 
@@ -208,8 +219,11 @@ function Navbar() {
       </MuiAppBar>
 
       {isLoggedIn && (
+
         <MuiAppBar position="fixed" sx={{ top: '40px', height: '25px', backgroundColor: '#ffffff', color: '#1976d2', display: 'flex', justifyContent: 'center', zIndex: theme.zIndex.appBar +1 }}>
+          
           <Toolbar>
+            
             <ButtonGroup variant="text" aria-label="Basic button group" sx={{ height: '25px', display: 'flex' }}>
               <Button
                 aria-controls={openMenu ? 'data-source-menu' : undefined}

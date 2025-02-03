@@ -320,7 +320,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         series2={chartDataFromStore.series2.map(value => parseFloat(value))}
         aggregation={data[4]} x_axis={data[2]}
         y_axis1={data[3][0]} // Set y_axis1 to the first value in data[3]
-  y_axis2={data[3][1]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} 
+  y_axis2={data[3][1]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} 
       />
     );
   }
@@ -328,12 +328,12 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
 
       case 'line':
         if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-          return <LineChart categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+          return <LineChart categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} />;
         }
         break;
         case 'area':
           if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-            return <AreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+            return <AreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} />;
           }
           break;
       case 'animatedTreeChart':
@@ -361,12 +361,12 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
         // break;  
         case 'scatter':
             if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-              return <ScatterChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+              return <ScatterChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} />;
             }
             break;
             case 'hierarchialBarChart':
               if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                return <HierarchialBarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                return <HierarchialBarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]}  />;
               }
               break;
               // case 'wordCloud':
@@ -545,10 +545,24 @@ return (
       
         <div
       className="chart-container"
-      style={{ width: "auto", height: "auto", position: "relative" }}
+      style={{ width: "auto", height: "auto", position: "relative" ,
+        // display: "grid",
+        // gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", // Each cell at least 400px wide
+        // gridGap: "10px",
+        // padding: "20px",
+        // border: "1px solid #ccc",
+        // backgroundColor: "white",
+      }}
       onContextMenu={handleContextMenu} // Handle right-click
     >
-      <div className="chart-area">{renderChart()}</div>
+     <div 
+    className="chart-area"
+    style={{  // Changed sx to style
+      padding: "20px",
+      border: "1px solid black",
+      boxSizing: "border-box",
+    }}
+  >{renderChart()}</div>
 
       {/* Context Menu */}
       <Menu

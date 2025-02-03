@@ -338,23 +338,31 @@ const ChartRenderer = ({
     <div className="chart-renderer">
       {xAxis.length >1 &&
         (chartType === "wordCloud" ) && (
-          renderError("Please select only 1 X-axis values for this chart type.")
+          renderError("Please select only 1 Columns values for this chart type.")
         )}
        {xAxis.length >1 &&
         (chartType === "Hierarachy") && (
-          renderError("Please select only X-axis values for this chart type.")
+          renderError("Please select only Columns values for this chart type.")
         )}
       {xAxis.length > 2 &&
         (chartType === "bar" ||
           chartType === "area" ||
           chartType === "polarArea" ||
           chartType === "textChart") && (
-          renderError("Please select only two X-axis values for this chart type.")
+          renderError("Please select only two Columns values for this chart type.")
         )}
 
       {/* Bar Chart */}
       {xAxis.length > 0 && yAxis.length>0 && chartType === "pie" && (
               <div style={{ marginTop: '20px' }}>
+                {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 Columns values. Please remove 1.
+        </div>
+      )
+    }
                 <Items>
                   <div className="chart-container">
                     <Pie categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
@@ -367,8 +375,24 @@ const ChartRenderer = ({
             )}
             {xAxis.length > 0 && yAxis.length>0 && chartType === "line" && (
               <div style={{ marginTop: '20px' }}>
+                {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 Columns values. Please remove 1.
+        </div>
+      )
+    }
                 <Items>
                   <div className="chart-container">
+                  {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 Columns values. Please remove 1.
+        </div>
+      )
+    }
                     <LineChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
                   </div>
                 </Items>
@@ -379,6 +403,14 @@ const ChartRenderer = ({
             )}
             {xAxis.length > 0 && yAxis.length>0 && chartType === "scatter" && (
               <div style={{ marginTop: '20px' }}>
+                {
+                  // If more than 2 X-axis values are selected, show the message to remove 1
+                  (xAxis.length >= 2) && (
+                    <div className="error-message">
+                      You have selected more than 2 Columns values. Please remove 1.
+                    </div>
+                  )
+                }
                 <Items>
                   <div className="chart-container">
                     <ScatterPlot categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
@@ -402,13 +434,13 @@ const ChartRenderer = ({
               </div>
             )} */}
 
-{(xAxis.length > 0 && yAxis.length > 0  && chartType === "bar") ? (
+{(xAxis.length == 1 && yAxis.length  ==1  && chartType === "bar") ? (
   <div style={{ marginTop: '20px' }}>
     {
       // If more than 2 X-axis values are selected, show the message to remove 1
       (xAxis.length >= 2) && (
         <div className="error-message">
-          You have selected more than 2 X-axis values. Please remove 1.
+          You have selected more than 2 Columns values. Please remove 1.
         </div>
       )
     }
@@ -431,13 +463,13 @@ const ChartRenderer = ({
 
               <div style={{ marginTop: '20px' }}>
                 {
-      // If more than 2 X-axis values are selected, show the message to remove 1
-      (xAxis.length >= 2) && (
-        <div className="error-message">
-          You have selected more than 2 X-axis values. Please remove 1.
-        </div>
-      )
-    }
+                  // If more than 2 X-axis values are selected, show the message to remove 1
+                  (xAxis.length >= 2) && (
+                    <div className="error-message">
+                      You have selected more than 2 X-axis values. Please remove 1.
+                    </div>
+                  )
+                }
                 <Items>
                   <div className="chart-container">
                     <AreaChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
@@ -450,14 +482,14 @@ const ChartRenderer = ({
             )}
             {xAxis.length > 0 && yAxis.length>0 && chartType === "polarArea" && (
               <div style={{ marginTop: '20px' }}>
-                {
-      // If more than 2 X-axis values are selected, show the message to remove 1
-      (xAxis.length >= 2) && (
-        <div className="error-message">
-          You have selected more than 2 X-axis values. Please remove 1.
-        </div>
-      )
-    }
+                            {
+                  // If more than 2 X-axis values are selected, show the message to remove 1
+                  (xAxis.length >= 2) && (
+                    <div className="error-message">
+                      You have selected more than 2 X-axis values. Please remove 1.
+                    </div>
+                  )
+                }
                 <Items>
                   <div className="chart-container">
                     <PolarAreaChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation} />
@@ -516,8 +548,17 @@ const ChartRenderer = ({
                         )}
 
 
-            {xAxis.length > 0 && yAxis.length>1 && chartType === "duealChart" && (
+            {/* {xAxis.length > 0 && yAxis.length>1 && chartType === "duealChart" && (
               <div style={{ marginTop: '20px' }}>
+                {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 1 X-axis values. Please remove .
+        </div>
+      )
+    }
+   
                 <Items>
                   <div className="chart-container">
                     <DuelAxisChart
@@ -549,9 +590,72 @@ const ChartRenderer = ({
                   <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
                 </div>
               </div>
-            )}
+            )} */}
+            {/* { xAxis.length > 0  && chartType === "duealChart" && (
+  <div style={{ marginTop: '20px' }}>
+    { yAxis.length <= 1 ? (
+      <div className="error-message">
+        You have selected less than 2 row values. Please add one.
+      </div>
+    ) : (
+      <>
+        <Items>
+          <div className="chart-container">
+            <DuelAxisChart
+              categories={plotData?.categories}
+              series1={plotData?.series1}
+              series2={plotData?.series2}
+              aggregation={plotData?.aggregation}
+            />
+          </div>
+        </Items>
+        <div className="btn-container">
+          <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+        </div>
+      </>
+    )}
+  </div>
+)} */}
+{ xAxis.length >= 1 && yAxis.length >= 1 && chartType === "duealChart" && (
+  <div style={{ marginTop: '20px' }}>
+    { xAxis.length > 1 ? (
+      <div className="error-message">
+        You have selected more than 1 column value for the X-axis. Please remove one.
+      </div>
+    ) : yAxis.length <2  ? (
+      <div className="error-message">
+        You have selected less than 2 row values. Please add one.
+      </div>
+    ) : (
+      <>
+        <Items>
+          <div className="chart-container">
+            <DuelAxisChart
+              categories={plotData?.categories}
+              series1={plotData?.series1}
+              series2={plotData?.series2}
+              aggregation={plotData?.aggregation}
+            />
+          </div>
+        </Items>
+        <div className="btn-container">
+          <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+        </div>
+      </>
+    )}
+  </div>
+)}
+
             {chartType === "treeHierarchy"  && (
                           <div style={{ marginTop: '20px' }}>
+                            {
+      // If more than 2 X-axis values are selected, show the message to remove 1
+      (xAxis.length >= 2) && (
+        <div className="error-message">
+          You have selected more than 2 Columns values. Please remove 1.
+        </div>
+      )
+    }
                               <div >
                                 <TreeHierarchy/>
                               </div>
@@ -603,6 +707,7 @@ const ChartRenderer = ({
 
           {xAxis.length > 0 && yAxis.length>0 && chartType === "hierarchialBarChart" && (
                       <div style={{ marginTop: '20px' }}>
+                        
                           <Items>
                             <div className="chart-container">
                               <HierarchicalBarChart categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>

@@ -763,33 +763,35 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 tools: {
                     customIcons: [
                         {
-                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▲</button>',
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
                             index: 1, // Start with the first position in the toolbar
                             title: 'Sort Ascending',
                             class: 'custom-sort-ascending',
                             click: handleSortAscending
                         },
                         {
-                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">▼</button>',
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
                             index: 2, // Position right after the previous custom icon
                             title: 'Sort Descending',
                             class: 'custom-sort-descending',
                             click: handleSortDescending
                         },
-                         {
-                        icon: '<button style="background:none;border:none;color:#28a745;font-size:20px;">⬆️</button>',
-                        index: 3, // Top 10
-                        title: 'Show Top 10',
-                        class: 'custom-top-10',
-                        click: handleTop10,
-                    },
-                    {
-                        icon: '<button style="background:none;border:none;color:#dc3545;font-size:20px;">⬇️</button>',
-                        index: 4, // Bottom 10
-                        title: 'Show Bottom 10',
-                        class: 'custom-bottom-10',
-                        click: handleBottom10,
-                    },
+                        {
+                            // Top 10: Using an upward double arrow symbol
+                            icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
+                            index: 3,
+                            title: 'Show Top 10',
+                            class: 'custom-top-10',
+                            click: handleTop10,
+                        },
+                        {
+                            // Bottom 10: Using a downward double arrow symbol
+                            icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
+                            index: 4,
+                            title: 'Show Bottom 10',
+                            class: 'custom-bottom-10',
+                            click: handleBottom10,
+                        },
                     {
                         icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
                         index: 5, // Reset
@@ -867,10 +869,10 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
         plotOptions: {
             bar: {
                 distributed: true,
-                dataLabels: {
-                    hideOverflowingLabels: true
-                },
                 barHeight: '80%',
+                dataLabels: {
+                    position: 'center', // Place labels inside the bar
+                },
                 
             }
         },
@@ -994,7 +996,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
   maxConstraints={[800, 500]} // Maximum width and height
   resizeHandles={['e', 'w']} // Allow horizontal resizing
   className="resizable-chart"
->
+><div className="chart-title">{customHeadings}</div>
   <Chart options={options} series={[{ data: sortedValues }]} type="bar" height={500} />
 </ResizableBox>
                 </div>

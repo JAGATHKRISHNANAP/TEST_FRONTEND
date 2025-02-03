@@ -346,6 +346,7 @@ function DuealChartInput() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const MAX_COLUMNS = 5;
+  const MAX_ROW=2
    const [errorMessage, setErrorMessage] = useState("");
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
@@ -380,9 +381,16 @@ function DuealChartInput() {
   }, [xAxis, yAxis, aggregate,chartType]);
 
   React.useEffect(() => {
-    if (xAxis.length > 0) {
+    if (xAxis.length >= 2) {
       // Automatically fetch filter options for the last added column
-      const lastAddedColumn = xAxis[xAxis.length - 1];
+      const lastAddedColumn = xAxis[0];
+      fetchFilterOptions(lastAddedColumn);
+    }
+  }, [xAxis]);
+  React.useEffect(() => {
+    if (xAxis.length == 1) {
+      // Automatically fetch filter options for the last added column
+      const lastAddedColumn = xAxis[0];
       fetchFilterOptions(lastAddedColumn);
     }
   }, [xAxis]);
@@ -423,12 +431,12 @@ function DuealChartInput() {
   };
   
 
-  React.useEffect(() => {
-    if (xAxis.length > 0) {
-      const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
-      fetchFilterOptions(columnName); // Fetch filter options but do not show the dropdown
-    }
-  }, [xAxis]); // Trigger whenever xAxis changes
+  // React.useEffect(() => {
+  //   if (xAxis.length > 0) {
+  //     const columnName = xAxis; // Get the latest X-axis column
+  //     fetchFilterOptions(columnName); // Fetch filter options but do not show the dropdown
+  //   }
+  // }, [xAxis]); // Trigger whenever xAxis changes
     
   const handleCheckboxChange = (option) => {
     let updatedOptions;
@@ -513,8 +521,8 @@ const handleDrop = (event, target) => {
       dispatch(setXAxis([...xAxis, columnName]));
     }
   } else if (target === "y-axis") {
-    if (yAxis.length >= MAX_COLUMNS) {
-      setErrorMessage("Error: Cannot drop more than 5 columns on the Y-axis.");
+    if (yAxis.length >= MAX_ROW) {
+      setErrorMessage("Error: Cannot drop more than 2 Row on the Y-axis.");
         setOpenSnackbar(true); // Open the Snackbar
         return;
     }
@@ -590,37 +598,38 @@ const handleDrop = (event, target) => {
     setOpenSnackbar(false);
   };
 
-  React.useEffect(() => {
-    if (xAxis.length > 0) {
-      const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
-      fetchFilterOptions(columnName);
-    }
-  }, [xAxis]); // Trigger whenever xAxis changes
+  // React.useEffect(() => {
+  //   if (xAxis.length > 0) {
+  //     // const columnName = xAxis[xAxis.length - 1]; // Get the latest X-axis column
+  //     const columnName = xAxis[0];
+  //     fetchFilterOptions(columnName);
+  //   }
+  // }, [xAxis]); // Trigger whenever xAxis changes
   
-  React.useEffect(() => {
+  // React.useEffect(() => {
     
-    const selectedUser = localStorage.getItem('selectedUser');
-    if (
-      xAxis.length > 0 &&
-      yAxis.length > 0 &&
-      aggregate &&
-      chartType &&
-      checkedOptions.length > 0
-    ) {
-      dispatch(
-        generateChart({
-          selectedTable,
-          xAxis,
-          yAxis,
-          barColor,
-          aggregate,
-          chartType,
-          checkedOptions,
-          selectedUser
-        })
-      );
-    }
-  }, [xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch, selectedTable, barColor]);
+  //   const selectedUser = localStorage.getItem('selectedUser');
+  //   if (
+  //     xAxis.length > 0 &&
+  //     yAxis.length > 0 &&
+  //     aggregate &&
+  //     chartType &&
+  //     checkedOptions.length > 0
+  //   ) {
+  //     dispatch(
+  //       generateChart({
+  //         selectedTable,
+  //         xAxis,
+  //         yAxis,
+  //         barColor,
+  //         aggregate,
+  //         chartType,
+  //         checkedOptions,
+  //         selectedUser
+  //       })
+  //     );
+  //   }
+  // }, [xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch, selectedTable, barColor]);
   
   return (
     <div className="App">

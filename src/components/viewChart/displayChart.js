@@ -666,7 +666,7 @@ function Charts() {
 
   const renderedCharts = useMemo(() => (
     chartData.map((data) => (
-      <Grid item xs={12} sm={5} md={5} lg={3} key={data.chartName} sx={{ padding: '16px' }}>
+      <Grid item xs={12} sm={5} md={5} lg={3} key={data.chartName} sx={{ padding: '16px', height: "450px"}}>
         <ResizableChart
           data={data}
           onRemove={handleCloseChart}
