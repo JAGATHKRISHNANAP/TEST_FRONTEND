@@ -524,55 +524,145 @@ function Charts() {
   //   }
   // }, [chartData]);
   
+  // const handleChartButtonClick = useCallback(async (chartName) => {
+  //   console.log(`Chart Name: ${chartName}`);
+
+  //   try {
+  //     const data = await fetchSingleChartData(chartName);
+  //     console.log("Data fetched from chartdata:", data);
+
+  //     // Define dimensions and spacing
+  //     const margin = 20; // Space between charts
+  //     const chartWidth = 500;
+  //     const chartHeight = 400;
+  //     const chartsPerRow = 4; // Number of charts per row
+
+  //     const existingCharts = [...chartData];
+  //     const totalCharts = existingCharts.length;
+
+  //     // Calculate new chart's row and column
+  //     const row = Math.floor(totalCharts / chartsPerRow);
+  //     const col = totalCharts % chartsPerRow;
+
+  //     // Calculate new position
+  //     const newPosition = {
+  //       x: col * (chartWidth + margin) + margin, // Horizontal position
+  //       y: row * (chartHeight + margin) + margin, // Vertical position
+  //     };
+
+  //     // Check if the new position is already taken
+  //     const isPositionTaken = existingCharts.some((chart) =>
+  //       chart.position.x === newPosition.x && chart.position.y === newPosition.y
+  //     );
+
+  //     // If position is taken, find a new available position (you can create a function to search for available spots)
+  //     if (isPositionTaken) {
+  //       let foundAvailablePosition = false;
+  //       let tempPosition = newPosition;
+  //       let i = 1;
+
+  //       // Try finding an empty spot
+  //       while (!foundAvailablePosition) {
+  //         tempPosition = {
+  //           x: (col + i) * (chartWidth + margin) + margin,
+  //           y: row * (chartHeight + margin) + margin,
+  //         };
+  //         foundAvailablePosition = !existingCharts.some(
+  //           (chart) => chart.position.x === tempPosition.x && chart.position.y === tempPosition.y
+  //         );
+  //         i++;
+  //       }
+
+  //       // Use the found position
+  //       setChartData((prevData) => [
+  //         ...prevData,
+  //         {
+  //           ...data,
+  //           chartName,
+  //           width: chartWidth,
+  //           height: chartHeight,
+  //           position: tempPosition, // Use the new position
+  //         },
+  //       ]);
+  //     } else {
+  //       // If position is available, simply add the chart at the new position
+  //       setChartData((prevData) => [
+  //         ...prevData,
+  //         {
+  //           ...data,
+  //           chartName,
+  //           width: chartWidth,
+  //           height: chartHeight,
+  //           position: newPosition, // Use the calculated position
+  //         },
+  //       ]);
+  //     }
+
+  //     setDroppedCharts((prev) => [...prev, chartName]);
+  //     setError(null);
+  //   } catch (error) {
+  //     console.error(`Error fetching data for Chart ${chartName}:`, error);
+  //     setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
+  //   }
+  // }, [chartData]);
+
   const handleChartButtonClick = useCallback(async (chartName) => {
     console.log(`Chart Name: ${chartName}`);
-
+  
     try {
       const data = await fetchSingleChartData(chartName);
       console.log("Data fetched from chartdata:", data);
-
+  
       // Define dimensions and spacing
       const margin = 20; // Space between charts
       const chartWidth = 500;
       const chartHeight = 400;
       const chartsPerRow = 4; // Number of charts per row
-
+  
       const existingCharts = [...chartData];
       const totalCharts = existingCharts.length;
-
-      // Calculate new chart's row and column
+  
+      // Calculate the row and column for the new chart
       const row = Math.floor(totalCharts / chartsPerRow);
       const col = totalCharts % chartsPerRow;
-
-      // Calculate new position
-      const newPosition = {
-        x: col * (chartWidth + margin) + margin, // Horizontal position
-        y: row * (chartHeight + margin) + margin, // Vertical position
-      };
-
+  
+      // Calculate the initial position for the new chart
+      const newX = col * (chartWidth + margin) + margin; // Horizontal position
+      const newY = row * (chartHeight + margin) + margin; // Vertical position
+  
+      // Flatten positions (x, y pairs)
+      const existingPositions = existingCharts.flatMap(chart => [chart.position.x, chart.position.y]);
+  
       // Check if the new position is already taken
-      const isPositionTaken = existingCharts.some((chart) =>
-        chart.position.x === newPosition.x && chart.position.y === newPosition.y
-      );
-
-      // If position is taken, find a new available position (you can create a function to search for available spots)
-      if (isPositionTaken) {
-        let foundAvailablePosition = false;
-        let tempPosition = newPosition;
-        let i = 1;
-
-        // Try finding an empty spot
-        while (!foundAvailablePosition) {
-          tempPosition = {
-            x: (col + i) * (chartWidth + margin) + margin,
-            y: row * (chartHeight + margin) + margin,
-          };
-          foundAvailablePosition = !existingCharts.some(
-            (chart) => chart.position.x === tempPosition.x && chart.position.y === tempPosition.y
-          );
-          i++;
+      const isPositionTaken = existingPositions.some(
+        (position, index) => {
+          // Check both x and y in pairs
+          const isMatchingX = position === newX && existingPositions[index + 1] === newY;
+          return isMatchingX;
         }
-
+      );
+  
+      if (isPositionTaken) {
+        // If the position is taken, try to find the next available position
+        let foundAvailablePosition = false;
+        let tempX = newX;
+        let tempY = newY;
+  
+        // Loop to find an empty spot
+        while (!foundAvailablePosition) {
+          // Increase column number to move to the next position
+          tempX = (col + 1) * (chartWidth + margin) + margin;
+          tempY = row * (chartHeight + margin) + margin;
+  
+          // Check for available position
+          foundAvailablePosition = !existingPositions.some(
+            (position, index) => {
+              const isMatchingX = position === tempX && existingPositions[index + 1] === tempY;
+              return isMatchingX;
+            }
+          );
+        }
+  
         // Use the found position
         setChartData((prevData) => [
           ...prevData,
@@ -581,11 +671,11 @@ function Charts() {
             chartName,
             width: chartWidth,
             height: chartHeight,
-            position: tempPosition, // Use the new position
+            position: { x: tempX, y: tempY }, // Store the new position
           },
         ]);
       } else {
-        // If position is available, simply add the chart at the new position
+        // If position is available, add chart at the calculated position
         setChartData((prevData) => [
           ...prevData,
           {
@@ -593,11 +683,11 @@ function Charts() {
             chartName,
             width: chartWidth,
             height: chartHeight,
-            position: newPosition, // Use the calculated position
+            position: { x: newX, y: newY }, // Store the calculated position
           },
         ]);
       }
-
+  
       setDroppedCharts((prev) => [...prev, chartName]);
       setError(null);
     } catch (error) {
@@ -605,7 +695,7 @@ function Charts() {
       setError(`Failed to fetch data for Chart ${chartName}. Please try again later.`);
     }
   }, [chartData]);
-
+  
   
 
   const handleRemoveChart = useCallback((chartName) => {

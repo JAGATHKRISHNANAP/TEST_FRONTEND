@@ -180,8 +180,8 @@ function Chartsview() {
               sx={{
                 margin: '4px',
                 minWidth: '90px',
-                color: 'white',
-                backgroundColor: 'primary.main',
+                color: 'black',
+                backgroundColor: 'white',
                 justifyContent: 'center',
                 maxHeight: '28px',
                 fontSize: '12px',
@@ -192,8 +192,9 @@ function Chartsview() {
                 display: 'inline-flex',
                 borderRadius: '4px',
                 textTransform: 'none',
+                border: '2px solid #D3D3D3', 
                 '&:hover': {
-                  backgroundColor: 'primary.dark',
+                  backgroundColor: '#A0A0A0',
                   transform: 'scale(1.05)', // Slight zoom effect for hover
                 },
               }}

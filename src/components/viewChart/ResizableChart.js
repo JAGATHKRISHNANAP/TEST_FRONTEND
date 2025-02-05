@@ -73,6 +73,10 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
   const text_y_database = data[10];
   const heading = data[7];
   const [aiMlChartData,setAiMLChartData]=useState(null);
+  const [borderColor, setBorderColor] = useState("#000"); // Default black border
+  const [borderSize, setBorderSize] = useState("1px"); // Default border size
+  const [showBorder, setShowBorder] = useState(true); // Toggle border visibility
+
   const chartDataFromStore = useSelector((state) =>
     state.viewcharts.charts.find((chart) => chart.chart_id === chart_id)
   );
@@ -555,87 +559,90 @@ return (
       }}
       onContextMenu={handleContextMenu} // Handle right-click
     >
-     <div 
-    className="chart-area"
-    style={{  // Changed sx to style
-      padding: "20px",
-      border: "1px solid black",
-      boxSizing: "border-box",
-    }}
-  >{renderChart()}</div>
-
-      {/* Context Menu */}
-      <Menu
-      open={Boolean(menuPosition)}
-        onClose={handleCloseMenu} // Automatically close when clicking outside
-        anchorReference="anchorPosition"
-        anchorPosition={menuPosition ? { top: menuPosition.top, left: menuPosition.left } : undefined}
-     
-      >
-        <MenuItem onClick={toggleTableModal}>
-          <VisibilityIcon sx={{ marginRight: "8px" }} /> View Data
-        </MenuItem>
-        <MenuItem onClick={handleRemove}>
-        
-          <DeleteIcon sx={{ marginRight: "8px" }} /> Delete Chart
-        </MenuItem>
-      </Menu>
-
-      {/* Dialog for viewing data */}
-      <Dialog
-        open={tableModalOpen}
-        onClose={toggleTableModal}
-        PaperProps={{
-          style: {
-            minWidth: "400px",
-            width: "auto",
-            maxWidth: "90%",
-            maxHeight: "90%",
-          },
-        }}
-      >
-        <IconButton
-          onClick={toggleTableModal}
-          aria-label="close"
-          style={{ position: "absolute", right: 8, top: 8 }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <IconButton 
-            onClick={downloadChartAsImage} 
-            aria-label="download image" 
-            style={{ position: 'absolute', left: '50px', top: '16px' }}
+      <div
+            className="chart-area"
+            style={{
+              padding: "20px",
+              border: showBorder ? `${borderSize} solid ${borderColor}` : "none",
+              boxSizing: "border-box",
+            }}
           >
-            <ImageIcon />
-          </IconButton>
-
-          <div style={{ position: 'relative' }}>
-            <IconButton 
-              onClick={downloadCSV} 
-              aria-label="download" 
-              style={{ position: 'absolute', left: '16px', top: '16px' }}
-            >
-              <DownloadIcon />
-            </IconButton>
+            {renderChart()}
           </div>
 
-        <DialogTitle style={{ textAlign: "center" }}>Chart Data</DialogTitle>
-        <DialogContent>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
+          {/* Context Menu for Customization */}
+          <Menu
+            open={Boolean(menuPosition)}
+            onClose={handleCloseMenu}
+            anchorReference="anchorPosition"
+            anchorPosition={menuPosition ? { top: menuPosition.top, left: menuPosition.left } : undefined}
           >
-            {renderTableData()}
-          </Box>
-        </DialogContent>
-      </Dialog>
-      </div>
-    </Draggable>
-  </div>
-);
+            <MenuItem onClick={toggleTableModal}>
+              <VisibilityIcon sx={{ marginRight: "8px" }} /> View Data
+            </MenuItem>
+            <MenuItem onClick={handleRemove}>
+              <DeleteIcon sx={{ marginRight: "8px" }} /> Delete Chart
+            </MenuItem>
+            <MenuItem>
+              <label>Border Color:</label>
+              <input
+                type="color"
+                value={borderColor}
+                onChange={(e) => setBorderColor(e.target.value)}
+                style={{ marginLeft: "10px", cursor: "pointer" }}
+              />
+            </MenuItem>
+            <MenuItem>
+              <label>Border Size:</label>
+              <select value={borderSize} onChange={(e) => setBorderSize(e.target.value)} style={{ marginLeft: "10px" }}>
+                <option value="1px">1px</option>
+                <option value="2px">2px</option>
+                <option value="3px">3px</option>
+                <option value="4px">4px</option>
+                <option value="5px">5px</option>
+              </select>
+            </MenuItem>
+            <MenuItem onClick={() => setShowBorder(!showBorder)}>
+              {showBorder ? "Hide Border" : "Show Border"}
+            </MenuItem>
+          </Menu>
 
+          {/* Dialog for Viewing Data */}
+          <Dialog
+            open={tableModalOpen}
+            onClose={toggleTableModal}
+            PaperProps={{
+              style: {
+                minWidth: "400px",
+                width: "auto",
+                maxWidth: "90%",
+                maxHeight: "90%",
+              },
+            }}
+          >
+            <IconButton onClick={toggleTableModal} aria-label="close" style={{ position: "absolute", right: 8, top: 8 }}>
+              <CloseIcon />
+            </IconButton>
+            <IconButton onClick={downloadChartAsImage} aria-label="download image" style={{ position: "absolute", left: "50px", top: "16px" }}>
+              <ImageIcon />
+            </IconButton>
+            <div style={{ position: "relative" }}>
+              <IconButton onClick={downloadCSV} aria-label="download" style={{ position: "absolute", left: "16px", top: "16px" }}>
+                <DownloadIcon />
+              </IconButton>
+            </div>
+
+            <DialogTitle style={{ textAlign: "center" }}>Chart Data</DialogTitle>
+            <DialogContent>
+              <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+                {renderTableData()}
+              </Box>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </Draggable>
+    </div>
+  );
 };
 
 export default ResizableChart;
