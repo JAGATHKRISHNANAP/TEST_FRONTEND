@@ -26,6 +26,8 @@ export const generateChart = createAsyncThunk(
   }
 );
 
+
+
 const chartSlice = createSlice({
   name: 'chart',
   initialState: {
@@ -82,6 +84,8 @@ const chartSlice = createSlice({
       });
   }
 });
+
+
 
 export const {
   setSelectedTable, setXAxis, setYAxis, setAggregate, setChartType, setDraggedColumn,
