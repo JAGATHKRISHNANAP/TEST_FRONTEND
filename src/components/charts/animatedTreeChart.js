@@ -222,6 +222,8 @@ import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
 import { saveAs } from 'file-saver';
 const Treemap = ({ categories = [], values = [] }) => {
+    console.log("Duel Axis Chart Props:", { categories, });
+  
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
     
@@ -249,7 +251,10 @@ const Treemap = ({ categories = [], values = [] }) => {
     
     const [boxSize, setBoxSize] = useState({ width: 500, height: 400 });
     const [isMenuVisible, setIsMenuVisible] = useState(false);
-
+     useEffect(() => {
+            setSortedCategories(categories);
+            setSortedValues(values);
+        }, [categories, values]);
     // Toggle the menu visibility when the hamburger icon is clicked
     const toggleMenuVisibility = () => {
         setIsMenuVisible(!isMenuVisible);

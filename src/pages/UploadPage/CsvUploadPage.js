@@ -161,6 +161,50 @@ const CsvUpload = () => {
   };
 
  
+  // const handleFileChange = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile) {
+  //     if (selectedFile.type === 'text/csv') {
+  //       dispatch(setFile(selectedFile));
+  //       Papa.parse(selectedFile, {
+  //         header: true,
+  //         complete: (results) => {
+  //           let data = results.data;
+  //           const headers = Object.keys(data[0]);
+  
+  //           // Check if a primary key exists
+  //           let primaryKeyColumnIndex = null;
+  //           for (let i = 0; i < headers.length; i++) {
+  //             const uniqueValues = new Set(data.map((row) => row[headers[i]]));
+  //             if (uniqueValues.size === data.length) {
+  //               primaryKeyColumnIndex = i;
+  //               break;
+  //             }
+  //           }
+  
+  //           if (primaryKeyColumnIndex === null) {
+  //             // Add 'id' column as primary key
+  //             const newColumnName = 'id';
+  //             data = data.map((row, index) => ({ [newColumnName]: index + 1, ...row }));
+  //             headers.unshift(newColumnName);  // Add 'id' as the first column
+  //           }
+  
+  //           setCsvData(data.slice(0, 5)); // Display only the first 5 rows
+  //           setTotalColumns(headers.length);
+  //           setTotalRows(data.length);
+  //           dispatch(setColumnHeadings(headers));
+  //           dispatch(setPrimaryKeyColumn(primaryKeyColumnIndex === null ? 0 : primaryKeyColumnIndex));
+  //         },
+  //       });
+  //     } else {
+  //       dispatch(setFile(null));
+  //       setSnackbarMessage('Please upload a valid Excel file.');
+  //     setSnackbarSeverity('error');
+  //     setSnackbarOpen(true);
+  //     }
+  //   }
+  // };
+  
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -198,9 +242,9 @@ const CsvUpload = () => {
         });
       } else {
         dispatch(setFile(null));
-        setSnackbarMessage('Please upload a valid Excel file.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+        setSnackbarMessage('Please upload a valid CSV file.');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
       }
     }
   };

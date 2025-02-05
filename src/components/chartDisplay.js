@@ -547,7 +547,23 @@ const ChartRenderer = ({
                           </div>
                         )}
 
-
+{xAxis.length > 0 && chartType === "duealbarChart" && (
+              <div style={{ marginTop: '20px' }}>
+                <Items>
+                  <div className="chart-container">
+                    <DuelBarChart
+                      categories={plotData?.categories}
+                      series1={plotData?.series1}
+                      series2={plotData?.series2}
+                      aggregation={plotData?.aggregation}
+                    />
+                  </div>
+                </Items>
+                <div className='btn-container'>
+                  <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
+                </div>
+              </div>
+            )} 
             {/* {xAxis.length > 0 && yAxis.length>1 && chartType === "duealChart" && (
               <div style={{ marginTop: '20px' }}>
                 {

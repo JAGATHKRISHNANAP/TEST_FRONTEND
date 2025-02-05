@@ -201,207 +201,207 @@
 
 
 
-// import React, { useEffect, useRef } from 'react';
-// import { useSelector } from 'react-redux';
-// import BarChart from '../ChartViews/barchartView';
-// import PieChart from '../ChartViews/piechartView';
-// import LineChart from '../ChartViews/linechartview';
-// import DualAxisChart from '../ChartViews/duelAxisChartView';
-// import { ResizableBox } from 'react-resizable';
-// import AreaChart from '../ChartViews/areaChartView';
-// import AnimatedTreemap from '../ChartViews/animatedTreeMapView';
-// import MapViewChart from '../ChartViews/mapChartView';
-// import PolarAreaChart from '../charts/polarArea';
-// import Scatter from '../ChartViews/scatterChartView';
-// import TreeHierarchyView from '../ChartViews/treeHierarchyView';
-// import TextChartView from '../ChartViews/textChartView';
-// import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
-// import SampleAiTestChart from '../ChartViews/sampleAiTestChartView';
-// import AiMlChartData from '../ChartViews/AiMLChartsView';
-// import DashboardSingleValueChart from '../ChartViews/DashboardSingleValueChart';
-// import WordCloud from '../ChartViews/wordCloudView';
+// // import React, { useEffect, useRef } from 'react';
+// // import { useSelector } from 'react-redux';
+// // import BarChart from '../ChartViews/barchartView';
+// // import PieChart from '../ChartViews/piechartView';
+// // import LineChart from '../ChartViews/linechartview';
+// // import DualAxisChart from '../ChartViews/duelAxisChartView';
+// // import { ResizableBox } from 'react-resizable';
+// // import AreaChart from '../ChartViews/areaChartView';
+// // import AnimatedTreemap from '../ChartViews/animatedTreeMapView';
+// // import MapViewChart from '../ChartViews/mapChartView';
+// // import PolarAreaChart from '../charts/polarArea';
+// // import Scatter from '../ChartViews/scatterChartView';
+// // import TreeHierarchyView from '../ChartViews/treeHierarchyView';
+// // import TextChartView from '../ChartViews/textChartView';
+// // import HierarchialBarChart from '../ChartViews/hierarchialBarChartView';
+// // import SampleAiTestChart from '../ChartViews/sampleAiTestChartView';
+// // import AiMlChartData from '../ChartViews/AiMLChartsView';
+// // import DashboardSingleValueChart from '../ChartViews/DashboardSingleValueChart';
+// // import WordCloud from '../ChartViews/wordCloudView';
 
-// const DroppableArea = () => {
-//   const droppableAreaRef = useRef(null);
-//   const chartdata = useSelector((state) => state.viewdashboard.dashboard_charts);
-//   const textChart = useSelector((state) => state.viewdashboard.textChart);
+// // const DroppableArea = () => {
+// //   const droppableAreaRef = useRef(null);
+// //   const chartdata = useSelector((state) => state.viewdashboard.dashboard_charts);
+// //   const textChart = useSelector((state) => state.viewdashboard.textChart);
 
-//   useEffect(() => {
-//     console.log("chartdata", chartdata);
-//   }, [chartdata]);
+// //   useEffect(() => {
+// //     console.log("chartdata", chartdata);
+// //   }, [chartdata]);
 
-//   return (
-//     <div
-//       ref={(node) => {
-//         droppableAreaRef.current = node;
-//       }}
-//       style={{
-//         display: "grid",
-//         gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", // Each cell at least 400px wide
-//         gridGap: "10px",
-//         padding: "20px",
-//         border: "1px solid #ccc",
-//         backgroundColor: "white",
-//         minHeight: "85vh",
-//       }}
-//     >
-//       {/* Render single value charts (if any) */}
-//       {textChart && textChart.length > 0
-//         ? textChart.map((text, index) => (
-//             <div
-//               key={`text-${index}`}
-//               style={{
-//                 padding: "20px",
-//                 height: "auto",
-//                 border: "2px solid black",
-//                 boxSizing: "border-box",
-//               }}
-//             >
-//               {text.chart_type === "singleValueChart" && (
-//                 <DashboardSingleValueChart
-//                   chartHeading={text.chart_heading}
-//                   totalXAxis={text.value.total_x_axis}
-//                 />
-//               )}
-//             </div>
-//           ))
-//         : null}
+// //   return (
+// //     <div
+// //       ref={(node) => {
+// //         droppableAreaRef.current = node;
+// //       }}
+// //       style={{
+// //         display: "grid",
+// //         gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", // Each cell at least 400px wide
+// //         gridGap: "10px",
+// //         padding: "20px",
+// //         border: "1px solid #ccc",
+// //         backgroundColor: "white",
+// //         minHeight: "85vh",
+// //       }}
+// //     >
+// //       {/* Render single value charts (if any) */}
+// //       {textChart && textChart.length > 0
+// //         ? textChart.map((text, index) => (
+// //             <div
+// //               key={`text-${index}`}
+// //               style={{
+// //                 padding: "20px",
+// //                 height: "auto",
+// //                 border: "2px solid black",
+// //                 boxSizing: "border-box",
+// //               }}
+// //             >
+// //               {text.chart_type === "singleValueChart" && (
+// //                 <DashboardSingleValueChart
+// //                   chartHeading={text.chart_heading}
+// //                   totalXAxis={text.value.total_x_axis}
+// //                 />
+// //               )}
+// //             </div>
+// //           ))
+// //         : null}
 
-//       {/* Render other charts */}
-//       {chartdata && chartdata.length > 0
-//         ? chartdata.map((chart, index) => (
-//           <div
-//           key={`chart-${index}`}
-//           style={{
-//             padding: "20px",
-//             minHeight: "450px", // Ensures a default height of 450px
-//             height: "auto", // Allows it to expand if needed
-//             border: "1px solid black",
-//             boxSizing: "border-box",
+// //       {/* Render other charts */}
+// //       {chartdata && chartdata.length > 0
+// //         ? chartdata.map((chart, index) => (
+// //           <div
+// //           key={`chart-${index}`}
+// //           style={{
+// //             padding: "20px",
+// //             minHeight: "450px", // Ensures a default height of 450px
+// //             height: "auto", // Allows it to expand if needed
+// //             border: "1px solid black",
+// //             boxSizing: "border-box",
             
-//             minWidth: "450px", // Ensures a default height of 450px
-//             width: "auto",
-//           }}
-//         >
+// //             minWidth: "450px", // Ensures a default height of 450px
+// //             width: "auto",
+// //           }}
+// //         >
         
-//               {chart.chart_type === "bar" && (
-//                 <BarChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   x_axis={chart.x_axis}
-//                   y_axis={chart.y_axis}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "pie" && (
-//                 <PieChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "line" && (
-//                 <LineChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   aggregation={chart.aggregate}
-//                   x_axis={chart.x_axis}
-//                   y_axis={chart.y_axis}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "area" && (
-//                 <AreaChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "polarArea" && (
-//                 <PolarAreaChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "scatter" && (
-//                 <Scatter
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "hierarchialBarChart" && (
-//                 <HierarchialBarChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   x_axis={chart.x_axis}
-//                   y_axis={chart.y_axis}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "treeHierarchy" && (
-//                 <TreeHierarchyView
-//                   x_axis={chart.x_axis}
-//                   treeData={chart.dataframe_dict}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "sampleAitestChart" && (
-//                 <SampleAiTestChart data={chart.histogram_details} />
-//               )}
-//               {chart.chart_type === "AiCharts" && (
-//                 <AiMlChartData data={chart.histogram_details} />
-//               )}
-//               {chart.chart_type === "mapchart" && (
-//                 <MapViewChart
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "animatedTreeChart" && (
-//                 <AnimatedTreemap
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
+// //               {chart.chart_type === "bar" && (
+// //                 <BarChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   x_axis={chart.x_axis}
+// //                   y_axis={chart.y_axis}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "pie" && (
+// //                 <PieChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "line" && (
+// //                 <LineChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   aggregation={chart.aggregate}
+// //                   x_axis={chart.x_axis}
+// //                   y_axis={chart.y_axis}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "area" && (
+// //                 <AreaChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "polarArea" && (
+// //                 <PolarAreaChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "scatter" && (
+// //                 <Scatter
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "hierarchialBarChart" && (
+// //                 <HierarchialBarChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   x_axis={chart.x_axis}
+// //                   y_axis={chart.y_axis}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "treeHierarchy" && (
+// //                 <TreeHierarchyView
+// //                   x_axis={chart.x_axis}
+// //                   treeData={chart.dataframe_dict}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "sampleAitestChart" && (
+// //                 <SampleAiTestChart data={chart.histogram_details} />
+// //               )}
+// //               {chart.chart_type === "AiCharts" && (
+// //                 <AiMlChartData data={chart.histogram_details} />
+// //               )}
+// //               {chart.chart_type === "mapchart" && (
+// //                 <MapViewChart
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "animatedTreeChart" && (
+// //                 <AnimatedTreemap
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
                   
-//                 />
-//               )}
-//               {chart.chart_type === "duealChart" && (
-//                 <DualAxisChart
-//                   categories={chart.categories}
-//                   series1={chart.series1}
-//                   series2={chart.series2}
-//                   x_axis={chart.x_axis}
-//                   y_axis1={chart.y_axis[0]}
-//                   y_axis2={chart.y_axis[1]}
-//                   aggregation={chart.aggregate}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "wordCloud" && (
-//                 <WordCloud
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//               {chart.chart_type === "textChart" && (
-//                 <TextChartView
-//                   categories={chart.categories}
-//                   values={chart.values}
-//                   chartColor={chart.chart_color}
-//                 />
-//               )}
-//             </div>
-//           ))
-//         : null}
-//     </div>
-//   );
-// };
+// //                 />
+// //               )}
+// //               {chart.chart_type === "duealChart" && (
+// //                 <DualAxisChart
+// //                   categories={chart.categories}
+// //                   series1={chart.series1}
+// //                   series2={chart.series2}
+// //                   x_axis={chart.x_axis}
+// //                   y_axis1={chart.y_axis[0]}
+// //                   y_axis2={chart.y_axis[1]}
+// //                   aggregation={chart.aggregate}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "wordCloud" && (
+// //                 <WordCloud
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //               {chart.chart_type === "textChart" && (
+// //                 <TextChartView
+// //                   categories={chart.categories}
+// //                   values={chart.values}
+// //                   chartColor={chart.chart_color}
+// //                 />
+// //               )}
+// //             </div>
+// //           ))
+// //         : null}
+// //     </div>
+// //   );
+// // };
 
-// export default DroppableArea;
+// // export default DroppableArea;
 
 // import React, { useState } from 'react';
 // import { useSelector } from 'react-redux';
@@ -681,38 +681,40 @@
 
 // export default DroppableArea;
 
-import React from 'react';
-import { useSelector } from 'react-redux';
-import ChartWrapper from './ChartWrapper';
-import ChartRenderer from './ChartRenderer';
-import TextChartContainer from './TextChartContainer';
+ import React from 'react';
+ import { useSelector } from 'react-redux';
+ import ChartWrapper from './ChartWrapper';
+ import ChartRenderer from './ChartRenderer';
+ import TextChartContainer from './TextChartContainer';
 
-const DroppableArea = () => {
-  const chartData = useSelector((state) => state.viewdashboard.dashboard_charts);
+ const DroppableArea = () => {
+   const chartData = useSelector((state) => state.viewdashboard.dashboard_charts);
 
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
-        gridGap: '10px',
-        padding: '20px',
-        border: '1px solid #ccc',
-        backgroundColor: 'white',
-        minHeight: '85vh',
-      }}
-    >
-      {/* Render Text Charts */}
-      <TextChartContainer />
+   return (
+     <div
+       style={{
+         display: 'grid',
+         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+         gridGap: '10px',
+         padding: '20px',
+         border: '1px solid #ccc',
+         backgroundColor: 'white',
+         minHeight: '80vh',
+       }}
+     >
+       {/* Render Text Charts */}
+       <TextChartContainer />
 
-      {/* Render Other Charts */}
-      {chartData?.map((chart, index) => (
-        <ChartWrapper key={`chart-${index}`} style={{ minWidth: '400px' }}>
-          <ChartRenderer chart={chart} />
-        </ChartWrapper>
-      ))}
-    </div>
-  );
-};
+       {/* Render Other Charts */}
+       {chartData?.map((chart, index) => (
+        <ChartWrapper key={`chart-${index}`} style={{ position: "absolute", // Allow chart to be placed based on its x, y coordinates
+left: `${chart.positions.x}px`,
+top: `${chart.positions.y}px`,minWidth: '400px' }}>
+           <ChartRenderer chart={chart} />
+         </ChartWrapper>
+       ))}
+     </div>
+   );
+ };
 
-export default DroppableArea;
+ export default DroppableArea;

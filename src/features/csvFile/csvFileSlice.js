@@ -112,7 +112,9 @@ const csvFileSlice = createSlice({
     // Reducer to set the file state
     setFile(state, action) {
       state.file = action.payload;
-      state.fileName = action.payload.name;
+      state.fileName = action.payload ? action.payload.name : '';
+      state.uploadSuccess = false;
+      state.uploadError = null;;
     },
     // Reducer to set column headings
     setColumnHeadings(state, action) {

@@ -251,7 +251,7 @@ export const sendClickedCategory = async (category,charts,x_axis) => {
 };
 
 
-export const saveAllCharts = async (user_id,chartData,dashboardfilterXaxis,selectedCategory,fileName,company_name) => {
+export const saveAllCharts = async (user_id,chartData,dashboardfilterXaxis,selectedCategory,fileName,company_name,position) => {
   try {
     await axios.post(`${API_URL}/save_all_chart_details`, {
       user_id: user_id,
@@ -259,7 +259,8 @@ export const saveAllCharts = async (user_id,chartData,dashboardfilterXaxis,selec
       dashboardfilterXaxis,
       selectedCategory,
       fileName,
-      company_name
+      company_name,
+      position
 
     });
     alert('All chart details saved successfully!');

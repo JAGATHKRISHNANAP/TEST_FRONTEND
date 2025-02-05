@@ -7,7 +7,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { updateSelectedCategory, setChartStatus, updateChartData, updateSelectedCategory_xaxis } from '../../features/ViewChartSlice/viewChartSlice';
 import { sendClickedCategory } from '../../utils/api';
 
-const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation = "Aggregation", x_axis = "X_axis", y_axis1 = "Y_axis_Bar", y_axis2 = "Y_axis_Line", otherChartCategories = [] }) => {
+const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation = "Aggregation", x_axis = "X_axis", y_axis1 = "Y_axis_Bar", y_axis2 = "Y_axis_Line", xFontSize, fontStyle, categoryColor,yFontSize, valueColor,chartColor, otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
     const [showResetButton, setShowResetButton] = useState(false);
@@ -139,11 +139,12 @@ const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
                 },
             },
         ],
+        colors: [chartColor],
         tooltip: {
             shared: true,
             intersect: false,
         },
-        colors: generateColors(categories.length),
+       
         plotOptions: {
             bar: {
                 distributed: true,

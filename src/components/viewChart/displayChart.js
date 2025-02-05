@@ -671,7 +671,7 @@ function Charts() {
             chartName,
             width: chartWidth,
             height: chartHeight,
-            position: { x: tempX, y: tempY }, // Store the new position
+           position: { x: newX, y: newY }, // Store the new position
           },
         ]);
       } else {
