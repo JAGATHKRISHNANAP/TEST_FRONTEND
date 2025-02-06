@@ -16,7 +16,9 @@ import ChartRenderer from './ChartRenderer';
 import TableDataRenderer from './TableDataRenderer'; // Import TableDataRenderer
 // import SingleValueChart from './SingleValueChart'; // Import SingleValueChart
 
-const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAreaRef }) => {
+const ResizableChart = ({ data, onRemove, updateChartDetails, 
+  // position={data.position}
+  chartId, droppableAreaRef,isChartView }) => {
   const [tableModalOpen, setTableModalOpen] = useState(false);
   
   const [width, setWidth] = useState(data.width);
@@ -296,15 +298,25 @@ const generateUniquePosition = useCallback((existingPositions) => {
   };
 
   
-  const handleContextMenu = (event) => {
-    event.preventDefault();
-    setAnchorEl(event.currentTarget);
-    setMenuPosition({
-      top: event.clientY,
-      left: event.clientX,
-    });
-  };
+  // const handleContextMenu = (event) => {
+  //   event.preventDefault();
+  //   setAnchorEl(event.currentTarget);
+  //   setMenuPosition({
+  //     top: event.clientY,
+  //     left: event.clientX,
+  //   });
+  // };
 
+  const handleContextMenu = (event) => {
+    if (!isChartView) { // Only show menu if not in chart view
+      event.preventDefault();
+      setAnchorEl(event.currentTarget);
+      setMenuPosition({
+        top: event.clientY,
+        left: event.clientX,
+      });
+    }
+  };
   // Close the context menu
   const handleCloseMenu = () => {
     setMenuPosition(null);
@@ -360,7 +372,7 @@ const generateUniquePosition = useCallback((existingPositions) => {
     <div>
       
       <ChartContainer position={position} handleDragStop={handleDragStop} handleContextMenu={handleContextMenu} > {/* Use ChartContainer */}
-        <ChartArea showBorder={showBorder} borderSize={borderSize} borderColor={borderColor}> {/* Use ChartArea */}
+        <ChartArea showBorder={!isChartView}  borderSize={borderSize} borderColor={borderColor}> {/* Use ChartArea */}
           {renderChart()}
         </ChartArea>
         <ChartContextMenu  

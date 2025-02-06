@@ -19,6 +19,10 @@ const viewChartSlice = createSlice({
     addChartData: (state, action) => {
       state.dashboard_charts.push(action.payload);
     },
+    clearDashboardCharts: (state) => {
+      state.dashboard_charts = [];
+      state.textChart = [];
+    },
     updateChartData: (state, action) => {
       const { chart_id, categories, values } = action.payload;
 
@@ -53,7 +57,7 @@ export const {
   removeChartData,
   updateSelectedCategory,
   setChartStatus,
-  updateSelectedCategory_xaxis
+  updateSelectedCategory_xaxis,clearDashboardCharts
 } = viewChartSlice.actions;
 
 export default viewChartSlice.reducer;

@@ -641,7 +641,7 @@ import {
   fetchDashboardData,
   deletedashboard,
 } from "../../utils/api";
-import { addTextChart, addChartData } from "../../features/viewDashboardSlice/viewDashboardSlice";
+import { addTextChart, addChartData,clearDashboardCharts } from "../../features/viewDashboardSlice/viewDashboardSlice";
 import {
   Box,
   Button,
@@ -651,7 +651,7 @@ import {
   DialogContent,
   DialogTitle,
   Menu,
-  MenuItem,
+  MenuItem,Snackbar,Alert
 } from "@mui/material";
 import "../Style.css";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -669,6 +669,8 @@ function ViewDashboardSidebar() {
   // Mapping of chart_id to its position { x, y }
   const [chartPositions, setChartPositions] = useState({});
 
+  // Track which chart is currently active
+  const [activeChart, setActiveChart] = useState(null);
   useEffect(() => {
     if (chartData) {
       localStorage.setItem("charts", JSON.stringify(chartData));
@@ -679,6 +681,9 @@ function ViewDashboardSidebar() {
   const [openModal, setOpenModal] = useState(false);
   const [chartToDelete, setChartToDelete] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar open state
+  const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
+
   const user_id = localStorage.getItem("user_id");
 
   console.log("chartData:", chartData); 
@@ -709,6 +714,7 @@ function ViewDashboardSidebar() {
           setChartNamesArray([]);
         }
       })
+      
       .catch((err) => {
         console.error("Error fetching total rows:", err);
         setChartNamesArray([]);
@@ -757,22 +763,53 @@ function ViewDashboardSidebar() {
   //       console.error("Error fetching chart data:", err);
   //     });
   // };
+  // const handleChartButtonClick = (chartNumber, chartName) => {
+  //   dispatch(fetchDashboardData(chartName))
+  //     .unwrap()
+  //     .then((response) => {
+  //       if (response && response.chart_datas) {
+  
+  //         const updatedChartData = response.chart_datas.map(chart => {
+  //           // Ensure chart.chart_id exists and is a string
+  //           const chartId = chart.chart_id ? chart.chart_id.toString() : null;
+  
+  //           //Check if position exists, if not, provide default values
+  //           const position = chart.position || { x: 0, y: 0 };
+  
+  //           return { ...chart, chart_id: chartId, position: position }; // Add or overwrite chart_id and position
+  //         });
+  
+  //         updatedChartData.forEach(chartData => {
+  //           if (chartData.chart_type === "singleValueChart") {
+  //             dispatch(addTextChart(chartData));
+  //           } else {
+  //             dispatch(addChartData(chartData));
+  //           }
+  //         });
+  
+  //       } else {
+  //         console.error("Response missing required data (chart_datas):", response);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching chart data:", err);
+  //     });
+  // };
   const handleChartButtonClick = (chartNumber, chartName) => {
+    setActiveChart(chartName);
+
+    dispatch(clearDashboardCharts());
+
     dispatch(fetchDashboardData(chartName))
       .unwrap()
       .then((response) => {
         if (response && response.chart_datas) {
-  
           const updatedChartData = response.chart_datas.map(chart => {
-            // Ensure chart.chart_id exists and is a string
             const chartId = chart.chart_id ? chart.chart_id.toString() : null;
-  
-            //Check if position exists, if not, provide default values
             const position = chart.position || { x: 0, y: 0 };
-  
-            return { ...chart, chart_id: chartId, position: position }; // Add or overwrite chart_id and position
+            return { ...chart, chart_id: chartId, position: position };
           });
-  
+
           updatedChartData.forEach(chartData => {
             if (chartData.chart_type === "singleValueChart") {
               dispatch(addTextChart(chartData));
@@ -780,16 +817,15 @@ function ViewDashboardSidebar() {
               dispatch(addChartData(chartData));
             }
           });
-  
-        } else {
-          console.error("Response missing required data (chart_datas):", response);
         }
       })
       .catch((err) => {
         console.error("Error fetching chart data:", err);
+        // Set the error message and open the Snackbar
+        setSnackbarMessage(err.message || 'An error occurred while fetching data.');
+        setSnackbarOpen(true); // Open the Snackbar
       });
   };
-
   const handleContextMenu = (event, chartName, index) => {
     event.preventDefault();
     setAnchorEl({
@@ -810,6 +846,21 @@ function ViewDashboardSidebar() {
     setAnchorEl(null);
   };
 
+  // const handleDeleteConfirm = () => {
+  //   if (chartToDelete) {
+  //     const { index, chartName } = chartToDelete;
+  //     dispatch(deletedashboard(chartName))
+  //       .then((response) => {
+  //         console.log("Chart deleted successfully:", response);
+  //         const updatedChartNames = chartNamesArray.filter((_, idx) => idx !== index);
+  //         setChartNamesArray(updatedChartNames);
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error deleting chart:", err);
+  //       });
+  //     setOpenModal(false);
+  //   }
+  // };
   const handleDeleteConfirm = () => {
     if (chartToDelete) {
       const { index, chartName } = chartToDelete;
@@ -821,24 +872,37 @@ function ViewDashboardSidebar() {
         })
         .catch((err) => {
           console.error("Error deleting chart:", err);
+          setSnackbarMessage(err.message || 'An error occurred while deleting the chart.');
+          setSnackbarOpen(true); // Open the Snackbar on error
         });
       setOpenModal(false);
     }
   };
-
   const handleCloseModal = () => {
     setOpenModal(false);
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false); // Close the Snackbar
+  };
   return (
     <div className="App" style={{ height: '100vh' }}>
       {/* Container with relative positioning so that absolute children are positioned accordingly */}
       <Box
+        // sx={{
+        //   position: 'relative',
+        //   width: '100%',
+        //   height: '100%',
+        //   backgroundColor: '#f9f9f9'
+        // }}
         sx={{
-          position: 'relative',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', // Adjust min size as needed
+          gap: '10px',
+          padding: '20px',
+          backgroundColor: '#f9f9f9',
           width: '100%',
           height: '100%',
-          backgroundColor: '#f9f9f9'
         }}
       >
         {/* Render each chart button at its specified position */}
@@ -871,7 +935,11 @@ function ViewDashboardSidebar() {
                 }}
                 onClick={() => handleChartButtonClick(index + 1, chart.chart_heading)}
                 onContextMenu={(event) => handleContextMenu(event, chart.chart_heading, index)}
+              
+                // Disable this button if it matches the currently active chart
+                disabled={activeChart === chart.chart_heading}
               >
+              
                 {chart.chart_heading}
               </Button>
             );
@@ -896,7 +964,7 @@ function ViewDashboardSidebar() {
               margin: '4px',
               minWidth: '90px',
               color: 'black',
-              background: 'white',
+              background: activeChart === name ? 'grey' : 'white',
               justifyContent: 'center',
               maxHeight: '28px',
               fontSize: '12px',
@@ -913,6 +981,7 @@ function ViewDashboardSidebar() {
             key={index + 1}
             onClick={() => handleChartButtonClick(index + 1, name)}
             onContextMenu={(event) => handleContextMenu(event, name, index)}
+            disabled={activeChart === name}
           >
             {name}
           </Button>
@@ -991,6 +1060,11 @@ function ViewDashboardSidebar() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

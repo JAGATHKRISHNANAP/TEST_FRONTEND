@@ -213,6 +213,7 @@ function Chartsview() {
         data={data}
         onRemove={handleRemoveChart}
         updateChartDetails={updateChartDetails}
+        isChartView={true} 
       />
     ));
   }, [chartData, updateChartDetails]);

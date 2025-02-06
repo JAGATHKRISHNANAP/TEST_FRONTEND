@@ -278,10 +278,22 @@ export const fetchDashboardTotalRows = createAsyncThunk('chart/fetchDashboardTot
   return response.data;
 });
 
-export const fetchDashboardData = createAsyncThunk('chart/fetchDashboardData', async (dashboard_names) => {
-  const response = await axios.get(`http://localhost:5000/Dashboard_data/${dashboard_names}`);
-  console.log("response",response.data)
-  return response.data;
+// export const fetchDashboardData = createAsyncThunk('chart/fetchDashboardData', async (dashboard_names) => {
+//   const response = await axios.get(`http://localhost:5000/Dashboard_data/${dashboard_names}`);
+//   console.log("response",response.data)
+//   return response.data;
+// });
+export const fetchDashboardData = createAsyncThunk('chart/fetchDashboardData', async (dashboard_names, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/Dashboard_data/${dashboard_names}`);
+    if (response.data.error) {
+      throw new Error(response.data.error); // Throw error if the backend returns an error message
+    }
+    return response.data;  // Return the data if successful
+  } catch (error) {
+    console.error(`Error fetching data for dashboard ${dashboard_names}:`, error);
+    return rejectWithValue(error.message || 'Failed to fetch data for the dashboard');  // Reject with a message
+  }
 });
 
 
@@ -681,15 +693,25 @@ export const sendaidashboardClickedCategory = async (category,x_axis) => {
 
 
 export const fetchSingleChartData = async (chartName) => {
-  try {
-    const response = await axios.get(`${API_URL}/chart_data/${chartName}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching data for Chart ${chartName}:`, error);
-    throw new Error(`Failed to fetch data for Chart ${chartName}`);
+//   try {
+//     const response = await axios.get(`${API_URL}/chart_data/${chartName}`);
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error fetching data for Chart ${chartName}:`, error);
+//     throw new Error(`Failed to fetch data for Chart ${chartName}`);
+//   }
+// };
+try {
+  const response = await axios.get(`${API_URL}/chart_data/${chartName}`);
+  if (response.data.error) {
+    throw new Error(response.data.error); // Throw error if the backend returns an error message
   }
+  return response.data;
+} catch (error) {
+  console.error(`Error fetching data for Chart ${chartName}:`, error);
+  throw new Error(error.message || 'Failed to fetch data for the chart');
+}
 };
-
 
 // export const generateChartData = async (selectedTable, xAxis, yAxis, aggregate, chartType, filterOptions, databaseName) => {
 //   const xAxisColumns = xAxis.join(', ');

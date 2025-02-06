@@ -694,12 +694,15 @@
      <div
        style={{
          display: 'grid',
-         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+         
+         gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+         gridAutoRows: 'minmax(200px, auto)', 
          gridGap: '10px',
          padding: '20px',
-         border: '1px solid #ccc',
+         
          backgroundColor: 'white',
-         minHeight: '80vh',
+         minHeight: '95vh',
+         
        }}
      >
        {/* Render Text Charts */}
@@ -707,7 +710,7 @@
 
        {/* Render Other Charts */}
        {chartData?.map((chart, index) => (
-        <ChartWrapper key={`chart-${index}`} style={{ position: "absolute", // Allow chart to be placed based on its x, y coordinates
+        <ChartWrapper key={`chart-${index}`} style={{padding:'1px' ,marginTop:'50px',position: "absolute", // Allow chart to be placed based on its x, y coordinates
 left: `${chart.positions.x}px`,
 top: `${chart.positions.y}px`,minWidth: '400px' }}>
            <ChartRenderer chart={chart} />

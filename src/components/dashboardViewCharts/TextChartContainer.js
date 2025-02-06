@@ -9,7 +9,7 @@ const TextChartContainer = () => {
   return (
     <>
       {textCharts?.map((text, index) => (
-        <ChartWrapper key={`text-${index}`} style={{ minWidth: '400px' }}>
+        <ChartWrapper key={`text-${index}`} style={{ minWidth: '400px',marginLeft:'80px' }}>
           <ChartRenderer chart={text} />
         </ChartWrapper>
       ))}

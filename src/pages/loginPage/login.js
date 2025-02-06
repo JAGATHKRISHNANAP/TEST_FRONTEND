@@ -321,15 +321,27 @@ export default function SignIn() {
       setEmailErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
+    // if (!password.value || password.value.length < 6) {
+    //   setPasswordError(true);
+    //   setPasswordErrorMessage('Password must be at least 6 characters long.');
+    //   isValid = false;
+    // } else {
+    //   setPasswordError(false);
+    //   setPasswordErrorMessage('');
+    // }
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9]).{8,10}$/;
+    if (!password.value || !passwordPattern.test(password.value)) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage(
+        'Password must be 8 to 10 characters long and include at least one letter and one symbol.'
+      );
       isValid = false;
     } else {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-
+  
+   
     return isValid;
   };
 

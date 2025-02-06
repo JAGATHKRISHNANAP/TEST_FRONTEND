@@ -124,3 +124,11 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-weight: bold;
   text-align: center;
 }
+.polar-area-chart {
+  width: 100%;  /* Or a fixed width */
+  height: 100%; /* Or a fixed height */
+}
+.polar-area-chart .apexcharts-canvas {
+width: 100% !important;
+height: 100% !important;
+}
