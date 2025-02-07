@@ -34,6 +34,7 @@ import  signupReducer  from '../features/signUp/signUpSlice';
 // import fetchedChartDataReducer from '../features/fetchChartDataForView/fetchChartDataSlice';
 import aichartReducer from '../features/aiCharts/aiChartSlice';
 import userReducer from'../features/Dashboard-Slice/userSlice';
+import viewChartDetailReducer from '../features/ViewChartSlice/chartSlice';
 
 const store = configureStore({
   
@@ -58,7 +59,7 @@ const store = configureStore({
     chartType: chartTypeReducer,
     chartColor: colorReducer,
     // barColor: barColorReducer,
-
+    viewChartDetails: viewChartDetailReducer,
     // totalRows: totalRowsReducer,
     chartdata: chartDataReducer,
     viewcharts: viewChartSliceReducer,

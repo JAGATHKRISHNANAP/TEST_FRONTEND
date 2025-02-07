@@ -23,7 +23,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
   
   const [width, setWidth] = useState(data.width);
   const [height, setHeight] = useState(data.height);
-  const [position, setPosition] = useState(data.position || { x: 0, y: 0 }); // Initialize unique position
+  // const [position, setPosition] = useState(data.position || { x: 0, y: 0 }); // Initialize unique position
   const [result, setResult] = useState(null);
   const [fetchedData, setFetchedData] = useState(null);
   const dispatch = useDispatch();
@@ -49,81 +49,83 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
   const [borderColor, setBorderColor] = useState("#000"); // Default black border
   const [borderSize, setBorderSize] = useState("1px"); // Default border size
   const [showBorder, setShowBorder] = useState(true); // Toggle border visibility
+  // const { position, chartName } = data;
+  const { position = { x: 0, y: 0 }, chartName } = data;
 
   const chartDataFromStore = useSelector((state) =>
     state.viewcharts.charts.find((chart) => chart.chart_id === chart_id)
   );
-  // const generateUniquePosition = useCallback((existingPositions) => {
-  //   const margin = 20;
-  //   const chartWidth = 500;
-  //   const chartHeight = 400;
-  //   const chartsPerRow = 4;
+//   // const generateUniquePosition = useCallback((existingPositions) => {
+//   //   const margin = 20;
+//   //   const chartWidth = 500;
+//   //   const chartHeight = 400;
+//   //   const chartsPerRow = 4;
 
-  //   let row, col, newX, newY;
-  //   let positionFound = false;
+//   //   let row, col, newX, newY;
+//   //   let positionFound = false;
 
-  //   for (let i = 0; i < 100; i++) { // Try a maximum of 100 times to find a position
-  //     const totalCharts = existingPositions.length / 2; // Divide by 2 because each position has x and y
-  //     row = Math.floor(totalCharts / chartsPerRow);
-  //     col = totalCharts % chartsPerRow;
-  //     newX = col * (chartWidth + margin) + margin;
-  //     newY = row * (chartHeight + margin) + margin;
+//   //   for (let i = 0; i < 100; i++) { // Try a maximum of 100 times to find a position
+//   //     const totalCharts = existingPositions.length / 2; // Divide by 2 because each position has x and y
+//   //     row = Math.floor(totalCharts / chartsPerRow);
+//   //     col = totalCharts % chartsPerRow;
+//   //     newX = col * (chartWidth + margin) + margin;
+//   //     newY = row * (chartHeight + margin) + margin;
 
-  //     const isPositionTaken = existingPositions.some((pos, idx) => pos === newX && existingPositions[idx + 1] === newY);
+//   //     const isPositionTaken = existingPositions.some((pos, idx) => pos === newX && existingPositions[idx + 1] === newY);
 
-  //     if (!isPositionTaken) {
-  //       positionFound = true;
-  //       break;
-  //     }
-  //   }
+//   //     if (!isPositionTaken) {
+//   //       positionFound = true;
+//   //       break;
+//   //     }
+//   //   }
 
-  //   if (!positionFound) {
-  //     console.warn("Could not find a unique position after multiple attempts.");
-  //     // Fallback to a default position or throw an error
-  //     return { x: 0, y: 0 }; // Or throw new Error("Could not find unique position");
-  //   }
-  //   return { x: newX, y: newY };
-  // }, []);
-  const [chartPositions, setChartPositions] = useState([]); // Track all chart positions
+//   //   if (!positionFound) {
+//   //     console.warn("Could not find a unique position after multiple attempts.");
+//   //     // Fallback to a default position or throw an error
+//   //     return { x: 0, y: 0 }; // Or throw new Error("Could not find unique position");
+//   //   }
+//   //   return { x: newX, y: newY };
+//   // }, []);
+//   const [chartPositions, setChartPositions] = useState([]); // Track all chart positions
 
-const generateUniquePosition = useCallback((existingPositions) => {
-  const margin = 20;
-  const chartWidth = 500;
-  const chartHeight = 400;
-  const chartsPerRow = 4;
+// const generateUniquePosition = useCallback((existingPositions) => {
+//   const margin = 20;
+//   const chartWidth = 500;
+//   const chartHeight = 400;
+//   const chartsPerRow = 4;
   
-  let row, col, newX, newY;
-  let positionFound = false;
+//   let row, col, newX, newY;
+//   let positionFound = false;
   
-  // Try to find an available position
-  for (let i = 0; i < 100; i++) { 
-    const totalCharts = existingPositions.length / 2; // Divide by 2 because each position has x and y
-    row = Math.floor(totalCharts / chartsPerRow);
-    col = totalCharts % chartsPerRow;
-    newX = col * (chartWidth + margin) + margin;
-    newY = row * (chartHeight + margin) + margin;
+//   // Try to find an available position
+//   for (let i = 0; i < 100; i++) { 
+//     const totalCharts = existingPositions.length / 2; // Divide by 2 because each position has x and y
+//     row = Math.floor(totalCharts / chartsPerRow);
+//     col = totalCharts % chartsPerRow;
+//     newX = col * (chartWidth + margin) + margin;
+//     newY = row * (chartHeight + margin) + margin;
 
-    // Check if the new position overlaps with existing positions
-    const isPositionTaken = existingPositions.some((pos, idx) => {
-      return pos.x === newX && pos.y === newY;
-    });
+//     // Check if the new position overlaps with existing positions
+//     const isPositionTaken = existingPositions.some((pos, idx) => {
+//       return pos.x === newX && pos.y === newY;
+//     });
 
-    if (!isPositionTaken) {
-      positionFound = true;
-      break;
-    }
-  }
+//     if (!isPositionTaken) {
+//       positionFound = true;
+//       break;
+//     }
+//   }
 
-  if (!positionFound) {
-    console.warn("Could not find a unique position after multiple attempts.");
-    return { x: 0, y: 0 }; 
-  }
+//   if (!positionFound) {
+//     console.warn("Could not find a unique position after multiple attempts.");
+//     return { x: 0, y: 0 }; 
+//   }
 
-  // Save the newly generated position
-  setChartPositions([...existingPositions, { x: newX, y: newY }]);
+//   // Save the newly generated position
+//   setChartPositions([...existingPositions, { x: newX, y: newY }]);
 
-  return { x: newX, y: newY };
-}, [chartPositions]); // Dependency on chartPositions
+//   return { x: newX, y: newY };
+// }, [chartPositions]); // Dependency on chartPositions
 
 
 
@@ -147,7 +149,7 @@ const generateUniquePosition = useCallback((existingPositions) => {
     updateChartDetails(data.chartName, { width, height, position });
     sendChartDetailsToBackend();
     sendDataToBackend();
-  }, [width, height, position,generateUniquePosition]);
+  }, [width, height, position]);
 
 
   const handleResize = (e, { size }) => {
@@ -277,27 +279,53 @@ const generateUniquePosition = useCallback((existingPositions) => {
 
 
 
-  const handleDragStop = async (e, uiData) => {
-    const newPosition = { x: uiData.x, y: uiData.y };
-    if (newPosition.x !== position.x || newPosition.y !== position.y) {
-      setPosition(newPosition);
-      updateChartDetails(data.chartName, { position: newPosition });
+  // const handleDragStop = async (e, uiData) => {
+  //   const newPosition = { x: uiData.x, y: uiData.y };
+  //   if (newPosition.x !== position.x || newPosition.y !== position.y) {
+  //     setPosition(newPosition);
+  //     updateChartDetails(data.chartName, { position: newPosition });
 
-      // Send new position to the backend
-      try {
-        await axios.post('http://localhost:5000/api/update-chart-position', {
-          chart_id: data[0],
+  //     // Send new position to the backend
+  //     try {
+  //       await axios.post('http://localhost:5000/api/update-chart-position', {
+  //         chart_id: data[0],
           
-          position: newPosition, // Sending updated position to backend
+  //         position: newPosition, // Sending updated position to backend
          
-        });
-      } catch (error) {
-        console.error('Error updating chart position:', error);
-      }
-    }
-  };
+  //       });
+  //     } catch (error) {
+  //       console.error('Error updating chart position:', error);
+  //     }
+  //   }
+  // };
 
-  
+  // const handleDragStop = async (e, uiData) => {
+  //   const newPosition = { x: uiData.x, y: uiData.y };
+
+  //   // Only update if the position has really changed.
+  //   if (newPosition.x !== position.x || newPosition.y !== position.y) {
+  //     // Notify the parent to update the chart details
+  //     updateChartDetails(chartName, { position: newPosition });
+
+      // Optionally, send the new position to the backend
+      // try {
+      //   await axios.post('http://localhost:5000/api/update-chart-position', {
+      //     chart_id: data.chart_id, // Ensure you pass the correct identifier
+      //     position: newPosition,
+      //   });
+      // } catch (error) {
+      //   console.error('Error updating chart position:', error);
+      // }
+  //   }
+  // };
+  const handleDragStop = (e, uiData) => {
+    const newPosition = { x: uiData.x, y: uiData.y };
+
+    // Only update if the position has changed.
+    if (newPosition.x !== position.x || newPosition.y !== position.y) {
+      updateChartDetails(chartName, { position: newPosition });
+    }
+  };  
   // const handleContextMenu = (event) => {
   //   event.preventDefault();
   //   setAnchorEl(event.currentTarget);
