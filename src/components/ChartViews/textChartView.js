@@ -154,7 +154,7 @@ const TextChart = ({ categories, values, title, xFontSize="FontSize",fontStyle="
         const svg = d3.select(svgRef.current)
             .attr('width', 400)
             .attr('height', categories.length * 40) // Set height based on number of categories
-            .style('border', '2px solid #000') // Add border to the chart
+            // .style('border', '2px solid #000') // Add border to the chart
 
         svg.selectAll('*').remove(); // Clear previous content
 

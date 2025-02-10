@@ -1428,14 +1428,15 @@ function Charts() {
   const renderedCharts = useMemo(() => (
     chartData.map((data) => (
       <Grid item xs={12} sm={5} md={5} lg={3} key={data.chartName}  sx={{ padding: '20px', height: "490px" }}
+      
     // Common class name for querying
-      // data-chartname={data.chartName}
+       data-chartname={data.chartName}
        >
         <ResizableChart
           data={data}
           onRemove={handleCloseChart}
           updateChartDetails={updateChartDetails}
-          // position={data.position}
+          position={data.position}
         />
         
       </Grid>
@@ -1445,7 +1446,7 @@ function Charts() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
-         <Box sx={{ flexGrow: 1, minHeight: '95vh', marginTop: '70px' }}>
+         <Box sx={{ flexGrow: 1, minHeight: '92vh', marginTop: '70px' }}>
           <Grid container spacing={2} wrap="wrap">
             <Grid item xs={12} md={12}>
               <DroppableArea onDrop={handleChartButtonClick} chartData={chartData}>

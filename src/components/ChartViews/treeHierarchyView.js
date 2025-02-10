@@ -203,7 +203,7 @@ const Dendrogram = ({ x_axis, treeData }) => {
       ref={containerRef}
       style={{
         margin: '10px',
-        border: '.5px solid black',
+        // border: '.5px solid black',
         backgroundColor: 'white',
         marginLeft: '1px',
         width: '100%',

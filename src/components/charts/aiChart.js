@@ -331,10 +331,15 @@ const AllCharts = () => {
         const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
        const categoryColor = useSelector((state) => state.toolTip.categoryColor);
        const valueColor= useSelector((state) => state.toolTip.valueColor);
+       const [selectedTable, setSelectedTable] = useState(localStorage.getItem('selectedTable')); // Get from localStorage
+
     useEffect(() => {
         dispatch(fetchChartData());
     }, [dispatch]);
-
+    useEffect(() => {
+        localStorage.setItem('selectedTable', selectedTable); // Save to localStorage whenever selectedTable changes
+    }, [selectedTable]);
+    
     const handleCheckboxChange = (chartIndex) => {
         setSelectedCharts((prevSelected) =>
             prevSelected.includes(chartIndex)
@@ -367,7 +372,9 @@ const AllCharts = () => {
     if (error) {
         return <div style={{ textAlign: 'center', marginTop: '20px' }}>Error: {error}</div>;
     }
-
+    if (!selectedTable) {
+        return <div style={{ textAlign: 'center', marginTop: '20px' }}>Please select a table to view charts.</div>;
+    }
     return (
         <Suspense fallback={<div>Loading Charts...</div>}>
             <div

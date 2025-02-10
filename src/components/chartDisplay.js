@@ -761,7 +761,7 @@ const ChartRenderer = ({
             )}
 
       {/* General Error Message */}
-      {(xAxis.length === 0 || yAxis.length === 0) && (
+      {(xAxis.length === 0 || yAxis.length === 0) && chartType !== "AiCharts" && (
         renderError("Please select at least one X-axis and one Y-axis value to render the chart.")
       )}
     </div>

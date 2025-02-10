@@ -257,9 +257,11 @@ export default function SignIn() {
         }
       const response = await signIn(email, password, company);
       console.log(response);
-      if (response.data && response.data.tables) {
+      if (response.data && response.data.tables && response.data.role_name) {
         const tableNames = response.data.tables;
+        const user_role=response.data.role_name;
         localStorage.setItem('tableNames', JSON.stringify(tableNames));
+        localStorage.setItem('user_role', JSON.stringify(user_role));
       }
   
       let user_id, user_name, user_role, user_email;
@@ -329,7 +331,7 @@ export default function SignIn() {
     //   setPasswordError(false);
     //   setPasswordErrorMessage('');
     // }
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9]).{8,10}$/;
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9]).{8,12}$/;
     if (!password.value || !passwordPattern.test(password.value)) {
       setPasswordError(true);
       setPasswordErrorMessage(

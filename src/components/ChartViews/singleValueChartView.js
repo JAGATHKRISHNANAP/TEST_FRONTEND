@@ -153,7 +153,7 @@ const SingleValueChartView = ({ width, heading, result, fetchedData }) => {
           maxConstraints={maxConstraints}
           onResize={handleResize}
           style={{
-            border: '0px solid #ccc', // Solid border for clarity
+            // border: '0px solid #ccc', // Solid border for clarity
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

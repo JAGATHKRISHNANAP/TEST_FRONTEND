@@ -318,13 +318,16 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
       // }
   //   }
   // };
+  
   const handleDragStop = (e, uiData) => {
+    if (!isChartView) { 
     const newPosition = { x: uiData.x, y: uiData.y };
 
     // Only update if the position has changed.
     if (newPosition.x !== position.x || newPosition.y !== position.y) {
       updateChartDetails(chartName, { position: newPosition });
     }
+  }
   };  
   // const handleContextMenu = (event) => {
   //   event.preventDefault();

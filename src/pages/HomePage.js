@@ -49,7 +49,33 @@ function Navbar() {
 
   const theamColor=localStorage.setItem('theamColor',appBarColor);
   // const secondNavbar=localStorage.getItem('show_second_navbar',showSecondNavbar);
+  const userRole = localStorage.getItem('user_role');
+  const isRouteAccessible = (route) => {
+    switch (userRole) {
+      case '2':
+        return true; // Admin can access all routes
+      case '1':
+        return !['/Charts_view', '/dashboard_view'].includes(route); // Developer can access all except View routes
+      case '3':
+        return ['/Charts_view', '/dashboard_view'].includes(route); // Viewer can only access View routes
+      default:
+        return false; // Default: no access
+    }
+  };
 
+  const handleNavigation = (route) => {
+    if (isRouteAccessible(route)) {
+      setActiveRoute(route);
+      navigate(route);
+      handleMenuClose();
+      handleViewMenuClose();
+     // window.location.reload(); // Consider removing if not absolutely necessary.  Can cause issues.
+    } else {
+      // Handle unauthorized access, e.g., show a message or redirect to a different page
+      alert("You don't have permission to access this page."); // Example: alert message
+      // Or: navigate('/some-other-route');  // Example: redirect
+    }
+  };
   React.useEffect(() => {
     // Check session storage for the navbar flag
     setShowSecondNavbar(sessionStorage.getItem('show_second_navbar') === 'true');
@@ -126,13 +152,13 @@ function Navbar() {
   };
   
  
-  const handleNavigation = (route) => {
-    setActiveRoute(route); 
-    navigate(route);
-    handleMenuClose();
-    handleViewMenuClose();
-    window.location.reload();
-  };
+  // const handleNavigation = (route) => {
+  //   setActiveRoute(route); 
+  //   navigate(route);
+  //   handleMenuClose();
+  //   handleViewMenuClose();
+  //   window.location.reload();
+  // };
 
 
   const handleLoginLogout = () => {
@@ -225,6 +251,7 @@ function Navbar() {
           <Toolbar>
             
             <ButtonGroup variant="text" aria-label="Basic button group" sx={{ height: '25px', display: 'flex' }}>
+            {userRole !== '3' && ( 
               <Button
                 aria-controls={openMenu ? 'data-source-menu' : undefined}
                 aria-haspopup="true"
@@ -244,7 +271,7 @@ function Navbar() {
                   Data Source 
                 </ListItemIcon>
               </Button>
-              
+            )}
               <Menu
   id="data-source-menu"
   anchorEl={anchorEl}
@@ -312,37 +339,42 @@ function Navbar() {
   Create DataSource
 </MenuItem>
 </Menu>
-           
-<Button
-onClick={() => handleNavigation('/load_data')}
-    sx={{
-      backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
-      maxWidth: '150px',
-      alignItems: 'center',
-      color: 'inherit',
-      fontSize: "16px", 
-    }}
-  >
-    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
-      Data Table 
-    </ListItemIcon>
-  </Button>
-  
+{userRole !== '3' && (  
+    <>     
   <Button
-onClick={() => handleNavigation('/load_db')}
-    sx={{
-      backgroundColor: location.pathname === '/load_db' ? '#c5c5c9' : 'inherit',
-      maxWidth: '200px',
-      alignItems: 'center',
-      color: 'inherit',
-      fontSize: "16px", 
-    }}
-  >
-    <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '200px', color: '#000000',textTransform: 'none'  }}>
-      Database Connection
-    </ListItemIcon>
-  </Button>
-<Button
+  onClick={() => handleNavigation('/load_data')}
+      sx={{
+        backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
+        maxWidth: '150px',
+        alignItems: 'center',
+        color: 'inherit',
+        fontSize: "16px", 
+      }}
+    >
+      <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+        Data Table 
+      </ListItemIcon>
+    </Button>
+ 
+      <Button
+    onClick={() => handleNavigation('/load_db')}
+        sx={{
+          backgroundColor: location.pathname === '/load_db' ? '#c5c5c9' : 'inherit',
+          maxWidth: '200px',
+          alignItems: 'center',
+          color: 'inherit',
+          fontSize: "16px", 
+        }}
+      >
+        <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '200px', color: '#000000',textTransform: 'none'  }}>
+          Database Connection
+        </ListItemIcon>
+      </Button>
+      </>
+)}
+{userRole !== '3' && (
+  <Button
+ 
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={openDesignMenu ? 'true' : undefined}
@@ -371,6 +403,7 @@ onClick={() => handleNavigation('/load_db')}
             Design 
           </ListItemIcon>
         </Button>
+)}
         <Menu
           id="design-menu"
           anchorEl={designMenuAnchorEl}
@@ -398,7 +431,7 @@ onClick={() => handleNavigation('/load_db')}
           Dashboard
           </MenuItem> */}
         </Menu>
-
+        {userRole !== '3' && (
               <Button
                 onClick={() => handleNavigation('/Edit_Chart')}
                 sx={{
@@ -411,8 +444,28 @@ onClick={() => handleNavigation('/load_db')}
                   Edit
                 </ListItemIcon>
               </Button>
-
-              <Button
+        )}
+   {(userRole === '3' || userRole === '2') && ( // Show for Viewer OR Admin
+    <Button
+        aria-controls={openViewMenu ? 'view-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={openViewMenu ? 'true' : undefined}
+        onMouseOver={handleViewMenuClick}
+        sx={{
+            backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
+            maxWidth: '150px',
+            alignItems: 'center',
+            color: 'inherit',
+            fontSize: "16px",
+        }}
+    >
+        <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000', textTransform: 'none' }}>
+            View
+        </ListItemIcon>
+    </Button>
+)}
+              
+              {/* <Button
                 aria-controls={openViewMenu ? 'view-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={openViewMenu ? 'true' : undefined}
@@ -429,7 +482,7 @@ onClick={() => handleNavigation('/load_db')}
                   View 
                 </ListItemIcon>
               </Button>
-
+         )} */}
               <Menu
                 id="view-menu"
                 anchorEl={viewMenuAnchorEl}
