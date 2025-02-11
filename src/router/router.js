@@ -26,6 +26,8 @@ import CustomDataSource from '../pages/UploadPage/customDataSource';
 import User_input from '../components/user/user_input';
 import CreateDataSource from '../pages/UploadPage/createNewDataSource';
 import RoleCreation from '../pages/loginPage/role';
+import DesignChart from '../pages/designChart/designChart';
+
 const AppRouter = () => {
   return (
     <Routes>
@@ -36,6 +38,7 @@ const AppRouter = () => {
       <Route path="/json_upload" element={<JsonUpload />} />
       <Route path="/custom_data_source" element={<CustomDataSource />} />
       <Route path="/Create_DataSource" element={<CreateDataSource />} />
+
 
 
 
@@ -57,16 +60,17 @@ const AppRouter = () => {
       <Route path="/home" element={<IndexHomePage />} />
       <Route path="/employeehome" element={<HomePage />} />
 
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={<DesignChart />} />
 
 
       {/* Authentication Routes */}
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
       <Route path="/signClient" element={<SignIn />} />
       <Route path="/clientEmpData" element={<ClientLoginHome />} />
       <Route path="/roles" element={<RoleCreation />} />
      
-
+      <Route path="/create_charts" element={<DesignChart />} />
+     
 
 
       {/* =====================GAYATHRI======================= */}

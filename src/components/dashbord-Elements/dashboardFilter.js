@@ -93,12 +93,8 @@ const ChartColorPage = () => {
   return (
     <div className="App">
       <Box sx={{ flexGrow: 1,
-          backgroundColor: "white",
-          height: "10vh", // Set the height to full viewport height
-          display: "flex", // Enable flexbox
-          justifyContent: "center", // Center horizontally
-          alignItems: "center", // Center vertically
-          }}>
+          
+         }}>
         {/* Main container */}
         <div className="dash-right-side-container">
           {/* Grid layout for icons */}

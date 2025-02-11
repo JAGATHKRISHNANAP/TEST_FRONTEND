@@ -560,7 +560,7 @@ import {
   fetchTableNamesFromExternalDB,
 } from '../../utils/api';
 import tinycolor from 'tinycolor2';
-
+import HomePage from '../../pages/HomePage';
 const LoadDbFile = () => {
   const dispatch = useDispatch();
   const { showDashboard, checkedPaths } = useSelector((state) => state.loadExcel);
@@ -697,7 +697,7 @@ const LoadDbFile = () => {
               <Typography variant="h6">Select User and Table</Typography>
             </Toolbar>
           </AppBar>
-
+<HomePage/>
           {/* User and Table Selection */}
           <Grid container spacing={4} sx={{ marginTop: '20px' }} justifyContent="center">
             {/* User Selection */}

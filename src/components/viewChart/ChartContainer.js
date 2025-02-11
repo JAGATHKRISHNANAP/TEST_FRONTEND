@@ -6,7 +6,7 @@ const ChartContainer = ({ position, handleDragStop, handleContextMenu, children 
     <Draggable onStop={handleDragStop} position={position}>
       <div
         className="chart-container"
-        style={{  height: "auto", position: "relative" }}
+        style={{  height: "auto", position: "absolute" ,width:'400px'}}
         onContextMenu={handleContextMenu}
       >
         {children}

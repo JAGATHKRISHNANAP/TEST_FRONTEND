@@ -370,7 +370,7 @@ const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_
 
     return (
         <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
-            <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+            <ResizableBox width={350} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
                 <Chart
                     options={options}
                     series={series}

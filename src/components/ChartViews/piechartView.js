@@ -251,7 +251,7 @@ const Pie = (props) => {
     <div className="app">
       <div className="row">
         <div className="pie-chart">
-          <ResizableBox  style={{ paddingTop: '35px' }} width={400} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 600]} >
+          <ResizableBox  style={{ paddingTop: '35px' }} width={370} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 600]} >
             <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
             <Chart
               options={options}

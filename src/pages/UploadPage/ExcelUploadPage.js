@@ -350,7 +350,8 @@ import * as XLSX from 'xlsx';
 import { fetchTableNamesAPI ,checkIfTableInUse,fetchTableColumnsAPI} from '../../utils/api';
 import { PieChart } from '@mui/x-charts/PieChart';
 import LinearProgress from '@mui/material/LinearProgress';
-
+import HomePage from '../HomePage';
+import Chip from '@mui/material/Chip';
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -635,176 +636,403 @@ const ExcelUpload = () => {
   
   
   
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <form onSubmit={handleSubmit} className="excel-upload-form">
+//   return (
+//     <React.Fragment>
+//       <CssBaseline />
+//       <form onSubmit={handleSubmit} className="excel-upload-form">
 
-         <Grid container item xs={12} md={12} style={{ backgroundColor: '#dcdfe8', height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
-           <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
-             <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
-  <Button component="label" variant="contained" sx={{
-      padding: '10px 18px', // Increase padding
+//          <Grid container item xs={12} md={12} style={{ backgroundColor: '#dcdfe8', height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
+//          <HomePage/>
+//            <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
+//              <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
+//   <Button component="label" variant="contained" sx={{
+//       padding: '10px 18px', // Increase padding
      
-    }} startIcon={<CloudUploadIcon />}>
-    Choose File
-    <VisuallyHiddenInput type="file" onChange={handleFileChange} />
-  </Button>
+//     }} startIcon={<CloudUploadIcon />}>
+//     Choose File
+//     <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+//   </Button>
 
-  <TextField
-    label="File Name"
-    value={fileName}
-    InputProps={{ readOnly: true }}
-    variant="filled"
-    size="small"
-    style={{ flexGrow: 2 , minWidth: '200px'}} // Ensures consistent width
-  />
+//   <TextField
+//     label="File Name"
+//     value={fileName}
+//     InputProps={{ readOnly: true }}
+//     variant="filled"
+//     size="small"
+//     style={{ flexGrow: 2 , minWidth: '200px'}} // Ensures consistent width
+//   />
 
-  <LoadingButton
-    disabled={!file || !selectedSheet || uploading}
-    color="secondary"
-    loading={uploading}
-    startIcon={<SaveIcon />}
-    type="submit"
-    variant="contained"
-    sx={{
-      padding: '11px 18px', // Increase padding
-      minWidth: '120px', // Minimum button width
-    }}
-  >
-    {uploading ? ' {uploadProgress}%': 'Upload'}
-    {uploading && (
-    <div>
-      <Typography variant="body2" color="textSecondary"> {uploadProgress}%
-      </Typography>
-      <LinearProgress variant="determinate" value={uploadProgress} />
-    </div>
-  )}
-  </LoadingButton>
+//   <LoadingButton
+//     disabled={!file || !selectedSheet || uploading}
+//     color="secondary"
+//     loading={uploading}
+//     startIcon={<SaveIcon />}
+//     type="submit"
+//     variant="contained"
+//     sx={{
+//       padding: '11px 18px', // Increase padding
+//       minWidth: '120px', // Minimum button width
+//     }}
+//   >
+//     {uploading ? ' {uploadProgress}%': 'Upload'}
+//     {uploading && (
+//     <div>
+//       <Typography variant="body2" color="textSecondary"> {uploadProgress}%
+//       </Typography>
+//       <LinearProgress variant="determinate" value={uploadProgress} />
+//     </div>
+//   )}
+//   </LoadingButton>
   
-</Grid>
+// </Grid>
 
 
-{/* Reserve space for sheet dropdown */}
-<Grid
-  item
-  xs={2}
-  style={{
-    minHeight: '30px', // Fixed height to reserve space
+// {/* Reserve space for sheet dropdown */}
+// <Grid
+//   item
+//   xs={2}
+//   style={{
+//     minHeight: '30px', // Fixed height to reserve space
+//   }}
+// >
+//   {sheetNames.length > 0 && (
+//     <>
+//       <Typography>Select a sheet:</Typography>
+//       <Select
+//         value={selectedSheet}
+//         onChange={(e) => handleSheetSelection(e.target.value)}
+//         displayEmpty
+//         fullWidth
+//         variant="outlined"
+//       >
+//         <MenuItem value="" disabled>
+//           -- Select a sheet --
+//         </MenuItem>
+//         {sheetNames.map((sheetName, index) => (
+//           <MenuItem key={index} value={sheetName}>
+//             {sheetName}
+//           </MenuItem>
+//         ))}
+//       </Select>
+//     </>
+//   )}
+// </Grid>
+
+
+//           {excelData.length > 0 && (
+//             <Grid item xs={4}>
+//               <Typography>Select a Primary Key Column:</Typography>
+//               <Select
+//                 value={primaryKeyColumn !== null ? primaryKeyColumn : ''}
+//                 onChange={(e) => dispatch(setPrimaryKeyColumn(e.target.value))}
+//                 displayEmpty
+//                 style={{ width: '' }}
+//                 variant="outlined"
+//               >
+//                 <MenuItem value="" disabled>
+//                   -- Select a Column --
+//                 </MenuItem>
+//                 {excelData[0].map((header, index) => (
+//                   <MenuItem key={index} value={index}>
+//                     {header}
+//                   </MenuItem>
+//                 ))}
+//               </Select>
+//             </Grid>
+//           )}
+// </Grid>       
+//         <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+//             <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+//               <PieChart
+//                 series={[
+//                   {
+//                     data: [
+//                       { id: 0, value: totalColumns },
+//                       { id: 1, value: totalRows },
+//                     ],
+//                   },
+//                 ]}
+//                 width={200}
+//                 height={100}
+//               />
+//             </div>
+//           </Grid>
+//         </Grid>
+//         {/* Display First 5 Rows in Table Format */}
+//         {excelData.length > 0 && (
+//           <Grid item xs={12} style={{ margin: '40px', backgroundColor: '#ffffff', justifyContent: 'center', display: 'flex', alignItems: 'center', borderRadius: '10px' }}>
+//             <Table>
+//               <TableHead>
+//                 <TableRow>
+//                   {excelData[0].map((header, index) => (
+//                     <TableCell key={index}>{header}</TableCell>
+//                   ))}
+//                 </TableRow>
+//               </TableHead>
+//               <TableBody>
+//                 {excelData.slice(1).map((row, rowIndex) => (
+//                   <TableRow key={rowIndex}>
+//                     {row.map((cell, cellIndex) => (
+//                       <TableCell key={cellIndex}>{cell}</TableCell>
+//                     ))}
+//                   </TableRow>
+//                 ))}
+//               </TableBody>
+//             </Table>
+//           </Grid>
+//         )}
+//       </form>
+
+//       {/* Confirmation Dialog */}
+//       <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
+//         <DialogTitle>Table Already Exists</DialogTitle>
+//         <DialogContent>
+//           <Typography>Do you want to update the existing table or skip this upload?</Typography>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={() => handleConfirmationChoice('skip')} color="primary">Skip</Button>
+//           <Button onClick={() => handleConfirmationChoice('update')} color="secondary">Update</Button>
+//         </DialogActions>
+//       </Dialog>
+
+//       {/* Snackbar Message */}
+//       <Snackbar
+//         open={snackbarOpen}
+//         autoHideDuration={3000}
+//         onClose={handleSnackbarClose}
+//       >
+//         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+//           {snackbarMessage}
+//         </Alert>
+//       </Snackbar>
+//     </React.Fragment>
+//   );
+// };
+
+// export default ExcelUpload;
+
+
+return (
+  <React.Fragment>
+    <CssBaseline />
+    <form onSubmit={handleSubmit} className="excel-upload-form">
+       <Grid container item xs={12} md={12} style={{height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
+        <HomePage/>
+         <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
+           <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
+<Button component="label" variant="contained" sx={{
+    padding: '10px 18px', // Increase padding
+   
+  }} startIcon={<CloudUploadIcon />}>
+  Choose File
+  <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+</Button>
+
+<TextField
+  label="File Name"
+  value={fileName}
+  InputProps={{ readOnly: true }}
+  variant="filled"
+  size="small"
+  style={{ flexGrow: 2 , minWidth: '200px'}} // Ensures consistent width
+/>
+
+<LoadingButton
+  disabled={!file || !selectedSheet || uploading}
+  color="secondary"
+  loading={uploading}
+  startIcon={<SaveIcon />}
+  type="submit"
+  variant="contained"
+  sx={{
+    padding: '11px 18px', // Increase padding
+    minWidth: '120px', // Minimum button width
   }}
 >
-  {sheetNames.length > 0 && (
-    <>
-      <Typography>Select a sheet:</Typography>
-      <Select
-        value={selectedSheet}
-        onChange={(e) => handleSheetSelection(e.target.value)}
-        displayEmpty
-        fullWidth
-        variant="outlined"
-      >
-        <MenuItem value="" disabled>
-          -- Select a sheet --
-        </MenuItem>
-        {sheetNames.map((sheetName, index) => (
-          <MenuItem key={index} value={sheetName}>
-            {sheetName}
-          </MenuItem>
-        ))}
-      </Select>
-    </>
-  )}
+  {uploading ? 'Uploading...' : 'Upload'}
+</LoadingButton>
 </Grid>
 
+{/* Reserve space for sheet dropdown */}
+<Grid  item  xs={2}  style={{    minHeight: '30px' }}>
+{sheetNames.length > 0 && (
+<>
+  {/* <Typography>Select a sheet:</Typography> */}
+  <Select
+    value={selectedSheet}
+    onChange={(e) => handleSheetSelection(e.target.value)}
+    displayEmpty
+    fullWidth
+    variant="outlined"
+    sx={{ height: 50 }} // Adjust height here (for MUI v5)
+    renderValue={(selected) => {
+      if (!selected) {
+        return <span>-- Select a sheet --</span>;
+      }
+      return (
+        <Chip
+          label={selected}
+          color="primary"
+          sx={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}
+        />
+      );
+    }}
+  >
+    <MenuItem value="" disabled>
+      -- Select a sheet --
+    </MenuItem>
+    {sheetNames.map((sheetName, index) => (
+      <MenuItem key={index} value={sheetName}>
+        {sheetName}
+      </MenuItem>
+    ))}
+  </Select>
+</>
+)}
 
-          {excelData.length > 0 && (
-            <Grid item xs={4}>
-              <Typography>Select a Primary Key Column:</Typography>
-              <Select
-                value={primaryKeyColumn !== null ? primaryKeyColumn : ''}
-                onChange={(e) => dispatch(setPrimaryKeyColumn(e.target.value))}
-                displayEmpty
-                style={{ width: '' }}
-                variant="outlined"
-              >
-                <MenuItem value="" disabled>
-                  -- Select a Column --
-                </MenuItem>
-                {excelData[0].map((header, index) => (
-                  <MenuItem key={index} value={index}>
-                    {header}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          )}
+
+
+</Grid>
+{excelData.length > 0 && (
+<Grid item xs={4}>
+  {/* <Typography>Select a Primary Key Column:</Typography> */}
+  <Select
+    value={primaryKeyColumn !== null && primaryKeyColumn !== undefined ? primaryKeyColumn : ''}
+    onChange={(e) => dispatch(setPrimaryKeyColumn(e.target.value))}
+    displayEmpty
+    fullWidth
+    variant="outlined"
+    sx={{ height: 50 }} // Adjust height here (for MUI v5)
+    renderValue={(selected) => {
+      if (selected === '' || selected === null || selected === undefined) {
+        return <span>-- Select a Column --</span>;
+      }
+      return (
+        <Chip
+          label={excelData[0][selected]}
+          color="primary"
+          sx={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}
+        />
+      );
+    }}
+  >
+    <MenuItem value="" disabled>
+      -- Select a Column --
+    </MenuItem>
+    {excelData[0].map((header, index) => (
+      <MenuItem key={index} value={index}>
+        {header}
+      </MenuItem>
+    ))}
+  </Select>
+</Grid>
+)}
+
 </Grid>       
-        <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <PieChart
-                series={[
-                  {
-                    data: [
-                      { id: 0, value: totalColumns },
-                      { id: 1, value: totalRows },
-                    ],
-                  },
-                ]}
-                width={200}
-                height={100}
-              />
-            </div>
-          </Grid>
+      <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <PieChart
+              series={[
+                {
+                  data: [
+                    { id: 0, value: totalColumns },
+                    { id: 1, value: totalRows },
+                  ],
+                },
+              ]}
+              width={200}
+              height={100}
+            />
+          </div>
         </Grid>
-        {/* Display First 5 Rows in Table Format */}
-        {excelData.length > 0 && (
-          <Grid item xs={12} style={{ margin: '40px', backgroundColor: '#ffffff', justifyContent: 'center', display: 'flex', alignItems: 'center', borderRadius: '10px' }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {excelData[0].map((header, index) => (
-                    <TableCell key={index}>{header}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {excelData.slice(1).map((row, rowIndex) => (
-                  <TableRow key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <TableCell key={cellIndex}>{cell}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Grid>
-        )}
-      </form>
+      </Grid>
+{excelData.length > 0 && (
+  <Grid
+    item
+    xs={12}
+    style={{
+      margin: '40px',
+      backgroundColor: '#ffffff',
+      justifyContent: 'center',
+      display: 'flex',
+      alignItems: 'center',
+      borderRadius: '10px',
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+      overflowX: 'auto',
+    }}
+  >
+    <Table style={{ border: '1px solid #ddd', width: '100%', borderRadius: '10px' }}>
+      <TableHead>
+        <TableRow style={{ backgroundColor: '#f5f5f5', borderBottom: '2px solid #ddd' }}>
+          {excelData[0].map((header, index) => (
+            <TableCell
+              key={index}
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                borderRight: '1px solid #ddd',
+              }}
+            >
+              {header}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {excelData.slice(1).map((row, rowIndex) => (
+          <TableRow
+            key={rowIndex}
+            style={{
+              borderBottom: '1px solid #ddd',
+              '&:last-child': {
+                borderBottom: 0,
+              },
+            }}
+          >
+            {row.map((cell, cellIndex) => (
+              <TableCell
+                key={cellIndex}
+                style={{
+                  padding: '10px',
+                  textAlign: 'center',
+                  borderRight: '1px solid #ddd',
+                }}
+              >
+                {cell}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </Grid>
+)}
+    </form>
 
-      {/* Confirmation Dialog */}
-      <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
-        <DialogTitle>Table Already Exists</DialogTitle>
-        <DialogContent>
-          <Typography>Do you want to update the existing table or skip this upload?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleConfirmationChoice('skip')} color="primary">Skip</Button>
-          <Button onClick={() => handleConfirmationChoice('update')} color="secondary">Update</Button>
-        </DialogActions>
-      </Dialog>
+    {/* Confirmation Dialog */}
+    <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
+      <DialogTitle>Table Already Exists</DialogTitle>
+      <DialogContent>
+        <Typography>Do you want to update the existing table or skip this upload?</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => handleConfirmationChoice('skip')} color="primary">Skip</Button>
+        <Button onClick={() => handleConfirmationChoice('update')} color="secondary">Update</Button>
+      </DialogActions>
+    </Dialog>
 
-      {/* Snackbar Message */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </React.Fragment>
-  );
+    {/* Snackbar Message */}
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={3000}
+      onClose={handleSnackbarClose}
+    >
+      <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
+  </React.Fragment>
+);
 };
 
 export default ExcelUpload;

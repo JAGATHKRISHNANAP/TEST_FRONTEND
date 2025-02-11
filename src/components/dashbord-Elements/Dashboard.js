@@ -24,7 +24,7 @@ import {
   generateChart
 } from '../../features/Dashboard-Slice/chartSlice';
 import { saveDataToDatabase,validateSaveName } from '../../utils/api';
-
+import HomePage from '../../pages/HomePage';
 import ChartDisplay from '../chartDisplay';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -167,8 +167,11 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
 
   return (
     <div className="App">
-      <Box sx={{ flexGrow: 1,marginTop:'80px',marginLeft:'5px',marginRight:'5px'}}>
-        <Grid container spacing={2} wrap="wrap">
+      
+      {/* <Box sx={{ flexGrow: 1,marginTop:'10px',marginLeft:'5px',marginRight:'5px'}}>
+        */}
+        <Grid container spacing={1.5} wrap="wrap">
+        
           <Grid item xs={12} md={1.5}>
             <Item>
             <DashboardTableDetails />
@@ -194,15 +197,16 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
               <DashboardCharts />
             </Item>
             {xAxis.length > 0 && (
-              <div style={{ marginTop: '20px',marginRight:'5px'}}>
+              
+              <div style={{ marginTop: '20px',marginRight:'5px',order:'2px solid #ccc'}}>
                 
-                {/* <Item> */} <DashboardFilter />
-                {/* </Item> */}
+                <Item> <DashboardFilter />
+                </Item>
               </div>
             )}
           </Grid>
         </Grid>
-      </Box>
+      {/* </Box> */}
 
       {/* Modal for saving data */}
       <Dialog open={open} onClose={handleClose}>

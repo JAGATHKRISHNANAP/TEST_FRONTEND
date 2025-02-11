@@ -11,7 +11,8 @@ import { styled } from '@mui/material/styles';
 import { Button, TextField, Typography, Grid, Snackbar, Alert, Select, MenuItem, FormGroup, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { fetchTableNamesAPI ,fetchTableColumnsAPI,checkIfTableInUse} from '../../utils/api';
-
+import HomePage from '../HomePage';
+import Chip from '@mui/material/Chip';
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -295,83 +296,141 @@ if (existingTableNames.includes(tableName)) {
     <React.Fragment>
       <CssBaseline />
       <form onSubmit={handleSubmit} className="json-upload-form">
-        <Grid container item xs={12} md={12} style={{ backgroundColor: '#dcdfe8', height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
-          <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
-            <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
- 
-              <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+      <Grid container item xs={12} md={12} style={{height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
+        <HomePage/>
+         <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
+           <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
+           <Button component="label" variant="contained" sx={{
+    padding: '10px 18px', // Increase padding
+   
+  }} startIcon={<CloudUploadIcon />}>
                 Choose File
                 <VisuallyHiddenInput type="file" onChange={handleFileChange} />
               </Button>
 
-              <TextField label="File Name" value={fileName} InputProps={{ readOnly: true }} variant="filled" size="small" />
-
-              <LoadingButton disabled={!file || uploading} color="secondary" onClick={handleSubmit} loading={uploading} loadingPosition="start" startIcon={<SaveIcon />} variant="contained">
+              <TextField
+                label="File Name"
+                value={fileName}
+                InputProps={{ readOnly: true }}
+                variant="filled"
+                size="small"
+                style={{ flexGrow: 2 , minWidth: '200px'}} // Ensures consistent width
+              />
+              {/* <LoadingButton disabled={!file || uploading} color="secondary" onClick={handleSubmit} loading={uploading} loadingPosition="start" startIcon={<SaveIcon />} variant="contained">
                 {uploading ? 'Uploading...' : 'Upload'}
               </LoadingButton>
+            </Grid> */}
+            <LoadingButton
+              disabled={!file || uploading}
+              color="secondary"
+              loading={uploading}
+              startIcon={<SaveIcon />}
+              type="submit"
+              variant="contained"
+              sx={{
+                padding: '11px 18px', // Increase padding
+                minWidth: '120px', // Minimum button width
+              }}
+            >
+              {uploading ? 'Uploading...' : 'Upload'}
+            </LoadingButton>
             </Grid>
 
-            <FormGroup>
+            {/* <FormGroup> */}
+              
               {jsonData.length > 0 && (
-                <Grid item>
-                  <Typography>Select a Primary Key Column:</Typography>
-                  <Select
-                    value={primaryKeyColumn !== null ? primaryKeyColumn : ''}
-                    onChange={(e) => dispatch(setPrimaryKeyColumn(e.target.value))}
-                    displayEmpty
-                    fullWidth
-                  >
-                    <MenuItem value="" disabled>
-                      -- Select a Column --
-                    </MenuItem>
-                    {columnHeadings.map((header, index) => (
-                      <MenuItem key={index} value={index}>
-                        {header}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Grid>
-              )}
-            </FormGroup>
+              //   <Grid item>
+              //     <Typography>Select a Primary Key Column:</Typography>
+              //     <Select
+              //       value={primaryKeyColumn !== null ? primaryKeyColumn : ''}
+              //       onChange={(e) => dispatch(setPrimaryKeyColumn(e.target.value))}
+              //       displayEmpty
+              //       fullWidth
+              //     >
+              //       <MenuItem value="" disabled>
+              //         -- Select a Column --
+              //       </MenuItem>
+              //       {columnHeadings.map((header, index) => (
+              //         <MenuItem key={index} value={index}>
+              //           {header}
+              //         </MenuItem>
+              //       ))}
+              //     </Select>
+              //   </Grid>
+              // )}
+               <Grid item xs={4}>
+  {/* <Typography>Select a Primary Key Column:</Typography> */}
+  <Select
+    value={primaryKeyColumn !== null && primaryKeyColumn !== undefined ? primaryKeyColumn : ''}
+    onChange={(e) => dispatch(setPrimaryKeyColumn(e.target.value))}
+    displayEmpty
+    fullWidth
+    variant="outlined"
+    sx={{ height: 50 }} // Adjust height here (for MUI v5)
+    renderValue={(selected) => {
+      if (selected === '' || selected === null || selected === undefined) {
+        return <span>-- Select a Column --</span>;
+      }
+      return (
+        <Chip
+        label={columnHeadings[selected]}
+          color="primary"
+          sx={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}
+        />
+      );
+    }}
+  >
+    <MenuItem value="" disabled>
+      -- Select a Column --
+    </MenuItem>
+    {columnHeadings?.map((header, index) => (
+      <MenuItem key={index} value={index}>
+        {header}
+      </MenuItem>
+    ))}
+  </Select>
+</Grid>
+)}
+            {/* </FormGroup> */}
           </Grid>
-          <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {/* <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <PieChart series={[{ data: [{ id: 0, value: totalColumns }, { id: 1, value: totalRows }] }]} width={200} height={200} />
             </div>
-          </Grid>
+          </Grid> */}
         </Grid>
         
       {jsonData.length > 0 && (
-                  <Grid item xs={12} style={{ margin: '120px', backgroundColor: '#ffffff', justifyContent: 'center', display: 'flex', alignItems: 'center', borderRadius: '10px' }}>
-<Table>
-  <TableHead>
-    <TableRow>
-      {Object.keys(jsonData[0]).map((key, idx) => (
-        <TableCell
-          key={idx}
-          style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-            backgroundColor: '#f4f4f4',
-          }}
-        >
-          {key.replace(/_/g, ' ').toUpperCase()}
-        </TableCell>
-      ))}
-    </TableRow>
-  </TableHead>
-  <TableBody>
-    {jsonData.map((row, rowIndex) => (
-      <TableRow key={rowIndex}>
-        {Object.values(row).map((value, cellIndex) => (
-          <TableCell key={cellIndex} style={{ textAlign: 'center' }}>
-            {value}
-          </TableCell>
-        ))}
-      </TableRow>
-    ))}
-  </TableBody>
-</Table>
+      <Grid item xs={12} style={{ margin: '40px', backgroundColor: '#ffffff',  justifyContent: 'center', display: 'flex', alignItems: 'center', borderRadius: '10px',  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',overflowX: 'auto' }}
+          > <Table style={{ border: '1px solid #ddd', width: '100%', borderRadius: '10px' }}>
+                      <TableHead>
+                         <TableRow style={{ backgroundColor: '#f5f5f5', borderBottom: '2px solid #ddd' }}>
+              {Object.keys(jsonData[0]).map((key, idx) => (
+                <TableCell
+                  key={idx}
+                  style={{
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    backgroundColor: '#f4f4f4',
+                  }}
+                >
+                  {key.replace(/_/g, ' ').toUpperCase()}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {jsonData.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {Object.values(row).map((value, cellIndex) => (
+                  <TableCell key={cellIndex} style={{ textAlign: 'center' }}>
+                    {value}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
 
         </Grid>

@@ -257,7 +257,7 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
     const tooltipRef = useRef(null);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-    const [boxSize, setBoxSize] = useState({ width: 400, height: 400 });
+    const [boxSize, setBoxSize] = useState({ width: 350, height: 400 });
     const charts = useSelector((state) => state.viewcharts.charts);
 
     const handleContextMenu = (event) => {

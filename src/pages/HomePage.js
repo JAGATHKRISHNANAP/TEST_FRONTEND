@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Avatar, Button, ButtonGroup, CssBaseline, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Avatar, Button, ButtonGroup,Grid, CssBaseline, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { FaFileExcel, FaFileCsv } from "react-icons/fa";
 import AudioFileIcon from '@mui/icons-material/AudioFile';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,7 @@ import { IoIosPaper } from 'react-icons/io';
 import { useDispatch } from 'react-redux'; // Import useDispatch
 import { resetState } from '../features/Dashboard-Slice/chartSlice'; // Import resetState
 
+import ShowSecondNavbar from './seconsNavBar' 
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
@@ -200,332 +201,374 @@ function Navbar() {
 
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <CssBaseline />
-      <MuiAppBar position="fixed" open={false} sx={{ height: '40px', display: 'flex', justifyContent: 'center', backgroundColor: appBarColor }}>
-        <Toolbar>
-          {isLoggedIn && (
-            <IconButton color="inherit" aria-label="open drawer" edge="start" >
-              <MenuIcon />
-            </IconButton>
-          )}
+//     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+//       <CssBaseline />
+//       <MuiAppBar position="fixed" open={false} sx={{ height: '40px', display: 'flex', justifyContent: 'center', backgroundColor: appBarColor }}>
+//         <Toolbar>
+//           {isLoggedIn && (
+//             <IconButton color="inherit" aria-label="open drawer" edge="start" >
+//               <MenuIcon />
+//             </IconButton>
+//           )}
 
-          {isLoggedIn && (
+//           {isLoggedIn && (
            
-            <>
+//             <>
            
-              <UserProfile username={username} appBarColor={appBarColor}/>
-               <Box sx={{ flexGrow: 1 }} /></>
-          )}
+//               <UserProfile username={username} appBarColor={appBarColor}/>
+//                <Box sx={{ flexGrow: 1 }} /></>
+//           )}
 
-          <Box sx={{ flexGrow: 1 }} />
-          <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
-            {isLoggedIn ? 'Logout' : 'Login'}
-          </Typography>
-          {/* Toggle button for Color Picker */}
-          {/* <IconButton color="inherit" onClick={handleColorPickerToggle}>
-            <PaletteIcon />
-          </IconButton>
-           */}
-          {isLoggedIn && (
-  <>
+//           <Box sx={{ flexGrow: 1 }} />
+//           <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
+//             {isLoggedIn ? 'Logout' : 'Login'}
+//           </Typography>
+//           {/* Toggle button for Color Picker */}
+//           {/* <IconButton color="inherit" onClick={handleColorPickerToggle}>
+//             <PaletteIcon />
+//           </IconButton>
+//            */}
+//           {isLoggedIn && (
+//   <>
 
-    {/* Color picker button displayed only when logged in */}
-    <IconButton color="inherit" onClick={handleColorPickerToggle}>
-      <PaletteIcon />
-    </IconButton>
-  </>
-)}
+//     {/* Color picker button displayed only when logged in */}
+//     <IconButton color="inherit" onClick={handleColorPickerToggle}>
+//       <PaletteIcon />
+//     </IconButton>
+//   </>
+// )}
 
 
 
     
 
+//         </Toolbar>
+//       </MuiAppBar>
+
+//       {isLoggedIn && (
+
+//         <MuiAppBar position="fixed" sx={{ top: '40px', height: '25px', backgroundColor: '#ffffff', color: '#1976d2', display: 'flex', justifyContent: 'center', zIndex: theme.zIndex.appBar +1 }}>
+          
+//           <Toolbar>
+            
+//             <ButtonGroup variant="text" aria-label="Basic button group" sx={{ height: '25px', display: 'flex' }}>
+//             {userRole !== '3' && ( 
+//               <Button
+//                 aria-controls={openMenu ? 'data-source-menu' : undefined}
+//                 aria-haspopup="true"
+//                 aria-expanded={openMenu ? 'true' : undefined}
+//                 onMouseOver={handleMenuClick}
+                
+//                 ref={buttonRef}
+//                 sx={{
+//                   backgroundColor: activeRoute === '/excel_upload' || activeRoute === '/csv_upload' || activeRoute === '/Audio_upload' ? '#c5c5c9' : 'inherit',
+//                   maxWidth: '150px',
+//                   alignItems: 'center',
+//                   color: 'inherit',
+//                   fontSize: "16px", 
+//                 }}
+//               >
+//                 <ListItemIcon sx={{ display: 'flex',alignItems: 'center', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+//                   Data Source 
+//                 </ListItemIcon>
+//               </Button>
+//             )}
+//               <Menu
+//   id="data-source-menu"
+//   anchorEl={anchorEl}
+//   open={openMenu}
+//   anchorOrigin={{
+//     vertical: "bottom",
+//     horizontal: "center",
+//   }}
+//   transformOrigin={{
+//     vertical: "top",
+//     horizontal: "center",
+//   }}
+//   PaperProps={{
+//     onChangeComplete:handleMenuClose,
+//     onMouseLeave: handleMenuMouseLeave,
+//     sx: {
+//       // width: menuWidth || 'auto',
+//       minWidth: 200,
+//       backgroundColor: '#ffffff',
+//       color: 'black',
+//     },
+//   }}
+// >
+//  {/* <MenuItem onClick={() => handleNavigation('/excel_upload')}>
+//   <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
+//   Excel
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/csv_upload')}>
+//   <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+//   CSV
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/json_upload')}>
+//   <ListItemIcon><BiSolidFileJson size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+//   JSON
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/custom_data_source')}>
+//   <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
+//   Custom Join
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
+//   <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+//   Create DataSource
+// </MenuItem>
+
+// </Menu>
+//  */}
+// <MenuItem onClick={() => handleNavigation('/excel_upload')}>
+//   <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
+//   Excel
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/csv_upload')}>
+//   <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+//   CSV
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/json_upload')}>
+//   <ListItemIcon><IoIosPaper size={20} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+//   JSON
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/custom_data_source')}>
+//   <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
+//   Custom Join
+// </MenuItem>
+// <MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
+//   <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
+//   Create DataSource
+// </MenuItem>
+// </Menu>
+// {userRole !== '3' && (  
+//     <>     
+//   <Button
+//   onClick={() => handleNavigation('/load_data')}
+//       sx={{
+//         backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
+//         maxWidth: '150px',
+//         alignItems: 'center',
+//         color: 'inherit',
+//         fontSize: "16px", 
+//       }}
+//     >
+//       <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
+//         Data Table 
+//       </ListItemIcon>
+//     </Button>
+ 
+//       <Button
+//     onClick={() => handleNavigation('/load_db')}
+//         sx={{
+//           backgroundColor: location.pathname === '/load_db' ? '#c5c5c9' : 'inherit',
+//           maxWidth: '200px',
+//           alignItems: 'center',
+//           color: 'inherit',
+//           fontSize: "16px", 
+//         }}
+//       >
+//         <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '200px', color: '#000000',textTransform: 'none'  }}>
+//           Database Connection
+//         </ListItemIcon>
+//       </Button>
+//       </>
+// )}
+// {userRole !== '3' && (
+//   <Button
+ 
+//           aria-controls={openDesignMenu ? 'design-menu' : undefined}
+//           aria-haspopup="true"
+//           aria-expanded={openDesignMenu ? 'true' : undefined}
+//           onMouseOver={handleDesignMenuClick}
+//           sx={{
+//             backgroundColor:
+//             location.pathname === '/dashboard'||
+//             location.pathname === '/Create_Dashboard' ||
+//             location.pathname === '/dashboard_view'
+//                 ? '#c5c5c9'
+//                 : 'inherit',
+//             alignItems: 'center',
+//           }}
+//         >
+//           <ListItemIcon
+//             sx={{
+//               display: 'flex',
+//               alignItems: 'center',
+//               width: '150px',
+//               justifyContent: 'center',
+//               color: '#000000',
+//               textTransform: 'none' ,
+//               fontSize: "16px"
+//             }}
+//           >
+//             Design 
+//           </ListItemIcon>
+//         </Button>
+// )}
+//         <Menu
+//           id="design-menu"
+//           anchorEl={designMenuAnchorEl}
+//           open={openDesignMenu}
+//           // onClose={handleDesignMenuClose}
+//           PaperProps={{
+//             // onMouseLeave: handleDesignMenuMouseLeave, 
+//             onChangeComplete:handleDesignMenuClose,
+//             onMouseLeave: handleDesignMenuMouseLeave,
+//             sx: {
+//               width: '170px',
+//               backgroundColor: '#ffffff',
+//               color: 'black',
+              
+//             },
+//           }}
+//         >
+//           <MenuItem onClick={() => handleNavigation('/dashboard')}>
+//           Chart
+//           </MenuItem>
+//           <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
+//           Dashboard 
+//           </MenuItem>
+//           {/* <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
+//           Dashboard
+//           </MenuItem> */}
+//         </Menu>
+//         {userRole !== '3' && (
+//               <Button
+//                 onClick={() => handleNavigation('/Edit_Chart')}
+//                 sx={{
+//                   backgroundColor: location.pathname === '/Edit_Chart' ? '#c5c5c9' : 'inherit',
+//                   alignItems: 'center',
+//                   fontSize: "16px", 
+//                 }}
+//               >
+//                 <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000',textTransform: 'none'  }}>
+//                   Edit
+//                 </ListItemIcon>
+//               </Button>
+//         )}
+//    {(userRole === '3' || userRole === '2') && ( // Show for Viewer OR Admin
+//     <Button
+//         aria-controls={openViewMenu ? 'view-menu' : undefined}
+//         aria-haspopup="true"
+//         aria-expanded={openViewMenu ? 'true' : undefined}
+//         onMouseOver={handleViewMenuClick}
+//         sx={{
+//             backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
+//             maxWidth: '150px',
+//             alignItems: 'center',
+//             color: 'inherit',
+//             fontSize: "16px",
+//         }}
+//     >
+//         <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000', textTransform: 'none' }}>
+//             View
+//         </ListItemIcon>
+//     </Button>
+// )}
+              
+//               {/* <Button
+//                 aria-controls={openViewMenu ? 'view-menu' : undefined}
+//                 aria-haspopup="true"
+//                 aria-expanded={openViewMenu ? 'true' : undefined}
+//                 onMouseOver={handleViewMenuClick}
+//                 sx={{
+//                   backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
+//                   maxWidth: '150px',
+//                   alignItems: 'center',
+//                   color: 'inherit',
+//                   fontSize: "16px", 
+//                 }}
+//               >
+//                 <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' ,textTransform: 'none' }}>
+//                   View 
+//                 </ListItemIcon>
+//               </Button>
+//          )} */}
+//               <Menu
+//                 id="view-menu"
+//                 anchorEl={viewMenuAnchorEl}
+//                 open={openViewMenu}
+//                 // onClose={handleViewMenuClose}
+//                 PaperProps={{
+//                   // onMouseLeave: handleViewMenuMouseLeave, 
+//                   onChangeComplete:handleViewMenuClose,
+//                 onMouseLeave: handleViewMenuMouseLeave,
+//                   sx: {
+//                     width: menuWidth || 'auto',
+//                     backgroundColor: '#ffffff',
+//                     color: 'black',
+//                   },
+//                 }}
+//               >
+//                 {/* <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>Charts</MenuItem>
+//                 <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem> */}
+//                 <MenuItem onClick={() => handleNavigation('/Charts_view')}>Chart</MenuItem>
+//                 <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem>
+//               </Menu>
+//             </ButtonGroup>
+
+//             {showColorPicker && (
+//             <Box sx={{ position: 'absolute', top: '50px', right: '10px', zIndex: 0 }}>
+//               <SketchPicker color={appBarColor} onChangeComplete={handleColorChange} />
+//             </Box>
+//           )}
+
+//           </Toolbar>
+//         </MuiAppBar>
+//       )}
+
+//       {/* <Box component="main" sx={{ backgroundColor: '#dcdfe8', flexGrow: 1, p: 3, minHeight: '100vh', display: 'flex', flexDirection: 'column', mt: 10 }}>
+//         <AppRouter />
+//       </Box> */}
+//       <Box component="main" sx={{ backgroundColor: '#dcdfe8',marginTop:'30px',minHeight:'100vh', display: 'flex', flexDirection: 'column', mt: 0 }}>
+//         <AppRouter />
+//       </Box>
+
+//     </Box>
+//   );
+// }
+
+// export default Navbar;
+
+<Grid sx={{ display: 'flex', flexDirection: 'column', minHeight: '8vh' }}>
+      <CssBaseline />
+      <MuiAppBar position="fixed" open={false} sx={{ height: '40px', display: 'flex', justifyContent: 'center', backgroundColor: appBarColor }}>
+        <Toolbar>
+
+            <IconButton color="inherit" aria-label="open drawer" edge="start" sx={{ marginRight: 0 }}>
+              <MenuIcon />
+            </IconButton>
+
+            <Typography variant="body2" sx={{ height: '10px', display: 'flex', alignItems: 'center' }}>
+              <Avatar src="/broken-image.jpg" sx={{ width: '30px', height: '30px', border: '2px solid white', backgroundColor: appBarColor, color: 'white', marginRight: 1 }} />
+              Hello, {username}
+            </Typography>
+
+          <Grid sx={{ flexGrow: 1 }} />
+          
+          <IconButton color="inherit" onClick={handleColorPickerToggle}>
+            <PaletteIcon />
+          </IconButton>
         </Toolbar>
       </MuiAppBar>
-
-      {isLoggedIn && (
-
-        <MuiAppBar position="fixed" sx={{ top: '40px', height: '25px', backgroundColor: '#ffffff', color: '#1976d2', display: 'flex', justifyContent: 'center', zIndex: theme.zIndex.appBar +1 }}>
-          
-          <Toolbar>
-            
-            <ButtonGroup variant="text" aria-label="Basic button group" sx={{ height: '25px', display: 'flex' }}>
-            {userRole !== '3' && ( 
-              <Button
-                aria-controls={openMenu ? 'data-source-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={openMenu ? 'true' : undefined}
-                onMouseOver={handleMenuClick}
-                
-                ref={buttonRef}
-                sx={{
-                  backgroundColor: activeRoute === '/excel_upload' || activeRoute === '/csv_upload' || activeRoute === '/Audio_upload' ? '#c5c5c9' : 'inherit',
-                  maxWidth: '150px',
-                  alignItems: 'center',
-                  color: 'inherit',
-                  fontSize: "16px", 
-                }}
-              >
-                <ListItemIcon sx={{ display: 'flex',alignItems: 'center', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
-                  Data Source 
-                </ListItemIcon>
-              </Button>
-            )}
-              <Menu
-  id="data-source-menu"
-  anchorEl={anchorEl}
-  open={openMenu}
-  anchorOrigin={{
-    vertical: "bottom",
-    horizontal: "center",
-  }}
-  transformOrigin={{
-    vertical: "top",
-    horizontal: "center",
-  }}
-  PaperProps={{
-    onChangeComplete:handleMenuClose,
-    onMouseLeave: handleMenuMouseLeave,
-    sx: {
-      // width: menuWidth || 'auto',
-      minWidth: 200,
-      backgroundColor: '#ffffff',
-      color: 'black',
-    },
-  }}
->
- {/* <MenuItem onClick={() => handleNavigation('/excel_upload')}>
-  <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
-  Excel
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/csv_upload')}>
-  <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  CSV
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/json_upload')}>
-  <ListItemIcon><BiSolidFileJson size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  JSON
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/custom_data_source')}>
-  <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
-  Custom Join
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
-  <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  Create DataSource
-</MenuItem>
-
-</Menu>
- */}
-<MenuItem onClick={() => handleNavigation('/excel_upload')}>
-  <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
-  Excel
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/csv_upload')}>
-  <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  CSV
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/json_upload')}>
-  <ListItemIcon><IoIosPaper size={20} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  JSON
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/custom_data_source')}>
-  <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
-  Custom Join
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
-  <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  Create DataSource
-</MenuItem>
-</Menu>
-{userRole !== '3' && (  
-    <>     
-  <Button
-  onClick={() => handleNavigation('/load_data')}
-      sx={{
-        backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
-        maxWidth: '150px',
-        alignItems: 'center',
-        color: 'inherit',
-        fontSize: "16px", 
-      }}
-    >
-      <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
-        Data Table 
-      </ListItemIcon>
-    </Button>
- 
-      <Button
-    onClick={() => handleNavigation('/load_db')}
-        sx={{
-          backgroundColor: location.pathname === '/load_db' ? '#c5c5c9' : 'inherit',
-          maxWidth: '200px',
-          alignItems: 'center',
-          color: 'inherit',
-          fontSize: "16px", 
-        }}
-      >
-        <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '200px', color: '#000000',textTransform: 'none'  }}>
-          Database Connection
-        </ListItemIcon>
-      </Button>
-      </>
-)}
-{userRole !== '3' && (
-  <Button
- 
-          aria-controls={openDesignMenu ? 'design-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={openDesignMenu ? 'true' : undefined}
-          onMouseOver={handleDesignMenuClick}
+      {showColorPicker && (
+        <Box
           sx={{
-            backgroundColor:
-            location.pathname === '/dashboard'||
-            location.pathname === '/Create_Dashboard' ||
-            location.pathname === '/dashboard_view'
-                ? '#c5c5c9'
-                : 'inherit',
-            alignItems: 'center',
+            position: 'absolute',
+            top: '50px',
+            right: '10px',
+            zIndex: 9999, // Set to a very high value to ensure it's on top
           }}
         >
-          <ListItemIcon
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '150px',
-              justifyContent: 'center',
-              color: '#000000',
-              textTransform: 'none' ,
-              fontSize: "16px"
-            }}
-          >
-            Design 
-          </ListItemIcon>
-        </Button>
-)}
-        <Menu
-          id="design-menu"
-          anchorEl={designMenuAnchorEl}
-          open={openDesignMenu}
-          // onClose={handleDesignMenuClose}
-          PaperProps={{
-            // onMouseLeave: handleDesignMenuMouseLeave, 
-            onChangeComplete:handleDesignMenuClose,
-            onMouseLeave: handleDesignMenuMouseLeave,
-            sx: {
-              width: '170px',
-              backgroundColor: '#ffffff',
-              color: 'black',
-              
-            },
-          }}
-        >
-          <MenuItem onClick={() => handleNavigation('/dashboard')}>
-          Chart
-          </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
-          Dashboard 
-          </MenuItem>
-          {/* <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
-          Dashboard
-          </MenuItem> */}
-        </Menu>
-        {userRole !== '3' && (
-              <Button
-                onClick={() => handleNavigation('/Edit_Chart')}
-                sx={{
-                  backgroundColor: location.pathname === '/Edit_Chart' ? '#c5c5c9' : 'inherit',
-                  alignItems: 'center',
-                  fontSize: "16px", 
-                }}
-              >
-                <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000',textTransform: 'none'  }}>
-                  Edit
-                </ListItemIcon>
-              </Button>
-        )}
-   {(userRole === '3' || userRole === '2') && ( // Show for Viewer OR Admin
-    <Button
-        aria-controls={openViewMenu ? 'view-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={openViewMenu ? 'true' : undefined}
-        onMouseOver={handleViewMenuClick}
-        sx={{
-            backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
-            maxWidth: '150px',
-            alignItems: 'center',
-            color: 'inherit',
-            fontSize: "16px",
-        }}
-    >
-        <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000', textTransform: 'none' }}>
-            View
-        </ListItemIcon>
-    </Button>
-)}
-              
-              {/* <Button
-                aria-controls={openViewMenu ? 'view-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={openViewMenu ? 'true' : undefined}
-                onMouseOver={handleViewMenuClick}
-                sx={{
-                  backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
-                  maxWidth: '150px',
-                  alignItems: 'center',
-                  color: 'inherit',
-                  fontSize: "16px", 
-                }}
-              >
-                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000' ,textTransform: 'none' }}>
-                  View 
-                </ListItemIcon>
-              </Button>
-         )} */}
-              <Menu
-                id="view-menu"
-                anchorEl={viewMenuAnchorEl}
-                open={openViewMenu}
-                // onClose={handleViewMenuClose}
-                PaperProps={{
-                  // onMouseLeave: handleViewMenuMouseLeave, 
-                  onChangeComplete:handleViewMenuClose,
-                onMouseLeave: handleViewMenuMouseLeave,
-                  sx: {
-                    width: menuWidth || 'auto',
-                    backgroundColor: '#ffffff',
-                    color: 'black',
-                  },
-                }}
-              >
-                {/* <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>Charts</MenuItem>
-                <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem> */}
-                <MenuItem onClick={() => handleNavigation('/Charts_view')}>Chart</MenuItem>
-                <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem>
-              </Menu>
-            </ButtonGroup>
-
-            {showColorPicker && (
-            <Box sx={{ position: 'absolute', top: '50px', right: '10px', zIndex: 0 }}>
-              <SketchPicker color={appBarColor} onChangeComplete={handleColorChange} />
-            </Box>
-          )}
-
-          </Toolbar>
-        </MuiAppBar>
+          <SketchPicker color={appBarColor} onChangeComplete={handleColorChange} />
+        </Box>
       )}
 
-      {/* <Box component="main" sx={{ backgroundColor: '#dcdfe8', flexGrow: 1, p: 3, minHeight: '100vh', display: 'flex', flexDirection: 'column', mt: 10 }}>
-        <AppRouter />
-      </Box> */}
-      <Box component="main" sx={{ backgroundColor: '#dcdfe8',marginTop:'30px',minHeight:'100vh', display: 'flex', flexDirection: 'column', mt: 0 }}>
-        <AppRouter />
-      </Box>
 
-    </Box>
+<ShowSecondNavbar/>
+
+    </Grid>
   );
 }
 
 export default Navbar;
-

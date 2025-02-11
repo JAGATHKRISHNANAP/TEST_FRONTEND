@@ -872,7 +872,7 @@ import Dashboard from '../dashbord-Elements/Dashboard';
 import { fetchTableNamesAPI, fetchTableDetailsAPI } from '../../utils/api'; // Import the API function to fetch table details
 import tinycolor from 'tinycolor2';
 import { debounce } from 'lodash'; // Import lodash debounce
-
+import HomePage from '../../pages/HomePage';
 const LoadExcelFile = () => {
   const dispatch = useDispatch();
   const { showDashboard, checkedPaths } = useSelector((state) => state.loadExcel);
@@ -984,7 +984,7 @@ console.log("limitedTableDetails",limitedTableDetails)
               <Typography variant="h6">Select Table</Typography>
             </Toolbar>
           </AppBar>
-
+          <HomePage/>
           <Grid container spacing={4} sx={{ marginTop: '20px' }} justifyContent="center">
             <Grid item xs={12} md={12}>
               

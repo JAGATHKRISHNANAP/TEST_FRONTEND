@@ -1,14 +1,26 @@
-import React from 'react'
-import HomePage from './pages/HomePage'
+// import React from 'react'
+// import HomePage from './pages/HomePage'
 
-function App() {
+// function App() {
+//   return (
+//     <div>
+//       <HomePage/>
+//     </div>
+//   )
+// }
+
+// export default App
+
+
+
+
+import React from 'react';
+import AppRouter from './router/router';
+
+const App = () => {
   return (
-    <div>
-      <HomePage/>
-    </div>
-  )
-}
+    <AppRouter />
+  );
+};
 
-export default App
-
-
+export default App;

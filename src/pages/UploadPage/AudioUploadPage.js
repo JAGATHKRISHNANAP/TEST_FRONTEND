@@ -10,7 +10,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { styled } from '@mui/material/styles';
 import { Button, TextField, Box, Container, IconButton, Grid } from '@mui/material';
-
+import HomePage from '../HomePage';
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -93,6 +93,7 @@ const AudioUpload = () => {
           <form onSubmit={handleSubmit} className="audio-upload-form">
             {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}> */}
             <Grid container item xs={12} md={12} style={{ backgroundColor: '#dcdfe8', height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px' }}>
+         <HomePage/>
           <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px' }}>
             <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
              

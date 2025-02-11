@@ -430,7 +430,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
                 
                 <div className="d3-bar-chart" style={{ position: 'relative', width: '90%' }}>
                     <ResizableBox
-                         width={400} height={400}
+                         width={350} height={400}
                          minConstraints={[300, 300]} maxConstraints={[1200, 800]}
                         onResize={onResize}
                     >

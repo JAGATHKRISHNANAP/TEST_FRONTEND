@@ -1302,7 +1302,7 @@ import {
 } from '@mui/material';
 import { Storage } from '@mui/icons-material';
 import axios from 'axios';
-
+import HomePage from '../HomePage';
 const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   maxWidth: 800,
@@ -1431,14 +1431,18 @@ export default function ExternalDbConnection() {
   };
 
   return (
+    
     <Card>
+      <HomePage/>
       <Typography variant="h4" align="center" gutterBottom>
         <Storage sx={{ marginRight: 1 }} /> Configure External Database
       </Typography>
       <Divider sx={{ marginBottom: 3 }} />
 
       <Box component="form" onSubmit={(e) => { e.preventDefault(); setOpenDialog(true); }}>
+      
         <Grid container spacing={3}>
+       
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <InputLabel>Database Type</InputLabel>

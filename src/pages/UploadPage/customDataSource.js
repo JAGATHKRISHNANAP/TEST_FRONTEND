@@ -1254,7 +1254,7 @@ import './custom.css';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Select from '@mui/material/Select';
 import {  fetchTableNamesAPI, fetchColumnsAPI, performJoinOperation,fetchUsers ,fetchTableNamesFromExternalDB } from '../../utils/api';
-
+import HomePage from '../HomePage';
 const ItemTypes = {
   TABLE: 'table',
 };
@@ -1348,8 +1348,11 @@ const DropZone = ({ droppedTables, setDroppedTables, setConnections, handleOpenR
         height: '380px',
         width: '99.5%',
         position: 'relative',
-        backgroundColor: 'white',
+        // backgroundColor: 'light grey',
         padding: `${topPadding}px 2px 2px 2px`,
+        backgroundColor: '#f0f0f0' ,
+        padding: '10px',
+        borderRadius: '5px'
       }}
     >
       {droppedTables.length === 0 && (
@@ -1523,7 +1526,9 @@ const JoinConfigSection = ({
         padding: '40px',
         borderRadius: '8px',
         width: 700,
-        backgroundColor: 'white',
+        backgroundColor:'white' ,
+        padding: '10px',
+        borderRadius: '5px'
       }}
     >
       {/* Heading */}
@@ -1533,7 +1538,7 @@ const JoinConfigSection = ({
         sx={{
           textAlign: 'left',
           marginBottom: '40px',
-          fontSize: '24px',
+          fontSize: '22px',
           fontWeight: 'bold',
           textTransform: 'uppercase', 
         }}
@@ -1545,10 +1550,10 @@ const JoinConfigSection = ({
           sx={{
             display: 'flex',
             alignItems: 'center', 
-            gap: '20px',
+            gap: '15px',
             padding: '10px',
             backgroundColor: 'white',
-            borderRadius: '8px',
+            borderRadius: '10px',
             width: '100%',
             height: 'auto',
             marginBottom: '80px',
@@ -1571,7 +1576,7 @@ const JoinConfigSection = ({
                 id: 'uncontrolled-native-0',
               }}
               sx={{
-                width: '180px', // Set the desired width
+                width: '170px', // Set the desired width
                 padding: '5px', // Optional for better spacing
               }}
               onChange={(e) => handleJoinKeyChange(0, e.target.value)} // Added the onChange handler
@@ -1621,7 +1626,7 @@ const JoinConfigSection = ({
                 id: 'uncontrolled-native-1',
               }}
               sx={{
-                width: '180px', // Set the desired width
+                width: '170px', // Set the desired width
               }}
               onChange={(e) => handleJoinKeyChange(1, e.target.value)} // Handle join key selection for Table 2
             >
@@ -1914,8 +1919,9 @@ const CustomJoinWithFetchTables = () => {
 
 return (
   <DndProvider backend={HTML5Backend}>
-    <Grid container spacing={2} sx={{ height: '93vh', padding: '10px', boxSizing: 'border-box',marginTop:'40px' }}>
+    <Grid container spacing={2} sx={{ height: '90vh', padding: '10px', boxSizing: 'border-box',marginTop:'40px' }}>
       {/* Left Panel */}
+         <HomePage />
       <Grid item xs={12} md={2.5} sx={{ maxHeight: '92.5vh', overflowY: 'auto' }}>
 <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: 'white' }}>
   <CardHeader
@@ -2003,7 +2009,7 @@ return (
                       backgroundColor: 'white',
                       padding: '10px',
                       borderRadius: '5px',
-                      height: '450px', // Fixed height for Join Config
+                      height: '340px', // Fixed height for Join Config
                       overflowY: 'auto',
                     }}
                   >
@@ -2024,7 +2030,7 @@ return (
                       backgroundColor: droppedTables.length === 0 ? '#f0f0f0' : 'white',
                       padding: '10px',
                       borderRadius: '5px',
-                      height: '450px', // Fixed height for Columns Preview
+                      height: '340px', // Fixed height for Columns Preview
                       overflowY: 'auto',
                       display: 'flex',
                       flexDirection: 'column',
@@ -2052,6 +2058,7 @@ return (
                               border: '1px solid #ccc',
                               borderRadius: '5px',
                               overflowY: 'auto',
+                            backgroundColor:' #f0f0f0'
                             }}
                           >
                             <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '10px' }}>

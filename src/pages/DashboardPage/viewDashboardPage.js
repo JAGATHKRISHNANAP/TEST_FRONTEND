@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Grid, Paper, styled } from "@mui/material";
 import ViewDashboardSidebar from "../../components/dashboardViewCharts/ViewDashboardSidebar";
 import DashboardDroppableArea from "../../components/dashboardViewCharts/dashboardDroppableArea";
-
+import HomePage from '../HomePage';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -28,7 +28,8 @@ function DashboardView() {
     <div className="App">
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2} wrap="wrap">
-          <Grid item xs={12} md={12} style={{marginTop:'80px'}}>
+        <HomePage/>
+         <Grid item xs={12} md={12} style={{marginTop:'80px'}}>
             
             <DashboardDroppableArea />
           </Grid>
