@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFile, setColumnHeadings, setPrimaryKeyColumn, uploadJson } from '../../features/jsonFileSlice/jsonFileSlice';

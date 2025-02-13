@@ -17,15 +17,15 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
     const [chartDimensions, setChartDimensions] = useState({ width: 500, height: 300 });
     const tooltipRef = useRef(null);
 
-    console.log("ChartColor===========================",lineColor)
+    // console.log("ChartColor===========================",lineColor)
 
-    console.log("categories===========================",categories)
-    console.log("values===============================",values)
-    console.log("x_axis===============================",x_axis)
-    console.log("y_axis===============================",y_axis)
-    console.log("aggregation==========================",aggregation)
+    // console.log("categories===========================",categories)
+    // console.log("values===============================",values)
+    // console.log("x_axis===============================",x_axis)
+    // console.log("y_axis===============================",y_axis)
+    // console.log("aggregation==========================",aggregation)
     console.log("selectedTable========================",selectedTable)
-    console.log("databaseName=========================",databaseName)
+    // console.log("databaseName=========================",databaseName)
 
     useEffect(() => {
         // Update chartData whenever categories or values change

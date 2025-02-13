@@ -206,24 +206,6 @@ const ResizableChart = ({ data, onRemove, updateChartDetails, index, droppableAr
     document.body.removeChild(a);
   };
 
-  // const handleDragStop = async (e, uiData) => {
-  //   const newPosition = { x: uiData.x, y: uiData.y };
-  //   if (newPosition.x !== position.x || newPosition.y !== position.y) {
-  //     setPosition(newPosition);
-  //     updateChartDetails(data.chartName, { position: newPosition });
-
-  //     // Send new position to the backend
-  //     try {
-  //       await axios.post('http://localhost:5000/api/update-chart-position', {
-  //         chart_id: data[0],
-  //         position: newPosition, // Sending updated position to backend
-  //       });
-  //     } catch (error) {
-  //       console.error('Error updating chart position:', error);
-  //     }
-  //   }
-  // };
-
   const toggleTableModal = () => {
     setTableModalOpen(!tableModalOpen);
   };

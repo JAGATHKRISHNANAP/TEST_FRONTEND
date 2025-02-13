@@ -73,8 +73,8 @@ const DroppableArea = () => {
       {chartdata && chartdata.length > 0 ? (
         chartdata.map((chart, index) => (
           // console.log("dataframe_dict-----------------------------------------------------", chart.dataframe_dict),
-          console.log("dataframe_dict-----------------------------------------------------", chart.histogram_details),
-          console.log("X_axis-----------------------------------------------------", chart.aggregate),
+          // console.log("dataframe_dict-----------------------------------------------------", chart.histogram_details),
+          // console.log("X_axis-----------------------------------------------------", chart.aggregate),
           // console.log("Y_axis-----------------------------------------------------", chart.chart_type), 
           // console.log("Ai related chat data-----------------------------------------------------", chart.histogram_details[0]),
           <div key={index} >

@@ -72,23 +72,6 @@ const LineChart = ({ categories, values, aggregation }) => {
               console.error('Error handling click event:', error);
             }
           };
-        // const handleClicked = async (event, chartContext, config) => {
-        //     const clickedCategoryIndex = config.dataPointIndex;
-        //     const clickedCategory = categories[clickedCategoryIndex];
-        //     dispatch(setClickedCategory(clickedCategory));
-        
-        //     try {
-        //         // Call the API function
-        //         const responseData = await yourBackendEndpointApi(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
-        
-        //         setPlotData(responseData); // Update the state with the response
-        //         setBarClicked(true);
-        //     } catch (error) {
-        //         console.error('Failed to send category data:', error);
-        //     }
-        // };
-    
-
     const handleContextMenu = (event) => {
         event.preventDefault();
         setContextMenuPosition({ x: event.pageX, y: event.pageY });
@@ -138,12 +121,7 @@ const LineChart = ({ categories, values, aggregation }) => {
     };
 
     const options = {
-        // chart: {
-        //     id: "basic-line",
-        //     events: {
-        //         dataPointSelection: handleClicked
-        //     },
-        // },
+
         chart: {
             events: {
                 dataPointSelection: handleClicked
@@ -292,14 +270,6 @@ const LineChart = ({ categories, values, aggregation }) => {
                         <CustomToolTip onClose={handleClosePopup} />
                     </div>
                 )}
-            {/* {barClicked && <DrillLineChart
-                categories={plotData.categories}
-                values={plotData.values}
-                aggregation={plotData.aggregation}
-                xAxis={xAxis}
-                yAxis={yAxis}
-                selectedTable={selectedTable}
-            />} */}
         </div>
     );
 };

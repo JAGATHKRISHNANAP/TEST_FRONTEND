@@ -16,44 +16,6 @@ const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_
         // console.log("Received values:", values);
       }, [categories, values]);
 
-    // const handleClicked = async (event, chartContext, config) => {
-    //     if (!isFilterActive) return; // If filter is not active, do nothing
-    
-    //     // console.log("clicked category Axis", x_axis);
-    
-    //     const clickedCategoryIndex = config.dataPointIndex;
-    //     const clickedCategory = categories[clickedCategoryIndex];
-    
-    //     // Check if the clicked category is present in all other charts
-    //     const isCategoryPresentInAllCharts = otherChartCategories.every(chartCats => chartCats.includes(clickedCategory));
-    
-    //     if (!isCategoryPresentInAllCharts) {
-    //         alert("Filter cannot be applied as categories differ between charts.");
-    //         return;
-    //     }
-    
-    //     try {
-    //         // Trigger the API call to send the clicked category
-    //         const response = await sendClickedCategory(clickedCategory,charts,x_axis);
-    //         console.log("chart_data_list:", response.chart_data_list)
-    //         response.chart_data_list.forEach((chartData) => {
-    //             const { chart_id, data } = chartData;
-    //             dispatch(updateChartData({
-    //               chart_id,
-    //               categories: data.categories,
-    //               values: data.values,
-    //             }));
-    //           });
-    //     } catch (error) {
-    //         console.error(`Failed to send category ${clickedCategory}:`, error);
-    //     }
-    
-    //     // Set the selected category and show the reset button
-    //     dispatch(updateSelectedCategory(clickedCategory));
-    //     dispatch(updateSelectedCategory_xaxis(x_axis))
-    //     dispatch(setChartStatus(true));
-    //     setShowResetButton(true);
-    // };
           const handleClicked = async (event, chartContext, config) => {
             // if (!isFilterActive) return;
             const clickedCategoryIndex = config.dataPointIndex;

@@ -90,38 +90,6 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
                 chartColor
             ));
 
-        // const nodes = svg.selectAll("g")
-        //     .data(root.leaves())
-        //     .enter()
-        //     .append("g")
-        //     .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
-        //     .on("mouseover", function (event, d) {
-        //         tooltip.style("display", "block")
-        //             .style("opacity", 1)
-        //             .html(`<strong>${d.data.name}</strong>: ${d.data.value}`);
-
-        //         d3.select(this).select('rect')
-        //             .transition()
-        //             .duration(200)
-        //             .style("stroke", "blue")
-        //             .style("stroke-width", 3)
-        //             .style("fill-opacity", 1);
-        //     })
-        //     .on("mousemove", function (event) {
-        //         const svgElement = svgRef.current.getBoundingClientRect(); // Get the SVG bounding box
-        //         tooltip.style("left", `${event.clientX - svgElement.left + 10}px`)
-        //                .style("top", `${event.clientY - svgElement.top + 10}px`);
-        //     })
-        //     .on("mouseout", function () {
-        //         tooltip.style("display", "none");
-
-        //         d3.select(this).select('rect')
-        //             .transition()
-        //             .duration(200)
-        //             .style("stroke", "#fff") // Reset stroke to normal
-        //             .style("stroke-width", 1) // Reset stroke width
-        //             .style("fill-opacity", 0.8); // Reset opacity
-        //     });
         const nodes = svg.selectAll("g")
     .data(root.leaves())
     .enter()

@@ -117,19 +117,6 @@ function Navbar() {
     window.location.reload();
   };
 
-
-  // const handleLoginLogout = () => {
-  //   if (isLoggedIn) {
-  //     sessionStorage.removeItem('session_id');
-  //     sessionStorage.removeItem('username');
-  //     setIsLoggedIn(false);
-  //     navigate('/login');
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // };
-
-
   const handleLoginLogout = () => {
     if (isLoggedIn) {
       sessionStorage.removeItem('session_id');
@@ -140,62 +127,6 @@ function Navbar() {
       navigate('/login');
     }
   };
-  
-  // const handleLoginLogout = () => {
-  //   if (isLoggedIn) {
-  //     sessionStorage.removeItem('session_id');
-  //     sessionStorage.removeItem('username');
-  //      // Set loginstatus to false on logout
-  //     setIsLoggedIn(false);
-  //     localStorage.setItem('loginstatus', false);
-  //     navigate('/login')
-      
-  //   } else {
-  //     // localStorage.setItem('loginstatus', 'true'); // This can be updated when login succeeds
-  //     navigate('/login');
-  //   }
-  // };
-
-
-//   const handleLoginLogout = () => {
-//     if (isLoggedIn) {
-//         sessionStorage.removeItem('session_id');
-//         sessionStorage.removeItem('username');
-//         setIsLoggedIn(false);
-//         localStorage.setItem('loginstatus', 'false'); // Store as string
-//         navigate('/login');
-//     } else {
-//         navigate('/login');
-//     }
-// };
-
-
-// const handleLoginLogout = () => {
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-//   const isLoggedIn = useSelector((state) => state.login.loginStatus);
-
-//   if (isLoggedIn) {
-//     dispatch(logout()); // Dispatch the logout action
-//     navigate('/login');
-//   } else {
-//     navigate('/login'); // Handle login redirection
-//   }
-// };
-// const handleLoginLogout = () => {
-//   if (isLoggedIn) {
-//     dispatch(logout()); // Dispatch the logout action
-//     navigate('/login');
-//   } else {
-//     navigate('/login'); // Handle login redirection
-//   }
-// };
-  
-  // React.useEffect(() => {
-  //   // Update isLoggedIn and loginstatus from localStorage
-  //   setIsLoggedIn(!!sessionStorage.getItem('session_id'));
-  // }, []);
-  
 
   React.useEffect(() => {
     setIsLoggedIn(!!sessionStorage.getItem('session_id'));
@@ -292,17 +223,6 @@ function Navbar() {
                   <DashboardCustomizeIcon  style={{ marginRight: 8 ,fontSize: 20}} /> CustomJoin
                 </MenuItem>
               </Menu>
-              {/* <Button
-                onClick={() => handleNavigation('/load_data')}
-                sx={{
-                  backgroundColor: location.pathname === '/load_data' ? '#c5c5c9' : 'inherit',
-                  alignItems: 'center',
-                }}
-              >
-                <ListItemIcon sx={{ display: 'flex', alignItems: 'center', width: '150px', justifyContent: 'center', color: '#000000' }}>
-                  design
-                </ListItemIcon>
-              </Button> */}
 
 
 <Button
@@ -318,56 +238,6 @@ onClick={() => handleNavigation('/load_data')}
       Data Table 
     </ListItemIcon>
   </Button>
-{/* 
-<Button
-          aria-controls={openDesignMenu ? 'design-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={openDesignMenu ? 'true' : undefined}
-          onClick={handleDesignMenuClick}
-          sx={{
-            backgroundColor:
-              location.pathname === '/load_data'||
-              location.pathname === '/Create_Dashboard' 
-                ? '#c5c5c9'
-                : 'inherit',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '150px',
-              justifyContent: 'center',
-              color: '#000000',
-            }}
-          >
-            Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
-          </ListItemIcon>
-        </Button> */}
-        {/* <Menu
-          id="design-menu"
-          anchorEl={designMenuAnchorEl}
-          open={openDesignMenu}
-          onClose={handleDesignMenuClose}
-          PaperProps={{
-            sx: {
-              width: menuWidth || 'auto',
-              backgroundColor: '#424242',
-              color: '#fff',
-            },
-          }}
-        >
-          <MenuItem onClick={() => handleNavigation('/load_data')}>
-            Design Chart
-          </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
-            Charts
-          </MenuItem>
-          
-
-        </Menu> */}
-
 
 <Button
           aria-controls={openDesignMenu ? 'design-menu' : undefined}
@@ -419,55 +289,7 @@ onClick={() => handleNavigation('/load_data')}
           </MenuItem>
         </Menu>
 
-{/* <Button
-  aria-controls={openDesignMenu ? 'design-menu' : undefined}
-  aria-haspopup="true"
-  aria-expanded={openDesignMenu ? 'true' : undefined}
-  onMouseOver={handleDesignMenuClick}
-  onMouseLeave={handleDesignMenuClose} // Close menu when mouse leaves the button
-  sx={{
-    backgroundColor:
-      location.pathname === '/Create_Dashboard' ||
-      location.pathname === '/dashboard_view'
-        ? '#c5c5c9'
-        : 'inherit',
-    alignItems: 'center',
-  }}
->
-  <ListItemIcon
-    sx={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '150px',
-      justifyContent: 'center',
-      color: '#000000',
-      textTransform: 'none',
-    }}
-  >
-    Design <ArrowDropDownCircleIcon sx={{ color: appBarColor }} />
-  </ListItemIcon>
-</Button>
-<Menu
-  id="design-menu"
-  anchorEl={designMenuAnchorEl}
-  open={openDesignMenu}
-  onMouseLeave={handleDesignMenuClose} // Close menu when mouse leaves the menu
-  onMouseEnter={() => setOpenDesignMenu(true)} // Prevent immediate close on hover
-  PaperProps={{
-    sx: {
-      width: menuWidth || 'auto',
-      backgroundColor: '#ffffff',
-      color: 'black',
-    },
-  }}
->
-  <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
-    Chart
-  </MenuItem>
-  <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
-    Dashboard
-  </MenuItem>
-</Menu> */}
+
 
 
               <Button
@@ -512,8 +334,7 @@ onClick={() => handleNavigation('/load_data')}
                   },
                 }}
               >
-                {/* <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>Charts</MenuItem>
-                <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem> */}
+
                 <MenuItem onClick={() => handleNavigation('/Charts_view')}>Charts</MenuItem>
                 <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem>
               </Menu>
@@ -529,9 +350,6 @@ onClick={() => handleNavigation('/load_data')}
         </MuiAppBar>
       )}
 
-      {/* <Box component="main" sx={{ backgroundColor: '#dcdfe8', flexGrow: 1, p: 3, minHeight: '100vh', display: 'flex', flexDirection: 'column', mt: 10 }}>
-        <AppRouter />
-      </Box> */}
       <Box component="main" sx={{ backgroundColor: '#dcdfe8',marginTop:'30px',minHeight:'100vh', display: 'flex', flexDirection: 'column', mt: 0 }}>
         <AppRouter />
       </Box>
