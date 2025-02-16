@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-
+import Filters from '../chartCreation/filter';
 import DashboardTableDetails from './dashbordTableDetails';
 import DashboardCharts from './dashbord-chartComponent';
 
@@ -26,6 +26,7 @@ import {
 import { saveDataToDatabase,validateSaveName } from '../../utils/api';
 import HomePage from '../../pages/HomePage';
 import ChartDisplay from '../chartDisplay';
+import { Filter } from '@mui/icons-material';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -128,6 +129,11 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
         return;
       }
      
+      const formattedCheckedOptions = Object.fromEntries(
+        Object.entries(checkedOptions).map(([key, values]) => [key, Array.isArray(values) ? values : []])
+      );
+      console.log('checkedOptions:', formattedCheckedOptions);
+      
       const response = await saveDataToDatabase({
         user_id,
         company_name,
@@ -141,7 +147,7 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
         barColor,
         chart_heading,
         dashboardBarColor,
-        checkedOptions,
+        checkedOptions: formattedCheckedOptions, // Pass the formatted object
         ai_chart_data: data.data,
         saveName,
         xFontSize,         
@@ -150,6 +156,29 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
         yFontSize,          
         valueColor,        
       });
+      
+  //     const response = await saveDataToDatabase({
+  //       user_id,
+  //       company_name,
+  //       selectedUser,
+  //       selectedTable,
+  //       databaseName,
+  //       xAxis,
+  //       yAxis,
+  //       aggregate,
+  //       chartType,
+  //       barColor,
+  //       chart_heading,
+  //       dashboardBarColor,
+  //       checkedOptions,
+  //       ai_chart_data: data.data,
+  //       saveName,
+  //       xFontSize,         
+  //       fontStyle,          
+  //       categoryColor,   
+  //       yFontSize,          
+  //       valueColor,        
+  //     });
       console.log('Data saved successfully:', response);
     setSnackbarSeverity('success');
     setSnackbarMessage('Data saved successfully!');
@@ -204,7 +233,16 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
                 </Item>
               </div>
             )}
+                        
+              
+              <div style={{ marginTop: '20px',marginRight:'5px',order:'2px solid #ccc'}}>
+                
+                <Item> <Filters />
+                </Item>
+              </div>
+            
           </Grid>
+          
         </Grid>
       {/* </Box> */}
 

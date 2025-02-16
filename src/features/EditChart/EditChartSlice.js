@@ -115,6 +115,19 @@ const chartSlice = createSlice({
     error: null,
   },
   reducers: {
+    setFilterOptionsForColumn: (state, action) => {
+      const { column, options } = action.payload;
+  
+      if (!options || (Array.isArray(options) && options.length === 0)) { 
+          // If options is undefined or an empty array, remove the column from state
+          delete state.filterOptions[column];
+          delete state.checkedOptions[column];
+      } else {
+          state.filterOptions[column] = options;
+          state.checkedOptions[column] = [...options];
+      }
+  },
+  
     setChartData: (state, action) => {
       state.chartData = action.payload;
     },
@@ -193,7 +206,7 @@ export const {
   setChartData,
   setSelectedTable,
   setFontStyles,
-  setColorStyles,
+  setColorStyles,setFilterOptionsForColumn
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

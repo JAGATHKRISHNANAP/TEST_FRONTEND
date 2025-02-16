@@ -1348,7 +1348,18 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
            const categoryColor = useSelector((state) => state.toolTip.categoryColor);
            const valueColor= useSelector((state) => state.toolTip.valueColor);
     
-
+           const uniqueCategories = [...new Set(categories)]; // Use uniqueCategories
+           const uniqueSeries1 = [...new Set(series1)];       // Use uniqueSeries1
+       
+       
+           const series = uniqueSeries1.map(series1Value => ({
+               name: series1Value,  // Use the actual series1 value as the name
+               data: uniqueCategories.map(categoryValue => {
+                   const index = categories.findIndex((cat, i) => cat === categoryValue && series1[i] === series1Value);
+                   return index !== -1 ? series2[index] : 0;
+               })
+           }));
+       
     // Chart Options
     const options = {
         chart: {
@@ -1381,7 +1392,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
             },
         },
         xaxis: {
-            categories: categories, // X-axis categories
+            categories: uniqueCategories, // X-axis categories
             labels: {
                 show: true,
                 style: {
@@ -1436,9 +1447,10 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
         tooltip: {
             enabled: true,
             custom: function({ series, seriesIndex, dataPointIndex, w }) {
-                const category = categories[dataPointIndex];
+                const category = uniqueCategories[dataPointIndex];
+                const series1Value = uniqueSeries1[seriesIndex]; // Get series1 value for tooltip
                 const value = series[seriesIndex][dataPointIndex];
-                let tooltipContent = '<div style="background: #333; color: #fff; padding: 10px; border-radius: 5px;">';
+                  let tooltipContent = '<div style="background: #333; color: #fff; padding: 10px; border-radius: 5px;">';
                 if (!toolTipOptions.heading && !toolTipOptions.categoryName && !toolTipOptions.value) {
                     tooltipContent += `<div><strong>Value:</strong> ${value}</div>`;
                     tooltipContent += `<div><strong>category:</strong> ${category}</div>`;
@@ -1462,18 +1474,18 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
     };
 
     // Series for Grouped Bars
-    const series = [
-        {
-            name: xAxis[0] || 'Series 1',
-            data: series1, // First dataset
-            color: '#008FFB', // Blue color
-        },
-        {
-            name: xAxis[1] || 'Series 2',
-            data: series2, // Second dataset
-            color: '#00E396', // Green color
-        },
-    ];
+    // const series = [
+    //     {
+    //         name: xAxis[0] || 'Series 1',
+    //         data: series1, // First dataset
+    //         color: '#008FFB', // Blue color
+    //     },
+    //     {
+    //         name: xAxis[1] || 'Series 2',
+    //         data: series2, // Second dataset
+    //         color: '#00E396', // Green color
+    //     },
+    // ];
 
     return (
         <div className="app">

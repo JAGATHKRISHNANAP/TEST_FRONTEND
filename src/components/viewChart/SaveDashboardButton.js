@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 
 function SaveDashboardButton({ onSaveClick }) {
   return (
-    <Button variant="contained" color="primary" onClick={onSaveClick}>
+    <Button variant="contained" color="success" onClick={onSaveClick}>
       Save Dashboard
     </Button>
   );

@@ -171,11 +171,11 @@ function Navbar() {
       sessionStorage.removeItem('username');
       setIsLoggedIn(false);
       dispatch(resetState());
-      navigate('/login');
+      navigate('/');
 
     } else {
      
-      navigate('/login');
+      navigate('/');
     }
   };
   
@@ -539,13 +539,22 @@ function Navbar() {
               <MenuIcon />
             </IconButton>
 
-            <Typography variant="body2" sx={{ height: '10px', display: 'flex', alignItems: 'center' }}>
+            {/* <Typography variant="body2" sx={{ height: '10px', display: 'flex', alignItems: 'center' }}>
               <Avatar src="/broken-image.jpg" sx={{ width: '30px', height: '30px', border: '2px solid white', backgroundColor: appBarColor, color: 'white', marginRight: 1 }} />
               Hello, {username}
             </Typography>
-
-          <Grid sx={{ flexGrow: 1 }} />
+             */}
+           
+           <>
           
+             <UserProfile username={username} appBarColor={appBarColor}/>
+              <Box sx={{ flexGrow: 1 }} /></>
+         
+          <Grid sx={{ flexGrow: 1 }} />
+          <Box sx={{ flexGrow: 1 }} />
+          <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
+            {isLoggedIn ? 'Logout' : 'Login'}
+          </Typography>
           <IconButton color="inherit" onClick={handleColorPickerToggle}>
             <PaletteIcon />
           </IconButton>

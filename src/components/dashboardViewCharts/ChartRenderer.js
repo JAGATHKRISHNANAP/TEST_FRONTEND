@@ -74,6 +74,7 @@ import AiMlChartData from '../ChartViews/AiMLChartsView';
 import DashboardSingleValueChart from '../ChartViews/DashboardSingleValueChart';
 import WordCloud from '../ChartViews/wordCloudView';
 
+import DuelBarChart from '../ChartViews/duelBarChartView';
 const ChartRenderer = ({ chart }) => {
   switch (chart.chart_type) {
     case 'bar':
@@ -102,6 +103,19 @@ const ChartRenderer = ({ chart }) => {
       return <AnimatedTreemap {...chart} chartColor={chart.chart_color} />;
     case 'duealChart':
       return <DualAxisChart {...chart} chartColor={chart.chart_color} />;
+      case 'duealbarChart':
+        return (
+            <DuelBarChart
+                categories={chart.categories}
+                series1={chart.series1}
+                series2={chart.series2}
+                x_axis={chart.x_axis}
+                y_axis={chart.y_axis && chart.y_axis.length > 0 ? chart.y_axis : null} // Safe access
+             
+                aggregation={chart.aggregate}
+                chartColor={chart.chart_color} 
+            />
+        );
     case 'wordCloud':
       return <WordCloud {...chart} chartColor={chart.chart_color} />;
     case 'textChart':

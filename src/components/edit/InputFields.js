@@ -382,6 +382,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
   setFontStyles,
   setColorStyles, } from "../../features/EditChart/EditChartSlice";
+  import { setCheckedOptions,setFilterOptionsForColumn } from "../../features/Dashboard-Slice/chartSlice";
 import SaveButton from './SaveButton';
 import ChartDisplay from "./ChartDisplay";
 import ChartControls from "./ChartControls";
@@ -409,7 +410,7 @@ function EditDashboard() {
   const [isChartGenerationClicked, setIsChartGenerationClicked] = useState(false);
   const [isDrillDownEnabled, setIsDrillDownEnabled] = useState(false);
 
-  const [filterOptions, setFilterOptions] = useState([]);
+  const [filterOptions, setFilterOptions] = useState({});
   const [checkedOptions, setCheckedOptions] = useState([]);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(true);
@@ -457,6 +458,7 @@ function EditDashboard() {
   console.log("filterOptionsas--------------------------1",filterOptionsas)
 
   console.log("filterOptions-----------------------------2",filterOptions)
+  
   useEffect(() => {
     if (chartType1) {
       dispatch(setChartType(chartType1));
@@ -487,7 +489,7 @@ function EditDashboard() {
         yAxis,
         aggregate,
         chartType,
-        filterOptions: checkedOptions.join(', '),
+        filterOptions,
         databaseName,
         selectedUser,
         xFontSize,
@@ -502,17 +504,31 @@ function EditDashboard() {
     }
   };
 
-  const fetchFilterOptions = async (columnName) => {
-    try {
-      const options = await fetchFilterOptionsAPI( databaseName,selectedTable,columnName, selectedUser);
-      setFilterOptions(options);
-      setCheckedOptions(options);
-      setShowFilterDropdown(false);
-      setSelectAllChecked(true); // Initialize selectAllChecked to true after fetching
-    } catch (error) {
-      console.error('Error fetching filter options:', error);
-    }
-  };
+  // const fetchFilterOptions = async (columnName) => {
+  //   try {
+  //     const options = await fetchFilterOptionsAPI( databaseName,selectedTable,columnName, selectedUser);
+  //     setFilterOptions(options);
+  //     setCheckedOptions(options);
+  //     setShowFilterDropdown(false);
+  //     setSelectAllChecked(true); // Initialize selectAllChecked to true after fetching
+  //   } catch (error) {
+  //     console.error('Error fetching filter options:', error);
+  //   }
+  // };
+  const fetchFilterOptions = async (column) => {
+            try {
+                const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+                if (options && typeof options === 'object') {
+                    dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+                    setCheckedOptions(options);
+                    setFilterOptions(options);
+                } else {
+                    console.error('Filter options is not an object as expected', options);
+                }
+            } catch (error) {
+                console.error('Failed to fetch filter options:', error);
+            }
+        };
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;

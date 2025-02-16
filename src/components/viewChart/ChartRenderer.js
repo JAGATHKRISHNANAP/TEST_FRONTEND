@@ -16,7 +16,7 @@ import MapChart from '../ChartViews/mapChartView';
 import WordCloud from '../ChartViews/wordCloudView';
 import SingleValueChart from './SingleValueChart'; // Import the new component
 
-
+import DuelBarChart from '../ChartViews/duelBarChartView';
 const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiChartData, aiMlChartData, result, fetchedData, width, handleResize }) => {
   const renderChart = () => {
     
@@ -37,7 +37,25 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
                   }
                   break;
         
-                case 'duealChart':
+                case 'duealbarChart':
+          if (
+            chartDataFromStore?.categories?.length > 0 &&
+            chartDataFromStore?.series1?.length > 0 &&
+            chartDataFromStore?.series2?.length > 0
+          ) {
+            return (
+              <DuelBarChart
+                categories={chartDataFromStore.categories}
+                series1={chartDataFromStore.series1}
+                series2={chartDataFromStore.series2}
+                aggregation={data[4]} x_axis={data[2]}
+                
+          y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} 
+              />
+            );
+          }
+          break;
+          case 'duealChart':
           if (
             chartDataFromStore?.categories?.length > 0 &&
             chartDataFromStore?.series1?.length > 0 &&

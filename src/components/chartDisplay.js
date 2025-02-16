@@ -336,10 +336,10 @@ const ChartRenderer = ({
   }));
   return (
     <div className="chart-renderer">
-      {xAxis.length >1 &&
+      {/* {xAxis.length >1 &&
         (chartType === "wordCloud" ) && (
           renderError("Please select only 1 Columns values for this chart type.")
-        )}
+        )} */}
        {xAxis.length >1 &&
         (chartType === "Hierarachy") && (
           renderError("Please select only Columns values for this chart type.")
@@ -434,7 +434,7 @@ const ChartRenderer = ({
               </div>
             )} */}
 
-{(xAxis.length == 1 && yAxis.length  ==1  && chartType === "bar") ? (
+{(xAxis.length >= 1 && yAxis.length  ==1  && chartType === "bar") ? (
   <div style={{ marginTop: '20px' }}>
     {
       // If more than 2 X-axis values are selected, show the message to remove 1
@@ -634,7 +634,7 @@ const ChartRenderer = ({
 )} */}
 { xAxis.length >= 1 && yAxis.length >= 1 && chartType === "duealChart" && (
   <div style={{ marginTop: '20px' }}>
-    { xAxis.length > 1 ? (
+    {/* { xAxis.length > 1 ? (
       <div className="error-message">
         You have selected more than 1 column value for the X-axis. Please remove one.
       </div>
@@ -643,7 +643,7 @@ const ChartRenderer = ({
         You have selected less than 2 row values. Please add one.
       </div>
     ) : (
-      <>
+      <> */}
         <Items>
           <div className="chart-container">
             <DuelAxisChart
@@ -657,8 +657,8 @@ const ChartRenderer = ({
         <div className="btn-container">
           <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
         </div>
-      </>
-    )}
+      {/* </> */}
+    {/* )} */}
   </div>
 )}
 

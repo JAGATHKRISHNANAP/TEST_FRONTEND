@@ -44,13 +44,18 @@
   
 //   export default ChartControls;
 
-import React from 'react';
+// import React from 'react';
 import { FormControl, InputLabel, NativeSelect, Paper, styled, List, ListItemButton, ListItemIcon, Checkbox } from "@mui/material";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { setAggregate, setYAxis } from "../../features/EditChart/EditChartSlice"; // Import setYAxis
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
-
+import FilterOptionsModal from '../chartCreation/filterDropDown';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setXAxis, toggleFilterDropdownForColumn } from '../../features/Dashboard-Slice/chartSlice';
+import { setCheckedOptions,setFilterOptionsForColumn } from "../../features/Dashboard-Slice/chartSlice";
+import { fetchFilterOptionsAPI } from "../../utils/api";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -61,8 +66,33 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checkedOptions, handleSelectAllChange, handleCheckboxChange, handleFilterIconClick, showFilterDropdown, removeColumnFromXAxis,selectAllChecked }) => {
   // const dispatch = useDispatch();
-
-  
+ const [selectedColumn, setSelectedColumn] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const databaseName = localStorage.getItem('company_name');
+    const selectedTable = localStorage.getItem('selectedTable');
+    const selectedUser = localStorage.getItem('selectedUser');
+    
+  const fetchFilterOptions = async (column) => {
+          try {
+              const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+              if (options && typeof options === 'object') {
+                  dispatch(setCheckedOptions({ column, options: options[column] || [] }));
+              } else {
+                  console.error('Filter options is not an object as expected', options);
+              }
+          } catch (error) {
+              console.error('Failed to fetch filter options:', error);
+          }
+      };
+      const openFilterModal = (column) => {
+        fetchFilterOptions(column); // Fetch options before opening modal
+        setSelectedColumn(column);
+        setModalOpen(true);
+    };
+    
+    const closeFilterModal = () => {
+        setModalOpen(false);
+    };
   return (
     <Item>
       <div className="dash-right-side-container">
@@ -73,14 +103,17 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
                         {xAxis.map((column, index) => (
                           <div key={index} className="x-axis-column" style={{maxHeight:"30px"}}>
                             <span>{column}</span>
-                            <span className="filter-icon" onClick={() => handleFilterIconClick(column)}>
-                              <FilterListIcon />
+                            <span className="filter-icon" onClick={() => openFilterModal(column)} style={{ cursor: "pointer" }}>
+                            <FilterListIcon />
                             </span>
+                            
                             <ClearIcon style={{ marginLeft: '10px' }} onClick={() => removeColumnFromXAxis(column)} />
-                          </div>
+                            {selectedColumn && <FilterOptionsModal column={selectedColumn} open={modalOpen} onClose={closeFilterModal} />}
+                            </div>
+                             
                         ))}
                       </div>
-                      {showFilterDropdown && (
+                      {/* {showFilterDropdown && (
                         <div className="filter-dropdown">
                           <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }}>
                             <label>
@@ -113,8 +146,8 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
                             </List>
                           ))}
                         </div>
-                      )}
-                    </div>
+                      )}*/}
+                    </div> 
                     {/* <div className="input-fields"> */}
                     <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>
                                           <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>

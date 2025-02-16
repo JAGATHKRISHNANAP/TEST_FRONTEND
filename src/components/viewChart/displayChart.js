@@ -13,7 +13,6 @@ import axios from "axios";
 import SaveDashboardButton from './SaveDashboardButton';  // Import SaveDashboardButton component
 import { fetchTotalRows } from '../../utils/api';
 import HomePage from '../../pages/HomePage';
-import '../viewChart/resizable.css';
 function Charts() {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
@@ -79,7 +78,7 @@ function Charts() {
           chartName,
           width: 500,
           height: 400,
-          // position: dropPosition || { x: 50, y: 50 }, // Default if not dropped
+           position: dropPosition || { x: 50, y: 50 }, // Default if not dropped
         },
       ]);
   
@@ -161,7 +160,7 @@ function Charts() {
   const renderedCharts = useMemo(() => (
     chartData.map((data) => (
       // <Grid item xs={12} sm={5} md={5} lg={1.7} key={data.chartName}  sx={{ padding: '0px', height: "490px" }}
-      <Grid item xs={3} sm={5} md={5} lg={3} key={data.chartName} sx={{ padding: '10px', height: "490px" }}
+      <Grid item xs={12} sm={6} md={4} lg={3} key={data.chartName} sx={{ padding: '0px', height: "490px" }}
 
     // Common class name for querying
        data-chartname={data.chartName}
@@ -185,10 +184,9 @@ function Charts() {
           <Grid container spacing={2} wrap="wrap">
             <Grid item xs={12} md={12}>
               <DroppableArea onDrop={handleChartButtonClick} chartData={chartData}>
-              <Grid container spacing={1} sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" ,padding:'10px' }}>
-  {renderedCharts}
-</Grid>
-
+                <Grid container spacing={2}>
+                  {renderedCharts}
+                </Grid>
               </DroppableArea>
             </Grid>
           </Grid>

@@ -228,7 +228,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'treeHierarchy' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('treeHierarchy')}
-            disabled={isTreeButtonDisabled}
+            // disabled={isTreeButtonDisabled}
           >
             <AccountTreeIcon/>
           </Button>

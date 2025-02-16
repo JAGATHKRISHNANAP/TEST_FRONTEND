@@ -908,6 +908,8 @@ const LoadExcelFile = () => {
       localStorage.removeItem('yAxis');
       localStorage.removeItem('aggregate');
       localStorage.removeItem('selectedChartType')
+
+      
       const fetchTableDetails = async () => {
         setIsLoading(true);
         try {
