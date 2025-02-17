@@ -37,7 +37,7 @@ function Navbar() {
   // const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
-  const [username, setUsername] = React.useState(localStorage.getItem('user_name'));
+  const [username, setUsername] = React.useState(sessionStorage.getItem('user_name'));
   // const showDashboard = useSelector(state => state.dashboard.showDashboard);
   const navigate = useNavigate();
   const handleLoginLogout = () => {

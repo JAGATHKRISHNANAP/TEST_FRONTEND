@@ -309,7 +309,9 @@ import CustomToolTip from "./customToolTip";
 import { sendCategoryToBackend } from "../../utils/api";
 import Draggable from "react-draggable";
 
-const ScatterChart = ({ categories, values, aggregation }) => {
+const ScatterChart = ({ categories = [], values = [], aggregation }) => {
+
+
   const dispatch = useDispatch();
   const lineColor = useSelector((state) => state.chartColor.chartColor);
   const xAxis = useSelector((state) => state.chart.xAxis);
@@ -519,21 +521,41 @@ const ScatterChart = ({ categories, values, aggregation }) => {
     },
     tooltip: {
       enabled: true,
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        // Get the scatter data point from the chart configuration
-        const dataPoint = w.config.series[seriesIndex].data[dataPointIndex];
-        const currentAggregation = aggregation || "Aggregation";
-        return `
-          <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
-            ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${xAxis} vs ${yAxis}</h4></div>` : ""}
-            <div>
-              ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${dataPoint.x}</div>` : ""}
-              ${toolTipOptions.value ? `<div><strong>Value:</strong> ${dataPoint.y}</div>` : ""}
-            </div>
-          </div>
-        `;
-      },
-    },
+      custom: toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+                ? function ({ series, seriesIndex, dataPointIndex, w }) {
+                    const category = plotData.categories ? plotData.categories[dataPointIndex] : categories[dataPointIndex];
+                    const value = series[seriesIndex][dataPointIndex];
+                    const currentAggregation = aggregation || 'Aggregation';
+                    const currentXAxis = xAxis[0] || 'X-Axis';
+                    const currentYAxis = yAxis || 'Y-Axis';
+
+                    return `
+                        <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                            ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>` : ''}
+                            <div>
+                                ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${category}</div>` : ''}
+                                ${toolTipOptions.value ? `<div><strong>Value:</strong> ${value}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+                : undefined
+        },
+      // custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+      //   // Get the scatter data point from the chart configuration
+      //   const dataPoint = w.config.series[seriesIndex].data[dataPointIndex];
+      //   const currentAggregation = aggregation || "Aggregation";
+      //   return `
+      //     <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+      //       ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${xAxis} vs ${yAxis}</h4></div>` : ""}
+      //       <div>
+      //         ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${dataPoint.x}</div>` : ""}
+      //         ${toolTipOptions.value ? `<div><strong>Value:</strong> ${dataPoint.y}</div>` : ""}
+      //       </div>
+      //     </div>
+      //   `;
+      // },
+    // },
     colors: [lineColor],
   };
 
@@ -572,7 +594,7 @@ const ScatterChart = ({ categories, values, aggregation }) => {
       <div className="row">
         <div className="scatter-chart">
           <ResizableBox
-            width={isFiltered ? Math.max(10 * 30, 600) : Math.max(values.length * 30, 600)}
+            width={isFiltered ? Math.max(10 * 30, 600) : Math.max((values?.length || 0) * 30, 600)}
             height={500}
             minConstraints={[600, 300]}
             maxConstraints={[800, 500]}

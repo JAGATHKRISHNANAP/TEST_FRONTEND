@@ -368,7 +368,7 @@ const MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024; // 1 GB limit
 const ExcelUpload = () => {
   const dispatch = useDispatch();
   const { file, uploading, uploadSuccess, uploadError, fileName, columnHeadings, primaryKeyColumn } = useSelector((state) => state.excelFile);
-  const [user_id, setUser_Id] = React.useState(localStorage.getItem('user_id'));
+  const [user_id, setUser_Id] = React.useState(sessionStorage.getItem('user_id'));
   const [totalRows, setTotalRows] = React.useState(0);
   const [totalColumns, setTotalColumns] = React.useState(0);
   const [excelData, setExcelData] = React.useState([]);
@@ -1024,7 +1024,7 @@ return (
     {/* Snackbar Message */}
     <Snackbar
       open={snackbarOpen}
-      autoHideDuration={3000}
+      autoHideDuration={1000}
       onClose={handleSnackbarClose}
     >
       <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>

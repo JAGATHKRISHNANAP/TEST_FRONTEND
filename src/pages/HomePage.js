@@ -27,7 +27,7 @@ import ShowSecondNavbar from './seconsNavBar'
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
-  const [username, setUsername] = React.useState(localStorage.getItem('user_name'));
+  const [username, setUsername] = React.useState(sessionStorage.getItem('user_name'));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
   const [viewMenuAnchorEl, setViewMenuAnchorEl] = React.useState(null);
@@ -50,7 +50,9 @@ function Navbar() {
 
   const theamColor=localStorage.setItem('theamColor',appBarColor);
   // const secondNavbar=localStorage.getItem('show_second_navbar',showSecondNavbar);
-  const userRole = localStorage.getItem('user_role');
+  // const userRole = localStorage.getItem('user_role');
+ const userRole = sessionStorage.getItem('user_role'); // Get role from sessionStorage
+
   const isRouteAccessible = (route) => {
     switch (userRole) {
       case '2':
@@ -168,7 +170,8 @@ function Navbar() {
       localStorage.removeItem('yAxis');
       localStorage.removeItem('xAxis');
       sessionStorage.removeItem('session_id');
-      sessionStorage.removeItem('username');
+      sessionStorage.removeItem('user_name');
+      sessionStorage.removeItem('user_role');
       setIsLoggedIn(false);
       dispatch(resetState());
       navigate('/');

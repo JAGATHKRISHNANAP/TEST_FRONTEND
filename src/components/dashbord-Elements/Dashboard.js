@@ -53,7 +53,7 @@ function Dashboard() {
   const [previousState, setPreviousState] = useState({ xAxis: '', yAxis: '', chartType: '' });
   const data  = useSelector((state) => state.aicharts);
   
-  const [selectedUser, setSelectedUser] = React.useState(localStorage.getItem('selectedUser'));
+  const [selectedUser, setSelectedUser] = React.useState(sessionStorage.getItem('selectedUser'));
   console.log('user_id:', user_id); 
   console.log('company_name:', company_name);
 

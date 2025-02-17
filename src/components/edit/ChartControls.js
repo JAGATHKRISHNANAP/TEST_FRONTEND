@@ -64,16 +64,17 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checkedOptions, handleSelectAllChange, handleCheckboxChange, handleFilterIconClick, showFilterDropdown, removeColumnFromXAxis,selectAllChecked }) => {
+const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checkedOptions, handleSelectAllChange, handleCheckboxChange, handleFilterIconClick, showFilterDropdown, removeColumnFromXAxis,selectAllChecked ,selectedTable}) => {
   // const dispatch = useDispatch();
  const [selectedColumn, setSelectedColumn] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const databaseName = localStorage.getItem('company_name');
-    const selectedTable = localStorage.getItem('selectedTable');
+    // const selectedTable = localStorage.getItem('selectedTable');
     const selectedUser = localStorage.getItem('selectedUser');
     
   const fetchFilterOptions = async (column) => {
           try {
+            console.log("Selected Table:", selectedTable);
               const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
               if (options && typeof options === 'object') {
                   dispatch(setCheckedOptions({ column, options: options[column] || [] }));

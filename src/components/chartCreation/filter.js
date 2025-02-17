@@ -267,6 +267,7 @@ function DualInputChart() {
     const { xAxis } = useSelector(state => state.chart); // Redux state
     const [hiddenColumns, setHiddenColumns] = useState([]);
     const [droppedColumns, setDroppedColumns] = useState([]); // Columns added manually
+    const [filter, setFilter] = useState(''); // State to filter columns
 
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -309,7 +310,10 @@ function DualInputChart() {
             onDragOver={handleDragOver} 
             onDrop={handleDrop} 
             style={{ border: "2px dashed #ccc", padding: "10px", minHeight: "60px" }}
-        > 
+        > <div>
+        <h3>Table Filter</h3>  {/* Heading */}
+        
+    </div>
             {displayedColumns.length === 0 ? (
                 <span>Drop Here</span>
             ) : (

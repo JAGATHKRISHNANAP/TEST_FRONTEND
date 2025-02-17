@@ -25,7 +25,7 @@ function Charts() {
   const dashboardfilterXaxis = useSelector((state) => state.viewcharts.selectedCategory_xaxis);
   const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
   const company_name = localStorage.getItem('company_name');
-  const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
+  const [user_id, setUserId] = React.useState(sessionStorage.getItem('user_id'));
   const [borderColor, setBorderColor] = useState("#000"); // Default black border
   const [borderSize, setBorderSize] = useState("1px"); // Default border size
   const [showBorder, setShowBorder] = useState(true); // Toggle border visibility

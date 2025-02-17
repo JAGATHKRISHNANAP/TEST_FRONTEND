@@ -311,7 +311,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchChartData, delete_Ai_Charts_Datas } from '../../features/aiCharts/aiChartSlice';
 import { lazy, Suspense } from 'react';
-
+import { setXAxis, setYAxis, toggleFilterDropdownForColumn } from '../../features/Dashboard-Slice/chartSlice';
 const LineChart = lazy(() => import('../ChartViews/linechartview'));
 const BarChart = lazy(() => import('../ChartViews/barchartView'));
 const PieChart = lazy(() => import('../ChartViews/piechartView'));
@@ -319,6 +319,7 @@ const AreaChart = lazy(() => import('../ChartViews/areaChartView'));
 const ScatterChart = lazy(() => import('../ChartViews/scatterChartView'));
 const DualAxisChart = lazy(() => import('../ChartViews/duelAxisChartView'));
 const MapChart = lazy(() => import('../ChartViews/mapChartView'));
+
 
 const AllCharts = () => {
     const dispatch = useDispatch();
@@ -335,8 +336,15 @@ const AllCharts = () => {
 
     useEffect(() => {
         dispatch(fetchChartData());
+        
     }, [dispatch]);
     useEffect(() => {
+        dispatch(setXAxis([]));
+                    dispatch(setYAxis([]));
+        localStorage.removeItem('xAxis');
+localStorage.removeItem('yAxis');
+localStorage.removeItem('aggregate');
+
         localStorage.setItem('selectedTable', selectedTable); // Save to localStorage whenever selectedTable changes
     }, [selectedTable]);
     

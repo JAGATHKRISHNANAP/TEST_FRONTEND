@@ -26,7 +26,7 @@ import { AppBar} from '@mui/material';
 function Navbar() {
   const theme = useTheme();
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
-  const [username, setUsername] = React.useState(localStorage.getItem('user_name'));
+  const [username, setUsername] = React.useState(sessionStorage.getItem('user_name'));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openMenu, setOpenMenu] = React.useState(false);
   const [viewMenuAnchorEl, setViewMenuAnchorEl] = React.useState(null);
@@ -49,12 +49,12 @@ function Navbar() {
 
   const theamColor=localStorage.setItem('theamColor',appBarColor);
   // const secondNavbar=localStorage.getItem('show_second_navbar',showSecondNavbar);
-  const userRole = localStorage.getItem('user_role');
+  const userRole = sessionStorage.getItem('user_role');
   const isRouteAccessible = (route) => {
     switch (userRole) {
       case '2':
         return true; // Admin can access all routes
-      case '1':
+      case '1' ||' Developer':
         return !['/Charts_view', '/dashboard_view'].includes(route); // Developer can access all except View routes
       case '3':
         return ['/Charts_view', '/dashboard_view'].includes(route); // Viewer can only access View routes

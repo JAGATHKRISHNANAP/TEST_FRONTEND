@@ -47,11 +47,8 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
               <DuelBarChart
                 categories={chartDataFromStore.categories}
                 series1={chartDataFromStore.series1}
-                series2={chartDataFromStore.series2}
-                aggregation={data[4]} x_axis={data[2]}
-                
-          y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} 
-              />
+                series2={chartDataFromStore.series2.map(value => parseFloat(value))}
+                aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} />
             );
           }
           break;
@@ -66,7 +63,7 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
                 categories={chartDataFromStore.categories}
                 series1={chartDataFromStore.series1.map(value => parseFloat(value))}
                 series2={chartDataFromStore.series2.map(value => parseFloat(value))}
-                aggregation={data[4]} x_axis={data[2]}
+                aggregation={data[4]} x_axis={data[5]}
                 y_axis1={data[3][0]} // Set y_axis1 to the first value in data[3]
           y_axis2={data[3][1]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} 
               />

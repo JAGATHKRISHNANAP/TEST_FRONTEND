@@ -808,7 +808,7 @@ function XAxisInput({ xAxis, MAX_COLUMNS, errorMessage, setErrorMessage, openSna
                         <div key={index} className="x-axis-column" draggable onDragStart={(event) => handleDragStart(event, column)} style={{ maxHeight: "30px", cursor: "grab", borderRadius: "1px", position: "relative" }}>
                             <span>{column}</span>
                             <span className="filter-icon" onClick={() => openFilterModal(column)} style={{ cursor: "pointer" }}>
-                                <FilterListIcon />
+                                {/* <FilterListIcon /> */}
                             </span>
                             <ClearIcon style={{ marginLeft: '10px' }} onClick={() => removeColumnFromXAxis(column)} />
                             {selectedColumn && <FilterOptionsModal column={selectedColumn} open={modalOpen} onClose={closeFilterModal} />}

@@ -33,7 +33,7 @@ function Chartsview() {
     (state) => state.viewcharts.selectedCategory
   );
   const database_name = localStorage.getItem("company_name");
-  const [user_id, setUserId] = React.useState(localStorage.getItem("user_id"));
+  const [user_id, setUserId] = React.useState(sessionStorage.getItem("user_id"));
 
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,

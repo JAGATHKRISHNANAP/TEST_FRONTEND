@@ -810,7 +810,7 @@ const [isMenuVisible, setIsMenuVisible] = useState(false);
     }, [sortedData, chartDimensions, lineColor]);
 
     const onResize = (event, { size }) => {
-        setChartDimensions({ width: size.width, height: size.height });
+        setChartDimensions({ width: size.width, height: 600 });
     };
 
   

@@ -90,7 +90,7 @@ import "../Style.css";
 function EditDashbordSidebar() {
   const dispatch = useDispatch();
   const [chartNamesArray, setChartNamesArray] = useState([]);
-  const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
+  const [user_id, setUserId] = React.useState(sessionStorage.getItem('user_id'));
   const [lastClickedButton, setLastClickedButton] = useState(null); // State to track the last clicked button
 
   // useEffect(() => {

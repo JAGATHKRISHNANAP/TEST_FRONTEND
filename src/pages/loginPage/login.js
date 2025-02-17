@@ -261,7 +261,8 @@ export default function SignIn() {
         const tableNames = response.data.tables;
         const user_role=response.data.role_name;
         localStorage.setItem('tableNames', JSON.stringify(tableNames));
-        localStorage.setItem('user_role', JSON.stringify(user_role));
+        // localStorage.setItem('user_role', JSON.stringify(user_role));
+        sessionStorage.setItem('user_role', user_role);
       }
   
       let user_id, user_name, user_role, user_email;
@@ -278,9 +279,9 @@ export default function SignIn() {
         user_email = response.data.user[3];
       }
   
-      localStorage.setItem('user_id', user_id);
-      localStorage.setItem('user_name', user_name);
-      localStorage.setItem('user_role', user_role);
+      sessionStorage.setItem('user_id', user_id);
+      sessionStorage.setItem('user_name', user_name);
+      sessionStorage.setItem('user_role', user_role);
       localStorage.setItem('user_email', user_email);
       localStorage.setItem('company_name', selectedCompany);
       localStorage.setItem('data', JSON.stringify(response));

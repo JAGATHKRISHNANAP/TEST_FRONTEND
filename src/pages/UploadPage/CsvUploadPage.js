@@ -138,7 +138,7 @@ const CsvUpload = () => {
 
   const company_database = localStorage.getItem('company_name');
   const databaseName = localStorage.getItem('company_name');
-  const [user_id, setUser_Id] = React.useState(localStorage.getItem('user_id'));
+  const [user_id, setUser_Id] = React.useState(sessionStorage.getItem('user_id'));
   const [primaryKeyNeeded, setPrimaryKeyNeeded] = useState(false);
 
 

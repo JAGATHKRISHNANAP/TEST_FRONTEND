@@ -1081,7 +1081,7 @@ import {
 import {
   addTextChart,
   addChartData,
-  clearDashboardCharts,
+  clearDashboardCharts,removeChartData
 } from "../../features/viewDashboardSlice/viewDashboardSlice";
 import {
   Box,
@@ -1101,27 +1101,27 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 function ViewDashboardSidebar() {
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    dispatch(clearDashboardCharts()); // Clears chart data at the start
+  }, [dispatch]);
+  
   // Sidebar chart names for labels
   const [chartNamesArray, setChartNamesArray] = useState([]);
 
-  // Dashboard charts data (each chart contains its chart_id and position)
   const chartData = useSelector(
     (state) => state.viewdashboard.dashboard_charts
   );
-
-  // (Optional) Mapping of chart_id to its position, if used elsewhere
   const [chartPositions, setChartPositions] = useState({});
 
   // Active chart (used to disable already-selected charts)
   const [activeChart, setActiveChart] = useState(null);
 
   // Save chart data in localStorage when it changes
-  useEffect(() => {
-    if (chartData) {
-      localStorage.setItem("charts", JSON.stringify(chartData));
-    }
-  }, [chartData]);
+  // useEffect(() => {
+  //   if (chartData) {
+  //     localStorage.setItem("charts", JSON.stringify(chartData));
+  //   }
+  // }, [chartData]);
 
   // Test chart data (if needed)
   const testchartData = useSelector((state) => state.viewdashboard.textChart);
@@ -1133,7 +1133,7 @@ function ViewDashboardSidebar() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const user_id = localStorage.getItem("user_id");
+  const user_id = sessionStorage.getItem("user_id");
 
   console.log("chartData:", chartData);
   console.log("testchartData:", testchartData);

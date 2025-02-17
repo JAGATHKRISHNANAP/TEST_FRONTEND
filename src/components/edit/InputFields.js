@@ -595,7 +595,7 @@ function EditDashboard() {
         chartColor: barColor,
         drilldownChartData: dashboardPlotData,
         drillDownChartColor: dashboardBarColor,
-        filterOptions: checkedOptions.join(', '),
+        filterOptions: checkedOptions,
         selectedUser,
         xFontSize,         
         fontStyle,          

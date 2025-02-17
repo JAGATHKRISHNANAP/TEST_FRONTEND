@@ -717,7 +717,7 @@
        {/* Render Text Charts */}
        <TextChartContainer />
 
-       {/* Render Other Charts */}
+       
        {chartData?.map((chart, index) => (
          <ChartWrapper key={`chart-${index}`} 
 //          style={{ position: 'relative',
@@ -737,7 +737,7 @@
 style={{padding:'1px' ,marginTop:'50px',position: "absolute", // Allow chart to be placed based on its x, y coordinates
 left: `${chart.positions.x}px`,
 top: `${chart.positions.y}px`,minWidth: '400px' }}>
-           <ChartRenderer chart={chart} />
+           <ChartRenderer chart={chart}  />
          </ChartWrapper>
        ))}
      </div>

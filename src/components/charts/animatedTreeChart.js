@@ -503,7 +503,9 @@ const Treemap = ({ categories = [], values = [] }) => {
             click: toggleMenuVisibility 
         }
     ];
-    
+    const onResize = (event, { size }) => {
+        setBoxSize({ width: size.width, height: 500 });
+    };
     const renderToolbar = () => (
         <div className="toolbar">
             {toolbarTools.map((tool, index) => (
@@ -529,7 +531,7 @@ const Treemap = ({ categories = [], values = [] }) => {
                 height={boxSize.height} 
                 minConstraints={[300, 300]} 
                 maxConstraints={[800, 600]} 
-                onResize={(event, { size }) => setBoxSize(size)}
+                onResize={onResize}
             >
                 <div>
                     <label>Adjust Data with Scrubber: </label>
