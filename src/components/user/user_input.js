@@ -48,7 +48,7 @@ export default function SignUp() {
   
 
   useEffect(() => {
-    const storedCompanyName = location.state?.companyName || sessionStorage.getItem('companyName');
+    const storedCompanyName = location.state?.companyName || sessionStorage.getItem('user_name');
     
     if (storedCompanyName) {
       setCompanyName(storedCompanyName);
@@ -191,12 +191,13 @@ export default function SignUp() {
         setOpen(true);
       }
     } catch (error) {
+      // Print backend error message
+      console.error("Backend Error:", error.message);
       setPasswordError(true);
-      setPasswordErrorMessage('Username already exists');
+      setPasswordErrorMessage(error.message);
       setOpen(true);
     }
   };
-  
 
 
   const handleClose = (event, reason) => {

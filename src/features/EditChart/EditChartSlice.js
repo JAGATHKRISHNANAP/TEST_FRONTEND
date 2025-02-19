@@ -105,7 +105,8 @@ const chartSlice = createSlice({
     yAxis: [],
     aggregate: null,
     chartType: null,
-    filterOptions: null,
+    filterOptions: {}, // Store options as { column1: [...options], column2: [...options] }
+  checkedOptions: {},
     chartColor: null,
     xFontSize: null,
     yFontSize: null,
@@ -113,6 +114,7 @@ const chartSlice = createSlice({
     valueColor: null,
     fontStyle: null,
     error: null,
+    filterDropdowns: {}
   },
   reducers: {
     setFilterOptionsForColumn: (state, action) => {
@@ -127,6 +129,12 @@ const chartSlice = createSlice({
           state.checkedOptions[column] = [...options];
       }
   },
+  
+    
+    
+      toggleFilterDropdownForColumn: (state, action) => {
+        state.filterDropdowns[action.payload] = !state.filterDropdowns[action.payload];
+      },
   
     setChartData: (state, action) => {
       state.chartData = action.payload;
@@ -164,6 +172,15 @@ const chartSlice = createSlice({
       state.categoryColor = action.payload.categoryColor;
       state.valueColor = action.payload.valueColor;
     },
+    setCheckedOptionsForColumn: (state, action) => {
+      const { column, options } = action.payload;
+      state.checkedOptions[column] = options;
+    },
+    setSelectAllCheckedForColumn: (state, action) => {
+      const { column, isChecked } = action.payload;
+      state.selectAllChecked = isChecked;
+    },
+    
   },
   extraReducers: (builder) => {
     builder
@@ -206,7 +223,7 @@ export const {
   setChartData,
   setSelectedTable,
   setFontStyles,
-  setColorStyles,setFilterOptionsForColumn
+  setColorStyles,setFilterOptionsForColumn, toggleFilterDropdownForColumn,setCheckedOptionsForColumn,setSelectAllCheckedForColumn,
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

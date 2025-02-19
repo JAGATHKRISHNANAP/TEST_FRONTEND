@@ -47,15 +47,16 @@
 // import React from 'react';
 import { FormControl, InputLabel, NativeSelect, Paper, styled, List, ListItemButton, ListItemIcon, Checkbox } from "@mui/material";
 // import { useDispatch } from "react-redux";
-import { setAggregate, setYAxis } from "../../features/EditChart/EditChartSlice"; // Import setYAxis
+import { setAggregate, setYAxis,setFilterOptions,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice"; // Import setYAxis
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import FilterOptionsModal from '../chartCreation/filterDropDown';
-import React, { useState } from 'react';
+import FilterOptionsModal from './editChartFilterModal';
+import React, { useState,useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setXAxis, toggleFilterDropdownForColumn } from '../../features/Dashboard-Slice/chartSlice';
-import { setCheckedOptions,setFilterOptionsForColumn } from "../../features/Dashboard-Slice/chartSlice";
-import { fetchFilterOptionsAPI } from "../../utils/api";
+import {fetchFilterOptionsAPI,generateChartData,saveChartData} from '../../utils/api';
+// import { setXAxis, toggleFilterDropdownForColumn } from '../../features/Dashboard-Slice/chartSlice';
+ import { setCheckedOptions } from "../../features/Dashboard-Slice/chartSlice";
+// import { fetchFilterOptionsAPI } from "../../utils/api";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -64,14 +65,30 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checkedOptions, handleSelectAllChange, handleCheckboxChange, handleFilterIconClick, showFilterDropdown, removeColumnFromXAxis,selectAllChecked ,selectedTable}) => {
+const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checkedOptions, handleSelectAllChange, handleCheckboxChange, handleFilterIconClick, showFilterDropdown, removeColumnFromXAxis,selectAllChecked,generateChart }) => {
   // const dispatch = useDispatch();
  const [selectedColumn, setSelectedColumn] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
-    const databaseName = localStorage.getItem('company_name');
+    
+    
+    // const databaseName = localStorage.getItem('company_name');
     // const selectedTable = localStorage.getItem('selectedTable');
     const selectedUser = localStorage.getItem('selectedUser');
-    
+    const chartData = useSelector((state) => state.chartdata.chartData || []);
+      const selectedTable = chartData[1] || "";
+      // const xAxis = chartData[2] || [];
+      // const yAxis = chartData[3] || [];
+      // const chartId = chartData[0] || "";
+       const databaseName = chartData[10] || "";
+      // const filterOptionss = chartData[9] || "";
+      // const selectedUser=chartData[11]||"";
+      useEffect((column) => {
+        if (xAxis.length > 0) {
+          const firstColumn = xAxis;
+          fetchFilterOptions(column);
+          generateChart();
+        }
+      }, [xAxis, chartData]);
   const fetchFilterOptions = async (column) => {
           try {
             console.log("Selected Table:", selectedTable);
@@ -86,12 +103,14 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
           }
       };
       const openFilterModal = (column) => {
-        fetchFilterOptions(column); // Fetch options before opening modal
+         // Fetch options before opening modal
+        
         setSelectedColumn(column);
         setModalOpen(true);
     };
     
-    const closeFilterModal = () => {
+    const closeFilterModal = (column) => {
+      fetchFilterOptions(column);
         setModalOpen(false);
     };
   return (
@@ -109,7 +128,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
                             </span>
                             
                             <ClearIcon style={{ marginLeft: '10px' }} onClick={() => removeColumnFromXAxis(column)} />
-                            {selectedColumn && <FilterOptionsModal column={selectedColumn} open={modalOpen} onClose={closeFilterModal} />}
+                            {selectedColumn && <FilterOptionsModal column={selectedColumn} open={modalOpen} onClose={closeFilterModal} generateChart={generateChart}/>}
                             </div>
                              
                         ))}

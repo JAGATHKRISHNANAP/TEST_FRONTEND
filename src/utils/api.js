@@ -301,17 +301,36 @@ export const fetchDashboardData = createAsyncThunk('chart/fetchDashboardData', a
 });
 
 
-export const userSignUp = async (registerType,userDetails,company) => {
+// export const userSignUp = async (registerType,userDetails,company) => {
+//   try {
+//     // Sending a POST request to the Flask backend
+//     company =localStorage.getItem("user_name")
+//     const response = await axios.post(`${API_URL}/api/usersignup`, {registerType,userDetails,company});
+//     return response.data; // Return the response from the server
+//   } catch (error) {
+//     console.error('Error during sign-up:', error);
+//     throw error;
+//   }
+// };
+
+export const userSignUp = async (registerType, userDetails, company) => {
   try {
-    // Sending a POST request to the Flask backend
-    company =localStorage.getItem("user_name")
-    const response = await axios.post(`${API_URL}/api/usersignup`, {registerType,userDetails,company});
-    return response.data; // Return the response from the server
+    // Fetch company from localStorage
+    company = localStorage.getItem("user_name");
+
+    const response = await axios.post(`${API_URL}/api/usersignup`, { registerType, userDetails, company });
+    return response.data; // Return success response
+
   } catch (error) {
-    console.error('Error during sign-up:', error);
-    throw error;
-  }
+    // Handle errors
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.error || "Unknown error occurred"); 
+    } else {
+      throw new Error("Server error, please try again later");
+    }
+  }
 };
+
 
 
 
@@ -595,7 +614,7 @@ export const AiMLchartData = async () => {
 
 export const fetchReportingIds = async () => {
   try {
-    const companyName = localStorage.getItem('user_name');
+    const companyName = sessionStorage.getItem('user_name');
     const response = await axios.get(`http://localhost:5000/api/employees`, {
       params: { company: companyName }
     });

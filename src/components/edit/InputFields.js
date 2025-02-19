@@ -381,8 +381,8 @@ import { useDispatch, useSelector } from "react-redux";
 // import FilterListIcon from '@mui/icons-material/FilterList';
 import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
   setFontStyles,
-  setColorStyles, } from "../../features/EditChart/EditChartSlice";
-  import { setCheckedOptions,setFilterOptionsForColumn } from "../../features/Dashboard-Slice/chartSlice";
+  setColorStyles,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice";
+  import { setCheckedOptions,} from "../../features/Dashboard-Slice/chartSlice";
 import SaveButton from './SaveButton';
 import ChartDisplay from "./ChartDisplay";
 import ChartControls from "./ChartControls";
@@ -417,7 +417,8 @@ function EditDashboard() {
   const [showSnackbar, setShowSnackbar] = useState(false); // Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
   const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Snackbar severity
-
+  const reduxCheckedOptions = useSelector(state => state.chart.checkedOptions); // Get from Redux
+//  const checkedOptionS = useSelector(state => state.chart.checkedOptions[column]) || [];
   const [barColor, setBarColor] = useState("#2196f3");
   const [dashboardPlotData, setDashboardPlotData] = useState({});
   const [dashboardBarColor, setDashboardBarColor] = useState("#2196f3");
@@ -441,18 +442,13 @@ function EditDashboard() {
   const yFontSize=useSelector(state => state.chartdata.yFontSize)|| "";
   const valueColor=useSelector(state => state.chartdata.valueColor)|| "";
   const [canDisplayChart, setCanDisplayChart] = useState(false);
+  
   useEffect(() => {
     // Check if all required data is available
     setCanDisplayChart(xAxis.length > 0 && yAxis.length > 0 && aggregate && chartType);
   }, [xAxis, yAxis, aggregate, chartType]); // Update when any of these change
 
   
-  // const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "");
-  // const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "");
-  // const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"");
-  // const categoryColor = useSelector((state) => state.toolTip.categoryColor||"");
-  // const valueColor= useSelector((state) => state.toolTip.valueColor);  
-    
   const filterOptionsas = filterOptionss.split(', ');
 
   console.log("filterOptionsas--------------------------1",filterOptionsas)
@@ -465,10 +461,10 @@ function EditDashboard() {
     }
   }, [chartType1, dispatch]);
 
-  useEffect(() => {
+  useEffect((column) => {
     if (xAxis.length > 0) {
-      const firstColumn = xAxis[0];
-      fetchFilterOptions(firstColumn);
+      const firstColumn = xAxis;
+      fetchFilterOptions(column);
       generateChart();
     }
   }, [xAxis, chartData]);
@@ -482,14 +478,15 @@ function EditDashboard() {
 
 
   const generateChart = async () => {
+    
     try {
       const data = {
-        selectedTable,
+        selectedTable:selectedTable,
         xAxis,
         yAxis,
         aggregate,
         chartType,
-        filterOptions,
+        filterOptions:reduxCheckedOptions,
         databaseName,
         selectedUser,
         xFontSize,
@@ -504,31 +501,22 @@ function EditDashboard() {
     }
   };
 
-  // const fetchFilterOptions = async (columnName) => {
-  //   try {
-  //     const options = await fetchFilterOptionsAPI( databaseName,selectedTable,columnName, selectedUser);
-  //     setFilterOptions(options);
-  //     setCheckedOptions(options);
-  //     setShowFilterDropdown(false);
-  //     setSelectAllChecked(true); // Initialize selectAllChecked to true after fetching
-  //   } catch (error) {
-  //     console.error('Error fetching filter options:', error);
-  //   }
-  // };
   const fetchFilterOptions = async (column) => {
-            try {
-                const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
-                if (options && typeof options === 'object') {
-                    dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
-                    setCheckedOptions(options);
-                    setFilterOptions(options);
-                } else {
-                    console.error('Filter options is not an object as expected', options);
-                }
-            } catch (error) {
-                console.error('Failed to fetch filter options:', error);
-            }
-        };
+    try {
+        const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+        if (options && typeof options === 'object') {
+            dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+            dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Dispatch for checked options
+            dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Set selectAllChecked to true initially
+                
+            setFilterOptions(options); // This line is still needed for the initial render of the filter list in the modal
+          } else {
+            console.error('Filter options is not an object as expected', options);
+        }
+    } catch (error) {
+        console.error('Failed to fetch filter options:', error);
+    }
+};
 
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
@@ -537,19 +525,6 @@ function EditDashboard() {
     generateChart(); 
   };
 
-  // const handleFilterIconClick = async (columnName) => {
-  //   setShowFilterDropdown(!showFilterDropdown); // Toggle dropdown
-  //   if (!showFilterDropdown) { // Only fetch if dropdown is opening
-  //     await fetchFilterOptions(columnName);
-  //   }
-  // };
-
-  // const handleFilterIconClick = (columnName) => {
-  //   setShowFilterDropdown(!showFilterDropdown);
-  //   if (!showFilterDropdown) {
-  //     fetchFilterOptions(columnName);
-  //   }
-  // };
   const handleFilterIconClick = async (columnName) => {
     if (showFilterDropdown) {
       // Close the dropdown if it's already open
@@ -566,7 +541,7 @@ function EditDashboard() {
       ? checkedOptions.filter(item => item !== option)
       : [...checkedOptions, option];
 
-    setCheckedOptions(updatedOptions);
+    setCheckedOptionsForColumn(updatedOptions);
     setSelectAllChecked(updatedOptions.length === filterOptions.length);
     generateChart(); 
   };
@@ -600,8 +575,8 @@ function EditDashboard() {
         xFontSize,         
         fontStyle,          
         categoryColor,   
-        yFontSize,          
-        valueColor,   
+        yFontSize:yFontSize,          
+        valueColor:valueColor,   
         
       };
   
@@ -626,16 +601,7 @@ function EditDashboard() {
 
   return (
     <div className="App">
-      {/* <FilterComponent 
-        xAxis={xAxis} 
-        filterOptions={filterOptions} 
-        checkedOptions={checkedOptions} 
-        handleSelectAllChange={handleSelectAllChange} 
-        handleCheckboxChange={handleCheckboxChange} 
-        handleFilterIconClick={handleFilterIconClick} 
-        showFilterDropdown={showFilterDropdown} 
-        removeColumnFromXAxis={removeColumnFromXAxis} 
-      /> */}
+     
 
       <ChartControls
         aggregate={aggregate}
@@ -650,6 +616,7 @@ function EditDashboard() {
         showFilterDropdown={showFilterDropdown} 
         removeColumnFromXAxis={removeColumnFromXAxis}  
         selectAllChecked={selectAllChecked}
+        generateChart={generateChart}
       />
 {/* 
       <ChartDisplay chartType={chartType} plotData={plotData} saveDataToDatabase={saveDataToDatabase} />

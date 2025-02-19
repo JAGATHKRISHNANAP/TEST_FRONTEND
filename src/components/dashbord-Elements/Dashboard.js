@@ -48,7 +48,7 @@ function Dashboard() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [saveName, setSaveName] = useState('');
-  const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
+  const [user_id, setUserId] = React.useState(sessionStorage.getItem('user_id'));
   const [company_name, setCompanyName] = React.useState(localStorage.getItem('company_name'));
   const [previousState, setPreviousState] = useState({ xAxis: '', yAxis: '', chartType: '' });
   const data  = useSelector((state) => state.aicharts);
