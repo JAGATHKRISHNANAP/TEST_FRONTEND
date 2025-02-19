@@ -135,7 +135,7 @@ export const generateChart = createAsyncThunk(
   'chart/generateChart',
   async ({ xAxis, yAxis, barColor, aggregate, chartType, checkedOptions, selectedUser }, { getState }) => {
     const xAxisColumns = xAxis.join(', ');
-    const selectedTable = localStorage.getItem("selectedTable");
+    const selectedTable = sessionStorage.getItem("selectedTable");
     const databaseName = localStorage.getItem('company_name');
     
     localStorage.setItem('filterOptions', JSON.stringify(checkedOptions));
@@ -219,7 +219,13 @@ const chartSlice = createSlice({
       const { column, isChecked } = action.payload;
       state.selectAllChecked = isChecked;
     },
-    
+    resetChartState: (state) => {
+
+      state.xAxis = [];
+      state.yAxis = [];
+      state.aggregate = {};
+      state.chartType = "";
+    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -239,7 +245,7 @@ const chartSlice = createSlice({
 });
 
 export const { setFilterOptionsForColumn, toggleFilterDropdownForColumn,setCheckedOptionsForColumn,setSelectAllCheckedForColumn,
-  setSelectedTable, setXAxis, setYAxis, setAggregate, setChartType, setDraggedColumn,
+  setSelectedTable, setXAxis, setYAxis, setAggregate, setChartType, setDraggedColumn,resetChartState,
   setShowBarChart, setFilterOptions, setCheckedOptions, setShowFilterDropdown, setSelectAllChecked,
   setBarColor, setDashboardPlotData, setDashboardBarColor, setClickedCategory, setIsChartGenerationClicked, resetState
 } = chartSlice.actions;

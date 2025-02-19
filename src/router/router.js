@@ -27,7 +27,7 @@ import User_input from '../components/user/user_input';
 import CreateDataSource from '../pages/UploadPage/createNewDataSource';
 import RoleCreation from '../pages/loginPage/role';
 import DesignChart from '../pages/designChart/designChart';
-
+import FontStyleSettings from '../components/charts/FontStyleSettings';
 const AppRouter = () => {
   return (
     <Routes>
@@ -40,7 +40,7 @@ const AppRouter = () => {
       <Route path="/Create_DataSource" element={<CreateDataSource />} />
 
 
-
+<Route path='/font-style-settings' element={<FontStyleSettings/>}/>
 
       {/* <Route path="/load_data" element={<LoadData />} /> */}
       <Route path="/edit_chart" element={<EditDashboard />} />

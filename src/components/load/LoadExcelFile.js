@@ -868,6 +868,7 @@ import {
   Alert, // Import Skeleton from MUI
 } from '@mui/material';
 import { setShowDashboard, setCheckedPaths } from '../../features/excelFileSlice/LoadExcelFileSlice';
+import {resetChartState} from'../../features/Dashboard-Slice/chartSlice';
 import Dashboard from '../dashbord-Elements/Dashboard';
 import { fetchTableNamesAPI, fetchTableDetailsAPI } from '../../utils/api'; // Import the API function to fetch table details
 import tinycolor from 'tinycolor2';
@@ -903,11 +904,11 @@ const LoadExcelFile = () => {
 
   useEffect(() => {
     if (selectedTable) {
-      localStorage.setItem('selectedTable',selectedTable); 
-      localStorage.removeItem('xAxis');
-      localStorage.removeItem('yAxis');
-      localStorage.removeItem('aggregate');
-      localStorage.removeItem('selectedChartType')
+      sessionStorage.setItem('selectedTable',selectedTable); 
+      sessionStorage.removeItem('xAxis');
+      sessionStorage.removeItem('yAxis');
+      sessionStorage.removeItem('aggregate');
+      sessionStorage.removeItem('selectedChartType')
 
       
       const fetchTableDetails = async () => {
@@ -944,6 +945,9 @@ const LoadExcelFile = () => {
   const handleTableSelect = (event) => {
     setSelectedTable(event.target.value);
     localStorage.removeItem('selectedUser'); 
+   
+  
+  
   };
 
   const handleLoadTable = () => {
@@ -954,6 +958,13 @@ const LoadExcelFile = () => {
 
       // Show success message
       setLoadSuccess(true);
+       dispatch(resetChartState());
+  
+    // Also remove from sessionStorage
+    sessionStorage.removeItem('xAxis');
+    sessionStorage.removeItem('yAxis');
+  
+    sessionStorage.removeItem('selectedChartType');
     }
   };
 

@@ -816,6 +816,27 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
                 offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
             }
         },
+        legend: {
+            show: true,
+            position: 'bottom', // Positions: 'top', 'right', 'bottom', 'left'
+            horizontalAlign: 'center', // Alignments: 'left', 'center', 'right'
+            fontSize: '12px',
+            fontFamily: fontStyle, // Use Redux state for font style
+            fontWeight: 400,
+            labels: {
+                colors: categoryColor, // Use Redux state for legend colors
+                useSeriesColors: false // Set true if you want the legend to match series colors
+            },
+            markers: {
+                width: 12,
+                height: 12,
+                radius: 2,
+            },
+            itemMargin: {
+                horizontal: 5,
+                vertical: 2
+            },
+        },
         
         xaxis: {
             categories: sortedCategories,

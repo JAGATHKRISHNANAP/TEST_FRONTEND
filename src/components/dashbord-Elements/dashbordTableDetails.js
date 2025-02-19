@@ -109,7 +109,7 @@ function DashboardTableDetails({ handleTableChange }) {
   const csvCheckedPaths = useSelector((state) => state.loadCsv.checkedPaths);
   const databaseName = localStorage.getItem('company_name');
 
-  const selectedTable = localStorage.getItem('selectedTable');
+  const selectedTable = sessionStorage.getItem('selectedTable');
 
   React.useEffect(() => {
     // // Load selected table name from localStorage

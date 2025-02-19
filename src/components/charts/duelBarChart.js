@@ -1345,21 +1345,108 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
     const xFontSize = useSelector((state) => state.toolTip.fontSizeX|| "12");
     const fontStyle = useSelector((state) => state.toolTip.fontStyle|| "Arial");
     const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
-           const categoryColor = useSelector((state) => state.toolTip.categoryColor);
-           const valueColor= useSelector((state) => state.toolTip.valueColor);
+    const categoryColor = useSelector((state) => state.toolTip.categoryColor);
+    const [filteredCategories, setFilteredCategories] = useState(categories);
+    const [filteredSeries1, setFilteredSeries1] = useState(series1);
+    const [filteredSeries2, setFilteredSeries2] = useState(series2);        
+    const valueColor= useSelector((state) => state.toolTip.valueColor);
+    const [legendPosition, setLegendPosition] = useState("bottom");
+    const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
+    const uniqueCategories = [...new Set(filteredCategories)]; // Use uniqueCategories
+    const uniqueSeries1 = [...new Set(filteredSeries1)];       // Use uniqueSeries1
+       
+    const toggleLegendPosition = () => {
+        setLegendPosition((prev) => {
+            const positions = [ "bottom", "left", "top","right", "hide"];
+            const newIndex = (positions.indexOf(prev) + 1) % positions.length;
+            const newPosition = positions[newIndex];
+            console.log("Legend position changed to:", newPosition);
+            return newPosition;
+        });
+    };
     
-           const uniqueCategories = [...new Set(categories)]; // Use uniqueCategories
-           const uniqueSeries1 = [...new Set(series1)];       // Use uniqueSeries1
-       
-       
-           const series = uniqueSeries1.map(series1Value => ({
-               name: series1Value,  // Use the actual series1 value as the name
-               data: uniqueCategories.map(categoryValue => {
-                   const index = categories.findIndex((cat, i) => cat === categoryValue && series1[i] === series1Value);
-                   return index !== -1 ? series2[index] : 0;
-               })
-           }));
-       
+
+    useEffect(() => {
+        setChartKey(prev => prev + 1);
+    }, [legendPosition]);
+    
+     
+    useEffect(() => {
+        setFilteredCategories(categories);
+        setFilteredSeries1(series1);
+        setFilteredSeries2(series2);
+    }, [categories, series1, series2]);
+    
+    const series = uniqueSeries1.map(series1Value => ({
+           name: series1Value,  // Use the actual series1 value as the name
+           data: uniqueCategories.map(categoryValue => {
+               const index = categories.findIndex((cat, i) => cat === categoryValue && series1[i] === series1Value);
+               return index !== -1 ? series2[index] : 0;
+           })
+       }));
+    const handleSortAscending = () => {
+        const sortedData = [...filteredCategories]
+            .map((category, index) => ({
+                category,
+                value: filteredSeries2[index],
+                series1: filteredSeries1[index]
+            }))
+            .sort((a, b) => a.value - b.value);
+    
+        setFilteredCategories(sortedData.map(item => item.category));
+        setFilteredSeries1(sortedData.map(item => item.series1));
+        setFilteredSeries2(sortedData.map(item => item.value));
+    };              
+           
+    
+          
+        
+        const handleSortDescending = () => {
+            const sortedData = [...filteredCategories]
+                .map((category, index) => ({
+                    category,
+                    value: filteredSeries2[index],
+                    series1: filteredSeries1[index]
+                }))
+                .sort((a, b) => b.value - a.value);
+        
+            setFilteredCategories(sortedData.map(item => item.category));
+            setFilteredSeries1(sortedData.map(item => item.series1));
+            setFilteredSeries2(sortedData.map(item => item.value));
+        };
+        
+        const handleTop10 = () => {
+            const sortedIndices = series2
+                .map((value, index) => ({ value, index }))
+                .sort((a, b) => b.value - a.value) // Sorting in descending order
+                .slice(0, 10)
+                .map(item => item.index);
+        
+            setFilteredCategories(sortedIndices.map(index => categories[index]));
+            setFilteredSeries1(sortedIndices.map(index => series1[index]));
+            setFilteredSeries2(sortedIndices.map(index => series2[index]));
+        };
+        
+    
+        const handleBottom10 = () => {
+            const sortedIndices = series2
+                .map((value, index) => ({ value, index }))
+                .sort((a, b) => a.value - b.value) // Sorting in ascending order
+                .slice(0, 10)
+                .map(item => item.index);
+        
+            setFilteredCategories(sortedIndices.map(index => categories[index]));
+            setFilteredSeries1(sortedIndices.map(index => series1[index]));
+            setFilteredSeries2(sortedIndices.map(index => series2[index]));
+        };
+        
+    
+        const handleReset = () => {
+            setFilteredCategories(categories);
+            setFilteredSeries1(series1);
+            setFilteredSeries2(series2);
+        };
+    
     // Chart Options
     const options = {
         chart: {
@@ -1368,7 +1455,51 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
              
             toolbar: {
                 tools: {
-                
+                    customIcons: [
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
+                            index: 1, // Start with the first position in the toolbar
+                            title: 'Sort Ascending',
+                            class: 'custom-sort-ascending',
+                            click: handleSortAscending
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
+                            index: 2, // Position right after the previous custom icon
+                            title: 'Sort Descending',
+                            class: 'custom-sort-descending',
+                            click: handleSortDescending
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
+                            index: 1,
+                            title: 'Show Top 10',
+                            class: 'custom-top-10',
+                            click: handleTop10,
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
+                            index: 2,
+                            title: 'Show Bottom 10',
+                            class: 'custom-bottom-10',
+                            click: handleBottom10,
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">🔄</button>',
+                            index: 3,
+                            title: 'Reset',
+                            class: 'custom-reset',
+                            click: handleReset,
+                        },
+                        {
+                            icon: '<button style="background:none;border:none;color:#007bff;font-size:16px;">📍</button>',
+                            index: 6,
+                            title: "Toggle Legend Position",
+                            class: "custom-legend-toggle",
+                            click: toggleLegendPosition,
+                          },
+                    ],
+                  
                     download: true,
                     selection: true,
                     zoom: false,
@@ -1377,10 +1508,19 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                     pan: true,
                     reset: true,
                 },
+                
                 offsetX: -10, // Adjusts horizontal position of the toolbar inside the chart
                 offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
             },
         },
+        legend: {
+            show: legendPosition !== "hide",
+      position: legendPosition === "hide" ? "top" : legendPosition,
+
+            // position: legendPosition || "top", // Default to "top" if null
+            // show: legendPosition !== null, // Hide legend if legendPosition is null
+        },
+        
         title: {
             text: `${aggregate} of ${xAxis[0]} and ${xAxis[1]} vs ${yAxis[0]}`,
             align: 'left',
@@ -1434,6 +1574,8 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                 dataLabels: {
                     position: 'top',
                 },
+                
+                
             },
         },
         dataLabels: {
@@ -1446,24 +1588,27 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
         },
         tooltip: {
             enabled: true,
-            custom: function({ series, seriesIndex, dataPointIndex, w }) {
-                const category = uniqueCategories[dataPointIndex];
-                const series1Value = uniqueSeries1[seriesIndex]; // Get series1 value for tooltip
+            custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                if (dataPointIndex === -1) return ''; // Prevent errors on invalid indices
+        
+                const category = w.globals.labels[dataPointIndex]; // Fetch category dynamically
                 const value = series[seriesIndex][dataPointIndex];
-                  let tooltipContent = '<div style="background: #333; color: #fff; padding: 10px; border-radius: 5px;">';
+        
+                let tooltipContent = `<div style="background: ${headingColor || '#333'}; color: #fff; padding: 10px; border-radius: 5px;">`;
+        
                 if (!toolTipOptions.heading && !toolTipOptions.categoryName && !toolTipOptions.value) {
                     tooltipContent += `<div><strong>Value:</strong> ${value}</div>`;
-                    tooltipContent += `<div><strong>category:</strong> ${category}</div>`;
+                    tooltipContent += `<div><strong>Category:</strong> ${category}</div>`;
                 } else {
                     if (toolTipOptions.heading) {
                         tooltipContent += `<div><h4>${aggregate} of ${xAxis[0]} vs ${yAxis[0]}</h4></div>`;
                     }
                     tooltipContent += '<div>';
                     if (toolTipOptions.categoryName) {
-                        tooltipContent += `<span><strong>Category:</strong> ${category}</span><br/>`;
+                        tooltipContent += `<span style="color:${categoryColor};"><strong>Category:</strong> ${category}</span><br/>`;
                     }
                     if (toolTipOptions.value) {
-                        tooltipContent += `<span><strong>Value:</strong> ${value}</span>`;
+                        tooltipContent += `<span style="color:${valueColor};"><strong>Value:</strong> ${value}</span>`;
                     }
                     tooltipContent += '</div>';
                 }
@@ -1471,8 +1616,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                 return tooltipContent;
             },
         },
-    };
-
+    }        
     // Series for Grouped Bars
     // const series = [
     //     {
@@ -1500,6 +1644,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                          <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
                                        
                         <Chart
+                        key={chartKey} 
                             options={options}
                             series={series}
                             type="bar"

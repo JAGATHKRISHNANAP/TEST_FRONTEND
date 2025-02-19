@@ -20,7 +20,8 @@ import DashboardCharts from './dashbord-chartComponent';
 import DuealChartInputsss from '../charts/duealChartInput';
 
 import DashboardFilter from'./dashboardFilter';
-import {
+import {setXAxis,
+  setYAxis,setAggregate,
   generateChart
 } from '../../features/Dashboard-Slice/chartSlice';
 import { saveDataToDatabase,validateSaveName } from '../../utils/api';
@@ -50,19 +51,21 @@ function Dashboard() {
   const [saveName, setSaveName] = useState('');
   const [user_id, setUserId] = React.useState(sessionStorage.getItem('user_id'));
   const [company_name, setCompanyName] = React.useState(localStorage.getItem('company_name'));
-  const [previousState, setPreviousState] = useState({ xAxis: '', yAxis: '', chartType: '' });
+ 
+  const [previousState, setPreviousState] = useState({ xAxis: '', yAxis: '', chartType: '' ,selectedTable:''});
   const data  = useSelector((state) => state.aicharts);
   
   const [selectedUser, setSelectedUser] = React.useState(sessionStorage.getItem('selectedUser'));
   console.log('user_id:', user_id); 
   console.log('company_name:', company_name);
-
+ 
   const {
     xAxis, yAxis, plotData, aggregate, checkedOptions, dashboardPlotData, dashboardBarColor
   } = useSelector(state => state.chart);
 
   const chartType = useSelector(state => state.chartType.type);
   const SelectedTable = useSelector((state) => state.dashboard.checkedPaths);
+  
   const barColor = useSelector((state) => state.chartColor.chartColor);
   // const databaseName = useSelector((state) => state.database.databaseName);
   const databaseName = localStorage.getItem('company_name');
@@ -78,10 +81,10 @@ function Dashboard() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 const [snackbarMessage, setSnackbarMessage] = useState('');
 const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' or 'error'
-
+const selectedTable=sessionStorage.getItem("selectedTable")
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   // const selectedTable = selectedTablearray.join(',');
-  const selectedTable=localStorage.getItem("selectedTable")
+  
   React.useEffect(() => {
     if (xAxis && yAxis && aggregate && chartType) {
       dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
@@ -91,8 +94,8 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
     e.preventDefault();
     e.returnValue = '';  // This triggers a confirmation prompt
   };
- 
-
+  
+  
   useEffect(() => {
     if (
       previousState.xAxis !== xAxis ||

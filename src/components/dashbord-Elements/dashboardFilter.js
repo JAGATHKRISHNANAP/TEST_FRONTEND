@@ -77,17 +77,22 @@ import { IconButton, Box, Grid, Tooltip,Button } from '@mui/material';
 import ColorLensIcon from '@mui/icons-material/ColorLens'; // Icon for color picker
 import SettingsIcon from '@mui/icons-material/Settings';
 import CustomToolTip from '../charts/customToolTip'; // Importing customToolTip.js
+import FontStyleSetting from '../charts/FontStyleSettings';
 
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 const ChartColorPage = () => {
   const [openColorPicker, setOpenColorPicker] = useState(false);
   const [openFilter, setOpenFilter] = useState(false); // State to handle the filter tooltip
-
+const [openText,setOPenText]=useState(false)
   const handleColorPickerToggle = () => {
     setOpenColorPicker(!openColorPicker);
   };
 
   const handleFilterToggle = () => {
     setOpenFilter(!openFilter); // Toggle the display of the filter content
+  };
+  const handleTextToggle = () => {
+    setOPenText(!openText); // Toggle the display of the filter content
   };
 
   return (
@@ -128,7 +133,17 @@ const ChartColorPage = () => {
     </Button>
   </Tooltip>
 </Grid>
-            
+<Grid item>
+  <Tooltip title="Text" arrow>
+    <Button
+      sx={{ margin: '1px' }}
+      variant={openText ? 'contained' : 'outlined'}
+      onClick={handleTextToggle}
+    >
+      <FormatColorTextIcon />
+    </Button>
+  </Tooltip>
+</Grid>
           </Grid>
 
           {/* Color Picker */}
@@ -136,6 +151,7 @@ const ChartColorPage = () => {
 
           {/* Filter */}
           {openFilter && <CustomToolTip onClose={handleFilterToggle} />}
+          {openText && <FontStyleSetting onClose={handleTextToggle} />}
         </div>
       </Box>
     </div>

@@ -795,7 +795,7 @@ function DuealChartInput() {
     const excelCheckedPaths = useSelector((state) => state.loadExcel.checkedPaths);
     const csvCheckedPaths = useSelector((state) => state.loadCsv.checkedPaths);
     const selectedUser = localStorage.getItem('selectedUser');
-    const selectedTable = localStorage.getItem('selectedTable');
+    const selectedTable = sessionStorage.getItem('selectedTable');
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const MAX_COLUMNS = 5;
@@ -811,18 +811,18 @@ function DuealChartInput() {
 
 
     useEffect(() => {
-        const savedXAxis = JSON.parse(localStorage.getItem('xAxis'));
-        const savedYAxis = JSON.parse(localStorage.getItem('yAxis'));
-        const savedAggregate = JSON.parse(localStorage.getItem('aggregate'));
+        const savedXAxis = JSON.parse(sessionStorage.getItem('xAxis'));
+        const savedYAxis = JSON.parse(sessionStorage.getItem('yAxis'));
+        const savedAggregate = JSON.parse(sessionStorage.getItem('aggregate'));
         if (savedAggregate) dispatch(setAggregate(savedAggregate));
         if (savedXAxis) dispatch(setXAxis(savedXAxis));
         if (savedYAxis) dispatch(setYAxis(savedYAxis));
     }, [dispatch]);
 
     React.useEffect(() => {
-        localStorage.setItem('xAxis', JSON.stringify(xAxis));
-        localStorage.setItem('yAxis', JSON.stringify(yAxis));
-        localStorage.setItem('aggregate', JSON.stringify(aggregate));
+        sessionStorage.setItem('xAxis', JSON.stringify(xAxis));
+        sessionStorage.setItem('yAxis', JSON.stringify(yAxis));
+        sessionStorage.setItem('aggregate', JSON.stringify(aggregate));
     }, [xAxis, yAxis, aggregate, chartType]);
 
 

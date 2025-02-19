@@ -733,7 +733,7 @@ function XAxisInput({ xAxis, MAX_COLUMNS, errorMessage, setErrorMessage, openSna
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const databaseName = localStorage.getItem('company_name');
-    const selectedTable = localStorage.getItem('selectedTable');
+    const selectedTable = sessionStorage.getItem('selectedTable');
     const selectedUser = localStorage.getItem('selectedUser');
     useEffect(() => {
         if (xAxis.length >= 1) {

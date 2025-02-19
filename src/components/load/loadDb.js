@@ -602,10 +602,10 @@ const LoadDbFile = () => {
       
       localStorage.setItem('selectedUser', selectedUser); 
       localStorage.setItem('connectionType', 'external'); 
-      localStorage.removeItem('xAxis');
-      localStorage.removeItem('yAxis');
-      localStorage.removeItem('aggregate');
-      localStorage.removeItem('selectedChartType')
+      sessionStorage.removeItem('xAxis');
+      sessionStorage.removeItem('yAxis');
+      sessionStorage.removeItem('aggregate');
+      sessionStorage.removeItem('selectedChartType')
       const fetchTables = async () => {
         setIsLoading(true);
         try {
@@ -624,7 +624,7 @@ const LoadDbFile = () => {
   // Fetch Table Details for Selected Table
   useEffect(() => {
     if (selectedTable) {
-      localStorage.setItem('selectedTable',selectedTable); 
+      sessionStorage.setItem('selectedTable',selectedTable); 
       const fetchTableDetails = async () => {
         setIsLoading(true);
         try {
