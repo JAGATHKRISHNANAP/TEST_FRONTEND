@@ -4,7 +4,7 @@ import './TextChart.css';
 import { fetchHelloData } from '../../utils/api';
 import { useSelector } from 'react-redux';
 
-const Dendrogram = (categories, values, aggregation) => {
+const Dendrogram = () => {
   const [data, setData] = useState(null);
   const svgRef = useRef();
   const dimensions = { width: 960, height: 600 };

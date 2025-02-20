@@ -223,7 +223,6 @@ const chartSlice = createSlice({
 
       state.xAxis = [];
       state.yAxis = [];
-      state.aggregate = {};
       state.chartType = "";
     },
     resetState: () => initialState,

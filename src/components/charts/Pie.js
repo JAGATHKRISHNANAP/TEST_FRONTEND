@@ -170,7 +170,7 @@ import CustomToolTip from './customToolTip'; // Import the CustomToolTip compone
 import "./tooltip.css"; // Import the CSS for the tooltip
 import { sendCategoryToBackend} from '../../utils/api';
 import Draggable from "react-draggable";
-
+import { setBarColor } from "../../features/Dashboard-Slice/chartSlice"; // Import your reducer action
 // const Pie = (props) => {
 //   useEffect(() => {
 //     console.log("Received categories:", props.categories);
@@ -554,3 +554,308 @@ const handleBottom10 = () => {
 };
 
 export default Pie;
+
+// const Pie = (props) => {
+//   const { categories, values, aggregation } = props;
+//   const dispatch = useDispatch();
+//   const xAxis = useSelector((state) => state.chart.xAxis);
+//   const yAxis = useSelector((state) => state.chart.yAxis);
+//   const aggregate = useSelector((state) => state.chart.aggregate);
+//   const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
+//   const customHeadings = useSelector((state) => state.toolTip.customHeading);
+//   const headingColor = useSelector((state) => state.toolTip.headingColor);
+
+//   const [plotData, setPlotData] = useState({});
+//   const [barClicked, setBarClicked] = useState(false);
+//   const [sortedCategories, setSortedCategories] = useState(categories);
+//   const [sortedValues, setSortedValues] = useState(values);
+//   const [isFiltered, setIsFiltered] = useState(false); // Track if Top 10 or Bottom 10 is applied
+//   const [legendPosition, setLegendPosition] = useState("right");
+//   const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
+
+//   // NEW: State for pie slice colors.
+//   // Initialize default colors (cycle through these if there are more categories)
+//   const defaultColors = [
+//     "#008FFB",
+//     "#00E396",
+//     "#FEB019",
+//     "#FF4560",
+//     "#775DD0",
+//     "#546E7A",
+//     "#26a69a",
+//     "#D10CE8",
+//   ];
+//   const [pieColors, setPieColors] = useState(
+//     categories.map((_, i) => defaultColors[i % defaultColors.length])
+//   );
+
+//   // NEW: Track which legend item (pie slice) is being edited.
+//   const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
+
+//   // Log received props for debugging
+//   useEffect(() => {
+//     console.log("Received categories:", props.categories);
+//     console.log("Received values:", props.values);
+//   }, [props.categories, props.values]);
+
+//   // Update sorted data when categories or values change
+//   useEffect(() => {
+//     setSortedCategories(categories);
+//     setSortedValues(values);
+//     // Also reset the pieColors to the defaults if needed:
+//     setPieColors(categories.map((_, i) => defaultColors[i % defaultColors.length]));
+//   }, [categories, values]);
+
+//   // Toolbar functions for sorting and filtering (as in your original code)
+//   const handleSortAscending = () => {
+//     const sortedData = sortedValues.map((value, index) => ({
+//       category: sortedCategories[index],
+//       value,
+//     }));
+//     sortedData.sort((a, b) => a.value - b.value);
+//     setSortedCategories(sortedData.map((item) => item.category));
+//     setSortedValues(sortedData.map((item) => item.value));
+//   };
+
+//   const handleSortDescending = () => {
+//     const sortedData = sortedValues.map((value, index) => ({
+//       category: sortedCategories[index],
+//       value,
+//     }));
+//     sortedData.sort((a, b) => b.value - a.value);
+//     setSortedCategories(sortedData.map((item) => item.category));
+//     setSortedValues(sortedData.map((item) => item.value));
+//   };
+
+//   const handleTop10 = () => {
+//     const sortedData = sortedValues.map((value, index) => ({
+//       category: sortedCategories[index],
+//       value,
+//     }));
+//     sortedData.sort((a, b) => b.value - a.value); // Sort descending
+//     const top10 = sortedData.slice(0, 10);
+//     setSortedCategories(top10.map((item) => item.category));
+//     setSortedValues(top10.map((item) => item.value));
+//     setIsFiltered(true);
+//   };
+
+//   const handleBottom10 = () => {
+//     const sortedData = sortedValues.map((value, index) => ({
+//       category: sortedCategories[index],
+//       value,
+//     }));
+//     sortedData.sort((a, b) => a.value - b.value); // Sort ascending
+//     const bottom10 = sortedData.slice(0, 10);
+//     setSortedCategories(bottom10.map((item) => item.category));
+//     setSortedValues(bottom10.map((item) => item.value));
+//     setIsFiltered(true);
+//   };
+
+//   // Function when a bar (pie slice) is clicked
+//   const handleClicked = async (event, chartContext, config) => {
+//     const clickedCategoryIndex = config.dataPointIndex;
+//     const clickedCategory = categories[clickedCategoryIndex];
+//     dispatch(setClickedCategory(clickedCategory));
+//     try {
+//       const data = await sendCategoryToBackend(
+//         clickedCategory,
+//         xAxis,
+//         yAxis,
+//         selectedTable,
+//         aggregate
+//       );
+//       setPlotData(data);
+//       setBarClicked(true);
+//     } catch (error) {
+//       console.error("Error handling click event:", error);
+//     }
+//   };
+
+//   // Function to toggle legend position (for your toolbar)
+//   const toggleLegendPosition = () => {
+//     setLegendPosition((prev) => {
+//       const positions = ["top", "bottom", "left", "right", "hide"];
+//       const newIndex = (positions.indexOf(prev) + 1) % positions.length;
+//       return positions[newIndex];
+//     });
+//   };
+
+//   useEffect(() => {
+//     setChartKey((prev) => prev + 1);
+//   }, [legendPosition]);
+
+//   // Handle color changes from the custom legend
+//   const handleColorChange = (index, newColor) => {
+//     setPieColors((prevColors) => {
+//       const updatedColors = [...prevColors];
+//       updatedColors[index] = newColor;
+//       return updatedColors;
+//     });
+//   };
+
+//   // Chart options – note the new `colors` property
+//   const options = {
+//     chart: {
+//       toolbar: {
+//         show: true,
+//         tools: {
+//           customIcons: [
+//             {
+//               icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
+//               index: 1,
+//               title: "Sort Ascending",
+//               class: "custom-sort-ascending",
+//               click: handleSortAscending,
+//             },
+//             {
+//               icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
+//               index: 2,
+//               title: "Sort Descending",
+//               class: "custom-sort-descending",
+//               click: handleSortDescending,
+//             },
+//             {
+//               icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
+//               index: 3,
+//               title: "Show Top 10",
+//               class: "custom-top-10",
+//               click: handleTop10,
+//             },
+//             {
+//               icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
+//               index: 4,
+//               title: "Show Bottom 10",
+//               class: "custom-bottom-10",
+//               click: handleBottom10,
+//             },
+//             {
+//               icon: '<button style="background:none;border:none;color:#6c757d;font-size:20px;">↺</button>',
+//               index: 5,
+//               title: "Reset Chart",
+//               class: "custom-reset",
+//               click: () => {
+//                 setSortedCategories(categories);
+//                 setSortedValues(values);
+//                 setIsFiltered(false);
+//               },
+//             },
+//             {
+//               icon: '<button style="background:none;border:none;color:#007bff;font-size:16px;">📍</button>',
+//               index: 6,
+//               title: "Toggle Legend Position",
+//               class: "custom-legend-toggle",
+//               click: toggleLegendPosition,
+//             },
+//           ],
+//           download: true,
+//           selection: true,
+//           zoom: false,
+//           zoomin: false,
+//           zoomout: false,
+//           pan: true,
+//           reset: true,
+//         },
+//         offsetX: 0,
+//         offsetY: 0,
+//       },
+//     },
+//     // Pass in our custom colors here:
+//     colors: pieColors,
+//     // If you want to use your custom legend, you can hide the built-in one:
+//     legend: {
+//       show: false,
+//       position: legendPosition === "hide" ? "right" : legendPosition,
+//     },
+//     labels: sortedCategories || [],
+//   };
+
+//   // Series for the pie chart
+//   const series = sortedValues || [];
+
+//   // (Optional) Build a label for aggregation if needed
+//   let aggregationLabel = "";
+//   switch (aggregation) {
+//     case "sum":
+//       aggregationLabel = "Sum";
+//       break;
+//     case "minimum":
+//       aggregationLabel = "Minimum";
+//       break;
+//     case "maximum":
+//       aggregationLabel = "Maximum";
+//       break;
+//     case "average":
+//       aggregationLabel = "Average";
+//       break;
+//     case "count":
+//       aggregationLabel = "Count";
+//       break;
+//     default:
+//       aggregationLabel = "";
+//   }
+//   console.log("aggregation", aggregationLabel);
+
+//   return (
+//     <div className="app">
+//       <div className="row">
+//         <div className="pie-chart">
+//           <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]}>
+//             <div className="chart-title">
+//               <h3 style={{ color: headingColor }}>{customHeadings}</h3>
+//             </div>
+//             <Chart
+//               key={chartKey}
+//               options={options}
+//               series={series}
+//               type="pie"
+//               width="100%"
+//               height="80%"
+//               // (Optionally add an onClick event to the chart if needed)
+//             />{/* CUSTOM LEGEND */}
+//             <div className="custom-legend" style={{ marginTop: "10px" }}>
+//               {sortedCategories.map((category, index) => (
+//                 <div
+//                   key={index}
+//                   style={{
+//                     display: "flex",
+//                     alignItems: "center",
+//                     marginBottom: "5px",
+//                     cursor: "pointer",
+//                   }}
+//                   onClick={() => setSelectedLegendIndex(index)}
+//                 >
+//                   {/* Color swatch */}
+//                   <div
+//                     style={{
+//                       width: "20px",
+//                       height: "20px",
+//                       backgroundColor: pieColors[index],
+//                       border: "1px solid #000",
+//                     }}
+//                   />
+//                   <span style={{ marginLeft: "10px" }}>{category}</span>
+//                   {/* If this legend item is selected, show a color picker */}
+//                   {selectedLegendIndex === index && (
+//                     <input
+//                       type="color"
+//                       value={pieColors[index]}
+//                       onChange={(e) => handleColorChange(index, e.target.value)}
+//                       onBlur={() => setSelectedLegendIndex(null)}
+//                       style={{ marginLeft: "10px" }}
+//                     />
+//                   )}
+//                 </div>
+//               ))}
+//             </div>
+//           </ResizableBox>
+
+          
+//         </div>
+//         <div className="color-picker"></div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Pie;
+

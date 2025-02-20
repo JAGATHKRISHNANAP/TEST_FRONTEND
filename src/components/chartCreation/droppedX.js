@@ -187,7 +187,7 @@ function DroppedXValues({ xAxis, handleDragStart, handleRemoveColumn }) {
     console.log("Redux Filter Options:", filterOptions);
     
     const databaseName = localStorage.getItem('company_name');
-    const selectedTable = localStorage.getItem('selectedTable');
+    const selectedTable = sessionStorage.getItem('selectedTable');
     const selectedUser = localStorage.getItem('selectedUser');
 
     // Store the previous xAxis state

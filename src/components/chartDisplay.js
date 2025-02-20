@@ -673,7 +673,7 @@ const ChartRenderer = ({
       )
     }
                               <div >
-                                <TreeHierarchy  categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
+                                <TreeHierarchy />
                               </div>
                               <div className='btn-container'>
                               <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>
