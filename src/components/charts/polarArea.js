@@ -502,165 +502,375 @@ import "react-resizable/css/styles.css"; // Import styles for resizing
 // export default PolarAreaChart;
 
 
-const PolarAreaChart = ({ categories = [], values = [] }) => {
-    const [sortedData, setSortedData] = useState({ categories, values });
-    const [legendPosition, setLegendPosition] = useState("right");
-    const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
-    const headingColor = useSelector((state) => state.toolTip.headingColor);
-    const customHeadings = useSelector((state) => state.toolTip.customHeading);
+// const PolarAreaChart = ({ categories = [], values = [] }) => {
+//     const [sortedData, setSortedData] = useState({ categories, values });
+//     const [legendPosition, setLegendPosition] = useState("right");
+//     const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
+//     const headingColor = useSelector((state) => state.toolTip.headingColor);
+//     const customHeadings = useSelector((state) => state.toolTip.customHeading);
 
-    // Function to toggle legend position
-    const toggleLegendPosition = () => {
-        const positions = ["top", "bottom", "left", "right", "hide"];
-        const newIndex = (positions.indexOf(legendPosition) + 1) % positions.length;
-        setLegendPosition(positions[newIndex]);
-    };
+//     // Function to toggle legend position
+//     const toggleLegendPosition = () => {
+//         const positions = ["top", "bottom", "left", "right", "hide"];
+//         const newIndex = (positions.indexOf(legendPosition) + 1) % positions.length;
+//         setLegendPosition(positions[newIndex]);
+//     };
 
-    useEffect(() => {
-        setChartKey((prev) => prev + 1); // Force re-render
-    }, [legendPosition]);
+//     useEffect(() => {
+//         setChartKey((prev) => prev + 1); // Force re-render
+//     }, [legendPosition]);
 
-    // Sorting Functions
-    const handleSort = (order) => {
-        const sorted = [...sortedData.categories]
-            .map((category, index) => ({ category, value: sortedData.values[index] }))
-            .sort((a, b) => (order === "asc" ? a.category.localeCompare(b.category) : b.category.localeCompare(a.category)));
+//     // Sorting Functions
+//     const handleSort = (order) => {
+//         const sorted = [...sortedData.categories]
+//             .map((category, index) => ({ category, value: sortedData.values[index] }))
+//             .sort((a, b) => (order === "asc" ? a.category.localeCompare(b.category) : b.category.localeCompare(a.category)));
 
-        setSortedData({
-            categories: sorted.map((item) => item.category),
-            values: sorted.map((item) => item.value),
-        });
-    };
+//         setSortedData({
+//             categories: sorted.map((item) => item.category),
+//             values: sorted.map((item) => item.value),
+//         });
+//     };
 
-    // Top & Bottom 10 Filters
-    const handleTopBottom = (type) => {
-        const sortedIndices = values
-            .map((value, index) => ({ value, index }))
-            .sort((a, b) => (type === "top" ? b.value - a.value : a.value - b.value))
-            .slice(0, 10)
-            .map((item) => item.index);
+//     // Top & Bottom 10 Filters
+//     const handleTopBottom = (type) => {
+//         const sortedIndices = values
+//             .map((value, index) => ({ value, index }))
+//             .sort((a, b) => (type === "top" ? b.value - a.value : a.value - b.value))
+//             .slice(0, 10)
+//             .map((item) => item.index);
 
-        setSortedData({
-            categories: sortedIndices.map((index) => categories[index]),
-            values: sortedIndices.map((index) => values[index]),
-        });
-    };
+//         setSortedData({
+//             categories: sortedIndices.map((index) => categories[index]),
+//             values: sortedIndices.map((index) => values[index]),
+//         });
+//     };
 
-    const handleReset = () => setSortedData({ categories, values });
+//     const handleReset = () => setSortedData({ categories, values });
 
-    const options = {
-        chart: {
-            type: "polarArea",
-            toolbar: {
-                show: true,
+//     const options = {
+//         chart: {
+//             type: "polarArea",
+//             toolbar: {
+//                 show: true,
                 
-                tools: {
-                    customIcons: [
-                        // {
-                        //     icon: "⇧",
-                        //     title: "Sort Ascending",
-                        //     class: "custom-sort-asc",
-                        //     click: () => handleSort("asc"),
-                        // },
-                        // {
-                        //     icon: "⇩",
-                        //     title: "Sort Descending",
-                        //     class: "custom-sort-desc",
-                        //     click: () => handleSort("desc"),
-                        // },
-                        {
-                            icon: "⏶",
-                            title: "Top 10",
-                            class: "custom-top-10",
-                            click: () => handleTopBottom("top"),
-                        },
-                        {
-                            icon: "⏷",
-                            title: "Bottom 10",
-                            class: "custom-bottom-10",
-                            click: () => handleTopBottom("bottom"),
-                        },
-                        {
-                            icon: "↺",
-                            title: "Reset",
-                            class: "custom-reset",
-                            click: handleReset,
-                        },
-                        {
-                            icon: "📍",
-                            title: "Toggle Legend",
-                            class: "custom-legend-toggle",
-                            click: toggleLegendPosition,
-                        },
-                    ],
-                    offsetX: -10, // Adjusts horizontal position of the toolbar inside the chart
-                    offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
-                },
-            },
-        },
-        labels: sortedData.categories || [],
-        legend: {
-          show: legendPosition !== "hide",
-          position: legendPosition, // Ensure it's not conflicting
-          floating: true, // Prevent overlap
-          horizontalAlign: "center", // Align properly
-          offsetY: 10,
-      },
+//                 tools: {
+//                     customIcons: [
+//                         // {
+//                         //     icon: "⇧",
+//                         //     title: "Sort Ascending",
+//                         //     class: "custom-sort-asc",
+//                         //     click: () => handleSort("asc"),
+//                         // },
+//                         // {
+//                         //     icon: "⇩",
+//                         //     title: "Sort Descending",
+//                         //     class: "custom-sort-desc",
+//                         //     click: () => handleSort("desc"),
+//                         // },
+//                         {
+//                             icon: "⏶",
+//                             title: "Top 10",
+//                             class: "custom-top-10",
+//                             click: () => handleTopBottom("top"),
+//                         },
+//                         {
+//                             icon: "⏷",
+//                             title: "Bottom 10",
+//                             class: "custom-bottom-10",
+//                             click: () => handleTopBottom("bottom"),
+//                         },
+//                         {
+//                             icon: "↺",
+//                             title: "Reset",
+//                             class: "custom-reset",
+//                             click: handleReset,
+//                         },
+//                         {
+//                             icon: "📍",
+//                             title: "Toggle Legend",
+//                             class: "custom-legend-toggle",
+//                             click: toggleLegendPosition,
+//                         },
+//                     ],
+//                     offsetX: -10, // Adjusts horizontal position of the toolbar inside the chart
+//                     offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
+//                 },
+//             },
+//         },
+//         labels: sortedData.categories || [],
+//         legend: {
+//           show: legendPosition !== "hide",
+//           position: legendPosition, // Ensure it's not conflicting
+//           floating: true, // Prevent overlap
+//           horizontalAlign: "center", // Align properly
+//           offsetY: 10,
+//       },
       
-        yaxis: {
-            show: false,
-            labels: { formatter: (value) => parseFloat(value).toFixed(2) },
-        },
-        plotOptions: {
-            polarArea: {
-                rings: { strokeWidth: 0 },
-                spokes: { strokeWidth: 0 },
-            },
-        },
-        dataLabels: {
-            enabled: false,
-            offsetY: -2,
-            style: { fontSize: "12px" },
-        },
-        tooltip: {
-          enabled: true,
-          theme: "light",
-          y: {
-              formatter: (value) => value.toLocaleString(),
-          },
-          style: {
-              fontSize: "12px",
-          },
-          fixed: {
-              enabled: true,
-              position: "topRight", // or "topLeft"
-          },
-      },
+//         yaxis: {
+//             show: false,
+//             labels: { formatter: (value) => parseFloat(value).toFixed(2) },
+//         },
+//         plotOptions: {
+//             polarArea: {
+//                 rings: { strokeWidth: 0 },
+//                 spokes: { strokeWidth: 0 },
+//             },
+//         },
+//         dataLabels: {
+//             enabled: false,
+//             offsetY: -2,
+//             style: { fontSize: "12px" },
+//         },
+//         tooltip: {
+//           enabled: true,
+//           theme: "light",
+//           y: {
+//               formatter: (value) => value.toLocaleString(),
+//           },
+//           style: {
+//               fontSize: "12px",
+//           },
+//           fixed: {
+//               enabled: true,
+//               position: "topRight", // or "topLeft"
+//           },
+//       },
       
-    };
+//     };
+
+//   return (
+//     <div className="app">
+//       <div className="row">
+//         <div className="pie-chart" >
+//         <ResizableBox   style={{ paddingTop: '35px' }} width={500} height={500} minConstraints={[300, 300]} maxConstraints={[1000, 800]}>
+
+//             <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
+//             <Chart
+//               options={options}
+            
+//                         series={sortedData.values || []}
+//                         type="polarArea"
+//               width="100%"
+//               height="90%"
+//             />
+//           </ResizableBox>
+//         </div>
+//       </div>
+
+
+//     </div>
+//   );
+// }
+// export default PolarAreaChart;
+
+
+const PolarAreaChart = ({ categories = [], values = [] }) => {
+  // Local state for sorted data.
+  const [sortedData, setSortedData] = useState({ categories, values });
+  const [legendPosition, setLegendPosition] = useState("right");
+  const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes.
+  // Track which legend item was clicked.
+  const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
+  const headingColor = useSelector((state) => state.toolTip.headingColor);
+  const customHeadings = useSelector((state) => state.toolTip.customHeading);
+
+  // Default colors for polar area slices.
+  const defaultColors = [
+    "#008FFB",
+    "#00E396",
+    "#FEB019",
+    "#FF4560",
+    "#775DD0",
+    "#546E7A",
+    "#26a69a",
+    "#D10CE8",
+  ];
+  const [polarColors, setPolarColors] = useState(
+    categories.map((_, i) => defaultColors[i % defaultColors.length])
+  );
+
+  // Toggle legend position.
+  const toggleLegendPosition = () => {
+    const positions = ["top", "bottom", "left", "right", "hide"];
+    const newIndex = (positions.indexOf(legendPosition) + 1) % positions.length;
+    setLegendPosition(positions[newIndex]);
+  };
+
+  useEffect(() => {
+    setChartKey((prev) => prev + 1); // Force re-render when legendPosition changes.
+  }, [legendPosition]);
+
+  // Sorting Functions.
+  const handleSort = (order) => {
+    const sorted = [...sortedData.categories]
+      .map((category, index) => ({ category, value: sortedData.values[index] }))
+      .sort((a, b) =>
+        order === "asc"
+          ? a.category.localeCompare(b.category)
+          : b.category.localeCompare(a.category)
+      );
+
+    setSortedData({
+      categories: sorted.map((item) => item.category),
+      values: sorted.map((item) => item.value),
+    });
+  };
+
+  // Top & Bottom 10 Filters.
+  const handleTopBottom = (type) => {
+    const sortedIndices = values
+      .map((value, index) => ({ value, index }))
+      .sort((a, b) => (type === "top" ? b.value - a.value : a.value - b.value))
+      .slice(0, 10)
+      .map((item) => item.index);
+
+    setSortedData({
+      categories: sortedIndices.map((index) => categories[index]),
+      values: sortedIndices.map((index) => values[index]),
+    });
+  };
+
+  const handleReset = () => setSortedData({ categories, values });
+
+  // Update polarColors when categories change.
+  useEffect(() => {
+    setSortedData({ categories, values });
+    setPolarColors(categories.map((_, i) => defaultColors[i % defaultColors.length]));
+  }, [categories, values]);
+
+  // Handle color change for a polar area slice.
+  const handlePolarColorChange = (index, newColor) => {
+    setPolarColors((prevColors) => {
+      const updatedColors = [...prevColors];
+      updatedColors[index] = newColor;
+      return updatedColors;
+    });
+  };
+
+  // Built-in legend click event: when a legend item is clicked, open the color picker.
+  const chartEvents = {
+    legendClick: function (chartContext, seriesIndex, config) {
+      setSelectedLegendIndex(seriesIndex);
+      return false; // Prevent default legend toggle.
+    },
+  };
+
+  const options = {
+    chart: {
+      type: "polarArea",
+      toolbar: {
+        show: true,
+        tools: {
+          customIcons: [
+            {
+              icon: "⏶",
+              title: "Top 10",
+              class: "custom-top-10",
+              click: () => handleTopBottom("top"),
+            },
+            {
+              icon: "⏷",
+              title: "Bottom 10",
+              class: "custom-bottom-10",
+              click: () => handleTopBottom("bottom"),
+            },
+            {
+              icon: "↺",
+              title: "Reset",
+              class: "custom-reset",
+              click: handleReset,
+            },
+            {
+              icon: "📍",
+              title: "Toggle Legend",
+              class: "custom-legend-toggle",
+              click: toggleLegendPosition,
+            },
+          ],
+          offsetX: -10,
+          offsetY: 0,
+        },
+      },
+      events: chartEvents,
+    },
+    colors: polarColors,
+    labels: sortedData.categories || [],
+    legend: {
+      show: legendPosition !== "hide",
+      position: legendPosition,
+      floating: true,
+      horizontalAlign: "center",
+      offsetY: 10,
+    },
+    yaxis: {
+      show: false,
+      labels: { formatter: (value) => parseFloat(value).toFixed(2) },
+    },
+    plotOptions: {
+      polarArea: {
+        rings: { strokeWidth: 0 },
+        spokes: { strokeWidth: 0 },
+      },
+    },
+    dataLabels: {
+      enabled: false,
+      offsetY: -2,
+      style: { fontSize: "12px" },
+    },
+    tooltip: {
+      enabled: true,
+      theme: "light",
+      y: {
+        formatter: (value) => value.toLocaleString(),
+      },
+      style: { fontSize: "12px" },
+      fixed: { enabled: true, position: "topRight" },
+    },
+  };
 
   return (
     <div className="app">
       <div className="row">
-        <div className="pie-chart" >
-        <ResizableBox   style={{ paddingTop: '35px' }} width={500} height={500} minConstraints={[300, 300]} maxConstraints={[1000, 800]}>
-
-            <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
+        <div className="pie-chart">
+          <ResizableBox
+            style={{ paddingTop: "35px" }}
+            width={500}
+            height={500}
+            minConstraints={[300, 300]}
+            maxConstraints={[1000, 800]}
+          >
+            <div className="chart-title" style={{ color: headingColor }}>
+              {customHeadings}
+            </div>
             <Chart
               options={options}
-            
-                        series={sortedData.values || []}
-                        type="polarArea"
+              series={sortedData.values || []}
+              type="polarArea"
               width="100%"
               height="90%"
+              key={chartKey}
             />
           </ResizableBox>
+          {selectedLegendIndex !== null && (
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <span>
+                Change color for "{sortedData.categories[selectedLegendIndex]}":{" "}
+              </span>
+              <input
+                type="color"
+                value={polarColors[selectedLegendIndex]}
+                onChange={(e) =>
+                  handlePolarColorChange(selectedLegendIndex, e.target.value)
+                }
+                onBlur={() => setSelectedLegendIndex(null)}
+              />
+            </div>
+          )}
         </div>
       </div>
-
-
     </div>
   );
-}
-export default PolarAreaChart;
+};
 
+export default PolarAreaChart;

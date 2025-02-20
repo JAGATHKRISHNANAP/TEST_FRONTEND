@@ -513,7 +513,7 @@ return (
             </LoadingButton>
             
             {uploadError && <p className="excel-upload-error">{uploadError}</p>}
-            {uploadSuccess && <p className="excel-upload-success">File uploaded successfully...</p>}
+            
           </Grid>
           {columnHeadings.length > 0 && (
           //    <Grid item xs={3} style={{ backgroundColor: '#ffffff', padding: '20px' }}>
@@ -622,7 +622,7 @@ return (
      {/* Snackbar Message */}
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={3000}
+          autoHideDuration={1000}
           onClose={handleSnackbarClose}
         >
           <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>

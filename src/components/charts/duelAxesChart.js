@@ -516,186 +516,460 @@
 //     );
 // };
 
-// export default DuelAxisChart;
-import React, { useState, useRef,useEffect } from 'react';
-import Chart from "react-apexcharts";
-import { useSelector, useDispatch } from "react-redux";
-import { ResizableBox } from 'react-resizable';
-import 'react-resizable/css/styles.css';
-import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
-import { sendCategoryToBackend } from '../../utils/api';
+// // export default DuelAxisChart;
+// import React, { useState, useRef,useEffect } from 'react';
+// import Chart from "react-apexcharts";
+// import { useSelector, useDispatch } from "react-redux";
+// import { ResizableBox } from 'react-resizable';
+// import 'react-resizable/css/styles.css';
+// import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
+// import { sendCategoryToBackend } from '../../utils/api';
 
-const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation }) => {
-    const dispatch = useDispatch();
-    const xAxis = useSelector((state) => state.chart.xAxis);
-    const yAxis = useSelector((state) => state.chart.yAxis);
-    const aggregate = useSelector((state) => state.chart.aggregate);
-    const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
-    const barcolour = useSelector((state) => state.chartColor.chartColor);
-    const customHeadings = useSelector((state) => state.toolTip.customHeading);
-    const headingColor = useSelector((state) => state.toolTip.headingColor);
+// const DuelAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation }) => {
+//     const dispatch = useDispatch();
+//     const xAxis = useSelector((state) => state.chart.xAxis);
+//     const yAxis = useSelector((state) => state.chart.yAxis);
+//     const aggregate = useSelector((state) => state.chart.aggregate);
+//     const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
+//     const barcolour = useSelector((state) => state.chartColor.chartColor);
+//     const customHeadings = useSelector((state) => state.toolTip.customHeading);
+//     const headingColor = useSelector((state) => state.toolTip.headingColor);
 
-    const [filteredCategories, setFilteredCategories] = useState(categories);
-    const [filteredSeries1, setFilteredSeries1] = useState(series1);
-    const [filteredSeries2, setFilteredSeries2] = useState(series2);
-     useEffect(() => {
-        setFilteredCategories(categories);
-        setFilteredSeries1(series1);
-        setFilteredSeries2(series2)
+//     const [filteredCategories, setFilteredCategories] = useState(categories);
+//     const [filteredSeries1, setFilteredSeries1] = useState(series1);
+//     const [filteredSeries2, setFilteredSeries2] = useState(series2);
+//      useEffect(() => {
+//         setFilteredCategories(categories);
+//         setFilteredSeries1(series1);
+//         setFilteredSeries2(series2)
            
-    }, [series1, series2, categories]);
-    const handleClicked = async (event, chartContext, config) => {
-        const clickedCategoryIndex = config.dataPointIndex;
-        const clickedCategory = categories[clickedCategoryIndex];
-        dispatch(setClickedCategory(clickedCategory));
-        try {
-            const data = await sendCategoryToBackend(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
-            console.log("Received Data:", data);
-        } catch (error) {
-            console.error('Error handling click event:', error);
-        }
-    };
-    const handleSortAscending = () => {
-        const sortedData = [...filteredSeries1]
-          .map((value, index) => ({ category: filteredCategories[index], value }))
-          .sort((a, b) => a.value - b.value);
+//     }, [series1, series2, categories]);
+//     const handleClicked = async (event, chartContext, config) => {
+//         const clickedCategoryIndex = config.dataPointIndex;
+//         const clickedCategory = categories[clickedCategoryIndex];
+//         dispatch(setClickedCategory(clickedCategory));
+//         try {
+//             const data = await sendCategoryToBackend(clickedCategory, xAxis, yAxis, selectedTable, aggregate);
+//             console.log("Received Data:", data);
+//         } catch (error) {
+//             console.error('Error handling click event:', error);
+//         }
+//     };
+//     const handleSortAscending = () => {
+//         const sortedData = [...filteredSeries1]
+//           .map((value, index) => ({ category: filteredCategories[index], value }))
+//           .sort((a, b) => a.value - b.value);
     
-        setFilteredCategories(sortedData.map((item) => item.category));
-        setFilteredSeries1(sortedData.map((item) => item.value));
-        setFilteredSeries2(sortedData.map((item) => item.value)); // Apply to both series for consistency
-      };
+//         setFilteredCategories(sortedData.map((item) => item.category));
+//         setFilteredSeries1(sortedData.map((item) => item.value));
+//         setFilteredSeries2(sortedData.map((item) => item.value)); // Apply to both series for consistency
+//       };
     
-      const handleSortDescending = () => {
-        const sortedData = [...filteredSeries1]
-          .map((value, index) => ({ category: filteredCategories[index], value }))
-          .sort((a, b) => b.value - a.value);
+//       const handleSortDescending = () => {
+//         const sortedData = [...filteredSeries1]
+//           .map((value, index) => ({ category: filteredCategories[index], value }))
+//           .sort((a, b) => b.value - a.value);
     
-        setFilteredCategories(sortedData.map((item) => item.category));
-        setFilteredSeries1(sortedData.map((item) => item.value));
-        setFilteredSeries2(sortedData.map((item) => item.value)); // Apply to both series for consistency
-      };
-    const handleTop10 = () => {
-        const sortedIndices = series1.map((value, index) => ({ value, index }))
-            .sort((a, b) => b.value - a.value)
-            .slice(0, 10)
-            .map(item => item.index);
+//         setFilteredCategories(sortedData.map((item) => item.category));
+//         setFilteredSeries1(sortedData.map((item) => item.value));
+//         setFilteredSeries2(sortedData.map((item) => item.value)); // Apply to both series for consistency
+//       };
+//     const handleTop10 = () => {
+//         const sortedIndices = series1.map((value, index) => ({ value, index }))
+//             .sort((a, b) => b.value - a.value)
+//             .slice(0, 10)
+//             .map(item => item.index);
 
-        setFilteredCategories(sortedIndices.map(index => categories[index]));
-        setFilteredSeries1(sortedIndices.map(index => series1[index]));
-        setFilteredSeries2(sortedIndices.map(index => series2[index]));
-    };
+//         setFilteredCategories(sortedIndices.map(index => categories[index]));
+//         setFilteredSeries1(sortedIndices.map(index => series1[index]));
+//         setFilteredSeries2(sortedIndices.map(index => series2[index]));
+//     };
 
-    const handleBottom10 = () => {
-        const sortedIndices = series1.map((value, index) => ({ value, index }))
-            .sort((a, b) => a.value - b.value)
-            .slice(0, 10)
-            .map(item => item.index);
+//     const handleBottom10 = () => {
+//         const sortedIndices = series1.map((value, index) => ({ value, index }))
+//             .sort((a, b) => a.value - b.value)
+//             .slice(0, 10)
+//             .map(item => item.index);
 
-        setFilteredCategories(sortedIndices.map(index => categories[index]));
-        setFilteredSeries1(sortedIndices.map(index => series1[index]));
-        setFilteredSeries2(sortedIndices.map(index => series2[index]));
-    };
+//         setFilteredCategories(sortedIndices.map(index => categories[index]));
+//         setFilteredSeries1(sortedIndices.map(index => series1[index]));
+//         setFilteredSeries2(sortedIndices.map(index => series2[index]));
+//     };
 
-    const handleReset = () => {
-        setFilteredCategories(categories);
-        setFilteredSeries1(series1);
-        setFilteredSeries2(series2);
-    };
+//     const handleReset = () => {
+//         setFilteredCategories(categories);
+//         setFilteredSeries1(series1);
+//         setFilteredSeries2(series2);
+//     };
 
-    const options = {
-        chart: {
-            type: 'line',
-            height: 350,
-            events: {
-                dataPointSelection: handleClicked
-            },
-            toolbar: {
-                show: true,
-                tools: {
-                    customIcons: [
-                        {
-                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
-                            index: 1, // Start with the first position in the toolbar
-                            title: 'Sort Ascending',
-                            class: 'custom-sort-ascending',
-                            click: handleSortAscending
-                        },
-                        {
-                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
-                            index: 2, // Position right after the previous custom icon
-                            title: 'Sort Descending',
-                            class: 'custom-sort-descending',
-                            click: handleSortDescending
-                        },
-                        {
-                            icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
-                            index: 1,
-                            title: 'Show Top 10',
-                            class: 'custom-top-10',
-                            click: handleTop10,
-                        },
-                        {
-                            icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
-                            index: 2,
-                            title: 'Show Bottom 10',
-                            class: 'custom-bottom-10',
-                            click: handleBottom10,
-                        },
-                        {
-                            icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">🔄</button>',
-                            index: 3,
-                            title: 'Reset',
-                            class: 'custom-reset',
-                            click: handleReset,
-                        }
-                    ]
-                }
-            }
-        },
-        xaxis: {
-            categories: filteredCategories,
-        },
-        yaxis: [
+//     const options = {
+//         chart: {
+//             type: 'line',
+//             height: 350,
+//             events: {
+//                 dataPointSelection: handleClicked
+//             },
+//             toolbar: {
+//                 show: true,
+//                 tools: {
+//                     customIcons: [
+//                         {
+//                             icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
+//                             index: 1, // Start with the first position in the toolbar
+//                             title: 'Sort Ascending',
+//                             class: 'custom-sort-ascending',
+//                             click: handleSortAscending
+//                         },
+//                         {
+//                             icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
+//                             index: 2, // Position right after the previous custom icon
+//                             title: 'Sort Descending',
+//                             class: 'custom-sort-descending',
+//                             click: handleSortDescending
+//                         },
+//                         {
+//                             icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
+//                             index: 1,
+//                             title: 'Show Top 10',
+//                             class: 'custom-top-10',
+//                             click: handleTop10,
+//                         },
+//                         {
+//                             icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
+//                             index: 2,
+//                             title: 'Show Bottom 10',
+//                             class: 'custom-bottom-10',
+//                             click: handleBottom10,
+//                         },
+//                         {
+//                             icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">🔄</button>',
+//                             index: 3,
+//                             title: 'Reset',
+//                             class: 'custom-reset',
+//                             click: handleReset,
+//                         }
+//                     ]
+//                 }
+//             }
+//         },
+//         xaxis: {
+//             categories: filteredCategories,
+//         },
+//         yaxis: [
+//             {
+//                 title: { text: yAxis[0] || 'Series 1' },
+//             },
+//             {
+//                 opposite: true,
+//                 title: { text: yAxis[1] || 'Series 2' },
+//             }
+//         ],
+//     };
+
+//     const series = [
+//         {
+//             name: yAxis[0] || 'Series 1',
+//             type: 'bar',
+//             data: filteredSeries1,
+//             color: barcolour
+//         },
+//         {
+//             name: yAxis[1] || 'Series 2',
+//             type: 'line',
+//             data: filteredSeries2,
+//             color: '#00E356'
+//         }
+//     ];
+
+//     return (
+//         <div className="app">
+//             <div className="row">
+//                 <div className="mixed-chart">
+//                     <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]}>
+//                         <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
+//                         <Chart options={options} series={series} type="line" width="100%" height="100%" />
+//                     </ResizableBox>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default DuelAxisChart;
+import React, { useState, useEffect } from "react";
+import Chart from "react-apexcharts";
+import { ResizableBox } from "react-resizable";
+import { useDispatch, useSelector } from "react-redux";
+import "react-resizable/css/styles.css";
+import { setClickedCategory } from "../../features/drillDownChartSlice/drillDownChartSlice";
+import { sendCategoryToBackend } from "../../utils/api";
+
+const DuelAxisChart = ({
+  categories = [],
+  series1 = [],
+  series2 = [],
+  aggregation,
+}) => {
+  const dispatch = useDispatch();
+  const xAxis = useSelector((state) => state.chart.xAxis);
+  const yAxis = useSelector((state) => state.chart.yAxis);
+  const aggregate = useSelector((state) => state.chart.aggregate);
+  const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
+  const customHeadings = useSelector((state) => state.toolTip.customHeading);
+  const headingColor = useSelector((state) => state.toolTip.headingColor);
+
+  // Local states for data
+  const [filteredCategories, setFilteredCategories] = useState(categories);
+  const [filteredSeries1, setFilteredSeries1] = useState(series1);
+  const [filteredSeries2, setFilteredSeries2] = useState(series2);
+
+  // For legend color picking
+  // Two series => two colors in an array
+  const [seriesColors, setSeriesColors] = useState(["#008FFB", "#00E356"]);
+  // Keep track of which legend item was clicked
+  const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
+
+  useEffect(() => {
+    setFilteredCategories(categories);
+    setFilteredSeries1(series1);
+    setFilteredSeries2(series2);
+    // Optionally re-initialize the colors if needed
+    setSeriesColors(["#008FFB", "#00E356"]);
+  }, [categories, series1, series2]);
+
+  // Sorting & filtering
+  const handleSortAscending = () => {
+    // Sort by the first series's values
+    const sortedData = [...filteredSeries1].map((value, index) => ({
+      category: filteredCategories[index],
+      value,
+      value2: filteredSeries2[index],
+    }));
+    sortedData.sort((a, b) => a.value - b.value);
+
+    setFilteredCategories(sortedData.map((item) => item.category));
+    setFilteredSeries1(sortedData.map((item) => item.value));
+    setFilteredSeries2(sortedData.map((item) => item.value2));
+  };
+
+  const handleSortDescending = () => {
+    const sortedData = [...filteredSeries1].map((value, index) => ({
+      category: filteredCategories[index],
+      value,
+      value2: filteredSeries2[index],
+    }));
+    sortedData.sort((a, b) => b.value - a.value);
+
+    setFilteredCategories(sortedData.map((item) => item.category));
+    setFilteredSeries1(sortedData.map((item) => item.value));
+    setFilteredSeries2(sortedData.map((item) => item.value2));
+  };
+
+  const handleTop10 = () => {
+    const sortedIndices = series1
+      .map((value, index) => ({ value, index }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10)
+      .map((item) => item.index);
+
+    setFilteredCategories(sortedIndices.map((index) => categories[index]));
+    setFilteredSeries1(sortedIndices.map((index) => series1[index]));
+    setFilteredSeries2(sortedIndices.map((index) => series2[index]));
+  };
+
+  const handleBottom10 = () => {
+    const sortedIndices = series1
+      .map((value, index) => ({ value, index }))
+      .sort((a, b) => a.value - b.value)
+      .slice(0, 10)
+      .map((item) => item.index);
+
+    setFilteredCategories(sortedIndices.map((index) => categories[index]));
+    setFilteredSeries1(sortedIndices.map((index) => series1[index]));
+    setFilteredSeries2(sortedIndices.map((index) => series2[index]));
+  };
+
+  const handleReset = () => {
+    setFilteredCategories(categories);
+    setFilteredSeries1(series1);
+    setFilteredSeries2(series2);
+  };
+
+  // Legend color picking: if user clicked a legend item, show a color picker
+  const handleLegendClick = (chartContext, seriesIndex, config) => {
+    setSelectedLegendIndex(seriesIndex);
+    return false; // Prevent the default toggle/hide behavior
+  };
+
+  // If user picks a color from the color picker, update the corresponding series color
+  const handleColorChange = (index, newColor) => {
+    setSeriesColors((prev) => {
+      const updated = [...prev];
+      updated[index] = newColor;
+      return updated;
+    });
+  };
+
+  // When a data point is clicked
+  const handleClicked = async (event, chartContext, config) => {
+    const clickedCategoryIndex = config.dataPointIndex;
+    const clickedCategory = filteredCategories[clickedCategoryIndex];
+    dispatch(setClickedCategory(clickedCategory));
+    try {
+      const data = await sendCategoryToBackend(
+        clickedCategory,
+        xAxis,
+        yAxis,
+        selectedTable,
+        aggregate
+      );
+      console.log("Received Data:", data);
+    } catch (error) {
+      console.error("Error handling click event:", error);
+    }
+  };
+
+  const options = {
+    chart: {
+      type: "line",
+      events: {
+        dataPointSelection: handleClicked,
+        legendClick: handleLegendClick,
+      },
+      toolbar: {
+        show: true,
+        tools: {
+          customIcons: [
             {
-                title: { text: yAxis[0] || 'Series 1' },
+              icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇧</button>',
+              index: 1,
+              title: "Sort Ascending",
+              class: "custom-sort-ascending",
+              click: handleSortAscending,
             },
             {
-                opposite: true,
-                title: { text: yAxis[1] || 'Series 2' },
-            }
-        ],
-    };
-
-    const series = [
-        {
-            name: yAxis[0] || 'Series 1',
-            type: 'bar',
-            data: filteredSeries1,
-            color: barcolour
+              icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">⇩</button>',
+              index: 2,
+              title: "Sort Descending",
+              class: "custom-sort-descending",
+              click: handleSortDescending,
+            },
+            {
+              icon: '<button style="background:none;border:none;color:#28a745;font-size:14px;">⏶</button>',
+              index: 3,
+              title: "Show Top 10",
+              class: "custom-top-10",
+              click: handleTop10,
+            },
+            {
+              icon: '<button style="background:none;border:none;color:#dc3545;font-size:14px;">⏷</button>',
+              index: 4,
+              title: "Show Bottom 10",
+              class: "custom-bottom-10",
+              click: handleBottom10,
+            },
+            {
+              icon: '<button style="background:none;border:none;color:#007bff;font-size:14px;">🔄</button>',
+              index: 5,
+              title: "Reset",
+              class: "custom-reset",
+              click: handleReset,
+            },
+          ],
         },
-        {
-            name: yAxis[1] || 'Series 2',
-            type: 'line',
-            data: filteredSeries2,
-            color: '#00E356'
-        }
-    ];
+      },
+    },
+    xaxis: {
+      categories: filteredCategories,
+    },
+    yaxis: [
+      {
+        title: { text: yAxis[0] || "Series 1" },
+      },
+      {
+        opposite: true,
+        title: { text: yAxis[1] || "Series 2" },
+      },
+    ],
+    // Provide the legend so each series is displayed (2 series => 2 items)
+    legend: {
+      show: true,
+      position: "bottom",
+      horizontalAlign: "center",
+      fontSize: "12px",
+      markers: {
+        width: 12,
+        height: 12,
+        radius: 2,
+      },
+    },
+    // The apex "colors" array is used for the overall series color order
+    colors: seriesColors,
+  };
 
-    return (
-        <div className="app">
-            <div className="row">
-                <div className="mixed-chart">
-                    <ResizableBox width={800} height={550} minConstraints={[500, 200]} maxConstraints={[800, 550]}>
-                        <div className="chart-title"><h3 style={{ color: headingColor }}>{customHeadings}</h3></div>
-                        <Chart options={options} series={series} type="line" width="100%" height="100%" />
-                    </ResizableBox>
-                </div>
+  // Two series: one is bar, one is line
+  const series = [
+    {
+      name: yAxis[0] || "Series 1",
+      type: "bar",
+      data: filteredSeries1,
+      // color: seriesColors[0], // If you prefer per-series color
+    },
+    {
+      name: yAxis[1] || "Series 2",
+      type: "line",
+      data: filteredSeries2,
+      // color: seriesColors[1],
+    },
+  ];
+
+  return (
+    <div className="app">
+      <div className="row">
+        <div className="mixed-chart">
+          <ResizableBox
+            width={800}
+            height={550}
+            minConstraints={[500, 200]}
+            maxConstraints={[800, 550]}
+          >
+            <div className="chart-title">
+              <h3 style={{ color: headingColor }}>{customHeadings}</h3>
             </div>
+            <Chart
+              options={options}
+              series={series}
+              type="line"
+              width="100%"
+              height="100%"
+            />
+          </ResizableBox>
         </div>
-    );
+      </div>
+      {/* Inline color picker if a legend item was clicked */}
+      {selectedLegendIndex !== null && (
+        <div style={{ textAlign: "center", marginTop: "10px" }}>
+          <span>
+            Change color for "
+            {selectedLegendIndex === 0
+              ? yAxis[0] || "Series 1"
+              : yAxis[1] || "Series 2"}
+            ":{" "}
+          </span>
+          <input
+            type="color"
+            value={seriesColors[selectedLegendIndex]}
+            onChange={(e) => handleColorChange(selectedLegendIndex, e.target.value)}
+            onBlur={() => setSelectedLegendIndex(null)}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default DuelAxisChart;
+
 
 // import React, { useState, useEffect } from 'react';
 // import Chart from "react-apexcharts";
