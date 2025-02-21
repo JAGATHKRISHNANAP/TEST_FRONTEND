@@ -75,7 +75,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
     // const selectedTable = localStorage.getItem('selectedTable');
     const selectedUser = localStorage.getItem('selectedUser');
     const chartData = useSelector((state) => state.chartdata.chartData || []);
-      const selectedTable = chartData[1] || "";
+      const selectedTable =sessionStorage.getItem('selectedTable');
       // const xAxis = chartData[2] || [];
       // const yAxis = chartData[3] || [];
       // const chartId = chartData[0] || "";
@@ -85,7 +85,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
       useEffect((column) => {
         if (xAxis.length > 0) {
           const firstColumn = xAxis;
-          fetchFilterOptions(column);
+          fetchFilterOptions(firstColumn);
           generateChart();
         }
       }, [xAxis, chartData]);
@@ -94,7 +94,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
             console.log("Selected Table:", selectedTable);
               const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
               if (options && typeof options === 'object') {
-                  dispatch(setCheckedOptions({ column, options: options[column] || [] }));
+                  dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
               } else {
                   console.error('Filter options is not an object as expected', options);
               }
@@ -103,16 +103,14 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
           }
       };
       const openFilterModal = (column) => {
-         // Fetch options before opening modal
-        
         setSelectedColumn(column);
         setModalOpen(true);
     };
-    
+
     const closeFilterModal = (column) => {
-      fetchFilterOptions(column);
         setModalOpen(false);
     };
+
   return (
     <Item>
       <div className="dash-right-side-container">
@@ -169,8 +167,8 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
                       )}*/}
                     </div> 
                     {/* <div className="input-fields"> */}
-                    <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>
-                                          <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>
+                    {/* <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>
+                                          <InputLabel id="demo-simple-select-label"></InputLabel>
                                           <NativeSelect
                                             style={{ marginRight: '10px' }} value={aggregate} 
                                             // onChange={(event) => dispatch(setAggregate(event.target.value))}
@@ -196,6 +194,38 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
                                             <option value="variance">Variance</option>
                                           </NativeSelect>
                                         </FormControl>
+                                         */}
+                                         {(xAxis.length > 0) && (
+  <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>
+    <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>
+    <NativeSelect
+      style={{ marginRight: '10px' }} 
+      value={aggregate} 
+      onChange={(event) => {
+        if (xAxis.length === 0) {
+          alert("Please select a table before choosing an aggregation.");
+        } else {
+          dispatch(setAggregate(event.target.value));
+        }
+      }}
+      inputProps={{
+        name: 'age',
+        id: 'uncontrolled-native',
+      }}
+    >
+      
+      <option value="sum">Sum</option>
+      <option value="average">Average</option>
+      <option value="count">Count</option>
+      <option value="minimum">Minimum</option>
+      <option value="maximum">Maximum</option>
+      <option value="variance">Variance</option>
+    </NativeSelect>
+  </FormControl>
+)}
+
+
+
                   {/* </div> */}
                   </div>
 

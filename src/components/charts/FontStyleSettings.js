@@ -602,7 +602,7 @@ const CustomToolTip = ({ onClose }) => {
                         onChange={(e) => setCategoryColor(e.target.value)}
                         style={{
                           width: "50px",
-                          height: "50px",
+                          height: "30px",
                           borderRadius: "50%",
                           border: "none",
                           cursor: "pointer",
@@ -624,7 +624,7 @@ const CustomToolTip = ({ onClose }) => {
                         onChange={(e) => setValueColor(e.target.value)}
                         style={{
                           width: "50px",
-                          height: "50px",
+                          height: "30px",
                           borderRadius: "50%",
                           border: "none",
                           cursor: "pointer",
@@ -646,7 +646,7 @@ const CustomToolTip = ({ onClose }) => {
                         onChange={(e) => setHeadingColor(e.target.value)}
                         style={{
                           width: "50px",
-                          height: "50px",
+                          height: "30px",
                           borderRadius: "60%",
                           border: "none",
                           cursor: "pointer",

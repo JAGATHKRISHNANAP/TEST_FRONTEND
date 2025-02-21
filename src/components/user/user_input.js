@@ -4,19 +4,26 @@ import { userSignUp, fetchCompanies, fetchRoles,fetchReportingIds } from '../../
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Box, Container, Card, TextField, Button, Snackbar,Link,
-  Alert, Typography, Grid, CssBaseline
+  Alert, Typography, Grid, CssBaseline,Avatar
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import UploadIcon from '@mui/icons-material/CloudUpload';
 import EditUserDetails from './EditUserDetails';
 import UploadUserInput from './UploadUserInput';
-
+import { useDispatch } from 'react-redux'; // Import useDispatch
+import { resetState } from '../../features/Dashboard-Slice/chartSlice'; // Import resetState
+import MuiAppBar from '@mui/material/AppBar';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import IconButton from '@mui/material/IconButton';
+import UserProfile from "../../components/profile/userProfile";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!sessionStorage.getItem('session_id'));
   const location = useLocation();
   const navigate = useNavigate();
+    const [username, setUsername] = React.useState(sessionStorage.getItem('user_name'));
   const { company } = location.state || {};
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
@@ -31,9 +38,12 @@ export default function SignUp() {
   const [componentKey, setComponentKey] = useState(0);
   const [companyName, setCompanyName] = useState('');
   const [selected, setSelected] = useState(null);
+  
+    const [appBarColor, setAppBarColor] = React.useState(localStorage.getItem('theamColor') || '#1976d2'); 
   const [categoryInput, setCategoryInput] = useState('');
   const [employees, setEmployees] = useState([]);
   const [reportingIds, setReportingIds] = useState([]);
+    const dispatch = useDispatch(); // Initialize dispatch
   const [formData, setFormData] = useState({
     employeeName: '',
     roleId: '',
@@ -102,13 +112,7 @@ export default function SignUp() {
     loadCompanies();
     loadRoles();
   }, []);
-  // const fetchReportingIds = async () => {
-  //   const storedCompanyName = localStorage.getItem('user_name');
-  //   const response = await fetch(`http://localhost:5000/api/employees?company=${storedCompanyName}`);
-  //   const data = await response.json();
-  //   console.log(data); // Confirm structure
-  //   return data.map(item => ({ id: item.employee_id, name: item.employee_name }));
-  // };
+  
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleAddCategory = () => {
@@ -204,10 +208,55 @@ export default function SignUp() {
     if (reason === 'clickaway') return;
     setOpen(false);
   };
+const handleLoginLogout = () => {
+    if (isLoggedIn) {
+      localStorage.clear();
+      localStorage.removeItem('yAxis');
+      localStorage.removeItem('xAxis');
+      sessionStorage.removeItem('session_id');
+      sessionStorage.removeItem('user_name');
+      sessionStorage.removeItem('user_role');
+      setIsLoggedIn(false);
+      dispatch(resetState());
+      navigate('/');
 
+    } else {
+     
+      navigate('/');
+    }
+  };
+  
   return (
-    <ThemeProvider theme={defaultTheme}>
+    
+<Grid sx={{ display: 'flex', flexDirection: 'column', minHeight: '8vh' }}>
       <CssBaseline />
+      <MuiAppBar position="fixed" open={false} sx={{ height: '40px', display: 'flex', justifyContent: 'center', backgroundColor: appBarColor }}>
+        <Toolbar>
+
+            <IconButton color="inherit" aria-label="open drawer" edge="start" sx={{ marginRight: 0 }}>
+              <MenuIcon />
+            </IconButton>
+{/* 
+             <Typography variant="body2" sx={{ height: '10px', display: 'flex', alignItems: 'center' }}>
+              <Avatar src="/broken-image.jpg" sx={{ width: '30px', height: '30px', border: '2px solid white', backgroundColor: appBarColor, color: 'white', marginRight: 1 }} />
+              Hello, {username}
+            </Typography>
+            
+            */}
+           <>
+          
+             <UserProfile username={username} appBarColor={appBarColor}/>
+              <Box sx={{ flexGrow: 1 }} /></>
+         
+          <Grid sx={{ flexGrow: 1 }} />
+          <Box sx={{ flexGrow: 1 }} />
+          <Typography component="div" sx={{ fontSize: '12px', cursor: 'pointer', marginRight: 2 }} onClick={handleLoginLogout}>
+            {isLoggedIn ? 'Logout' : 'Login'}
+          </Typography>
+         
+        </Toolbar>
+      </MuiAppBar>
+     
       <AppBar position="static">
         <Toolbar
           sx={{
@@ -220,6 +269,32 @@ export default function SignUp() {
             // position: 'fixed',  
           }}
         >
+          
+<Link
+  onClick={() => {
+    setSelected('register');
+    setShowUpload(false);
+    setShowManualForm(true);
+    setShowEditDetails(false);
+  }}
+  sx={{
+    bgcolor: selected === 'register' ? 'lightgray' : 'inherit',
+    '&:hover': { bgcolor: 'lightgray', color: 'black' },
+    margin: 1,
+    fontSize: 12,
+    color: 'black',
+    display: 'flex',
+    alignItems: 'center',
+    height: '20px',
+    textDecoration: 'none', // Remove default underline
+  }}
+>
+
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+  <PersonAddIcon style={{ marginRight: '4px' }} />
+  Register
+</div>
+</Link>
           <Link
   onClick={() => {
     setSelected('edit');
@@ -421,6 +496,8 @@ export default function SignUp() {
           {passwordError ? passwordErrorMessage : 'User created successfully!'}
         </Alert>
       </Snackbar>
-    </ThemeProvider>
+
+
+    </Grid>
   );
 }

@@ -354,7 +354,14 @@ const [legendPosition, setLegendPosition] = useState("right");
             return positions[newIndex];
         });
     };
-
+    useEffect(() => {
+      if (categories && Array.isArray(categories)) {
+        setPieColors(categories.map((_, i) => defaultColors[i % defaultColors.length]));
+      } else {
+        setPieColors([]); // Set an empty array to prevent errors
+      }
+    }, [categories, values]);
+    
     useEffect(() => {
         setChartKey((prev) => prev + 1); // Update chart key to force re-render
     }, [legendPosition]);

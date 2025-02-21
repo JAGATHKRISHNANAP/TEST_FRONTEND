@@ -21,6 +21,17 @@
 }
 
 
+.download-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.download-menu.show {
+    display: block;
+}
 
 .chart-title {
     text-align: center;

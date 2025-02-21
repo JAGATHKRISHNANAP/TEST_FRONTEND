@@ -110,9 +110,10 @@ function FilterOptionsModal({ column, open, onClose }) {
   const yFontSize=useSelector(state => state.chartdata.yFontSize)|| "";
   const valueColor=useSelector(state => state.chartdata.valueColor)|| "";
 //       const selectedUser = localStorage.getItem('selectedUser');
-  const filterOptions = useSelector(state => state.chart.filterOptions[column]) || [];
-  const checkedOptions = useSelector(state => state.chart.checkedOptions[column]) || [];
-  const selectAllChecked = useSelector(state => state.chart.selectAllChecked[column]) || false;
+const checkedOptions = useSelector(state => state.chart.checkedOptions[column]) || []; // Access directly
+    const filterOptions = useSelector(state => state.chart.filterOptions[column]) || [];
+    const selectAllChecked = checkedOptions.length === filterOptions.length; // Simplified check
+
 const [plotData, setPlotData] = useState({});
   const generateChart = async () => {
     
@@ -163,7 +164,8 @@ const [plotData, setPlotData] = useState({});
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
     dispatch(setSelectAllCheckedForColumn({ column, isChecked }));
-    dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? [...filterOptions] : [] }));
+    // dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? [...filterOptions] : [] }));
+    generateChart();
   };
 
   const handleCheckboxChange = (option) => {
@@ -171,7 +173,7 @@ const [plotData, setPlotData] = useState({});
       ? checkedOptions.filter(item => item !== option)
       : [...checkedOptions, option];
     dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
-    dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
+    // dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
     generateChart();
   };
 

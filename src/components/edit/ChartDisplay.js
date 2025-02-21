@@ -286,7 +286,8 @@ const ChartDisplay = ({ chartType, plotData, xAxis, saveDataToDatabase, showSnac
           return (
             <Item>
               <div className="chart-container">
-                <TreeHierarchy />
+              <TreeHierarchy categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
+                             
               </div>
               
             </Item>

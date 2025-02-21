@@ -532,14 +532,14 @@
 // };
 
 // export default D3HierarchialBarChart;
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useMemo } from 'react';
 import * as d3 from 'd3';
 import { ResizableBox } from 'react-resizable';
 import { useDispatch, useSelector } from 'react-redux';
 import { setClickedCategory } from '../../features/drillDownChartSlice/drillDownChartSlice';
 import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
 import "./tooltip.css";
-
+import { saveAs } from 'file-saver';
 const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) => {
     const dispatch = useDispatch();
     const xAxis = useSelector((state) => state.chart.xAxis);
@@ -552,14 +552,76 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const yFontSize = useSelector((state) => state.toolTip.fontSizeY || "12");
     const categoryColor = useSelector((state) => state.toolTip.categoryColor);
     const valueColor = useSelector((state) => state.toolTip.valueColor);
-  
+    // const [sortedData, setSortedData] = useState([]);
+
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
   
     const [chartData, setChartData] = useState({ categories, values });
     const [drillStack, setDrillStack] = useState([]);
     const [chartDimensions, setChartDimensions] = useState({ width: 500, height: 500 });
-  
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+    // Toggle the menu visibility when the hamburger icon is clicked
+    const toggleMenuVisibility = () => {
+        setIsMenuVisible(!isMenuVisible);
+        console.log('Menu visibility:', !isMenuVisible);
+    };
+    
+    const downloadSVG = () => {
+        const svg = d3.select(svgRef.current);
+        const svgData = new XMLSerializer().serializeToString(svg.node());
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
+        saveAs(svgBlob, 'chart.svg');
+    };
+    
+    // Function to download the chart as PNG
+    const downloadPNG = () => {
+        const svg = d3.select(svgRef.current).node();
+        const svgString = new XMLSerializer().serializeToString(svg);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const DOMURL = window.URL || window.webkitURL || window;
+        
+        const img = new Image();
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+        const url = DOMURL.createObjectURL(svgBlob);
+        
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0);
+            const imgURI = canvas.toDataURL('image/png');
+            const pngBlob = dataURItoBlob(imgURI);
+            saveAs(pngBlob, 'chart.png');
+        };
+        img.src = url;
+    };
+    
+    // Function to convert data URI to Blob (for PNG download)
+    function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const uintArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+            uintArray[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([uintArray], { type: 'image/png' });
+    }
+    
+    // Function to download chart data as CSV
+    const downloadCSV = () => {
+        const csvData = categories.map((category, index) => `${category},${values[index]}`).join('\n');
+        const blob = new Blob([csvData], { type: 'text/csv' });
+        saveAs(blob, 'chart_data.csv');
+    };
+    const renderDownloadMenu = () => (
+        <div className={`download-menu ${isMenuVisible ? 'show' : ''}`}>
+            <ul>
+                <li><button onClick={downloadSVG}>Download as SVG</button></li>
+                <li><button onClick={downloadPNG}>Download as PNG</button></li>
+                <li><button onClick={downloadCSV}>Download as CSV</button></li>
+            </ul>
+        </div>
+    );
     // Local color state: one color per category
     const defaultColors = [
       "#008FFB",
@@ -574,7 +636,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const [barColor, setBarColor] = useState(
       categories.map((_, i) => defaultColors[i % defaultColors.length])
     );
-  
+   
     // State for inline color picker (which legend item is selected)
     const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
   
@@ -617,13 +679,66 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         setDrillStack(drillStack.slice(0, -1));
       }
     };
-  
-    // Sort the data for display
-    const sortedData = chartData.categories.map((cat, index) => ({
-      category: cat,
-      value: chartData.values[index],
-    })).sort((a, b) => b.value - a.value);
-  
+    const sortedData = useMemo(() => {
+      return chartData.categories.map((category, index) => ({
+          category,
+          value: chartData.values[index]
+      })).sort((a, b) => b.value - a.value);
+  }, [chartData]);
+//   const handleSortAscending = () => {
+//     const sorted = [...sortedIndices.categories]
+//         .map((category, index) => ({ category, value: sortedData.values[index] }))
+//         .sort((a, b) => a.category.localeCompare(b.category));
+
+//     setSortedData({
+//         categories: sorted.map(item => item.category),
+//         values: sorted.map(item => item.value)
+//     });
+// };
+
+// // Function to handle descending sort
+// const handleSortDescending = () => {
+//     const sorted = [...sortedData.categories]
+//         .map((category, index) => ({ category, value: sortedData.values[index] }))
+//         .sort((a, b) => b.category.localeCompare(a.category));
+
+//     setSortedData({
+//         categories: sorted.map(item => item.category),
+//         values: sorted.map(item => item.value)
+//     });
+// };
+
+    const handleTop10 = () => {
+        const sortedIndices = values
+            .map((value, index) => ({ value, index }))
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 10)
+            .map(item => item.index);
+
+        setChartData({
+            categories: sortedIndices.map(index => categories[index]),
+            values: sortedIndices.map(index => values[index]),
+        });
+    };
+
+    const handleBottom10 = () => {
+        const sortedIndices = values
+            .map((value, index) => ({ value, index }))
+            .sort((a, b) => a.value - b.value)
+            .slice(0, 10)
+            .map(item => item.index);
+
+        setChartData({
+            categories: sortedIndices.map(index => categories[index]),
+            values: sortedIndices.map(index => values[index]),
+        });
+    };
+
+    const handleReset = () => {
+        setChartData({ categories, values });
+    };
+
+   
     useEffect(() => {
       if (!chartData.categories.length || !chartData.values.length) return;
   
@@ -714,10 +829,46 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const onResize = (event, { size }) => {
       setChartDimensions({ width: size.width, height: size.height });
     };
-  
+    
+        
+    const toolbarTools = [
+      { 
+          icon: <button style={{ background: 'none', border: 'none', color: '#28a745', fontSize: '14px' }}>⏶</button>, 
+          title: 'Show Top 10', 
+          click: handleTop10, 
+          iconColor: 'pink' 
+      },
+      { 
+          icon: <button style={{ background: 'none', border: 'none', color: '#dc3545', fontSize: '14px' }}>⏷</button>, 
+          title: 'Show Bottom 10', 
+          click: handleBottom10 
+      },
+      { 
+          icon: <button style={{ background: 'none', border: 'none', color: '#6c757d', fontSize: '20px' }}>↺</button>, 
+          title: 'Reset Chart', 
+          click: handleReset 
+      },
+      { 
+          icon: <button style={{ background: 'none', border: 'none', fontSize: '20px' }}>☰</button>, 
+          title: 'Download Options', 
+          click: toggleMenuVisibility 
+      }
+  ];
+  const renderToolbar = () => (
+    <div className="toolbar">
+        {toolbarTools.map((tool, index) => (
+            <button key={index} title={tool.title} onClick={tool.click}>
+                {tool.icon}
+            </button>
+        ))}
+        {renderDownloadMenu()} {/* Add the download menu here */}
+    </div>
+);
+
     return (
       <div className="app">
         <div className="row">
+        {renderToolbar()}
           <div className="d3-bar-chart">
             <ResizableBox 
               width={chartDimensions.width}

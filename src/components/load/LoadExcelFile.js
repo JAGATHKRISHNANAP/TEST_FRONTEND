@@ -874,6 +874,7 @@ import { fetchTableNamesAPI, fetchTableDetailsAPI } from '../../utils/api'; // I
 import tinycolor from 'tinycolor2';
 import { debounce } from 'lodash'; // Import lodash debounce
 import HomePage from '../../pages/HomePage';
+import {resetChartType} from'../../features/Dashboard-Slice/chartTypeSlice';
 const LoadExcelFile = () => {
   const dispatch = useDispatch();
   const { showDashboard, checkedPaths } = useSelector((state) => state.loadExcel);
@@ -959,11 +960,12 @@ const LoadExcelFile = () => {
       // Show success message
       setLoadSuccess(true);
        dispatch(resetChartState());
+       dispatch(resetChartType())
   
     // Also remove from sessionStorage
     sessionStorage.removeItem('xAxis');
     sessionStorage.removeItem('yAxis');
-  
+    sessionStorage.removeItem('selectedChartType')
     sessionStorage.removeItem('selectedChartType');
     }
   };

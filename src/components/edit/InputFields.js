@@ -442,7 +442,9 @@ function EditDashboard() {
   const yFontSize=useSelector(state => state.chartdata.yFontSize)|| "";
   const valueColor=useSelector(state => state.chartdata.valueColor)|| "";
   const [canDisplayChart, setCanDisplayChart] = useState(false);
-  
+  const reduxFilterOptions = useSelector(state => state.chartdata.filterOptions);
+console.log("Redux Filter Options:", reduxFilterOptions);
+
   useEffect(() => {
     // Check if all required data is available
     setCanDisplayChart(xAxis.length > 0 && yAxis.length > 0 && aggregate && chartType);
@@ -460,14 +462,19 @@ function EditDashboard() {
       dispatch(setChartType(chartType1));
     }
   }, [chartType1, dispatch]);
-
-  useEffect((column) => {
-    if (xAxis.length > 0) {
-      const firstColumn = xAxis;
-      fetchFilterOptions(column);
-      generateChart();
-    }
-  }, [xAxis, chartData]);
+useEffect(() => {
+            if (xAxis.length >= 1) {
+                fetchFilterOptions(xAxis);
+                generateChart();
+            }
+        }, [xAxis]);
+  // useEffect((column) => {
+  //   if (xAxis.length > 0) {
+  //     const firstColumn = xAxis;
+  //     fetchFilterOptions(column);
+  //     generateChart();
+  //   }
+  // }, [xAxis, chartData]);
 
 
   useEffect(() => {
@@ -486,7 +493,7 @@ function EditDashboard() {
         yAxis,
         aggregate,
         chartType,
-        filterOptions:reduxCheckedOptions,
+        filterOptions: reduxCheckedOptions, 
         databaseName,
         selectedUser,
         xFontSize,
@@ -505,9 +512,10 @@ function EditDashboard() {
     try {
         const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
         if (options && typeof options === 'object') {
-            dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
-            dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Dispatch for checked options
-            dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Set selectAllChecked to true initially
+          dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+            // dispatch(setCheckedOptions({ column, options: options[column] || [] })); // Dispatch for checked options
+             dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Initialize checked options
+                   dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Set selectAllChecked to true initially
                 
             setFilterOptions(options); // This line is still needed for the initial render of the filter list in the modal
           } else {

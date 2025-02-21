@@ -569,7 +569,7 @@ function Navbar() {
             position: 'absolute',
             top: '50px',
             right: '10px',
-            zIndex: 9999, // Set to a very high value to ensure it's on top
+            zIndex: 9999,
           }}
         >
           <SketchPicker color={appBarColor} onChangeComplete={handleColorChange} />

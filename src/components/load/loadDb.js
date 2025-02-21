@@ -527,6 +527,7 @@
 
 import Dashboard from '../dashbord-Elements/Dashboard';
 import React, { useEffect, useState } from 'react';
+import {resetChartState} from'../../features/Dashboard-Slice/chartSlice';
 import {
   Container,
   AppBar,
@@ -666,8 +667,15 @@ const LoadDbFile = () => {
       console.log('Selected Table:', selectedTable);
 
       // Show success message
-      setLoadSuccess(true);
-    }
+      setLoadSuccess(true); 
+             dispatch(resetChartState());
+        
+          // Also remove from sessionStorage
+          sessionStorage.removeItem('xAxis');
+          sessionStorage.removeItem('yAxis');
+        
+          sessionStorage.removeItem('selectedChartType');
+          }
   };
   const handleCloseSnackbar = () => {
     setLoadSuccess(false);

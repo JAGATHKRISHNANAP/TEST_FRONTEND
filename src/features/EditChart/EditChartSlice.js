@@ -117,24 +117,31 @@ const chartSlice = createSlice({
     filterDropdowns: {}
   },
   reducers: {
-    setFilterOptionsForColumn: (state, action) => {
-      const { column, options } = action.payload;
+  //   setFilterOptionsForColumn: (state, action) => {
+  //     const { column, options } = action.payload;
   
-      if (!options || (Array.isArray(options) && options.length === 0)) { 
-          // If options is undefined or an empty array, remove the column from state
-          delete state.filterOptions[column];
-          delete state.checkedOptions[column];
-      } else {
-          state.filterOptions[column] = options;
-          state.checkedOptions[column] = [...options];
-      }
+  //     if (!options || (Array.isArray(options) && options.length === 0)) { 
+  //         // If options is undefined or an empty array, remove the column from state
+  //         delete state.filterOptions[column];
+  //         delete state.checkedOptions[column];
+  //     } else {
+  //         state.filterOptions[column] = options;
+  //         state.checkedOptions[column] = [...options];
+  //     }
+  // },
+  
+  setFilterOptionsForColumn: (state, action) => {
+    const { column, options } = action.payload;
+    state.filterOptions[column] = options;
+    if (!state.checkedOptions[column]) {
+      state.checkedOptions[column] = options; //Initialize checked options with filterOptions
+    }
   },
-  
-    
     
       toggleFilterDropdownForColumn: (state, action) => {
         state.filterDropdowns[action.payload] = !state.filterDropdowns[action.payload];
       },
+    
   
     setChartData: (state, action) => {
       state.chartData = action.payload;
@@ -172,13 +179,25 @@ const chartSlice = createSlice({
       state.categoryColor = action.payload.categoryColor;
       state.valueColor = action.payload.valueColor;
     },
+    // setCheckedOptionsForColumn: (state, action) => {
+    //   const { column, options } = action.payload;
+    //   state.checkedOptions[column] = options;
+    // },
     setCheckedOptionsForColumn: (state, action) => {
       const { column, options } = action.payload;
-      state.checkedOptions[column] = options;
-    },
+      state.checkedOptions[column] = options; // Directly assign the options array
+  },
+    // setSelectAllCheckedForColumn: (state, action) => {
+    //   const { column, isChecked } = action.payload;
+    //   state.selectAllChecked = isChecked;
+    // },
     setSelectAllCheckedForColumn: (state, action) => {
       const { column, isChecked } = action.payload;
-      state.selectAllChecked = isChecked;
+      if (isChecked) {
+        state.checkedOptions[column] = state.filterOptions[column] || []; // Select all available options
+      } else {
+        state.checkedOptions[column] = []; // Clear options
+      }
     },
     
   },
@@ -195,14 +214,14 @@ const chartSlice = createSlice({
         state.yAxis = action.payload[3]; // Initialize yAxis
         state.aggregate = action.payload[4]; // Initialize aggregate
         state.chartType = action.payload[5]; // Initialize chartType if needed
-        state.filterOptions = action.payload[10]; // Initialize filterOptions if needed
+        state.filterOptions = action.payload[9]; // Initialize filterOptions if needed
         state.chartColor = action.payload[7]; // Initialize chartColor if needed
         state.databaseName = action.payload[11]; // Initialize databaseName if needed
         state.xFontSize = action.payload[12]; // Initialize xFontSize
-        state.yFontSize = action.payload[13]; // Initialize yFontSize
+        state.yFontSize = action.payload[15]; // Initialize yFontSize
         state.categoryColor = action.payload[14]; // Initialize categoryColor
-        state.valueColor = action.payload[15]; // Initialize valueColor
-        state.fontStyle = action.payload[16]; // Initialize fontStyle
+        state.valueColor = action.payload[16]; // Initialize valueColor
+        state.fontStyle = action.payload[13]; // Initialize fontStyle
       })
       .addCase(fetchTotalRows.rejected, (state, action) => {
         state.error = action.error.message;

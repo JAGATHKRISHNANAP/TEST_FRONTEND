@@ -102,7 +102,10 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
               //   return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
                 // break;  
               case 'treeHierarchy':
-                return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
+                // return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
+                if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
+                  return <TreeHierarchyView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]}  />;
+                }
                 // break;  
                 case 'scatter':
                     if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {

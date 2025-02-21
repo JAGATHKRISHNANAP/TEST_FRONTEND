@@ -666,14 +666,10 @@ const ChartRenderer = ({
                           <div style={{ marginTop: '20px' }}>
                             {
       // If more than 2 X-axis values are selected, show the message to remove 1
-      (yAxis.length >=1) && (
-        <div className="error-message">
-          You have selected row values. Please remove .
-        </div>
-      )
+      
     }
                               <div >
-                                <TreeHierarchy />
+                                <TreeHierarchy categories={plotData?.categories} values={plotData?.values} aggregation={plotData?.aggregation}/>
                               </div>
                               <div className='btn-container'>
                               <button className="save-button" onClick={handleSaveButtonClick}>Save Chart</button>

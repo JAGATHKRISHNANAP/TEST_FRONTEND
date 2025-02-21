@@ -16,7 +16,8 @@ import MapIcon from '@mui/icons-material/Map';
 import AlignHorizontalLeftIcon from '@mui/icons-material/AlignHorizontalLeft';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import PsychologyIcon from '@mui/icons-material/Psychology';
-
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz'; // Import for dual axis toggle
+import ShowChart from '@mui/icons-material/ShowChart';
 import CloudIcon from '@mui/icons-material/Cloud';
 import { FcComboChart } from "react-icons/fc";
 import { FcBarChart } from 'react-icons/fc'; 
@@ -168,7 +169,7 @@ return (
       <Divider />
       
       <div>
-        <Tooltip title="Dual Chart" arrow>
+        {/*<Tooltip title="Dual Chart" arrow>
           <Button
             sx={{ margin: "2px" }}
             variant={chartType === 'duealChart' ? 'contained' : 'outlined'}
@@ -189,6 +190,28 @@ return (
             <FcBarChart size={23}/>
           </Button>
         </Tooltip>
+         */}
+<Tooltip title="Dual Chart" arrow>
+  <Button
+    sx={{ margin: "2px" }}
+    variant={chartType === 'duealChart' ? 'contained' : 'outlined'}
+    onClick={() => handleChartTypeChange('duealChart')}
+    disabled={isdueaLButtonDisabled} // Fix here
+  >
+    <SwapHorizIcon size={23}/>
+  </Button>
+</Tooltip>
+
+<Tooltip title="Dual Bar Chart" arrow>
+  <Button
+    sx={{ margin: "2px" }}
+    variant={chartType === 'duealbarChart' ? 'contained' : 'outlined'}
+    onClick={() => handleChartTypeChange('duealbarChart')}
+    disabled={isdueaLXButtonDisabled} // Fix here
+  >
+    <ShowChart size={23}/>
+  </Button>
+</Tooltip>
 
         <Tooltip title="Text Chart" arrow>
           <Button

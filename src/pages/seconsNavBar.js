@@ -183,7 +183,11 @@ function Navbar() {
     >
       <CssBaseline />
       <Toolbar>
-      <ButtonGroup variant="text" aria-label="Basic button group" sx={{ height: '25px', display: 'flex' }}>
+      <ButtonGroup variant="text" aria-label="Basic button group" sx={{ height: '25px', display: 'flex' ,gap:0,
+      '& .MuiButtonGroup-grouped:not(:last-of-type)': {
+      borderRight: 'none', // Removes any border between buttons,
+      border:'none'
+    }}}>
             {userRole !== '3' && ( 
               <Button
                 aria-controls={openMenu ? 'data-source-menu' : undefined}
@@ -193,11 +197,13 @@ function Navbar() {
                 
                 ref={buttonRef}
                 sx={{
-                  backgroundColor: activeRoute === '/excel_upload' || activeRoute === '/csv_upload' || activeRoute === '/Audio_upload' ? '#c5c5c9' : 'inherit',
+                  backgroundColor: activeRoute === '/excel_upload' || activeRoute === '/csv_upload' || activeRoute === '/Audio_upload'  ? '#c5c5c9' : 'inherit',
+              alignItems: 'center',
                   maxWidth: '150px',
                   alignItems: 'center',
-                  color: 'inherit',
+                 
                   fontSize: "16px", 
+                 
                 }}
               >
                 <ListItemIcon sx={{ display: 'flex',alignItems: 'center', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
@@ -251,23 +257,53 @@ function Navbar() {
 
 </Menu>
  */}
-<MenuItem onClick={() => handleNavigation('/excel_upload')}>
+<MenuItem onClick={() => handleNavigation('/excel_upload')} sx={{
+    backgroundColor: location.pathname === '/excel_upload' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/excel_upload' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
   <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
   Excel
 </MenuItem>
-<MenuItem onClick={() => handleNavigation('/csv_upload')}>
+<MenuItem onClick={() => handleNavigation('/csv_upload')}  sx={{
+    backgroundColor: location.pathname === '/csv_upload' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/csv_upload' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
   <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
   CSV
 </MenuItem>
-<MenuItem onClick={() => handleNavigation('/json_upload')}>
+<MenuItem onClick={() => handleNavigation('/json_upload')}  sx={{
+    backgroundColor: location.pathname === '/json_upload' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/json_upload' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
   <ListItemIcon><IoIosPaper size={20} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
   JSON
 </MenuItem>
-<MenuItem onClick={() => handleNavigation('/custom_data_source')}>
+<MenuItem onClick={() => handleNavigation('/custom_data_source')}  sx={{
+    backgroundColor: location.pathname === '/custom_data_source' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/custom_data_source' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
   <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
   Custom Join
 </MenuItem>
-<MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
+<MenuItem onClick={() => handleNavigation('/Create_DataSource')}  sx={{
+    backgroundColor: location.pathname === '/Create_DataSource' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/Create_DataSource' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
   <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
   Create DataSource
 </MenuItem>
@@ -281,7 +317,7 @@ function Navbar() {
         maxWidth: '150px',
         alignItems: 'center',
         color: 'inherit',
-        fontSize: "16px", 
+        fontSize: "16px",  border: 'none',
       }}
     >
       <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000',textTransform: 'none'  }}>
@@ -296,7 +332,7 @@ function Navbar() {
           maxWidth: '200px',
           alignItems: 'center',
           color: 'inherit',
-          fontSize: "16px", 
+          fontSize: "16px",  border: 'none',
         }}
       >
         <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '200px', color: '#000000',textTransform: 'none'  }}>
@@ -315,8 +351,8 @@ function Navbar() {
           sx={{
             backgroundColor:
             location.pathname === '/dashboard'||
-            location.pathname === '/Create_Dashboard' ||
-            location.pathname === '/dashboard_view'
+            location.pathname === '/Create_Dashboard' 
+            // location.pathname === '/dashboard_view'
                 ? '#c5c5c9'
                 : 'inherit',
             alignItems: 'center',
@@ -354,10 +390,22 @@ function Navbar() {
             },
           }}
         >
-          <MenuItem onClick={() => handleNavigation('/dashboard')}>
+          <MenuItem onClick={() => handleNavigation('/dashboard')} sx={{
+    backgroundColor: location.pathname === '/dashboard' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/dashboard' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
           Chart
           </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>
+          <MenuItem onClick={() => handleNavigation('/Create_Dashboard')} sx={{
+    backgroundColor: location.pathname === '/Create_Dashboard' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/Create_Dashboard' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>
           Dashboard 
           </MenuItem>
           {/* <MenuItem onClick={() => handleNavigation('/dashboard_view')}>
@@ -389,7 +437,7 @@ function Navbar() {
             maxWidth: '150px',
             alignItems: 'center',
             color: 'inherit',
-            fontSize: "16px",
+            fontSize: "16px",border: 'none',
         }}
     >
         <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', width: '150px', color: '#000000', textTransform: 'none' }}>
@@ -434,8 +482,20 @@ function Navbar() {
               >
                 {/* <MenuItem onClick={() => handleNavigation('/Create_Dashboard')}>Charts</MenuItem>
                 <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem> */}
-                <MenuItem onClick={() => handleNavigation('/Charts_view')}>Chart</MenuItem>
-                <MenuItem onClick={() => handleNavigation('/dashboard_view')}>Dashboard</MenuItem>
+                <MenuItem onClick={() => handleNavigation('/Charts_view')} sx={{
+    backgroundColor: location.pathname === '/Charts_view' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/Charts_view' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>Chart</MenuItem>
+                <MenuItem onClick={() => handleNavigation('/dashboard_view')} sx={{
+    backgroundColor: location.pathname === '/dashboard_view' ? '#c5c5c9': 'inherit',
+    color: location.pathname === '/dashboard_view' ? '#ffffff' : 'black',
+    '&:hover': {
+      backgroundColor: '#64b5f6'
+    }
+  }}>Dashboard</MenuItem>
               </Menu>
             </ButtonGroup>
 

@@ -9,9 +9,13 @@ const chartTypeSlice = createSlice({
     setChartType: (state, action) => {
       state.type = action.payload;
     },
+    resetChartType: (state) => {
+
+      state.type = "";
+    },
   },
 });
 
-export const { setChartType } = chartTypeSlice.actions;
+export const { setChartType,resetChartType } = chartTypeSlice.actions;
 
 export default chartTypeSlice.reducer;
