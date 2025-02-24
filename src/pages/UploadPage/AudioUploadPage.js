@@ -30,6 +30,19 @@ const AudioUpload = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
+  useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {

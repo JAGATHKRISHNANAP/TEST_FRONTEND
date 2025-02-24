@@ -1293,6 +1293,7 @@ const DropZone = ({ droppedTables, setDroppedTables, setConnections, handleOpenR
 
   const tableSpacing = 350;
   const topPadding = 25;
+
   const [, drop] = useDrop(() => ({
     accept: ItemTypes.TABLE,
     drop: (item) => {
@@ -1676,6 +1677,19 @@ const CustomJoinWithFetchTables = () => {
   const [users, setUsers] = useState([]);
   const connectionType = localStorage.getItem('connectionType');
   
+    useEffect(() => {
+        // Prevent navigating back
+        const disableBackButton = () => {
+          window.history.pushState(null, "", window.location.href);
+        };
+      
+        window.history.pushState(null, "", window.location.href);
+        window.addEventListener("popstate", disableBackButton);
+      
+        return () => {
+          window.removeEventListener("popstate", disableBackButton);
+        };
+      }, []);
   useEffect(() => {
     const fetchAllUsers = async () => {
       setIsLoading(true);

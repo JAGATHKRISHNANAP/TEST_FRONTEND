@@ -685,28 +685,7 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
           value: chartData.values[index]
       })).sort((a, b) => b.value - a.value);
   }, [chartData]);
-//   const handleSortAscending = () => {
-//     const sorted = [...sortedIndices.categories]
-//         .map((category, index) => ({ category, value: sortedData.values[index] }))
-//         .sort((a, b) => a.category.localeCompare(b.category));
 
-//     setSortedData({
-//         categories: sorted.map(item => item.category),
-//         values: sorted.map(item => item.value)
-//     });
-// };
-
-// // Function to handle descending sort
-// const handleSortDescending = () => {
-//     const sorted = [...sortedData.categories]
-//         .map((category, index) => ({ category, value: sortedData.values[index] }))
-//         .sort((a, b) => b.category.localeCompare(a.category));
-
-//     setSortedData({
-//         categories: sorted.map(item => item.category),
-//         values: sorted.map(item => item.value)
-//     });
-// };
 
     const handleTop10 = () => {
         const sortedIndices = values

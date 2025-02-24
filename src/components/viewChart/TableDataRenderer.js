@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TableDataRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, result, fetchedData, heading, text_y_xis }) => {
+const TableDataRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData,hierarchyValues, result, fetchedData, heading, text_y_xis }) => {
   const renderTableData = () => {
     const tableStyles = {
       width: '100%',
@@ -41,23 +41,67 @@ const TableDataRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData,
           </tbody>
         </table>
       ) : null;
-    } else if (data[5] === 'treeHierarchy') {
-      return hierarchy && hierarchyData ? (
-        <table style={tableStyles}>
-          <thead>
-            <tr>
-              <th style={thStyles}>Hierarchy</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hierarchyData.map((Hierarchy, index) => (
-              <tr key={index}>
-                <td style={tdStyles}>{hierarchy[index]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : null;
+    // } else if (data[5] === 'treeHierarchy') {
+    //   return hierarchy && hierarchyData ? (
+    //     <table style={tableStyles}>
+    //       <thead>
+    //         <tr>
+    //           <th style={thStyles}>Hierarchy</th>
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         {hierarchyData.map((Hierarchy, index) => (
+    //           <tr key={index}>
+    //             <td style={tdStyles}>{hierarchy[index]}</td>
+    //           </tr>
+    //         ))}
+    //       </tbody>
+    //     </table>
+    //   ) : null;
+  // } else if (data[5] === 'treeHierarchy') {
+  //     return hierarchyData && hierarchyData.length > 0 ? (
+  //       <table style={tableStyles}>
+  //         <thead>
+  //           <tr>
+  //             <th style={thStyles}>Hierarchy</th>
+  //             <th style={thStyles}>Data</th>
+  //             <th style={thStyles}>Value</th>
+  //           </tr>
+  //         </thead>
+  //         <tbody>
+  //           {hierarchyData.map((item, index) => (
+  //             <tr key={index}>
+  //               <td style={tdStyles}>{hierarchy[index]}</td>
+  //               <td style={tdStyles}>{JSON.stringify(item)}</td>
+  //               <td style={tdStyles}>{hierarchyValues}</td>
+  //             </tr>
+  //           ))}
+  //         </tbody>
+  //       </table>
+  //     ) : <p>No hierarchy data available</p>;
+} else if (data[5] === 'treeHierarchy') {
+  return hierarchyData && hierarchyData.length > 0 ? (
+    <table style={tableStyles}>
+      <thead>
+        <tr>
+          <th style={thStyles}>Hierarchy</th>
+          <th style={thStyles}>Data</th>
+          <th style={thStyles}>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {hierarchyData.map((item, index) => (
+          <tr key={index}>
+            <td style={tdStyles}>{hierarchy?.[index] || "N/A"}</td>
+            <td style={tdStyles}>{Object.values(item).join(", ")}</td>  
+            <td style={tdStyles}>{hierarchyValues?.[index] || "N/A"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : <p>No hierarchy data available</p>;
+
+    
     } else if (data[5] === 'singleValueChart') {
       return fetchedData ? (
         <table style={tableStyles}>

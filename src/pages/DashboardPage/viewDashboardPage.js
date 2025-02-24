@@ -23,7 +23,20 @@ function DashboardView() {
   useEffect(() => {
     console.log("checkedOptions:", checkedOptions);
   }, [checkedOptions]);
-
+  
+useEffect(() => {
+    // Prevent navigating back
+    const disableBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+  
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", disableBackButton);
+  
+    return () => {
+      window.removeEventListener("popstate", disableBackButton);
+    };
+  }, []);
   return (
     <div className="App">
       <Box sx={{ flexGrow: 1 }}>

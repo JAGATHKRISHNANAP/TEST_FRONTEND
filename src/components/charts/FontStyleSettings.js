@@ -492,31 +492,30 @@ const CustomToolTip = ({ onClose }) => {
       />
 
       <Draggable handle=".tooltip-header">
-        <div
-          style={{
-            position: "fixed",
-            top: "10%",
-            left: "30%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "white",
-            padding: "20px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            zIndex: 2000,
-            width: "700px",
-            borderRadius: "10px",
-            maxHeight: "80vh",
-            overflowY: "auto",
-            cursor: "move",
-          }}
-        >
-          <div
-            className="tooltip-header"
-            style={{
-              cursor: "move",
-              paddingBottom: "10px",
-              borderBottom: "1px solid #ccc",
-            }}
-          >
+      <div
+    style={{
+      position: "fixed",
+      top: "10%",
+      left: "30%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "white",
+      padding: "20px",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      zIndex: 2000,
+      width: "700px",
+      borderRadius: "10px",
+      maxHeight: "80vh",
+      overflowY: "auto",
+      cursor: "default", // Normal cursor for the main container
+    }}
+  >
+    <div className="tooltip-header" 
+      style={{
+        cursor: "move", // Move cursor only for the top header
+        paddingBottom: "10px",
+        borderBottom: "1px solid #ccc",
+      }}
+    >
             <Typography variant="h5" gutterBottom>
               Text
             </Typography>

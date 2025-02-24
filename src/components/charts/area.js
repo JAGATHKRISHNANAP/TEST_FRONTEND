@@ -783,6 +783,7 @@ const AreaChart = ({ categories = [], values = [], aggregation }) => {
   const options = {
     chart: {
       type: "area",
+      
       toolbar: {
         tools: {
           customIcons: [

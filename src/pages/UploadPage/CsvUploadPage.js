@@ -143,6 +143,19 @@ const CsvUpload = () => {
 
 
   useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
+  useEffect(() => {
     if (uploadError) {
       const message = typeof uploadError === "object" ? uploadError.message || JSON.stringify(uploadError) : uploadError;
       setSnackbarMessage(message);
@@ -480,8 +493,8 @@ return (
     <form onSubmit={handleSubmit} className="excel-upload-form">
       <Grid container item xs={12} md={12} style={{height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
               <HomePage />
-          <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
-            <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
+              <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
+                    <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '180px' }}>
             <Button
               component="label"
               variant="contained"
@@ -508,6 +521,10 @@ return (
               loadingPosition="start"
               startIcon={<SaveIcon />}
               variant="contained"
+              sx={{
+                padding: '11px 18px', // Increase padding
+                minWidth: '120px', // Minimum button width
+              }}
             >
               {uploading ? 'Uploading...' : 'Upload'}
             </LoadingButton>
@@ -571,7 +588,24 @@ return (
 </Grid>
 )}
         </Grid>
-      </Grid>
+        <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <PieChart
+                series={[
+                  {
+                    data: [
+                      { id: 0, value: totalColumns },
+                      { id: 1, value: totalRows },
+                    ],
+                  },
+                ]}
+                width={200}
+                height={100}
+              />
+            </div>
+          </Grid>
+        </Grid>
+
 
       {/* Display preview of the first 5 rows */}
       {csvData.length > 0 && (

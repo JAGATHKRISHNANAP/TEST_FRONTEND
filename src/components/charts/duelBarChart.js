@@ -1452,7 +1452,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
         chart: {
             type: 'bar',
             height: 350,
-             
+            
             toolbar: {
                 tools: {
                     customIcons: [

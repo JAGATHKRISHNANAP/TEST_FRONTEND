@@ -381,8 +381,8 @@ import { useDispatch, useSelector } from "react-redux";
 // import FilterListIcon from '@mui/icons-material/FilterList';
 import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
   setFontStyles,
-  setColorStyles,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice";
-  import { setCheckedOptions,} from "../../features/Dashboard-Slice/chartSlice";
+  setColorStyles } from "../../features/EditChart/EditChartSlice";
+  import { setCheckedOptions,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn} from "../../features/Dashboard-Slice/chartSlice";
 import SaveButton from './SaveButton';
 import ChartDisplay from "./ChartDisplay";
 import ChartControls from "./ChartControls";
@@ -456,7 +456,19 @@ console.log("Redux Filter Options:", reduxFilterOptions);
   console.log("filterOptionsas--------------------------1",filterOptionsas)
 
   console.log("filterOptions-----------------------------2",filterOptions)
-  
+  useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
   useEffect(() => {
     if (chartType1) {
       dispatch(setChartType(chartType1));

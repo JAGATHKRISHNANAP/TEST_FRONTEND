@@ -527,7 +527,7 @@ const CustomToolTip = ({ onClose }) => {
         onClick={onClose}
       />
       
-      <Draggable handle=".tooltip-header">
+      {/* <Draggable handle=".tooltip-header">
         <div
           style={{
             position: "fixed",
@@ -564,6 +564,50 @@ const CustomToolTip = ({ onClose }) => {
               &times;
             </button>
           </div>
+           */}
+<Draggable handle=".tooltip-header">
+  <div
+    style={{
+      position: "fixed",
+      top: "10%",
+      left: "30%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "white",
+      padding: "20px",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      zIndex: 2000,
+      width: "700px",
+      borderRadius: "10px",
+      maxHeight: "80vh",
+      overflowY: "auto",
+      cursor: "default", // Normal cursor for the main container
+    }}
+  >
+    <div className="tooltip-header" 
+      style={{
+        cursor: "move", // Move cursor only for the top header
+        paddingBottom: "10px",
+        borderBottom: "1px solid #ccc",
+      }}
+    >
+      <Typography variant="h5" gutterBottom>
+        Customize Tooltip
+      </Typography>
+      <button
+        onClick={onClose}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "transparent",
+          border: "none",
+          fontSize: "20px",
+          cursor: "pointer",
+        }}
+      >
+        &times;
+      </button>
+    </div>
 
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>

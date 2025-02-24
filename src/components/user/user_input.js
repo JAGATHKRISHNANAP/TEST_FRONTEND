@@ -133,6 +133,20 @@ export default function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Validation for username and password length
+    if (formData.userName.length > 20) {
+      setPasswordError(true);
+      setPasswordErrorMessage('Username must not exceed 20 characters.');
+      setOpen(true);
+      return;
+    }
+  
+    if (formData.password.length > 20) {
+      setPasswordError(true);
+      setPasswordErrorMessage('Password must not exceed 20 characters.');
+      setOpen(true);
+      return;
+    }
   
     const userDetails = {
       employeeName: formData.employeeName,
@@ -439,6 +453,7 @@ const handleLoginLogout = () => {
                         type="password"
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        inputProps={{ maxLength: 20 }}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -450,6 +465,7 @@ const handleLoginLogout = () => {
                         type="password"
                         value={formData.retypePassword}
                         onChange={(e) => setFormData({ ...formData, retypePassword: e.target.value })}
+                        inputProps={{ maxLength: 20 }}
                       />
                     </Grid>
                     <Grid item xs={12}>

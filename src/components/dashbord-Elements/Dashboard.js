@@ -84,16 +84,16 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
 const selectedTable=sessionStorage.getItem("selectedTable")
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   // const selectedTable = selectedTablearray.join(',');
-  
-  React.useEffect(() => {
-    if (xAxis && yAxis && aggregate && chartType) {
-      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions,selectedUser }));
+  useEffect(() => {
+    if (xAxis && yAxis && aggregate && chartType && selectedTable) { // Add selectedTable
+        dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions, selectedUser }));
     }
-  }, [SelectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, dispatch]);
-  const preventReload = (e) => {
-    e.preventDefault();
-    e.returnValue = '';  // This triggers a confirmation prompt
-  };
+}, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, selectedUser, dispatch]); // Add selectedTable
+
+  // const preventReload = (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = '';  // This triggers a confirmation prompt
+  // };
   
   
   useEffect(() => {
@@ -196,7 +196,19 @@ const selectedTable=sessionStorage.getItem("selectedTable")
   };
   
   
-
+useEffect(() => {
+    // Prevent navigating back
+    const disableBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+  
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", disableBackButton);
+  
+    return () => {
+      window.removeEventListener("popstate", disableBackButton);
+    };
+  }, []);
   return (
     <div className="App">
       

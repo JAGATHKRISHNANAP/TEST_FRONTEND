@@ -134,7 +134,7 @@ const chartSlice = createSlice({
     const { column, options } = action.payload;
     state.filterOptions[column] = options;
     if (!state.checkedOptions[column]) {
-      state.checkedOptions[column] = options; //Initialize checked options with filterOptions
+      state.checkedOptions[column] = [...options]; //Initialize checked options with filterOptions
     }
   },
     

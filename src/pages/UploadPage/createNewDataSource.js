@@ -1294,7 +1294,7 @@
 //   );
 // }
 
-import * as React from 'react';
+import React,{useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import { 
   Box, Grid, Button, Card as MuiCard, TextField, Typography, Snackbar, Alert, MenuItem, 
@@ -1303,6 +1303,7 @@ import {
 import { Storage } from '@mui/icons-material';
 import axios from 'axios';
 import HomePage from '../HomePage';
+
 const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   maxWidth: 800,
@@ -1331,6 +1332,20 @@ export default function ExternalDbConnection() {
   const company_name = localStorage.getItem("company_name");
   const apiUrl = 'http://localhost:5000/connect'; // Flask backend URL
 
+  
+  useEffect(() => {
+    // Prevent navigating back
+    const disableBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+  
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", disableBackButton);
+  
+    return () => {
+      window.removeEventListener("popstate", disableBackButton);
+    };
+  }, []);
   const handleTestConnection = async () => {
     if (!dbUsername || !dbPassword || !port || !dbName) {
       setTestMessage('Please fill in all fields to test the connection.');

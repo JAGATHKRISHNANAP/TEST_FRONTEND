@@ -32,7 +32,19 @@ function Charts() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const chartDetails = useSelector((state) => state.viewChartDetails.chartDetails);
 
-
+  useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
   useEffect(() => {
     console.log("Redux Chart Details:", chartDetails);
     console.log(" chartData:", chartData);

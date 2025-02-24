@@ -835,6 +835,7 @@ const DuelAxisChart = ({
       events: {
         dataPointSelection: handleClicked,
         legendClick: handleLegendClick,
+        
       },
       toolbar: {
         show: true,

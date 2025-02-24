@@ -1070,7 +1070,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [legendPosition, setLegendPosition] = useState("right");
   const [chartKey, setChartKey] = useState(0);
-
+  const [isPanning, setIsPanning] = useState(false);
   // Default colors
   const defaultColors = [
     "#008FFB",
@@ -1194,7 +1194,20 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
     chart: {
       events: {
         dataPointSelection: handleClicked,
-        ...chartEvents
+        ...chartEvents,
+        mounted: function (chartContext) {
+          const toolbar = document.querySelector(".apexcharts-toolbar");
+          if (toolbar) {
+            toolbar.addEventListener("click", (event) => {
+              if (event.target.closest(".apexcharts-pan-icon")) {
+                document.body.style.cursor = "grab";
+              }
+            });
+          }
+        },
+        mouseLeave: function () {
+          document.body.style.cursor = "default"; // Reset when mouse leaves chart
+        }
       },
       toolbar: {
         tools: {

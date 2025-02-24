@@ -21,6 +21,7 @@ import ShowChart from '@mui/icons-material/ShowChart';
 import CloudIcon from '@mui/icons-material/Cloud';
 import { FcComboChart } from "react-icons/fc";
 import { FcBarChart } from 'react-icons/fc'; 
+import {resetCustomHeading}from'../../features/ToolTip/toolTipSlice';
 function DashboardCharts() {
   const dispatch = useDispatch();
   const DchartType = useSelector((state) => state.chartType.type);
@@ -63,7 +64,7 @@ function DashboardCharts() {
   const handleChartTypeChange = (selectedChartType) => {
     dispatch(setChartType(selectedChartType));
     sessionStorage.setItem('selectedChartType', selectedChartType); // Save to local storage
-
+    dispatch(resetCustomHeading());
   //   let message = `Chart of type ${selectedChartType} selected. Ensure proper axis selection.`;
 
   //   // Custom message based on selected chart type and axis requirements

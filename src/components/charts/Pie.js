@@ -378,12 +378,23 @@ const [legendPosition, setLegendPosition] = useState("right");
     const [pieColors, setPieColors] = useState(
       (categories || []).map((_, i) => defaultColors[i % defaultColors.length])
     );
+  // useEffect(() => {
+  //   setSortedCategories(categories);
+  //   setSortedValues(values);
+  //   setPieColors(categories.map((_, i) => defaultColors[i % defaultColors.length]));
+  // }, [categories, values]);
   useEffect(() => {
-    setSortedCategories(categories);
-    setSortedValues(values);
-    setPieColors(categories.map((_, i) => defaultColors[i % defaultColors.length]));
- 
+    if (Array.isArray(categories) && categories.length > 0) {
+      setSortedCategories(categories);
+      setSortedValues(values);
+      setPieColors(categories.map((_, i) => defaultColors[i % defaultColors.length]));
+    } else {
+      setSortedCategories([]);
+      setSortedValues([]);
+      setPieColors([]); // Prevents error when categories are empty
+    }
   }, [categories, values]);
+  
 
   const handleSortAscending = () => {
     const sortedData = [...sortedValues].map((value, index) => ({

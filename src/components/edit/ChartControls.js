@@ -47,7 +47,7 @@
 // import React from 'react';
 import { FormControl, InputLabel, NativeSelect, Paper, styled, List, ListItemButton, ListItemIcon, Checkbox } from "@mui/material";
 // import { useDispatch } from "react-redux";
-import { setAggregate, setYAxis,setFilterOptions,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice"; // Import setYAxis
+import { setAggregate, setYAxis,setFilterOption,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice"; // Import setYAxis
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import FilterOptionsModal from './editChartFilterModal';
@@ -55,7 +55,7 @@ import React, { useState,useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {fetchFilterOptionsAPI,generateChartData,saveChartData} from '../../utils/api';
 // import { setXAxis, toggleFilterDropdownForColumn } from '../../features/Dashboard-Slice/chartSlice';
- import { setCheckedOptions } from "../../features/Dashboard-Slice/chartSlice";
+ import { setCheckedOptions} from "../../features/Dashboard-Slice/chartSlice";
 // import { fetchFilterOptionsAPI } from "../../utils/api";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -93,6 +93,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
           try {
             console.log("Selected Table:", selectedTable);
               const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+              console.log('options', options);
               if (options && typeof options === 'object') {
                   dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
               } else {
@@ -102,6 +103,25 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
               console.error('Failed to fetch filter options:', error);
           }
       };
+  
+  //   const fetchFilterOptions = async (column) => {
+  //     try {
+  //         const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+  //         if (options && typeof options === 'object') {
+  //           dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+  //             // dispatch(setCheckedOptions({ column, options: options[column] || [] })); // Dispatch for checked options
+  //             //  dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Initialize checked options
+  //                   //  dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Set selectAllChecked to true initially
+                  
+  //             setFilterOptions(options); // This line is still needed for the initial render of the filter list in the modal
+  //           } else {
+  //             console.error('Filter options is not an object as expected', options);
+  //         }
+  //     } catch (error) {
+  //         console.error('Failed to fetch filter options:', error);
+  //     }
+  // };
+  
       const openFilterModal = (column) => {
         setSelectedColumn(column);
         setModalOpen(true);

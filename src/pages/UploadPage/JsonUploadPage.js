@@ -1,6 +1,6 @@
 
 
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFile, setColumnHeadings, setPrimaryKeyColumn, uploadJson } from '../../features/jsonFileSlice/jsonFileSlice';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -38,6 +38,19 @@ const JsonUpload = () => {
   const [snackbarSeverity, setSnackbarSeverity] = React.useState('success');
   const company_database = localStorage.getItem('company_name');
 
+  useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
   React.useEffect(() => {
     if (uploadError) {
       setSnackbarMessage(uploadError);
@@ -392,7 +405,24 @@ if (existingTableNames.includes(tableName)) {
 </Grid>
 )}
             {/* </FormGroup> */}
-          </Grid>
+           <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <PieChart
+                          series={[
+                            {
+                              data: [
+                                { id: 0, value: totalColumns },
+                                { id: 1, value: totalRows },
+                              ],
+                            },
+                          ]}
+                          width={200}
+                          height={100}
+                        />
+                      </div>
+                    </Grid>
+                  </Grid>
+          
           {/* <Grid item xs={12} md={2} style={{ backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <PieChart series={[{ data: [{ id: 0, value: totalColumns }, { id: 1, value: totalRows }] }]} width={200} height={200} />

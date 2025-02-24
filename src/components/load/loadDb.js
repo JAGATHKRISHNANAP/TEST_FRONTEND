@@ -581,6 +581,19 @@ const LoadDbFile = () => {
   const lighterColor = tinycolor(theamColor).lighten(10).toString();
   const databaseName = localStorage.getItem('company_name');
 
+  useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
   // Fetch User List
   useEffect(() => {
     const fetchAllUsers = async () => {

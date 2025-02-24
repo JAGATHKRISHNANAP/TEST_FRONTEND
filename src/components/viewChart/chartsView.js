@@ -40,6 +40,20 @@ function Chartsview() {
     height: window.innerHeight,
   });
 
+
+  useEffect(() => {
+      // Prevent navigating back
+      const disableBackButton = () => {
+        window.history.pushState(null, "", window.location.href);
+      };
+    
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", disableBackButton);
+    
+      return () => {
+        window.removeEventListener("popstate", disableBackButton);
+      };
+    }, []);
   // Update window size on resize
   useEffect(() => {
     const handleResize = () => {

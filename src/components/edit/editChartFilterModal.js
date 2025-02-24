@@ -173,7 +173,7 @@ const [plotData, setPlotData] = useState({});
       ? checkedOptions.filter(item => item !== option)
       : [...checkedOptions, option];
     dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
-    // dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
+    dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
     generateChart();
   };
 

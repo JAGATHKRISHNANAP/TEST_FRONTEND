@@ -31,6 +31,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
   const [tableVisible, setTableVisible] = useState(false);
   const [hierarchy,setHierarchy]=useState(null);
   const [hierarchyData,setHierarchyData]=useState(null);
+  const [hierarchyValues,setHierarchyValues]=useState(null);
   const [aiChartData,setAiChartData]=useState(null);
   const database_name =localStorage.getItem("company_name");
   const isDashboard = context === "dashboard";
@@ -55,6 +56,20 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
   const chartDataFromStore = useSelector((state) =>
     state.viewcharts.charts.find((chart) => chart.chart_id === chart_id)
   );
+  useEffect(() => {
+    // Prevent navigating back
+    const disableBackButton = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+  
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", disableBackButton);
+  
+    return () => {
+      window.removeEventListener("popstate", disableBackButton);
+    };
+  }, []);
+  
 //   // const generateUniquePosition = useCallback((existingPositions) => {
 //   //   const margin = 20;
 //   //   const chartWidth = 500;
@@ -167,10 +182,16 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
     
       const response = await sendChartDetails(data, position, selectedUser);
   
+      // if (data[5] === 'treeHierarchy') {
+      //   setHierarchyData(response["data frame"]);
+      //   setHierarchy(response["x_axis"]);
+      // }
       if (data[5] === 'treeHierarchy') {
-        setHierarchyData(response["data frame"]);
-        setHierarchy(response["x_axis"]);
-      }
+        const { categories, values, x_axis } = response;
+        setHierarchyData(categories); // Assuming categories contains hierarchical structure
+        setHierarchy(x_axis); // Setting the x-axis for reference
+        setHierarchyValues(values);
+    }
       if(data[5]==='sampleAitestChart'){
         setAiChartData(response['histogram_details']);
       }
@@ -373,6 +394,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
         chartDataFromStore={chartDataFromStore}
         hierarchy={hierarchy}
         hierarchyData={hierarchyData}
+
         aiChartData={aiChartData}
         aiMlChartData={aiMlChartData}
         result={result}
@@ -390,6 +412,7 @@ const ResizableChart = ({ data, onRemove, updateChartDetails,
         chartDataFromStore={chartDataFromStore}
         hierarchy={hierarchy}
         hierarchyData={hierarchyData}
+        hierarchyValues={hierarchyValues}
         result={result}
         fetchedData={fetchedData}
         heading={heading}
