@@ -457,7 +457,7 @@ import { BiVolumeLow } from "react-icons/bi"
 
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { fetchTotalRows } from '../../utils/api';
 import DraggableChartButton from './DraggableChartButton';
 import DroppableArea from './DroppableArea';
@@ -479,10 +479,23 @@ function Charts() {
   const dashboardfilterXaxis = useSelector((state) => state.viewcharts.selectedCategory_xaxis);
   const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
   const company_name=(localStorage.getItem('company_name'))
+  // const ChartPossition = useSelector((state) => state.viewchartspostion.chartPositions);
+
+  const ChartPossition = useSelector(
+    (state) => state.viewchartspostion.chartPositions,
+    shallowEqual
+  );
+
 
   const [user_id, setUserId] = React.useState(localStorage.getItem('user_id'));
 
   console.log("company name*****************************",company_name)
+
+
+  useEffect(() => {
+    console.log("Updated ChartPositions:", ChartPossition);
+  }, [ChartPossition]);
+  
 
   useEffect(() => {
     console.log("Fetching total rows");
@@ -551,14 +564,54 @@ function Charts() {
   }, []);
 
 
-  const updateChartDetails = useCallback((chartName, newDetails) => {
-    setChartData((prevData) => {
-      const updatedData = prevData.map((data) =>
-        data.chartName === chartName ? { ...data, ...newDetails } : data
+  // const updateChartDetails = useCallback((chartName, newDetails) => {
+  //   setChartData((prevData) => {
+  //     const updatedData = prevData.map((data) =>
+  //       data.chartName === chartName ? { ...data, ...newDetails } : data
+  //     );
+  //     return updatedData;
+  //   });
+  // }, []);
+
+  const updateChartDetails = useCallback(
+    (chartName, newDetails) => {
+      // 1. Find the matching position from ChartPossition
+      const matchedPosition = ChartPossition.find(
+        (pos) => pos.chartName === chartName
       );
-      return updatedData;
-    });
-  }, []);
+  
+      // Optional: if not found, you could early-return or handle it differently
+      if (!matchedPosition) return;
+  
+      // 2. Use setChartData to update the relevant chart
+      setChartData((prevData) => {
+        return prevData.map((chartItem) => {
+          if (chartItem.chartName === chartName) {
+            // Merge existing chart data, the new details, and the matched position
+            return {
+              ...chartItem,
+              ...newDetails,
+              // If you store positions in a nested `position` object:
+              position: {
+                x: matchedPosition.x,
+                y: matchedPosition.y,
+              },
+              // or if you just store them at top level:
+              // x: matchedPosition.x,
+              // y: matchedPosition.y,
+            };
+          }
+          return chartItem;
+        });
+      });
+    },
+    [ChartPossition] // Make sure to include ChartPossition in dependency array
+  );
+
+
+
+
+
 
   const handleSaveClick = () => {
     setOpenDialog(true);
