@@ -90,7 +90,7 @@ function DashboardCharts() {
 
   
   const isBARHIERARCHYButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length === 1);
-  const isTreeButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length===0 );
+  const isTreeButtonDisabled = !(xAxis?.length >= 1 && yAxis?.length>=0 );
   const isSingleValueButtonDisabled = !(xAxis?.length === 1  && yAxis?.length===0);
   
   // const 
@@ -252,7 +252,7 @@ return (
             sx={{ margin: "2px" }}
             variant={chartType === 'treeHierarchy' ? 'contained' : 'outlined'}
             onClick={() => handleChartTypeChange('treeHierarchy')}
-            // disabled={isTreeButtonDisabled}
+             disabled={isTreeButtonDisabled}
           >
             <AccountTreeIcon/>
           </Button>

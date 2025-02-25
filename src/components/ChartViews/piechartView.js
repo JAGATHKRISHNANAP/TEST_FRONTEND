@@ -164,12 +164,12 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const Pie = (props) => {
-  const { categories, values: stringValues, aggregation ,x_axis} = props;
+  const { categories, values: stringValues, aggregation ,x_axis,customHeadings, headingColor} = props;
   const values = stringValues.map(value => parseFloat(value));
   const dispatch = useDispatch();
   const [showResetButton, setShowResetButton] = useState(false);
-  const customHeadings = useSelector((state) => state.toolTip.customHeading); // Added customHeadings selector
-  const charts = useSelector((state) => state.viewcharts.charts);
+  // const customHeadings = useSelector((state) => state.toolTip.customHeading); // Added customHeadings selector
+   const charts = useSelector((state) => state.viewcharts.charts);
   const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
   
   const handleClicked = async (event, chartContext, config) => {
@@ -252,7 +252,9 @@ const Pie = (props) => {
       <div className="row">
         <div className="pie-chart">
           <ResizableBox  style={{ paddingTop: '35px' }} width={370} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 600]} >
-            <div className="chart-title">{customHeadings}</div> {/* Added custom heading */}
+          <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
             <Chart
               options={options}
               series={series}

@@ -211,10 +211,16 @@ const chartSlice = createSlice({
     setDashboardBarColor: (state, action) => { state.dashboardBarColor = action.payload },
     setClickedCategory: (state, action) => { state.clickedCategory = action.payload },
     setIsChartGenerationClicked: (state, action) => { state.isChartGenerationClicked = action.payload },
+    // setCheckedOptionsForColumn: (state, action) => {
+    //   const { column, options } = action.paylresetChartStateoad;
+    //   state.checkedOptions[column] = options;
+    // },
     setCheckedOptionsForColumn: (state, action) => {
+      if (!action.payload || !action.payload.column) return;
       const { column, options } = action.payload;
       state.checkedOptions[column] = options;
     },
+    
     setSelectAllCheckedForColumn: (state, action) => {
       const { column, isChecked } = action.payload;
       state.selectAllChecked = isChecked;
@@ -224,6 +230,7 @@ const chartSlice = createSlice({
       state.xAxis = [];
       state.yAxis = [];
       state.chartType = "";
+      
     },
     resetState: () => initialState,
   },

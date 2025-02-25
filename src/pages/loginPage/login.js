@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+
+
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -17,7 +20,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import {resetState} from'../../features/Dashboard-Slice/chartSlice';
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -30,7 +33,7 @@ export default function SignIn() {
   const [selectedCompany, setSelectedCompany] = useState('');
   const [isUserLogin, setIsUserLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const dispatch = useDispatch();
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -288,7 +291,14 @@ export default function SignIn() {
   
       if (response.message.includes('Login successful')) {
         sessionStorage.setItem('session_id', response.session_id);
-  
+        dispatch(resetState());
+   
+     // Also remove from sessionStorage
+     sessionStorage.removeItem('xAxis');
+     sessionStorage.removeItem('yAxis');
+     sessionStorage.removeItem('selectedTable');
+     sessionStorage.removeItem('selectedChartType');
+     
         if (response.message === 'Login successful to admin page') {
           navigate('/signClient');
         } else if (response.message === 'Login successful to user page') {

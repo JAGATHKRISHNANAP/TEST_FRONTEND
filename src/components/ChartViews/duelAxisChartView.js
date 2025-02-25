@@ -7,7 +7,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { updateSelectedCategory, setChartStatus, updateChartData, updateSelectedCategory_xaxis } from '../../features/ViewChartSlice/viewChartSlice';
 import { sendClickedCategory } from '../../utils/api';
 
-const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation = "Aggregation", x_axis = "X_axis", y_axis1 = "Y_axis_Bar", y_axis2 = "Y_axis_Line", xFontSize, fontStyle, categoryColor,yFontSize, valueColor,chartColor, otherChartCategories = [] }) => {
+const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregation = "Aggregation", x_axis = "X_axis", y_axis1 = "Y_axis_Bar", y_axis2 = "Y_axis_Line", xFontSize, fontStyle, categoryColor,yFontSize, valueColor,chartColor,customHeadings, headingColor, otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const selectedCategory = useSelector((state) => state.viewcharts.selectedCategory);
     const [showResetButton, setShowResetButton] = useState(false);
@@ -186,6 +186,9 @@ const DualAxisChart = ({ categories = [], series1 = [], series2 = [], aggregatio
     return (
         <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
             <ResizableBox width={350} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+            <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
                 <Chart
                     options={options}
                     series={series}

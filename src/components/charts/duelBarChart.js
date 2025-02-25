@@ -1354,7 +1354,8 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
     const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
     const uniqueCategories = [...new Set(filteredCategories)]; // Use uniqueCategories
     const uniqueSeries1 = [...new Set(filteredSeries1)];       // Use uniqueSeries1
-       
+    const [seriesColors, setSeriesColors] = useState({});
+    const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
     const toggleLegendPosition = () => {
         setLegendPosition((prev) => {
             const positions = [ "bottom", "left", "top","right", "hide"];
@@ -1382,7 +1383,9 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
            data: uniqueCategories.map(categoryValue => {
                const index = categories.findIndex((cat, i) => cat === categoryValue && series1[i] === series1Value);
                return index !== -1 ? series2[index] : 0;
-           })
+               
+           }),
+           color: seriesColors[series1Value] || undefined,
        }));
     const handleSortAscending = () => {
         const sortedData = [...filteredCategories]
@@ -1446,10 +1449,25 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
             setFilteredSeries1(series1);
             setFilteredSeries2(series2);
         };
+        const handleLegendClick = (seriesName, index) => {
+            setSelectedLegendIndex(index);
+        };
     
     // Chart Options
     const options = {
         chart: {
+            events: {
+                legendClick: (chartContext, seriesIndex) => {
+                    if (!chartContext || !chartContext.w || !chartContext.w.config || !chartContext.w.config.series) {
+                        console.error("Chart context or series data is undefined");
+                        return;
+                    }
+                    const clickedSeriesName = chartContext.w.config.series[seriesIndex]?.name;
+                    if (clickedSeriesName) {
+                        handleLegendClick(clickedSeriesName, seriesIndex);
+                    }
+                }
+            },            
             type: 'bar',
             height: 350,
             
@@ -1513,14 +1531,19 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                 offsetY: 0 // Adjusts vertical position of the toolbar inside the chart
             },
         },
-        legend: {
-            show: legendPosition !== "hide",
-      position: legendPosition === "hide" ? "top" : legendPosition,
-
+    //     legend: {
+    //         show: legendPosition !== "hide",
+    //   position: legendPosition === "hide" ? "top" : legendPosition,
+    legend: {
+        show: legendPosition !== "hide",
+        position: legendPosition === "hide" ? "top" : legendPosition,
+        onItemClick: {
+            toggleDataSeries: true,
+        
             // position: legendPosition || "top", // Default to "top" if null
             // show: legendPosition !== null, // Hide legend if legendPosition is null
         },
-        
+    },
         title: {
             text: `${aggregate} of ${xAxis[0]} and ${xAxis[1]} vs ${yAxis[0]}`,
             align: 'left',
@@ -1652,6 +1675,24 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                             height="100%"
                         />
                     </ResizableBox>
+                    {selectedLegendIndex !== null && (
+                <div style={{ textAlign: "center", marginTop: "10px" }}>
+                    <span>
+                        Change color for "{series[selectedLegendIndex].name}":
+                    </span>
+                    <input
+                        type="color"
+                        value={seriesColors[series[selectedLegendIndex].name] || "#000000"}
+                        onChange={(e) =>
+                            setSeriesColors(prev => ({
+                                ...prev,
+                                [series[selectedLegendIndex].name]: e.target.value
+                            }))
+                        }
+                        onBlur={() => setSelectedLegendIndex(null)}
+                    />
+                </div>
+            )}
                 </div>
             </div>
         </div>

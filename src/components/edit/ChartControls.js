@@ -82,27 +82,27 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
        const databaseName = chartData[10] || "";
       // const filterOptionss = chartData[9] || "";
       // const selectedUser=chartData[11]||"";
-      useEffect((column) => {
-        if (xAxis.length > 0) {
-          const firstColumn = xAxis;
-          fetchFilterOptions(firstColumn);
-          generateChart();
-        }
-      }, [xAxis, chartData]);
-  const fetchFilterOptions = async (column) => {
-          try {
-            console.log("Selected Table:", selectedTable);
-              const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
-              console.log('options', options);
-              if (options && typeof options === 'object') {
-                  dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
-              } else {
-                  console.error('Filter options is not an object as expected', options);
-              }
-          } catch (error) {
-              console.error('Failed to fetch filter options:', error);
-          }
-      };
+  //     useEffect((column) => {
+  //       if (xAxis.length > 0) {
+  //         const firstColumn = xAxis;
+  //         fetchFilterOptions(firstColumn);
+  //         generateChart();
+  //       }
+  //     }, [xAxis, chartData]);
+  // const fetchFilterOptions = async (column) => {
+  //         try {
+  //           console.log("Selected Table:", selectedTable);
+  //             const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+  //             console.log('options', options);
+  //             if (options && typeof options === 'object') {
+  //                 dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+  //             } else {
+  //                 console.error('Filter options is not an object as expected', options);
+  //             }
+  //         } catch (error) {
+  //             console.error('Failed to fetch filter options:', error);
+  //         }
+  //     };
   
   //   const fetchFilterOptions = async (column) => {
   //     try {

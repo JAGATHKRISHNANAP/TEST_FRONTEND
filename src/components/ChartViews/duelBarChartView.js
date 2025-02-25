@@ -204,15 +204,15 @@ import 'react-resizable/css/styles.css';
 import ContectMenu from '../charts/contextMenu';
 import CustomToolTip from '../charts/customToolTip';
 
-const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation = "Aggregation", x_axis = "X_axis", y_axis = "Y_axis_Line", xFontSize, fontStyle, categoryColor, yFontSize, valueColor, chartColor, otherChartCategories = [] }) => {
+const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation = "Aggregation", x_axis = "X_axis", y_axis = "Y_axis_Line", xFontSize, fontStyle, categoryColor, yFontSize, valueColor, chartColor,customHeadings, headingColor, otherChartCategories = [] }) => {
 
     const aggregate = useSelector((state) => state.chart.aggregate);
     const toolTipOptions = useSelector((state) => state.toolTip);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-    const customHeadings = useSelector((state) => state.toolTip.customHeading);
-    const [popupVisible, setPopupVisible] = useState(false);
-    const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
+    // const customHeadings = useSelector((state) => state.toolTip.customHeading);
+    // const [popupVisible, setPopupVisible] = useState(false);
+    // const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
    
     // Ensure categories and series are unique
     const uniqueCategories = [...new Set(categories)];
@@ -345,7 +345,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation = "
                 <div className="mixed-chart">
                     <ResizableBox width={350} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
                         <div className="chart-title">
-                            <h3 style={{ color: headingColor }}>{customHeadings}</h3>
+                            <h3 >{customHeadings}</h3>
                         </div>
                         <Chart
                             options={options}

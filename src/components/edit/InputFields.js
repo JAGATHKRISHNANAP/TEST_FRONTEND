@@ -381,8 +381,8 @@ import { useDispatch, useSelector } from "react-redux";
 // import FilterListIcon from '@mui/icons-material/FilterList';
 import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
   setFontStyles,
-  setColorStyles } from "../../features/EditChart/EditChartSlice";
-  import { setCheckedOptions,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn} from "../../features/Dashboard-Slice/chartSlice";
+  setColorStyles,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice";
+  import { setCheckedOptions} from "../../features/Dashboard-Slice/chartSlice";
 import SaveButton from './SaveButton';
 import ChartDisplay from "./ChartDisplay";
 import ChartControls from "./ChartControls";
@@ -527,7 +527,7 @@ useEffect(() => {
           dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
             // dispatch(setCheckedOptions({ column, options: options[column] || [] })); // Dispatch for checked options
              dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Initialize checked options
-                   dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Set selectAllChecked to true initially
+                   dispatch(setSelectAllCheckedForColumn({ column, isChecked: false })); // Set selectAllChecked to true initially
                 
             setFilterOptions(options); // This line is still needed for the initial render of the filter list in the modal
           } else {
@@ -541,10 +541,25 @@ useEffect(() => {
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
     setSelectAllChecked(isChecked);
-    setCheckedOptions(isChecked ? filterOptions : []); // Simplified logic
+    if (isChecked) {
+      setCheckedOptions([...filterOptions, ...chartData[9]]);
+    } else {
+      setCheckedOptions(isChecked ? reduxFilterOptions : []); // Simplified logic
+    }
+    
     generateChart(); 
   };
 
+//   const handleSelectAllChange = (event) => {
+//     const isChecked = event.target.checked;
+//     setSelectAllChecked(isChecked);
+//     if (isChecked) {
+//       setCheckedOptions([...filterOptions, ...chartData[9]]);
+//     } else {
+//       setCheckedOptions([]);
+//     }
+//     generateChart(); // Update chart when select all changes
+//   };
   const handleFilterIconClick = async (columnName) => {
     if (showFilterDropdown) {
       // Close the dropdown if it's already open
@@ -628,7 +643,7 @@ useEffect(() => {
         dispatch={dispatch}
         xAxis={xAxis}
         yAxis={yAxis} // Pass yAxis to ChartControls
-        filterOptions={filterOptions} 
+        filterOptions={reduxFilterOptions} 
         checkedOptions={checkedOptions} 
         handleSelectAllChange={handleSelectAllChange} 
         handleCheckboxChange={handleCheckboxChange} 

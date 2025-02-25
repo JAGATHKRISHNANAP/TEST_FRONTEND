@@ -19,21 +19,22 @@ import SingleValueChart from './SingleValueChart'; // Import the new component
 import DuelBarChart from '../ChartViews/duelBarChartView';
 const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiChartData, aiMlChartData, result, fetchedData, width, handleResize }) => {
   const renderChart = () => {
-    
+    console.log("Chart Heading Data:", data[7],data[8]);  // Ensure this logs a valid value
+
     switch (data[5]) {
       case 'bar':
                 if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                  return <BarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                  return <BarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} customHeadings={data[7]} headingColor={data[8]}  />;
                 }
                 break;
               case 'pie':
                 if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                  return <PieChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                  return <PieChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} customHeadings={data[7]} headingColor={data[8]} />;
                 }
                 break;
                 case 'polarArea':
                   if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                    return <PolarAreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                    return <PolarAreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} customHeadings={data[7]} headingColor={data[8]} />;
                   }
                   break;
         
@@ -48,7 +49,7 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
                 categories={chartDataFromStore.categories}
                 series1={chartDataFromStore.series1}
                 series2={chartDataFromStore.series2.map(value => parseFloat(value))}
-                aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} />
+                aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} customHeadings={data[7]} headingColor={data[8]} />
             );
           }
           break;
@@ -65,7 +66,7 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
                 series2={chartDataFromStore.series2.map(value => parseFloat(value))}
                 aggregation={data[4]} x_axis={data[5]}
                 y_axis1={data[3][0]} // Set y_axis1 to the first value in data[3]
-          y_axis2={data[3][1]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} 
+          y_axis2={data[3][1]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} customHeadings={data[7]} headingColor={data[8]}
               />
             );
           }
@@ -73,24 +74,24 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
         
               case 'line':
                 if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                  return <LineChart categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} />;
+                  return <LineChart categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} customHeadings={data[7]} headingColor={data[8]} />;
                 }
                 break;
                 case 'area':
                   if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                    return <AreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} />;
+                    return <AreaChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} customHeadings={data[7]} headingColor={data[8]}/>;
                   }
                   break;
               case 'animatedTreeChart':
                 if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
                 //   return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} />;
                 // }
-                return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} chartColor={data[6]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                return <AnimatedTreemap categories={chartDataFromStore.categories} values={chartDataFromStore.values} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} chartColor={data[6]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}customHeadings={data[7]} headingColor={data[8]}  />;
                     }
                   break;
             case 'textChart':
                     if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                      return <TextChartView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                      return <TextChartView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} customHeadings={data[7]} headingColor={data[8]}  />;
                     }
                         break;
               case 'sampleAitestChart':
@@ -104,18 +105,21 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
               case 'treeHierarchy':
                 // return <TreeHierarchyView x_axis={hierarchy} treeData={hierarchyData} />;
                 if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                  return <TreeHierarchyView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]}  />;
+                  return <TreeHierarchyView categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} customHeadings={data[7]} headingColor={data[8]}    />;
                 }
                 // break;  
                 case 'scatter':
                     if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                      return <ScatterChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} />;
+                      return <ScatterChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} customHeadings={data[7]} headingColor={data[8]}   />;
                     }
                     break;
                     case 'hierarchialBarChart':
                       if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                        return <HierarchialBarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]}  />;
+                        return <HierarchialBarChart categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} aggregation={data[4]} x_axis={data[2]} y_axis={data[3]}xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} chartColor={data[6]} customHeadings={data[7]} headingColor={data[8]} />;
+                        
+
                       }
+                      console.log("Chart Heading Data:", data[7]);
                       break;
                       // case 'wordCloud':
                       //   if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
@@ -129,7 +133,7 @@ const ChartRenderer = ({ data, chartDataFromStore, hierarchy, hierarchyData, aiC
                     break;
                     case 'wordCloud':
                         if (chartDataFromStore?.categories?.length > 0 && chartDataFromStore?.values?.length > 0) {
-                          return <WordCloud categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]}  />;
+                          return <WordCloud categories={chartDataFromStore.categories} values={chartDataFromStore.values.map(value => parseFloat(value))} xFontSize={data[12]} fontStyle={data[13]} categoryColor={data[14]} yFontSize={data[15]} valueColor={data[16]} customHeadings={data[7]} headingColor={data[8]}  />;
                         }
                         break;
         

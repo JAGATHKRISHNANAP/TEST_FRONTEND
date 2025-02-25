@@ -251,7 +251,7 @@ import {updateSelectedCategory,updateChartData,setChartStatus} from '../../featu
 import { sendClickedCategory} from '../../utils/api';
 
 
-const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis, y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", otherChartCategories = [] }) => {
+const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis, y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",customHeadings, headingColor, otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
@@ -489,7 +489,9 @@ const AnimatedTreemap = ({ categories = [], values = [] ,chartColor, aggregation
                 maxConstraints={[800, 600]} 
                 onResize={(event, { size }) => setBoxSize(size)}
                 onContextMenu={handleContextMenu}
-            >
+            ><div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
                 <svg ref={svgRef}  width="100%" height="80%" style={{ flex: "1 1 auto" }}></svg>
                 {/* <div ref={tooltipRef} className="maptooltip" style={{ display: 'none', position: 'absolute', opacity: 0 }}></div> */}
             </ResizableBox>

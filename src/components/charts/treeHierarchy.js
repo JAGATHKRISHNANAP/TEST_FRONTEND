@@ -553,13 +553,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import './TextChart.css';
-
+import { useDispatch, useSelector } from 'react-redux';
 const Dendrogram = ({ categories = [], values = [],aggragation=[] }) => {
   const [data, setData] = useState(null);
   const svgRef = useRef();
   const dimensions = { width: 960, height: 600 };
   const margin = { top: 20, right: 90, bottom: 30, left: 90 };
-
+  const customHeadings = useSelector((state) => state.toolTip.customHeading);
+  const headingColor = useSelector((state) => state.toolTip.headingColor);
+  const [depthColors, setDepthColors] = useState({
+    0: '#1f77b4',
+    1: '#ff7f0e',
+    2: '#2ca02c',
+    3: '#d62728',
+    4: '#9467bd',
+  });
+  const [selectedDepth, setSelectedDepth] = useState(null);
   useEffect(() => {
     if (categories.length > 0 && values.length > 0) {
       const hierarchicalData = transformToHierarchy(categories, values);
@@ -618,17 +627,24 @@ const Dendrogram = ({ categories = [], values = [],aggragation=[] }) => {
     }
   };
 
-  const getNodeColor = (d) => {
-    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'];
-    return colors[d.depth] || '#333';
-  };
+  // const getNodeColor = (d) => {
+  //   const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'];
+  //   return colors[d.depth] || '#333';
+  // };
+  const getNodeColor = (d) => depthColors[d.depth] || '#333';
+
 
   const generateDendrogram = (hierarchicalData) => {
     if (!hierarchicalData) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
-
+    const handleNodeClick = (event, d) => {
+      toggleChildren(d);
+      updateDendrogram(d);
+      setSelectedDepth(d.depth); // Track the selected depth
+    };
+    
     const treeLayout = d3.tree().size([dimensions.height, dimensions.width - 160]);
     const root = treeLayout(hierarchicalData);
     root.x0 = dimensions.height / 2;
@@ -662,6 +678,7 @@ const Dendrogram = ({ categories = [], values = [],aggragation=[] }) => {
         .on('click', (event, d) => {
           toggleChildren(d);
           updateDendrogram(d);
+           setSelectedDepth(d.depth);
         });
 
       nodeEnter.append('circle')
@@ -689,12 +706,35 @@ const Dendrogram = ({ categories = [], values = [],aggragation=[] }) => {
     if (data) {
       generateDendrogram(data);
     }
-  }, [data]);
+  }, [data,depthColors]);
 
   return (
     <div>
       <div style={{ margin: '10px', border: '1px solid black', backgroundColor: 'white', width: '100%', height: '50%' }}>
+      <div className="chart-title">
+              <h3 style={{ color: headingColor }}>{customHeadings}</h3>
+            </div>
         <svg ref={svgRef} width={dimensions.width} height={dimensions.height}></svg>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+        {selectedDepth !== null && (
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <span>Depth {selectedDepth}: </span>
+              <input
+                type="color"
+                value={depthColors[selectedDepth] || '#000000'}
+                onChange={(e) =>
+                  setDepthColors((prev) => ({
+                    ...prev,
+                    [selectedDepth]: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          </div>
+        )}
+</div>
+
       </div>
     </div>
   );

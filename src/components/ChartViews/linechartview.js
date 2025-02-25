@@ -316,7 +316,7 @@ import { Modal, Box, TextField, Button, MenuItem, FormControl, InputLabel, Selec
 // import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import { sendClickedCategory,fetchPredictionDataAPI } from '../../utils/api';
 
-const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", chartColor="chartColor" ,otherChartCategories = []  }) => {
+const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize="xFontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor", chartColor="chartColor" ,customHeadings, headingColor, otherChartCategories = [] }) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
     const xAxis = useSelector((state) => state.chart.xAxis);
@@ -324,7 +324,7 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize
     // const aggregate = useSelector((state) => state.chart.aggregate);
     // const selectedTable = useSelector((state) => state.dashboard.checkedPaths);
     // const toolTipOptions = useSelector((state) => state.toolTip);
-    const customHeadings = useSelector((state) => state.toolTip.customHeading);
+    // const customHeadings = useSelector((state) => state.toolTip.customHeading);
     const [plotData, setPlotData] = useState({});
      const charts = useSelector((state) => state.viewcharts.charts);
     // const [barClicked, setBarClicked] = useState(false);
@@ -517,7 +517,10 @@ const LineChart = ({ categories, values, aggregation,  x_axis, y_axis, xFontSize
             <div className="row">
                 {/* <div className="line-chart"> */}
                     <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[600, 600]} >
-                    <div className="chart-title">{customHeadings}</div>
+                    {/* <div className="chart-title">{customHeadings}</div> */}
+                    <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
                         <Chart
                             options={options}
                             series={series}

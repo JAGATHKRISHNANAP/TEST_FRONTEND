@@ -664,12 +664,15 @@ import * as d3 from 'd3';
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css"; // Ensure ResizableBox styles are loaded
 import "../charts/TextChart.css";
-const Dendrogram = ({ categories = [], values = [],aggragation=[] }) => {
+const Dendrogram = ({ categories = [], values = [],aggragation=[],customHeadings, headingColor  }) => {
   const [data, setData] = useState(null);
   const svgRef = useRef();
   const dimensions = { width: 960, height: 600 };
   const margin = { top: 20, right: 90, bottom: 30, left: 90 };
-
+ useEffect(() => {
+      console.log("Dendrogram Heading:", customHeadings, "Color:", headingColor);
+    }, [customHeadings, headingColor]);
+    
   useEffect(() => {
     if (categories.length > 0 && values.length > 0) {
       const hierarchicalData = transformToHierarchy(categories, values);
@@ -810,6 +813,9 @@ const Dendrogram = ({ categories = [], values = [],aggragation=[] }) => {
         maxConstraints={[1200, 800]}
          style={{ border: "1px solid black", backgroundColor: "white", overflow: "hidden" }}
       >
+        <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>
         <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
           <svg ref={svgRef} width={dimensions.width} height={dimensions.height} />
         </div>

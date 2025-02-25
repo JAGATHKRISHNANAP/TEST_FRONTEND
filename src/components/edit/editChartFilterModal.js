@@ -88,7 +88,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCheckedOptionsForColumn, setSelectAllCheckedForColumn, setFilterOptionsForColumn } from '../../features/Dashboard-Slice/chartSlice';
+import { setCheckedOptionsForColumn, setSelectAllCheckedForColumn, setFilterOptionsForColumn } from '../../features/EditChart/EditChartSlice';
 import { Modal, Box, Typography, List, ListItemButton, ListItemIcon, Checkbox, Button, Divider } from '@mui/material';
 import { fetchFilterOptionsAPI,generateChartData } from "../../utils/api";
 
@@ -110,10 +110,11 @@ function FilterOptionsModal({ column, open, onClose }) {
   const yFontSize=useSelector(state => state.chartdata.yFontSize)|| "";
   const valueColor=useSelector(state => state.chartdata.valueColor)|| "";
 //       const selectedUser = localStorage.getItem('selectedUser');
-const checkedOptions = useSelector(state => state.chart.checkedOptions[column]) || []; // Access directly
-    const filterOptions = useSelector(state => state.chart.filterOptions[column]) || [];
+const checkedOptions = useSelector(state => state.chartdata.checkedOptions[column]) || []; // Access directly
+    const filterOptions = useSelector(state => state.chartdata.filterOptions[column]) || [];
+    const reduxFilterOptions = useSelector(state => state.chartdata.filterOptions);
     const selectAllChecked = checkedOptions.length === filterOptions.length; // Simplified check
-
+const reduxCheckedOptions = useSelector(state => state.chart.checkedOptions); // Get from Redux
 const [plotData, setPlotData] = useState({});
   const generateChart = async () => {
     
@@ -124,7 +125,7 @@ const [plotData, setPlotData] = useState({});
         yAxis,
         aggregate,
         chartType,
-        filterOptions:checkedOptions,
+        filterOptions:reduxCheckedOptions,
         databaseName,
         selectedUser,
         xFontSize,
@@ -164,7 +165,7 @@ const [plotData, setPlotData] = useState({});
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
     dispatch(setSelectAllCheckedForColumn({ column, isChecked }));
-    // dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? [...filterOptions] : [] }));
+    dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? [...filterOptions] : [] }));
     generateChart();
   };
 

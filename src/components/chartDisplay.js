@@ -340,9 +340,9 @@ const ChartRenderer = ({
         (chartType === "wordCloud" ) && (
           renderError("Please select only 1 Columns values for this chart type.")
         )} */}
-       {xAxis.length >1 &&
-        (chartType === "Hierarachy") && (
-          renderError("Please select only Columns values for this chart type.")
+       {xAxis.length <1 &&
+        (chartType === "treeHierarchy") && (
+          renderError("Please select Columns values for this chart type.")
         )}
       {xAxis.length > 2 &&
         (chartType === "bar" ||
@@ -662,7 +662,7 @@ const ChartRenderer = ({
   </div>
 )}
 
-            {chartType === "treeHierarchy"  && (
+            {xAxis.length > 0 && chartType === "treeHierarchy"  && (
                           <div style={{ marginTop: '20px' }}>
                             {
       // If more than 2 X-axis values are selected, show the message to remove 1
@@ -757,9 +757,11 @@ const ChartRenderer = ({
             )}
 
       {/* General Error Message */}
-      {(xAxis.length === 0 || yAxis.length === 0) && chartType !== "AiCharts" && (
-        renderError("Please select at least one X-axis and one Y-axis value to render the chart.")
-      )}
+      {(xAxis?.length === 0 || yAxis?.length === 0) &&
+ chartType !== "AiCharts" &&
+ chartType !== "treeHierarchy" && chartType !== "singleValueChart" && chartType !== "wordCloud" &&
+ renderError("Please select at least one X-axis and one Y-axis value to render the chart.")}
+
     </div>
   );
 };

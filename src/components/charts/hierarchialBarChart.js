@@ -553,7 +553,8 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
     const categoryColor = useSelector((state) => state.toolTip.categoryColor);
     const valueColor = useSelector((state) => state.toolTip.valueColor);
     // const [sortedData, setSortedData] = useState([]);
-
+ const customHeadings = useSelector((state) => state.toolTip.customHeading);
+  const headingColor = useSelector((state) => state.toolTip.headingColor);
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
   
@@ -613,15 +614,24 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
         const blob = new Blob([csvData], { type: 'text/csv' });
         saveAs(blob, 'chart_data.csv');
     };
+    // const renderDownloadMenu = () => (
+    //     <div className={`download-menu ${isMenuVisible ? 'show' : ''}`}>
+    //         <ul>
+    //             <li><button onClick={downloadSVG}>Download as SVG</button></li>
+    //             <li><button onClick={downloadPNG}>Download as PNG</button></li>
+    //             <li><button onClick={downloadCSV}>Download as CSV</button></li>
+    //         </ul>
+    //     </div>
+    // );
     const renderDownloadMenu = () => (
-        <div className={`download-menu ${isMenuVisible ? 'show' : ''}`}>
-            <ul>
-                <li><button onClick={downloadSVG}>Download as SVG</button></li>
-                <li><button onClick={downloadPNG}>Download as PNG</button></li>
-                <li><button onClick={downloadCSV}>Download as CSV</button></li>
-            </ul>
-        </div>
-    );
+      <div className={`download-menu ${isMenuVisible ? 'show' : ''}`} style={{ position: 'absolute', top: '40px', right: '10px', backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '5px', padding: '10px', zIndex: 1000 }}> {/* Added styles */}
+          <ul>
+              <li><button onClick={downloadSVG}>Download as SVG</button></li>
+              <li><button onClick={downloadPNG}>Download as PNG</button></li>
+              <li><button onClick={downloadCSV}>Download as CSV</button></li>
+          </ul>
+      </div>
+  );
     // Local color state: one color per category
     const defaultColors = [
       "#008FFB",
@@ -827,23 +837,33 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
           title: 'Reset Chart', 
           click: handleReset 
       },
-      { 
-          icon: <button style={{ background: 'none', border: 'none', fontSize: '20px' }}>☰</button>, 
-          title: 'Download Options', 
-          click: toggleMenuVisibility 
-      }
+       {
+        icon: <button style={{ background: 'none', border: 'none', fontSize: '20px' }}>☰</button>,
+        title: 'Download Options',
+        click: toggleMenuVisibility
+    }
   ];
-  const renderToolbar = () => (
-    <div className="toolbar">
-        {toolbarTools.map((tool, index) => (
-            <button key={index} title={tool.title} onClick={tool.click}>
-                {tool.icon}
-            </button>
-        ))}
-        {renderDownloadMenu()} {/* Add the download menu here */}
-    </div>
-);
+//   const renderToolbar = () => (
+//     <div className="toolbar">
+//         {toolbarTools.map((tool, index) => (
+//             <button key={index} title={tool.title} onClick={tool.click}>
+//                 {tool.icon}
+//             </button>
+//         ))}
+//         {renderDownloadMenu()} {/* Add the download menu here */}
+//     </div>
+// );
 
+const renderToolbar = () => (
+  <div className="toolbar" style={{ position: 'relative' }}> {/* Added relative positioning */}
+      {toolbarTools.map((tool, index) => (
+          <button key={index} title={tool.title} onClick={tool.click}>
+              {tool.icon}
+          </button>
+      ))}
+      {renderDownloadMenu()}
+  </div>
+);
     return (
       <div className="app">
         <div className="row">
@@ -855,7 +875,9 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation }) =>
               minConstraints={[300, 300]}
               maxConstraints={[1200, 800]}
               onResize={onResize}
-            >
+            ><div className="chart-title">
+            <h3 style={{ color: headingColor }}>{customHeadings}</h3>
+          </div>
               <svg ref={svgRef} width="100%" height="90%" />
               <div ref={tooltipRef} className="tooltip"></div>
             </ResizableBox>

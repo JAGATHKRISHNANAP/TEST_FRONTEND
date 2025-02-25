@@ -312,7 +312,7 @@ if (existingTableNames.includes(tableName)) {
       <Grid container item xs={12} md={12} style={{height: '10vh', flexWrap: 'wrap', gap: '20px', justifyContent: 'center',marginTop:'80px'}}>
         <HomePage/>
          <Grid item xs={12} md={9} style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '20px'}}>
-           <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '10px' }}>
+           <Grid item sx={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginLeft: '11px' }}>
            <Button component="label" variant="contained" sx={{
     padding: '10px 18px', // Increase padding
    

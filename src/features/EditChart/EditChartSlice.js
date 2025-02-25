@@ -114,7 +114,8 @@ const chartSlice = createSlice({
     valueColor: null,
     fontStyle: null,
     error: null,
-    filterDropdowns: {}
+    filterDropdowns: {},
+    selectAllCheckedForColumn: {}
   },
   reducers: {
   //   setFilterOptionsForColumn: (state, action) => {
@@ -130,14 +131,18 @@ const chartSlice = createSlice({
   //     }
   // },
   
+  // setFilterOptionsForColumn: (state, action) => {
+  //   const { column, options } = action.payload;
+  //   state.filterOptions[column] = options;
+  //   if (!state.checkedOptions[column]) {
+  //     state.checkedOptions[column] = [...options]; //Initialize checked options with filterOptions
+  //   }
+  // },
+    
   setFilterOptionsForColumn: (state, action) => {
     const { column, options } = action.payload;
     state.filterOptions[column] = options;
-    if (!state.checkedOptions[column]) {
-      state.checkedOptions[column] = [...options]; //Initialize checked options with filterOptions
-    }
   },
-    
       toggleFilterDropdownForColumn: (state, action) => {
         state.filterDropdowns[action.payload] = !state.filterDropdowns[action.payload];
       },
@@ -183,23 +188,35 @@ const chartSlice = createSlice({
     //   const { column, options } = action.payload;
     //   state.checkedOptions[column] = options;
     // },
-    setCheckedOptionsForColumn: (state, action) => {
-      const { column, options } = action.payload;
-      state.checkedOptions[column] = options; // Directly assign the options array
+  //   setCheckedOptionsForColumn: (state, action) => {
+  //     const { column, options } = action.payload;
+  //     state.checkedOptions[column] = options; // Directly assign the options array
+  // },
+  //   // setSelectAllCheckedForColumn: (state, action) => {
+  //   //   const { column, isChecked } = action.payload;
+  //   //   state.selectAllChecked = isChecked;
+  //   // },
+  //   setSelectAllCheckedForColumn: (state, action) => {
+  //     const { column, isChecked } = action.payload;
+  //     if (isChecked) {
+  //       state.checkedOptions[column] = state.filterOptions[column] || []; // Select all available options
+  //     } else {
+  //       state.checkedOptions[column] = []; // Clear options
+  //     }
+  //   },
+  setCheckedOptionsForColumn: (state, action) => {
+    const { column, options } = action.payload;
+    state.checkedOptions[column] = options;
   },
-    // setSelectAllCheckedForColumn: (state, action) => {
-    //   const { column, isChecked } = action.payload;
-    //   state.selectAllChecked = isChecked;
-    // },
-    setSelectAllCheckedForColumn: (state, action) => {
-      const { column, isChecked } = action.payload;
-      if (isChecked) {
-        state.checkedOptions[column] = state.filterOptions[column] || []; // Select all available options
-      } else {
-        state.checkedOptions[column] = []; // Clear options
-      }
-    },
-    
+  setSelectAllCheckedForColumn: (state, action) => {
+    const { column, isChecked } = action.payload;
+    state.selectAllCheckedForColumn[column] = isChecked;
+    if (isChecked) {
+      state.checkedOptions[column] = state.filterOptions[column] || []; // Select all
+    } else {
+      state.checkedOptions[column] = []; // Deselect all
+    }
+  },
   },
   extraReducers: (builder) => {
     builder

@@ -205,12 +205,12 @@ import 'react-resizable/css/styles.css'; // Import the CSS for the resizable box
 import "../charts/tooltip.css"; // Import tooltip styles
 // import "../Style.css"; // Import global styles
 
-const PolarAreaChart = ({ categories = [], values = [] }) => {
-    const [sortedData, setSortedData] = useState({ categories, values });
+const PolarAreaChart = ({ categories = [], values = [],customHeadings, headingColor, otherChartCategories = [] }) => {
+    const [sortedData, setSortedData] = useState({ categories, values,customHeadings, headingColor });
     const [legendPosition, setLegendPosition] = useState("hide");
     const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
-    const headingColor = useSelector((state) => state.toolTip.headingColor);
-    const customHeadings = useSelector((state) => state.toolTip.customHeading);
+    // const headingColor = useSelector((state) => state.toolTip.headingColor);
+    // const customHeadings = useSelector((state) => state.toolTip.customHeading);
 
     // Function to toggle legend position
     const toggleLegendPosition = () => {
@@ -350,6 +350,9 @@ const PolarAreaChart = ({ categories = [], values = [] }) => {
  
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
     <ResizableBox width={380} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+    <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
         <Chart
             options={options}
             series={sortedData.values || []}

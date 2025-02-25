@@ -1058,7 +1058,7 @@ const ScatterChart = ({ categories = [], values = [], aggregation }) => {
   // We pass the actual category names to xaxis.categories for labeling.
   const series = sortedCategories.map((cat, i) => ({
     name: cat,                // Legend label
-    data: [{ x: i, y: sortedValues[i] }], // Single numeric x for spacing
+    data: [{ x: i+1, y: sortedValues[i] }], // Single numeric x for spacing
   }));
 
   // Sorting & filtering
@@ -1249,6 +1249,13 @@ const ScatterChart = ({ categories = [], values = [], aggregation }) => {
       categories: sortedCategories,
       title: { text: xAxis },
       labels: {
+        offsetX: 0, // Moves labels slightly to the right
+        rotate: -45, // Optional: Rotate labels for better visibility
+        style: {
+          fontSize: `${xFontSize}px`,
+          fontFamily: fontStyle,
+          colors: categoryColor,
+        },
         style: {
           fontSize: `${xFontSize}px`,
           fontWeight: 400,
@@ -1274,39 +1281,76 @@ const ScatterChart = ({ categories = [], values = [], aggregation }) => {
         },
       },
     },
-    tooltip: {
-      enabled: true,
-      custom:
-        toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
-          ? function ({ series, seriesIndex, dataPointIndex, w }) {
-              // Each series => one data point => index = seriesIndex
-              const cat = sortedCategories[seriesIndex];
-              const val = sortedValues[seriesIndex];
-              return `
-                <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+  //   tooltip: {
+  //     enabled: true,
+  //     custom:
+  //       toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+  //         ? function ({ series, seriesIndex, dataPointIndex, w }) {
+  //             // Each series => one data point => index = seriesIndex
+  //             const cat = sortedCategories[seriesIndex];
+  //             const val = sortedValues[seriesIndex];
+  //             return `
+  //               <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+  //                 ${
+  //                   toolTipOptions.heading
+  //                     ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${aggregation} of ${xAxis} vs ${yAxis}</h4></div>`
+  //                     : ""
+  //                 }
+  //                 <div>
+  //                   ${
+  //                     toolTipOptions.categoryName
+  //                       ? `<div><strong>Category:</strong> ${cat}</div>`
+  //                       : ""
+  //                   }
+  //                   ${
+  //                     toolTipOptions.value
+  //                       ? `<div><strong>Value:</strong> ${val}</div>`
+  //                       : ""
+  //                   }
+  //                 </div>
+  //               </div>
+  //             `;
+  //           }
+  //         : undefined,
+  //   },
+  // };
+  tooltip: {
+    enabled: true,
+    // Example custom tooltip if needed
+    custom:
+      toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+        ? function ({ series, seriesIndex, dataPointIndex, w }) {
+            // Each series is a single data point
+            const cat = sortedCategories[seriesIndex];
+            const val = sortedValues[seriesIndex];
+            const currentAggregation = aggregation || "Aggregation";
+            const currentXAxis = xAxis[0] || "X-Axis";
+            const currentYAxis = yAxis || "Y-Axis";
+            return `
+              <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                ${
+                  toolTipOptions.heading
+                    ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>`
+                    : ""
+                }
+                <div>
                   ${
-                    toolTipOptions.heading
-                      ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${aggregation} of ${xAxis} vs ${yAxis}</h4></div>`
+                    toolTipOptions.categoryName
+                      ? `<div><strong>Category:</strong> ${cat}</div>`
                       : ""
                   }
-                  <div>
-                    ${
-                      toolTipOptions.categoryName
-                        ? `<div><strong>Category:</strong> ${cat}</div>`
-                        : ""
-                    }
-                    ${
-                      toolTipOptions.value
-                        ? `<div><strong>Value:</strong> ${val}</div>`
-                        : ""
-                    }
-                  </div>
+                  ${
+                    toolTipOptions.value
+                      ? `<div><strong>Value:</strong> ${val}</div>`
+                      : ""
+                  }
                 </div>
-              `;
-            }
-          : undefined,
-    },
-  };
+              </div>
+            `;
+          }
+        : undefined,
+  },
+};
 
   return (
     <div className="app">

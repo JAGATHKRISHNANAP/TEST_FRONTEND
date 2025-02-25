@@ -456,7 +456,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import '../charts/WordCloud.css';
 
-const WordCloud = ({ categories = [], values = [] }) => {
+const WordCloud = ({ categories = [], values = [],customHeadings, headingColor }) => {
     const wordCloudRef = useRef(null);
     const [wordData, setWordData] = useState([]);
     const [displayCount, setDisplayCount] = useState(10);
@@ -528,6 +528,9 @@ const WordCloud = ({ categories = [], values = [] }) => {
         <div className="word-cloud-container">
             <ResizableBox width={400} height={400} minConstraints={[300, 300]} maxConstraints={[800, 600]}>
                 <div style={{ display: "flex", flexDirection: "column", height: "90%" }}>
+                <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
                     <svg ref={wordCloudRef} width="100%" height="90%" style={{ flex: "1 1 auto" }} />
                     <div className="word-cloud-controls" style={{ height: "20%", padding: "10px" }}>
                         <label>

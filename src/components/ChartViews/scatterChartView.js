@@ -201,7 +201,7 @@ import { updateSelectedCategory,setChartStatus,updateChartData ,updateSelectedCa
 import { useDispatch, useSelector } from 'react-redux';
 import { sendClickedCategory } from '../../utils/api';
 
-const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",chartColor="chartColor", otherChartCategories = [] }) => {
+const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",chartColor="chartColor",customHeadings, headingColor, otherChartCategories = [] }) => {
     const dispatch = useDispatch();
 
     const [isFilterActive, setIsFilterActive] = useState(false); // State to manage the filter functionality
@@ -371,6 +371,9 @@ const Scatter = ({ categories = [], values = [], aggregation = "Aggregation", x_
     return (
         <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
             <ResizableBox width={350} height={400} minConstraints={[300, 300]} maxConstraints={[1200, 800]}>
+            <div className="chart-title">
+            <h3 >{customHeadings}</h3>
+          </div>{/* Added custom heading */}
                 <Chart
                     options={options}
                     series={series}

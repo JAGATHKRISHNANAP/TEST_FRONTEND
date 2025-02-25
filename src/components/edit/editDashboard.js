@@ -96,8 +96,8 @@ function EditDashboard() {
 
   // Ensure checkedOptions gets updated when chartData[10] changes
   useEffect(() => {
-    if (chartData && chartData[10] && Array.isArray(chartData[10])) {
-      setCheckedOptions(chartData[10]);
+    if (chartData && chartData[9] && Array.isArray(chartData[10])) {
+      setCheckedOptions(chartData[9]);
     }
   }, [chartData]);
 

@@ -266,7 +266,7 @@ import { setClickedCategory } from '../../features/drillDownChartSlice/drillDown
 import '../charts/tooltip.css';
 import { fetchHierarchialDrilldownDataAPI } from '../../utils/api';
 
-const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axis, y_axis ,tableName,chartColor, xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor"}) => {
+const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axis, y_axis ,tableName,chartColor, xFontSize="FontSize",fontStyle="fontStyle", categoryColor="categoryColor", yFontSize="yFontSize", valueColor="valueColor",customHeadings, headingColor}) => {
     const dispatch = useDispatch();
     const lineColor = useSelector((state) => state.chartColor.chartColor);
     const databaseName = localStorage.getItem('company_name');
@@ -433,7 +433,9 @@ const D3HierarchialBarChart = ({ categories = [], values = [], aggregation,x_axi
                          width={350} height={400}
                          minConstraints={[300, 300]} maxConstraints={[1200, 800]}
                         onResize={onResize}
-                    >
+                    ><div className="chart-title">
+                    <h3 >{customHeadings}</h3>
+                  </div>{/* Added custom heading */}
                         <svg ref={svgRef} width="100%" height="90%" />
                         {/* <div ref={tooltipRef} className="tooltip"></div> */}
                     </ResizableBox>
