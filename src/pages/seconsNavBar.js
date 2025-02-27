@@ -46,7 +46,7 @@ function Navbar() {
   const dispatch = useDispatch(); // Initialize dispatch
 
   const buttonRef = React.useRef(null);
-
+  let closeTimeout = null;
   const theamColor=localStorage.setItem('theamColor',appBarColor);
   // const secondNavbar=localStorage.getItem('show_second_navbar',showSecondNavbar);
   const userRole = sessionStorage.getItem('user_role');
@@ -67,13 +67,13 @@ function Navbar() {
     if (isRouteAccessible(route)) {
       setActiveRoute(route);
       navigate(route);
-      handleMenuClose();
+     
       handleViewMenuClose();
-     // window.location.reload(); // Consider removing if not absolutely necessary.  Can cause issues.
+    
     } else {
-      // Handle unauthorized access, e.g., show a message or redirect to a different page
+     
       alert("You don't have permission to access this page."); // Example: alert message
-      // Or: navigate('/some-other-route');  // Example: redirect
+     
     }
   };
   React.useEffect(() => {
@@ -82,25 +82,33 @@ function Navbar() {
  }, []);
 
   const handleMenuClick = (event) => {
+    clearTimeout(closeTimeout);
     setAnchorEl(event.currentTarget);
+    
     setOpenMenu(true);
-    if (buttonRef.current) {
-      const buttonWidth = buttonRef.current.offsetWidth;
-      setMenuWidth(buttonWidth);
-    }
+    // if (buttonRef.current) {
+    //   const buttonWidth = buttonRef.current.offsetWidth;
+    //   setMenuWidth(buttonWidth);
+    // }
   };
 
-  const handleMenuClose = () => {
-    setOpenMenu(false);
-    setAnchorEl(null);
-  };
+  // const handleMenuClose = () => {
+  //   closeTimeout = setTimeout(() => {
+  //     setOpenMenu(false);
+  //     setAnchorEl(null);
+  //   }, 300); // Small delay to prevent flickering
+  // };
 
+  const handleMenuEnter = () => {
+   
+    setOpenMenu(true);
+  };
   const handleMouseLeave = () => {
     // Delay the menu close to prevent flickering if user hovers off quickly
-    setTimeout(() => {
+    closeTimeout =setTimeout(() => {
         setOpenMenu(false);
         setAnchorEl(null);
-    }, 1000);  // Adjust time as needed (in ms)
+    }, 800);  // Adjust time as needed (in ms)
 };
   const disableBackButton = () => {
     window.history.pushState(null, null, window.location.href);
@@ -117,15 +125,23 @@ function Navbar() {
     setOpenViewMenu(false);
     setViewMenuAnchorEl(null);
   };
+  const handleViewMenuEnter = () => {
+    setOpenViewMenu(true);
+    clearTimeout(closeTimeout);
+  };
 
    const handleViewMenuMouseLeave = () => {
-    // setTimeout(() => {
-      setOpenViewMenu(false); // Close the View menu after delay
-    //   setViewMenuAnchorEl(null);
-    // }, 1000); // Adjust delay time as needed
+    closeTimeout =setTimeout(() => {
+       setOpenViewMenu(false);
+      setAnchorEl(null);
+  }, 800);  // Adjust time as needed (in ms)
+   
   };
   
-
+  const handleDesignMouseEnter = () => {
+    setOpenDesignMenu(true);  // Open menu when mouse enters the button
+    clearTimeout(closeTimeout);
+  };
 
   const handleDesignMenuClick = (event) => {
     setDesignMenuAnchorEl(event.currentTarget);
@@ -139,34 +155,36 @@ function Navbar() {
   
   const handleDesignMenuMouseLeave = () => {
     // setTimeout(() => {
-      setOpenDesignMenu(false); // Close the Design menu after delay
-    //   setDesignMenuAnchorEl(null);
-    // }, 1000); // Adjust delay time as needed
+      closeTimeout =setTimeout(() => {
+        setOpenDesignMenu(false); 
+       setAnchorEl(null);
+   }, 800);  // A
+  
   };
   
  
-  // const handleNavigation = (route) => {
-  //   setActiveRoute(route); 
-  //   navigate(route);
-  //   handleMenuClose();
-  //   handleViewMenuClose();
-  //   window.location.reload();
+  // const handleColorPickerToggle = () => {
+  //   setShowColorPicker(!showColorPicker);
   // };
-  const handleColorPickerToggle = () => {
-    setShowColorPicker(!showColorPicker);
-  };
 
   const handleColorChange = (color) => {
     setAppBarColor(color.hex);
   };
   const handleMenuMouseEnter = () => {
     setOpenMenu(true);  // Open menu when mouse enters the button
+    clearTimeout(closeTimeout);
   };
   
-  const handleMenuMouseLeave = () => {
-    setOpenMenu(false);  // Close menu when mouse leaves the button
-  };
-  
+  const handleMenuMouseLeave = (event) => {
+     // Check if the mouse is leaving both the button and the menu
+  if (
+    event.relatedTarget &&
+    !event.currentTarget.contains(event.relatedTarget) &&
+    (!anchorEl || !anchorEl.contains(event.relatedTarget))
+  ) {
+    setOpenMenu(false);
+  }
+};
 
   return (
     <AppBar
@@ -193,8 +211,9 @@ function Navbar() {
                 aria-controls={openMenu ? 'data-source-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={openMenu ? 'true' : undefined}
-                onMouseOver={handleMenuClick}
-                
+                onMouseEnter={handleMenuClick} // Opens the menu
+                onMouseLeave={handleMouseLeave} // Delayed closing
+              
                 ref={buttonRef}
                 sx={{
                   backgroundColor: activeRoute === '/excel_upload' || activeRoute === '/csv_upload' || activeRoute === '/Audio_upload'  ? '#c5c5c9' : 'inherit',
@@ -224,8 +243,10 @@ function Navbar() {
     horizontal: "center",
   }}
   PaperProps={{
-    onChangeComplete:handleMenuClose,
-    onMouseLeave: handleMenuMouseLeave,
+    // onChangeComplete:handleMenuClose,
+    // onMouseLeave: handleMenuMouseLeave,
+     onMouseEnter: handleMenuMouseEnter, // Keep menu open when hovered
+    onMouseLeave: handleMenuMouseLeave, // Close menu with delay
     sx: {
       // width: menuWidth || 'auto',
       minWidth: 200,
@@ -234,29 +255,7 @@ function Navbar() {
     },
   }}
 >
- {/* <MenuItem onClick={() => handleNavigation('/excel_upload')}>
-  <ListItemIcon><FaFileExcel size={18} style={{ marginRight: 6 ,color: 'black'}} /></ListItemIcon> 
-  Excel
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/csv_upload')}>
-  <ListItemIcon><FaFileCsv size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  CSV
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/json_upload')}>
-  <ListItemIcon><BiSolidFileJson size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  JSON
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/custom_data_source')}>
-  <ListItemIcon><DashboardCustomizeIcon fontSize="small" sx={{ marginRight: 1,color: 'black' }} /></ListItemIcon> 
-  Custom Join
-</MenuItem>
-<MenuItem onClick={() => handleNavigation('/Create_DataSource')}>
-  <ListItemIcon><AiOutlineCloudServer size={18} style={{ marginRight: 8,color: 'black' }} /></ListItemIcon> 
-  Create DataSource
-</MenuItem>
 
-</Menu>
- */}
 <MenuItem onClick={() => handleNavigation('/excel_upload')} sx={{
     backgroundColor: location.pathname === '/excel_upload' ? '#c5c5c9': 'inherit',
     color: location.pathname === '/excel_upload' ? '#ffffff' : 'black',
@@ -348,6 +347,7 @@ function Navbar() {
           aria-haspopup="true"
           aria-expanded={openDesignMenu ? 'true' : undefined}
           onMouseOver={handleDesignMenuClick}
+          onMouseLeave={handleDesignMenuMouseLeave} 
           sx={{
             backgroundColor:
             location.pathname === '/dashboard'||
@@ -380,8 +380,10 @@ function Navbar() {
           // onClose={handleDesignMenuClose}
           PaperProps={{
             // onMouseLeave: handleDesignMenuMouseLeave, 
-            onChangeComplete:handleDesignMenuClose,
-            onMouseLeave: handleDesignMenuMouseLeave,
+            onMouseEnter: handleDesignMouseEnter, // Keep menu open when hovered
+            onMouseLeave: handleDesignMenuMouseLeave, // Close menu with delay
+            // onChangeComplete:handleDesignMenuClose,
+            // onMouseLeave: handleDesignMenuMouseLeave,
             sx: {
               width: '170px',
               backgroundColor: '#ffffff',
@@ -431,7 +433,8 @@ function Navbar() {
         aria-controls={openViewMenu ? 'view-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={openViewMenu ? 'true' : undefined}
-        onMouseOver={handleViewMenuClick}
+        onMouseOver={handleViewMenuClick} // Opens the menu
+        onMouseLeave={handleViewMenuMouseLeave} // Delayed closing
         sx={{
             backgroundColor: location.pathname === '/Charts_view' || location.pathname === '/dashboard_view' ? '#c5c5c9' : 'inherit',
             maxWidth: '150px',
@@ -470,9 +473,11 @@ function Navbar() {
                 open={openViewMenu}
                 // onClose={handleViewMenuClose}
                 PaperProps={{
-                  // onMouseLeave: handleViewMenuMouseLeave, 
-                  onChangeComplete:handleViewMenuClose,
-                onMouseLeave: handleViewMenuMouseLeave,
+                  // onMouseLeave: handleViewMenuMouseLeave,
+                  onMouseEnter: handleViewMenuEnter, // Keep menu open when hovered
+                  onMouseLeave: handleViewMenuMouseLeave, // Close menu with delay
+                //   onChangeComplete:handleViewMenuClose,
+                // onMouseLeave: handleViewMenuMouseLeave,
                   sx: {
                     width: menuWidth || 'auto',
                     backgroundColor: '#ffffff',

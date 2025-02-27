@@ -138,11 +138,23 @@ const chartSlice = createSlice({
   //     state.checkedOptions[column] = [...options]; //Initialize checked options with filterOptions
   //   }
   // },
-    
   setFilterOptionsForColumn: (state, action) => {
     const { column, options } = action.payload;
-    state.filterOptions[column] = options;
-  },
+
+    if (!options || (Array.isArray(options) && options.length === 0)) { 
+        // If options is undefined or an empty array, remove the column from state
+        delete state.filterOptions[column];
+        delete state.checkedOptions[column];
+    } else {
+        state.filterOptions[column] = options;
+        state.checkedOptions[column] = [...options];
+    }
+},
+
+  // setFilterOptionsForColumn: (state, action) => {
+  //   const { column, options } = action.payload;
+  //   state.filterOptions[column] = options;
+  // },
       toggleFilterDropdownForColumn: (state, action) => {
         state.filterDropdowns[action.payload] = !state.filterDropdowns[action.payload];
       },

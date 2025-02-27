@@ -835,7 +835,7 @@ const AreaChart = ({ categories = [], values = [], aggregation }) => {
           zoom: false,
           zoomin: false,
           zoomout: false,
-          pan: true,
+          // pan: true,
           reset: true,
         },
         offsetX: -10,

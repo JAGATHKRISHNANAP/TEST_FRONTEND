@@ -1062,7 +1062,7 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
   const yFontSize = useSelector((state) => state.toolTip.fontSizeY || "12");
   const categoryColor = useSelector((state) => state.toolTip.categoryColor);
   const valueColor = useSelector((state) => state.toolTip.valueColor);
-
+const headingColor = useSelector((state) => state.toolTip.headingColor); // Get color from Redux
   const [plotData, setPlotData] = useState({});
   const [barClicked, setBarClicked] = useState(false);
   const [sortedCategories, setSortedCategories] = useState(categories);
@@ -1442,7 +1442,9 @@ const BarChart = ({ categories = [], values = [], aggregation }) => {
             resizeHandles={['e', 'w']}
             className="resizable-chart"
           >
-            <div className="chart-title">{customHeadings}</div>
+            <div className="chart-title">
+              <h3 style={{ color: headingColor }}>{customHeadings}</h3>
+            </div>
             <Chart key={chartKey} options={options} series={series} type="bar" height={500} />
           </ResizableBox>
           {/* Inline color picker for the selected legend item */}

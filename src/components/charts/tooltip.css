@@ -111,6 +111,17 @@
     max-width: 100%; /* Set a maximum width */
     overflow-x: auto; /* Enable horizontal scrolling */
 }
+
+.chart-container.grabbing {
+    cursor: grabbing;
+}
+.apexcharts-canvas {
+    cursor: grab !important;
+  }
+  .apexcharts-canvas:active {
+    cursor: grabbing !important;
+  }
+  
 .download-menu1 {
     display: none;
     position: absolute;

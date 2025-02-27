@@ -80,6 +80,11 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
       // const yAxis = chartData[3] || [];
       // const chartId = chartData[0] || "";
        const databaseName = chartData[10] || "";
+       
+       useEffect(() => {
+        console.log("Props in ChartControls:", { xAxis, yAxis, generateChart });
+    }, [xAxis, yAxis, generateChart]);
+    
       // const filterOptionss = chartData[9] || "";
       // const selectedUser=chartData[11]||"";
   //     useEffect((column) => {
@@ -124,6 +129,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
   
       const openFilterModal = (column) => {
         setSelectedColumn(column);
+        console.log("column",column)
         setModalOpen(true);
     };
 

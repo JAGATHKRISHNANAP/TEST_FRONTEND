@@ -88,10 +88,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCheckedOptionsForColumn, setSelectAllCheckedForColumn, setFilterOptionsForColumn } from '../../features/EditChart/EditChartSlice';
+// import { setCheckedOptionsForColumn, setSelectAllCheckedForColumn, setFilterOptionsForColumn } from '../../features/EditChart/EditChartSlice';
 import { Modal, Box, Typography, List, ListItemButton, ListItemIcon, Checkbox, Button, Divider } from '@mui/material';
 import { fetchFilterOptionsAPI,generateChartData } from "../../utils/api";
-
+import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
+  setFontStyles,
+  setColorStyles,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice";
 function FilterOptionsModal({ column, open, onClose }) {
   const dispatch = useDispatch();
    const chartType = useSelector(state => state.chartdata.chartType);
@@ -146,33 +148,71 @@ const [plotData, setPlotData] = useState({});
         }
     }, [open, column]);
 
+  // const fetchFilterOptions = async (column) => {
+  //   const selectedTable = chartData[1] || "";
+  //   try {
+  //     const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+  //     if (options && typeof options === 'object') {
+  //       console.log("Props in ChartControls:", options);
+  //       dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+  //       dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Initialize checked options
+  //       dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Initialize selectAllChecked to true
+  //       setFilterOptions(options);
+  //     } else {
+  //       console.error('Filter options is not an object as expected', options);
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to fetch filter options:', error);
+  //   }
+  // };
   const fetchFilterOptions = async (column) => {
     const selectedTable = chartData[1] || "";
     try {
-      const options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
-      if (options && typeof options === 'object') {
-        dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
-        dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] })); // Initialize checked options
-        dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Initialize selectAllChecked to true
-      } else {
-        console.error('Filter options is not an object as expected', options);
-      }
-    } catch (error) {
-      console.error('Failed to fetch filter options:', error);
-    }
-  };
+        let options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
 
+        // Ensure options is always an object
+        if (typeof options === "string") {
+            options = JSON.parse(options);
+        }
+
+        if (options && typeof options === "object" && options[column]) {
+            console.log("Props in ChartControls:", options);
+           dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));; // Ensure this is an array
+            dispatch(setCheckedOptionsForColumn({ column, options: options[column] })); // Initialize checked options
+            dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Initialize selectAllChecked to true
+        } else {
+            console.error('Filter options is not an object or does not contain the expected column', options);
+        }
+    } catch (error) {
+        console.error('Failed to fetch filter options:', error);
+    }
+};
+
+  
+
+  // const handleSelectAllChange = (event) => {
+  //   const isChecked = event.target.checked;
+  //   dispatch(setSelectAllCheckedForColumn({ column, isChecked }));
+  //   dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? [...filterOptions] : [] }));
+  //   generateChart();
+  // };
+
+  
   const handleSelectAllChange = (event) => {
     const isChecked = event.target.checked;
-    dispatch(setSelectAllCheckedForColumn({ column, isChecked }));
-    dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? [...filterOptions] : [] }));
-    generateChart();
+    setSelectAllCheckedForColumn(isChecked);
+    if (isChecked) {
+      setCheckedOptionsForColumn([...filterOptions, ...chartData[9]]);
+    } else {
+      setCheckedOptionsForColumn(isChecked ? reduxFilterOptions : []); // Simplified logic
+    }
+    
+    generateChart(); 
   };
-
   const handleCheckboxChange = (option) => {
-    const updatedOptions = checkedOptions.includes(option)
-      ? checkedOptions.filter(item => item !== option)
-      : [...checkedOptions, option];
+    const updatedOptions = reduxCheckedOptions.includes(option)
+      ? reduxCheckedOptions.filter(item => item !== option)
+      : [...reduxCheckedOptions, option];
     dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
     dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
     generateChart();

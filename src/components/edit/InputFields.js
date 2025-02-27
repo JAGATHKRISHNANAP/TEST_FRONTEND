@@ -505,7 +505,7 @@ useEffect(() => {
         yAxis,
         aggregate,
         chartType,
-        filterOptions: reduxCheckedOptions, 
+        filterOptions: reduxFilterOptions, 
         databaseName,
         selectedUser,
         xFontSize,

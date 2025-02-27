@@ -4,7 +4,7 @@ import worldGeoJson from '../../assets/geoMap/countries.geo.json'; // GeoJSON fi
 import { useDispatch, useSelector } from "react-redux";
 import '../charts/ChoroplethMap.css';   
 
-const ChoroplethMap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis", otherChartCategories = [] }) => {
+const ChoroplethMap = ({ categories = [], values = [] ,chartColor, aggregation = "Aggregation", x_axis="X_axis", y_axis="Y_axis",customHeadings, headingColor, otherChartCategories = [] }) => {
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
     const dispatch = useDispatch();
