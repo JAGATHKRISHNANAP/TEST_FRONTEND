@@ -221,9 +221,11 @@ import './tooltip.css';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
 import { saveAs } from 'file-saver';
-const Treemap = ({ categories = [], values = [] }) => {
+const Treemap = ({ categories = [], values = [],aggregation=[] }) => {
     console.log("Duel Axis Chart Props:", { categories, });
-  
+   const xAxis = useSelector((state) => state.chart.xAxis);
+    const yAxis = useSelector((state) => state.chart.yAxis);
+    const aggregate = useSelector((state) => state.chart.aggregate);
     const svgRef = useRef(null);
     const tooltipRef = useRef(null);
     
@@ -418,39 +420,87 @@ const Treemap = ({ categories = [], values = [] }) => {
             .domain([0, sortedCategories.length])
             .interpolator(d3.interpolateLab(d3.rgb(chartColor).brighter(4), chartColor));
     
+        // const nodes = svg.selectAll('g')
+        //     .data(root.leaves())
+        //     .enter()
+        //     .append('g')
+        //     .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+        //     .on('mouseover', function (event, d) {
+        //         tooltip.style('display', 'block')
+        //             .style('opacity', 1)
+        //             .html(`<strong>${d.data.name}</strong>: ${d.data.value}`);
+    
+        //         d3.select(this).select('rect')
+        //             .transition()
+        //             .duration(200)
+        //             .style('stroke', 'blue')
+        //             .style('stroke-width', 3)
+        //             .style('fill-opacity', 1);
+        //     })
+        //     .on('mousemove', function (event) {
+        //         const svgElement = svgRef.current.getBoundingClientRect();
+        //         tooltip.style('left', `${event.clientX - svgElement.left + 10}px`)
+        //             .style('top', `${event.clientY - svgElement.top + 10}px`);
+        //     })
+        //     .on('mouseout', function () {
+        //         tooltip.style('display', 'none');
+                
+        //         d3.select(this).select('rect')
+        //             .transition()
+        //             .duration(200)
+        //             .style('stroke', '#fff')
+        //             .style('stroke-width', 1)
+        //             .style('fill-opacity', 0.8);
+        //     });
+        const currentAggregation = aggregation || "Aggregation";
+        const currentXAxis = xAxis?.[0] || "X-Axis";
+        const currentYAxis = yAxis || "Y-Axis";
         const nodes = svg.selectAll('g')
-            .data(root.leaves())
-            .enter()
-            .append('g')
-            .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
-            .on('mouseover', function (event, d) {
-                tooltip.style('display', 'block')
-                    .style('opacity', 1)
-                    .html(`<strong>${d.data.name}</strong>: ${d.data.value}`);
-    
-                d3.select(this).select('rect')
-                    .transition()
-                    .duration(200)
-                    .style('stroke', 'blue')
-                    .style('stroke-width', 3)
-                    .style('fill-opacity', 1);
-            })
-            .on('mousemove', function (event) {
-                const svgElement = svgRef.current.getBoundingClientRect();
-                tooltip.style('left', `${event.clientX - svgElement.left + 10}px`)
-                    .style('top', `${event.clientY - svgElement.top + 10}px`);
-            })
-            .on('mouseout', function () {
-                tooltip.style('display', 'none');
-    
-                d3.select(this).select('rect')
-                    .transition()
-                    .duration(200)
-                    .style('stroke', '#fff')
-                    .style('stroke-width', 1)
-                    .style('fill-opacity', 0.8);
-            });
-    
+        
+        .data(root.leaves())
+        .enter()
+        .append('g')
+        .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+        
+        .on('mouseover', function (event, d) {
+            tooltip.style('display', 'block')
+                .style('opacity', 1)
+                .html(`
+                    <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                         ${
+                    toolTipOptions.heading
+                      ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>`
+                      : ""
+                  }<div>
+                            ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${d.data.name}</div>` : ''}
+                            ${toolTipOptions.value ? `<div><strong>Value:</strong> ${d.data.value}</div>` : ''}
+                        </div>
+                    </div>
+                `);
+
+            d3.select(this).select('rect')
+                .transition()
+                .duration(200)
+                .style('stroke', 'blue')
+                .style('stroke-width', 3)
+                .style('fill-opacity', 1);
+        })
+        .on('mousemove', function (event) {
+            tooltip.style('left', `${event.pageX + 10}px`)
+                   .style('top', `${event.pageY + 10}px`);
+        })
+        
+        .on('mouseout', function () {
+            tooltip.style('display', 'none');
+
+            d3.select(this).select('rect')
+                .transition()
+                .duration(200)
+                .style('stroke', '#fff')
+                .style('stroke-width', 1)
+                .style('fill-opacity', 0.8);
+        });
+
         nodes.append('rect')
             .attr('width', d => d.x1 - d.x0)
             .attr('height', d => d.y1 - d.y0)
@@ -478,7 +528,7 @@ const Treemap = ({ categories = [], values = [] }) => {
             .duration(4000)
             .style('opacity', 1);
     
-    }, [sortedCategories, sortedValues, sliderValue, chartColor, boxSize, xFontSize, fontStyle, categoryColor]);
+    }, [sortedCategories, sortedValues, sliderValue, chartColor, boxSize, xFontSize, fontStyle, categoryColor,toolTipOptions]);
     
     const toolbarTools = [
         { 

@@ -1296,6 +1296,7 @@
 
 import React,{useEffect} from 'react';
 import { styled } from '@mui/material/styles';
+import {useNavigate} from "react-router";
 import { 
   Box, Grid, Button, Card as MuiCard, TextField, Typography, Snackbar, Alert, MenuItem, 
   Select, FormControl, InputLabel, Divider, Dialog, DialogActions, DialogContent, DialogTitle 
@@ -1332,20 +1333,20 @@ export default function ExternalDbConnection() {
   const company_name = localStorage.getItem("company_name");
   const apiUrl = 'http://localhost:5000/connect'; // Flask backend URL
 
+  const navigate = useNavigate(); // Initialize useNavigate
   
-  useEffect(() => {
-    // Prevent navigating back
-    const disableBackButton = () => {
-      window.history.pushState(null, "", window.location.href);
-    };
+    useEffect(() => {
+        const disableBackButton = () => {
+            navigate("/"); // Redirect to the login page
+        };
   
-    window.history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", disableBackButton);
+        window.history.pushState(null, "", window.location.href);
+        window.addEventListener("popstate", disableBackButton);
   
-    return () => {
-      window.removeEventListener("popstate", disableBackButton);
-    };
-  }, []);
+        return () => {
+            window.removeEventListener("popstate", disableBackButton);
+        };
+    }, [navigate]); // Add navigate to the dependency array
   const handleTestConnection = async () => {
     if (!dbUsername || !dbPassword || !port || !dbName) {
       setTestMessage('Please fill in all fields to test the connection.');

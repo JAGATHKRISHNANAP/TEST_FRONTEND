@@ -45,7 +45,7 @@ function YAxisInput({ yAxis, MAX_ROW, errorMessage, setErrorMessage, openSnackba
     return (
       <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}>
       <label htmlFor="y-axis-input" style={{ margin: '15px 30px 0px 0px' }}>Rows:  </label>
-      <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "1000px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
+      <div className="input-fields" onDragOver={handleDragOver} onDrop={(event) => handleDrop(event, "y-axis")} style={{ width: "900px", height: "40px", border: '1px solid #000', marginLeft: '1px' }}>
       <div className="x-axis-columns" style={{ marginBottom: '3px', marginTop: "4px", marginLeft: "5px" }}>
             {yAxis.map((column, index) => (
               <div key={index} className="y-axis-column" draggable

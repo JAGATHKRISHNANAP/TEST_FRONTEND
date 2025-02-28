@@ -345,7 +345,7 @@ const Pie = (props) => {
 const [legendPosition, setLegendPosition] = useState("right");
     const [chartKey, setChartKey] = useState(0); // Force re-render when legend changes
     const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
-
+const toolTipOptions = useSelector((state) => state.toolTip);
     // Function to toggle legend position
     const toggleLegendPosition = () => {
         setLegendPosition((prev) => {
@@ -476,7 +476,7 @@ const handleBottom10 = () => {
   const options = {
     chart: {
       toolbar: {
-        show: true,
+        show:true,
         tools: {
           customIcons: [
             {
@@ -548,8 +548,44 @@ const handleBottom10 = () => {
       position: legendPosition === "hide" ? "bottom" : legendPosition,
     },
     labels: sortedCategories || [],
-  };
+    tooltip:{
 
+    // enabled: true,
+    // Example custom tooltip if needed
+    custom:
+      toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+        ? function ({ series, seriesIndex, dataPointIndex, w }) {
+            // Each series is a single data point
+            const cat = sortedCategories[seriesIndex];
+            const val = sortedValues[seriesIndex];
+            const currentAggregation = aggregation || "Aggregation";
+            const currentXAxis = xAxis[0] || "X-Axis";
+            const currentYAxis = yAxis || "Y-Axis";
+            return `
+              <div style="background: white; color: black; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                ${
+                  toolTipOptions.heading
+                    ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>`
+                    : ""
+                }
+                <div>
+                  ${
+                    toolTipOptions.categoryName
+                      ? `<div><strong>Category:</strong> ${cat}</div>`
+                      : ""
+                  }
+                  ${
+                    toolTipOptions.value
+                      ? `<div><strong>Value:</strong> ${val}</div>`
+                      : ""
+                  }
+                </div>
+              </div>
+            `;
+          }
+        : undefined,
+  },
+};
   let aggregationLabel = '';
   switch (aggregation) {
     case 'sum':

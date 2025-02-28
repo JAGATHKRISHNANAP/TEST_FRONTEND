@@ -3,6 +3,7 @@ import { Box, Grid, Paper, styled } from "@mui/material";
 import ViewDashboardSidebar from "../../components/dashboardViewCharts/ViewDashboardSidebar";
 import DashboardDroppableArea from "../../components/dashboardViewCharts/dashboardDroppableArea";
 import HomePage from '../HomePage';
+import {useNavigate} from "react-router";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -23,20 +24,20 @@ function DashboardView() {
   useEffect(() => {
     console.log("checkedOptions:", checkedOptions);
   }, [checkedOptions]);
-  
-useEffect(() => {
-    // Prevent navigating back
-    const disableBackButton = () => {
-      window.history.pushState(null, "", window.location.href);
-    };
-  
-    window.history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", disableBackButton);
-  
-    return () => {
-      window.removeEventListener("popstate", disableBackButton);
-    };
-  }, []);
+  const navigate = useNavigate(); // Initialize useNavigate
+        
+          useEffect(() => {
+              const disableBackButton = () => {
+                  navigate("/"); // Redirect to the login page
+              };
+        
+              window.history.pushState(null, "", window.location.href);
+              window.addEventListener("popstate", disableBackButton);
+        
+              return () => {
+                  window.removeEventListener("popstate", disableBackButton);
+              };
+          }, [navigate]); // Add navigate to the dependency array
   return (
     <div className="App">
       <Box sx={{ flexGrow: 1 }}>

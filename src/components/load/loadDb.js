@@ -527,6 +527,7 @@
 
 import Dashboard from '../dashbord-Elements/Dashboard';
 import React, { useEffect, useState } from 'react';
+import {useNavigate} from "react-router";
 import {resetChartState} from'../../features/Dashboard-Slice/chartSlice';
 import {
   Container,
@@ -581,19 +582,33 @@ const LoadDbFile = () => {
   const lighterColor = tinycolor(theamColor).lighten(10).toString();
   const databaseName = localStorage.getItem('company_name');
 
-  useEffect(() => {
-      // Prevent navigating back
-      const disableBackButton = () => {
-        window.history.pushState(null, "", window.location.href);
-      };
+  // useEffect(() => {
+  //     // Prevent navigating back
+  //     const disableBackButton = () => {
+  //       window.history.pushState(null, "", window.location.href);
+  //     };
     
+  //     window.history.pushState(null, "", window.location.href);
+  //     window.addEventListener("popstate", disableBackButton);
+    
+  //     return () => {
+  //       window.removeEventListener("popstate", disableBackButton);
+  //     };
+  //   }, []);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+      const disableBackButton = () => {
+          navigate("/"); // Redirect to the login page
+      };
+
       window.history.pushState(null, "", window.location.href);
       window.addEventListener("popstate", disableBackButton);
-    
+
       return () => {
-        window.removeEventListener("popstate", disableBackButton);
+          window.removeEventListener("popstate", disableBackButton);
       };
-    }, []);
+  }, [navigate]); // Add navigate to the dependency array
   // Fetch User List
   useEffect(() => {
     const fetchAllUsers = async () => {

@@ -840,7 +840,7 @@
 
 import React, { useEffect, useState,useCallback  } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import {useNavigate} from "react-router";
 
 import {
   Container,
@@ -887,20 +887,20 @@ const LoadExcelFile = () => {
   const lighterColor = tinycolor(theamColor).lighten(10).toString();
   const databaseName = localStorage.getItem('company_name'); // Get the company name from localStorage
   const [loadSuccess, setLoadSuccess] = useState(false); // New state for message
+const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-      // Prevent navigating back
       const disableBackButton = () => {
-        window.history.pushState(null, "", window.location.href);
+          navigate("/"); // Redirect to the login page
       };
-    
+
       window.history.pushState(null, "", window.location.href);
       window.addEventListener("popstate", disableBackButton);
-    
+
       return () => {
-        window.removeEventListener("popstate", disableBackButton);
+          window.removeEventListener("popstate", disableBackButton);
       };
-    }, []);
+  }, [navigate]); // Add navigate to the dependency array
   useEffect(() => {
     const fetchTableNames = async () => {
       setIsLoading(true);

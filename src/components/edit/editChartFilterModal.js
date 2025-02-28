@@ -114,9 +114,9 @@ function FilterOptionsModal({ column, open, onClose }) {
 //       const selectedUser = localStorage.getItem('selectedUser');
 const checkedOptions = useSelector(state => state.chartdata.checkedOptions[column]) || []; // Access directly
     const filterOptions = useSelector(state => state.chartdata.filterOptions[column]) || [];
-    const reduxFilterOptions = useSelector(state => state.chartdata.filterOptions);
+    const reduxFilterOptions = useSelector(state => state.chartdata.filterOptions[column]||[]);
     const selectAllChecked = checkedOptions.length === filterOptions.length; // Simplified check
-const reduxCheckedOptions = useSelector(state => state.chart.checkedOptions); // Get from Redux
+const reduxCheckedOptions = useSelector(state => state.chartdata.checkedOptions); // Get from Redux
 const [plotData, setPlotData] = useState({});
   const generateChart = async () => {
     
@@ -141,12 +141,33 @@ const [plotData, setPlotData] = useState({});
       console.error('Error:', error);
     }
   };
+//   const handleCloseModal = () => {
+//     dispatch(setFilterOptions({ ...reduxCheckedOptions })); // Dispatch action to update filterOptions
+//     onClose();
+//     generateChart();
+// };
 
+
+  // useEffect(() => {
+  //       if (open && column) {
+  //           fetchFilterOptions(column);
+  //       }
+  //   }, [open, column]);
   useEffect(() => {
-        if (open && column) {
-            fetchFilterOptions(column);
-        }
-    }, [open, column]);
+    if (open && column) {
+        console.log("Modal Opened for Column:", column);
+        fetchFilterOptions(column);
+    }
+}, [open, column]);
+
+useEffect(() => {
+    console.log("Redux Filter Options:", reduxFilterOptions);
+}, [reduxFilterOptions]);
+
+useEffect(() => {
+  console.log("Checked Options:", reduxCheckedOptions);
+  console.log("Filter Options:", reduxFilterOptions);
+}, [reduxCheckedOptions, reduxFilterOptions]);
 
   // const fetchFilterOptions = async (column) => {
   //   const selectedTable = chartData[1] || "";
@@ -165,30 +186,91 @@ const [plotData, setPlotData] = useState({});
   //     console.error('Failed to fetch filter options:', error);
   //   }
   // };
-  const fetchFilterOptions = async (column) => {
-    const selectedTable = chartData[1] || "";
-    try {
-        let options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+//   const fetchFilterOptions = async (column) => {
+//     const selectedTable = chartData[1] || "";
+//     try {
+//         let options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
 
-        // Ensure options is always an object
-        if (typeof options === "string") {
-            options = JSON.parse(options);
-        }
+//         // Ensure options is always an object
+//         if (typeof options === "string") {
+//             options = JSON.parse(options);
+//         }
 
-        if (options && typeof options === "object" && options[column]) {
-            console.log("Props in ChartControls:", options);
-           dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));; // Ensure this is an array
-            dispatch(setCheckedOptionsForColumn({ column, options: options[column] })); // Initialize checked options
-            dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Initialize selectAllChecked to true
-        } else {
-            console.error('Filter options is not an object or does not contain the expected column', options);
-        }
-    } catch (error) {
-        console.error('Failed to fetch filter options:', error);
-    }
+//         if (options && typeof options === "object" && options[column]) {
+//             console.log("Props in ChartControls:", options);
+//            dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));; // Ensure this is an array
+//             dispatch(setCheckedOptionsForColumn({ column, options: options[column] })); // Initialize checked options
+//             dispatch(setSelectAllCheckedForColumn({ column, isChecked: true })); // Initialize selectAllChecked to true
+//         } else {
+//             console.error('Filter options is not an object or does not contain the expected column', options);
+//         }
+//     } catch (error) {
+//         console.error('Failed to fetch filter options:', error);
+//     }
+// };
+
+// const fetchFilterOptions = async (column) => {
+//   const selectedTable = chartData[1] || "";
+//   try {
+//       console.log("Fetching filter options for column:", column);
+//       let options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+//       console.log("Raw API Response:", options);
+
+//       // Ensure options is always an object
+//       if (typeof options === "string") {
+//           options = JSON.parse(options);
+//       }
+
+//       console.log("Parsed options:", options);
+
+//       if (options && typeof options === "object" && options[column]) {
+//           console.log("Final Filter Options:", options[column]);
+//           dispatch(setFilterOptionsForColumn({ column, options: options[column] }));
+          
+//           dispatch(setCheckedOptionsForColumn({ column, options: options[column] }));
+//           dispatch(setSelectAllCheckedForColumn({ column, isChecked: false }));
+//       } else {
+//           console.error('Filter options is not an object or does not contain the expected column', options);
+//       }
+//   } catch (error) {
+//       console.error('Failed to fetch filter options:', error);
+//   }
+// };
+const fetchFilterOptions = async (column) => {
+  const selectedTable = chartData[1] || "";
+  try {
+      console.log("Fetching filter options for column:", column);
+      let options = await fetchFilterOptionsAPI(databaseName, selectedTable, [column], selectedUser);
+      console.log("Raw API Response:", options);
+
+      // Ensure options is always an object
+      if (typeof options === "string") {
+          options = JSON.parse(options);
+      }
+
+      console.log("Parsed options:", options);
+
+      if (options && typeof options === "object" && Array.isArray(options[column])) {
+          console.log("Final Filter Options:", options[column]);
+
+          dispatch(setFilterOptionsForColumn({ column, options: options[column] || [] }));
+          console.log(`Dispatched setFilterOptionsForColumn for ${column}:`, options[column]);
+
+          dispatch(setCheckedOptionsForColumn({ column, options: options[column] || [] }));
+          console.log(`Dispatched setCheckedOptionsForColumn for ${column}:`, options[column]);
+
+          dispatch(setSelectAllCheckedForColumn({ column, isChecked: false }));
+          console.log(`Dispatched setSelectAllCheckedForColumn for ${column}: false`);
+    
+      } else {
+          console.error('Filter options is not an object or does not contain an array for the expected column:', options);
+      }
+  } catch (error) {
+      console.error('Failed to fetch filter options:', error);
+  }
 };
 
-  
+
 
   // const handleSelectAllChange = (event) => {
   //   const isChecked = event.target.checked;
@@ -198,25 +280,91 @@ const [plotData, setPlotData] = useState({});
   // };
 
   
-  const handleSelectAllChange = (event) => {
-    const isChecked = event.target.checked;
-    setSelectAllCheckedForColumn(isChecked);
-    if (isChecked) {
-      setCheckedOptionsForColumn([...filterOptions, ...chartData[9]]);
-    } else {
-      setCheckedOptionsForColumn(isChecked ? reduxFilterOptions : []); // Simplified logic
-    }
+  // const handleSelectAllChange = (event) => {
+  //   const isChecked = event.target.checked;
+  //   setSelectAllCheckedForColumn(isChecked);
+  //   if (isChecked) {
+  //     setCheckedOptionsForColumn([...filterOptions, ...chartData[9]]);
+  //   } else {
+  //     setCheckedOptionsForColumn(isChecked ? reduxFilterOptions : []); // Simplified logic
+  //   }
     
-    generateChart(); 
-  };
-  const handleCheckboxChange = (option) => {
-    const updatedOptions = reduxCheckedOptions.includes(option)
-      ? reduxCheckedOptions.filter(item => item !== option)
-      : [...reduxCheckedOptions, option];
-    dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
-    dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
-    generateChart();
-  };
+  //   generateChart(); 
+  // };
+//   const handleSelectAllChange = (event) => {
+//     const isChecked = event.target.checked;
+//     dispatch(setSelectAllCheckedForColumn({ column, isChecked }));
+//     dispatch(setCheckedOptionsForColumn({ column, options: isChecked ? filterOptions : [] }));
+//     generateChart();
+// };
+
+const handleSelectAllChange = (event) => {
+  const isChecked = event.target.checked;
+  dispatch(setSelectAllCheckedForColumn({ column, isChecked }));
+
+  // Ensure chartData[9] exists before appending it
+  const updatedOptions = isChecked 
+      ? [...filterOptions, ...(chartData[9] || [])] 
+      : [];
+
+  dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
+  
+  
+  generateChart();
+};
+
+  // const handleCheckboxChange = (option) => {
+  //   const updatedOptions = reduxCheckedOptions.includes(option)
+  //     ? reduxCheckedOptions.filter(item => item !== option)
+  //     : [...reduxCheckedOptions, option];
+  //   dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
+  //   dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
+  //   generateChart();
+  // };
+
+//   const handleCheckboxChange = (option) => {
+//     const updatedOptions = checkedOptions.includes(option)
+//         ? checkedOptions.filter(item => item !== option)
+//         : [...checkedOptions, option];
+
+//     dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
+//     dispatch(setSelectAllCheckedForColumn({ column, isChecked: updatedOptions.length === filterOptions.length }));
+//     generateChart();
+// };
+// const handleCheckboxChange = (option) => {
+//   const updatedOptions = checkedOptions.includes(option)
+//       ? checkedOptions.filter(item => item !== option)
+//       : [...checkedOptions, option];
+
+//   // Ensure chartData[9] is included when checking all options
+//   const allOptions = [...filterOptions, ...(chartData[9] || [])];
+
+//   const isSelectAllChecked = updatedOptions.length === allOptions.length;
+
+//   dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
+//   dispatch(setSelectAllCheckedForColumn({ column, isChecked: isSelectAllChecked }));
+  
+//   generateChart();
+// };
+
+const handleCheckboxChange = (option) => {
+  const currentOptions = Array.isArray(checkedOptions) ? checkedOptions : [];
+  const updatedOptions = currentOptions.includes(option)
+      ? currentOptions.filter(item => item !== option)
+      : [...currentOptions, option];
+
+  // Ensure chartData[9] is included when comparing for "Select All"
+  const allOptions = filterOptions
+
+  const isSelectAllChecked = updatedOptions.length === allOptions.length;
+
+  dispatch(setCheckedOptionsForColumn({ column, options: updatedOptions }));
+  dispatch(setSelectAllCheckedForColumn(updatedOptions.length === allOptions.length));
+ 
+
+  generateChart();
+};
+
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby="filter-modal-title">
@@ -227,7 +375,7 @@ const [plotData, setPlotData] = useState({});
         <Typography id="filter-modal-title" variant="h6" sx={{ mb: 1, textAlign: 'center' }}>
           Filter Options for {column}
         </Typography>
-        <List sx={{ maxHeight: 300, overflowY: 'auto', p: 0 }}>
+        {/* <List sx={{ maxHeight: 300, overflowY: 'auto', p: 0 }}>
           <ListItemButton onClick={handleSelectAllChange} sx={{ py: 0.5, minHeight: 32 }}>
             <ListItemIcon>
               <Checkbox checked={selectAllChecked} />
@@ -242,7 +390,32 @@ const [plotData, setPlotData] = useState({});
               <Typography variant="body2">{option}</Typography>
             </ListItemButton>
           ))}
-        </List>
+        </List> */}
+        <List sx={{ maxHeight: 300, overflowY: 'auto', p: 0 }}>
+        {filterOptions.length === 0 ? (
+
+    <Typography sx={{ textAlign: 'center', p: 2 }}>No options available</Typography>
+  ) : (
+    <>
+      <ListItemButton onClick={handleSelectAllChange} sx={{ py: 0.5, minHeight: 32 }}>
+        <ListItemIcon>
+          <Checkbox checked={selectAllChecked} />
+        </ListItemIcon>
+        <Typography variant="body2">Select All</Typography>
+      </ListItemButton>
+      {filterOptions.map((option, index) => (
+
+        <ListItemButton key={index} onClick={() => handleCheckboxChange(option)} sx={{ py: 0.5, minHeight: 32 }}>
+          <ListItemIcon>
+            <Checkbox checked={checkedOptions.includes(option)} />
+          </ListItemIcon>
+          <Typography variant="body2">{option}</Typography>
+        </ListItemButton>
+      ))}
+    </>
+  )}
+</List>
+
         <Divider sx={{ my: 1 }} />
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant="contained" onClick={onClose} sx={{ mr: 1, flex: 1 }}>Apply</Button>

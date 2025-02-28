@@ -5,7 +5,7 @@ import { sendChartData } from "../../utils/api";
 // import { useSelector } from "react-redux";
 
 const TextChart = (props) => {
-  const [dimensions, setDimensions] = useState({ width: 300, height: 200 });
+  const [dimensions, setDimensions] = useState({ width: 500, height: 400 });
   const [isResizing, setIsResizing] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
@@ -21,7 +21,7 @@ const TextChart = (props) => {
     const yFontSize= useSelector((state) => state.toolTip.fontSizeY||"12");
            const categoryColor = useSelector((state) => state.toolTip.categoryColor);
            const valueColor= useSelector((state) => state.toolTip.valueColor);
-    
+     const customHeadings = useSelector((state) => state.toolTip.customHeading);
 
   const MAX_WIDTH = 1200; // Set your maximum width
   const MAX_HEIGHT = 600; // Set your maximum height
@@ -120,12 +120,16 @@ const TextChart = (props) => {
 
   return (
     <div className="app">
+           
       <div className="row">
+
         <div
           className="border-box"
           onMouseDown={handleMouseDown}
           style={{ width: dimensions.width, height: dimensions.height, overflow: 'auto' }}
-        >
+        > <div className="chart-title">
+        <h3 style={{ color: headingColor }}>{customHeadings}</h3>
+      </div>
           {Array.isArray(categories) && Array.isArray(values) && categories.length === values.length ? (
             categories.map((category, index) => (
               <div key={index}><pre className="left-align">

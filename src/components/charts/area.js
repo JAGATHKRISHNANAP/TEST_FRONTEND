@@ -685,35 +685,36 @@ const AreaChart = ({ categories = [], values = [], aggregation }) => {
   const yFontSize = useSelector((state) => state.toolTip.fontSizeY || "12");
   const categoryColor = useSelector((state) => state.toolTip.categoryColor);
   const valueColor = useSelector((state) => state.toolTip.valueColor);
-
+  const areaColor = useSelector((state) => state.chartColor.chartColor);
   const [sortedCategories, setSortedCategories] = useState(categories);
   const [sortedValues, setSortedValues] = useState(values);
   const [isFiltered, setIsFiltered] = useState(false);
   const [legendPosition, setLegendPosition] = useState("right");
+  const [plotData, setPlotData] = useState({});
+const toolTipOptions = useSelector((state) => state.toolTip);
+  // // Default color palette for categories
+  // const defaultColors = [
+  //   "#008FFB",
+  //   "#00E396",
+  //   "#FEB019",
+  //   "#FF4560",
+  //   "#775DD0",
+  //   "#546E7A",
+  //   "#26a69a",
+  //   "#D10CE8",
+  // ];
 
-  // Default color palette for categories
-  const defaultColors = [
-    "#008FFB",
-    "#00E396",
-    "#FEB019",
-    "#FF4560",
-    "#775DD0",
-    "#546E7A",
-    "#26a69a",
-    "#D10CE8",
-  ];
+  // // 1) Transform data into multiple series (one per category).
+  // //    Each series has a single data point.
+  // const series = sortedCategories.map((cat, index) => ({
+  //   name: cat,                // This becomes the legend label
+  //   data: sortedValues || [] // Single data point for the category
+  // }));
 
-  // 1) Transform data into multiple series (one per category).
-  //    Each series has a single data point.
-  const series = sortedCategories.map((cat, index) => ({
-    name: cat,                // This becomes the legend label
-    data: sortedValues || [] // Single data point for the category
-  }));
-
-  // 2) Build a color array that assigns a unique color per category.
-  const multiSeriesColors = sortedCategories.map(
-    (_, i) => defaultColors[i % defaultColors.length]
-  );
+  // // 2) Build a color array that assigns a unique color per category.
+  // const multiSeriesColors = sortedCategories.map(
+  //   (_, i) => defaultColors[i % defaultColors.length]
+  // );
 
   // Re-initialize sorted data if categories or values change
   useEffect(() => {
@@ -772,12 +773,12 @@ const AreaChart = ({ categories = [], values = [], aggregation }) => {
     setIsFiltered(false);
   };
 
-  // Toggle legend position
-  const toggleLegendPosition = () => {
-    const positions = ["top", "bottom", "left", "right", "hide"];
-    const newIndex = (positions.indexOf(legendPosition) + 1) % positions.length;
-    setLegendPosition(positions[newIndex]);
-  };
+  // // Toggle legend position
+  // const toggleLegendPosition = () => {
+  //   const positions = ["top", "bottom", "left", "right", "hide"];
+  //   const newIndex = (positions.indexOf(legendPosition) + 1) % positions.length;
+  //   setLegendPosition(positions[newIndex]);
+  // };
 
   // ApexCharts options
   const options = {
@@ -835,20 +836,42 @@ const AreaChart = ({ categories = [], values = [], aggregation }) => {
           zoom: false,
           zoomin: false,
           zoomout: false,
-          // pan: true,
+          pan: true,
           reset: true,
         },
         offsetX: -10,
         offsetY: 0,
       },
     },
-    legend: {
-      show: legendPosition !== "hide",
-      position: legendPosition === "hide" ? "bottom" : legendPosition,
-      horizontalAlign: "center",
-    },
-    // Provide multiple colors for multiple series
-    colors: multiSeriesColors,
+    // legend: {
+    //   show: legendPosition !== "hide",
+    //   position: legendPosition === "hide" ? "bottom" : legendPosition,
+    //   horizontalAlign: "center",
+    // },
+    // // Provide multiple colors for multiple series
+    colors: [areaColor],
+    tooltip: {
+      enabled: true,
+      custom: toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+          ? function ({ series, seriesIndex, dataPointIndex, w }) {
+              const category = plotData.categories ? plotData.categories[dataPointIndex] : categories[dataPointIndex];
+              const value = series[seriesIndex][dataPointIndex];
+              const currentAggregation = aggregation || 'Aggregation';
+              const currentXAxis = xAxis[0] || 'X-Axis';
+              const currentYAxis = yAxis || 'Y-Axis';
+
+              return `
+                  <div style="background: white; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                      ${toolTipOptions.heading ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>` : ''}
+                      <div>
+                          ${toolTipOptions.categoryName ? `<div><strong>Category:</strong> ${category}</div>` : ''}
+                          ${toolTipOptions.value ? `<div><strong>Value:</strong> ${value}</div>` : ''}
+                      </div>
+                  </div>
+              `;
+          }
+          : undefined
+  },
     xaxis: {
       // Because each series is just a single data point,
       // you might only want a placeholder on the x-axis:

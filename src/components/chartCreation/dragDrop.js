@@ -11,7 +11,7 @@ function AggregationInput({ aggregate }) {
     return (
          <div className="input-fields">
                          {/* <div style={{ display: 'flex', alignItems: 'center', zIndex: 1000 }}> */}
-                           <FormControl style={{ width: '200px', marginLeft: '30px', marginTop: '5px' }}>
+                           <FormControl style={{ width: '200px', marginLeft: '200px', marginTop: '5px' }}>
                              <InputLabel id="demo-simple-select-label">Aggregation</InputLabel>
                              <NativeSelect
                                style={{ marginRight: '10px' }} value={aggregate} onChange={(event) => dispatch(setAggregate(event.target.value))}

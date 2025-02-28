@@ -122,7 +122,7 @@ const initialState = {
   checkedOptions: {},
   showFilterDropdown: false,
   selectAllChecked: true,
-  barColor: "#2196f3",
+  barColors: [],
   dashboardPlotData: {},
   dashboardBarColor: "#2196f3",
   status: 'idle',

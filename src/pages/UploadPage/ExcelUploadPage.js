@@ -352,6 +352,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import LinearProgress from '@mui/material/LinearProgress';
 import HomePage from '../HomePage';
 import Chip from '@mui/material/Chip';
+import {useNavigate} from "react-router";
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -395,19 +396,33 @@ const ExcelUpload = () => {
   //   }
   // }, [uploadError, uploadSuccess]);
   
-    useEffect(() => {
-        // Prevent navigating back
-        const disableBackButton = () => {
+    // useEffect(() => {
+    //     // Prevent navigating back
+    //     const disableBackButton = () => {
+    //       window.history.pushState(null, "", window.location.href);
+    //     };
+      
+    //     window.history.pushState(null, "", window.location.href);
+    //     window.addEventListener("popstate", disableBackButton);
+      
+    //     return () => {
+    //       window.removeEventListener("popstate", disableBackButton);
+    //     };
+    //   }, []);
+    const navigate = useNavigate(); // Initialize useNavigate
+    
+      useEffect(() => {
+          const disableBackButton = () => {
+              navigate("/"); // Redirect to the login page
+          };
+    
           window.history.pushState(null, "", window.location.href);
-        };
-      
-        window.history.pushState(null, "", window.location.href);
-        window.addEventListener("popstate", disableBackButton);
-      
-        return () => {
-          window.removeEventListener("popstate", disableBackButton);
-        };
-      }, []);
+          window.addEventListener("popstate", disableBackButton);
+    
+          return () => {
+              window.removeEventListener("popstate", disableBackButton);
+          };
+      }, [navigate]); // Add navigate to the dependency array
   React.useEffect(() => {
     if (uploadError && uploadError.status === false) {
       console.log(uploadError.status);

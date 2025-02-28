@@ -13,6 +13,7 @@ import axios from "axios";
 import SaveDashboardButton from './SaveDashboardButton';  // Import SaveDashboardButton component
 import { fetchTotalRows } from '../../utils/api';
 import HomePage from '../../pages/HomePage';
+import {useNavigate} from "react-router";
 function Charts() {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
@@ -32,19 +33,20 @@ function Charts() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const chartDetails = useSelector((state) => state.viewChartDetails.chartDetails);
 
-  useEffect(() => {
-      // Prevent navigating back
-      const disableBackButton = () => {
-        window.history.pushState(null, "", window.location.href);
-      };
-    
-      window.history.pushState(null, "", window.location.href);
-      window.addEventListener("popstate", disableBackButton);
-    
-      return () => {
-        window.removeEventListener("popstate", disableBackButton);
-      };
-    }, []);
+ const navigate = useNavigate(); // Initialize useNavigate
+       
+         useEffect(() => {
+             const disableBackButton = () => {
+                 navigate("/"); // Redirect to the login page
+             };
+       
+             window.history.pushState(null, "", window.location.href);
+             window.addEventListener("popstate", disableBackButton);
+       
+             return () => {
+                 window.removeEventListener("popstate", disableBackButton);
+             };
+         }, [navigate]); // Add navigate to the dependency array
   useEffect(() => {
     console.log("Redux Chart Details:", chartDetails);
     console.log(" chartData:", chartData);

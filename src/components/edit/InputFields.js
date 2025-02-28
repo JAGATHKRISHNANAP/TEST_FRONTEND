@@ -375,12 +375,13 @@ import React, { useState, useEffect } from "react";
 // import LineChart from '../charts/lineChart';
 // import ScatterPlot from '../charts/scatterChart';
 // import BarChart from '../charts/barChart';
+import {useNavigate} from "react-router";
 import {Snackbar, Alert, Box, Checkbox, FormControl, Grid, InputLabel, List, ListItemButton, ListItemIcon, NativeSelect, Paper, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 // import ClearIcon from '@mui/icons-material/Clear';
 // import FilterListIcon from '@mui/icons-material/FilterList';
 import { setAggregate, setXAxis, setYAxis, setChartData, setFilterOptions, setSelectedTable, setChartType,
-  setFontStyles,
+  setFontStyles,setChartHeading,
   setColorStyles,setFilterOptionsForColumn ,setSelectAllCheckedForColumn,setCheckedOptionsForColumn } from "../../features/EditChart/EditChartSlice";
   import { setCheckedOptions} from "../../features/Dashboard-Slice/chartSlice";
 import SaveButton from './SaveButton';
@@ -417,15 +418,16 @@ function EditDashboard() {
   const [showSnackbar, setShowSnackbar] = useState(false); // Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
   const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Snackbar severity
-  const reduxCheckedOptions = useSelector(state => state.chart.checkedOptions); // Get from Redux
+  const reduxCheckedOptions = useSelector(state => state.chartdata.checkedOptions); // Get from Redux
 //  const checkedOptionS = useSelector(state => state.chart.checkedOptions[column]) || [];
+  // const barColor =useSelector(state => state.chartdata.chartColor)|| "";
   const [barColor, setBarColor] = useState("#2196f3");
   const [dashboardPlotData, setDashboardPlotData] = useState({});
   const [dashboardBarColor, setDashboardBarColor] = useState("#2196f3");
 
   const chartType1 = useSelector(state => state.chartType.type);
   const dispatch = useDispatch();
-
+  const chartHeading=useSelector(state => state.chartdata.chart_heading)|| "";
   const chartType = useSelector(state => state.chartdata.chartType);
   const aggregate = useSelector(state => state.chartdata.aggregate) || "";
   const chartData = useSelector((state) => state.chartdata.chartData || []);
@@ -456,19 +458,20 @@ console.log("Redux Filter Options:", reduxFilterOptions);
   console.log("filterOptionsas--------------------------1",filterOptionsas)
 
   console.log("filterOptions-----------------------------2",filterOptions)
-  useEffect(() => {
-      // Prevent navigating back
-      const disableBackButton = () => {
-        window.history.pushState(null, "", window.location.href);
-      };
-    
-      window.history.pushState(null, "", window.location.href);
-      window.addEventListener("popstate", disableBackButton);
-    
-      return () => {
-        window.removeEventListener("popstate", disableBackButton);
-      };
-    }, []);
+   const navigate = useNavigate(); // Initialize useNavigate
+      
+        useEffect(() => {
+            const disableBackButton = () => {
+                navigate("/"); // Redirect to the login page
+            };
+      
+            window.history.pushState(null, "", window.location.href);
+            window.addEventListener("popstate", disableBackButton);
+      
+            return () => {
+                window.removeEventListener("popstate", disableBackButton);
+            };
+        }, [navigate]); // Add navigate to the dependency array
   useEffect(() => {
     if (chartType1) {
       dispatch(setChartType(chartType1));
@@ -505,12 +508,12 @@ useEffect(() => {
         yAxis,
         aggregate,
         chartType,
-        filterOptions: reduxFilterOptions, 
+        filterOptions: reduxCheckedOptions, 
         databaseName,
         selectedUser,
         xFontSize,
         yFontSize,
-        categoryColor,valueColor,fontStyle,
+        categoryColor,valueColor,fontStyle,chartHeading
       };
       
       const chartData = await generateChartData(data);
@@ -544,7 +547,7 @@ useEffect(() => {
     if (isChecked) {
       setCheckedOptions([...filterOptions, ...chartData[9]]);
     } else {
-      setCheckedOptions(isChecked ? reduxFilterOptions : []); // Simplified logic
+      setCheckedOptions(isChecked ? filterOptions : []); // Simplified logic
     }
     
     generateChart(); 
@@ -605,13 +608,14 @@ useEffect(() => {
         chartColor: barColor,
         drilldownChartData: dashboardPlotData,
         drillDownChartColor: dashboardBarColor,
-        filterOptions: checkedOptions,
+        filterOptions: reduxCheckedOptions,
         selectedUser,
         xFontSize,         
         fontStyle,          
         categoryColor,   
         yFontSize:yFontSize,          
         valueColor:valueColor,   
+        chart_heading:chartHeading
         
       };
   

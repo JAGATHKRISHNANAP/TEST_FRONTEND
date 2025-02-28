@@ -16,7 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-
+import {useNavigate} from "react-router";
 import HomePage from '../../pages/HomePage';
 function Chartsview() {
   const dispatch = useDispatch();
@@ -40,20 +40,20 @@ function Chartsview() {
     height: window.innerHeight,
   });
 
-
-  useEffect(() => {
-      // Prevent navigating back
-      const disableBackButton = () => {
-        window.history.pushState(null, "", window.location.href);
-      };
-    
-      window.history.pushState(null, "", window.location.href);
-      window.addEventListener("popstate", disableBackButton);
-    
-      return () => {
-        window.removeEventListener("popstate", disableBackButton);
-      };
-    }, []);
+const navigate = useNavigate(); // Initialize useNavigate
+      
+        useEffect(() => {
+            const disableBackButton = () => {
+                navigate("/"); // Redirect to the login page
+            };
+      
+            window.history.pushState(null, "", window.location.href);
+            window.addEventListener("popstate", disableBackButton);
+      
+            return () => {
+                window.removeEventListener("popstate", disableBackButton);
+            };
+        }, [navigate]); // Add navigate to the dependency array
   // Update window size on resize
   useEffect(() => {
     const handleResize = () => {

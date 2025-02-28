@@ -1331,6 +1331,7 @@ import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import ContectMenu from './contextMenu';
 import CustomToolTip from './customToolTip';
+import { faSlash } from '@fortawesome/free-solid-svg-icons';
 
 const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) => {
     const xAxis = useSelector((state) => state.chart.xAxis);
@@ -1462,6 +1463,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                         console.error("Chart context or series data is undefined");
                         return;
                     }
+                    
                     const clickedSeriesName = chartContext.w.config.series[seriesIndex]?.name;
                     if (clickedSeriesName) {
                         handleLegendClick(clickedSeriesName, seriesIndex);
@@ -1538,7 +1540,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
         show: legendPosition !== "hide",
         position: legendPosition === "hide" ? "top" : legendPosition,
         onItemClick: {
-            toggleDataSeries: true,
+            toggleDataSeries: false,
         
             // position: legendPosition || "top", // Default to "top" if null
             // show: legendPosition !== null, // Hide legend if legendPosition is null
@@ -1617,14 +1619,14 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                 const category = w.globals.labels[dataPointIndex]; // Fetch category dynamically
                 const value = series[seriesIndex][dataPointIndex];
         
-                let tooltipContent = `<div style="background: ${headingColor || '#333'}; color: #fff; padding: 10px; border-radius: 5px;">`;
+                let tooltipContent = `<div style="background:  color: #fff; padding: 10px; border-radius: 5px;">`;
         
                 if (!toolTipOptions.heading && !toolTipOptions.categoryName && !toolTipOptions.value) {
                     tooltipContent += `<div><strong>Value:</strong> ${value}</div>`;
                     tooltipContent += `<div><strong>Category:</strong> ${category}</div>`;
                 } else {
                     if (toolTipOptions.heading) {
-                        tooltipContent += `<div><h4>${aggregate} of ${xAxis[0]} vs ${yAxis[0]}</h4></div>`;
+                        tooltipContent += `<div><h4>${aggregate} of ${xAxis[0]} and ${xAxis[1]} vs ${yAxis[0]}</h4></div>`;
                     }
                     tooltipContent += '<div>';
                     if (toolTipOptions.categoryName) {
@@ -1639,7 +1641,7 @@ const BarChart = ({ categories = [], series1 = [], series2 = [], aggregation }) 
                 return tooltipContent;
             },
         },
-    }        
+    };    
     // Series for Grouped Bars
     // const series = [
     //     {

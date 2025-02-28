@@ -115,7 +115,8 @@ const chartSlice = createSlice({
     fontStyle: null,
     error: null,
     filterDropdowns: {},
-    selectAllCheckedForColumn: {}
+    selectAllCheckedForColumn: {},
+    chart_heading: null
   },
   reducers: {
   //   setFilterOptionsForColumn: (state, action) => {
@@ -138,18 +139,34 @@ const chartSlice = createSlice({
   //     state.checkedOptions[column] = [...options]; //Initialize checked options with filterOptions
   //   }
   // },
-  setFilterOptionsForColumn: (state, action) => {
-    const { column, options } = action.payload;
+//   setFilterOptionsForColumn: (state, action) => {
+//     const { column, options } = action.payload;
 
-    if (!options || (Array.isArray(options) && options.length === 0)) { 
-        // If options is undefined or an empty array, remove the column from state
-        delete state.filterOptions[column];
-        delete state.checkedOptions[column];
-    } else {
-        state.filterOptions[column] = options;
-        state.checkedOptions[column] = [...options];
-    }
+//     if (!options || (Array.isArray(options) && options.length === 0)) { 
+//         // If options is undefined or an empty array, remove the column from state
+//         delete state.filterOptions[column];
+//         delete state.checkedOptions[column];
+//     } else {
+//         state.filterOptions[column] = options;
+//         state.checkedOptions[column] = [...options];
+//     }
+// },
+setFilterOptionsForColumn: (state, action) => {
+  const { column, options } = action.payload;
+
+  if (!options || (Array.isArray(options) && options.length === 0)) {
+      // If options is undefined or an empty array, remove the column from state
+      state.filterOptions = { ...state.filterOptions };
+      delete state.filterOptions[column];
+
+      state.checkedOptions = { ...state.checkedOptions };
+      delete state.checkedOptions[column];
+  } else {
+      state.filterOptions = { ...state.filterOptions, [column]: options };
+      state.checkedOptions = { ...state.checkedOptions, [column]: [...options] };
+  }
 },
+
 
   // setFilterOptionsForColumn: (state, action) => {
   //   const { column, options } = action.payload;
@@ -178,6 +195,7 @@ const chartSlice = createSlice({
     setFilterOptions: (state, action) => {
       state.filterOptions = action.payload;
     },
+    
     setChartColor: (state, action) => {
       state.chartColor = action.payload;
     },
@@ -195,6 +213,9 @@ const chartSlice = createSlice({
     setColorStyles: (state, action) => {
       state.categoryColor = action.payload.categoryColor;
       state.valueColor = action.payload.valueColor;
+    },
+    setChartHeading: (state, action) => {
+      state.chart_heading = action.payload;
     },
     // setCheckedOptionsForColumn: (state, action) => {
     //   const { column, options } = action.payload;
@@ -230,35 +251,79 @@ const chartSlice = createSlice({
     }
   },
   },
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addCase(fetchTotalRows.fulfilled, (state, action) => {
+  //       state.totalRows = action.payload;
+  //     })
+  //     .addCase(fetchChartData.fulfilled, (state, action) => {
+  //       state.chartData = action.payload;
+  //       state.chartid = action.payload[0]; // Initialize chartid
+  //       state.tableName = action.payload[1]; // Initialize tableName
+  //       state.xAxis = action.payload[2]; // Initialize xAxis
+  //       state.yAxis = action.payload[3]; // Initialize yAxis
+  //       state.aggregate = action.payload[4]; // Initialize aggregate
+  //       state.chartType = action.payload[5]; // Initialize chartType if needed
+  //       state.filterOptions = action.payload[9]; // Initialize filterOptions if needed
+  //       state.chartColor = action.payload[7]; // Initialize chartColor if needed
+  //       state.databaseName = action.payload[11]; // Initialize databaseName if needed
+  //       state.xFontSize = action.payload[12]; // Initialize xFontSize
+  //       state.yFontSize = action.payload[15]; // Initialize yFontSize
+  //       state.categoryColor = action.payload[14]; // Initialize categoryColor
+  //       state.valueColor = action.payload[16]; // Initialize valueColor
+  //       state.fontStyle = action.payload[13]; // Initialize fontStyle
+  //       state.chart_heading=action.payload[7]
+  //     })
+  //     .addCase(fetchTotalRows.rejected, (state, action) => {
+  //       state.error = action.error.message;
+  //     })
+  //     .addCase(fetchChartData.rejected, (state, action) => {
+  //       state.error = action.error.message;
+  //     });
+  // },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTotalRows.fulfilled, (state, action) => {
-        state.totalRows = action.payload;
-      })
-      .addCase(fetchChartData.fulfilled, (state, action) => {
-        state.chartData = action.payload;
-        state.chartid = action.payload[0]; // Initialize chartid
-        state.tableName = action.payload[1]; // Initialize tableName
-        state.xAxis = action.payload[2]; // Initialize xAxis
-        state.yAxis = action.payload[3]; // Initialize yAxis
-        state.aggregate = action.payload[4]; // Initialize aggregate
-        state.chartType = action.payload[5]; // Initialize chartType if needed
-        state.filterOptions = action.payload[9]; // Initialize filterOptions if needed
-        state.chartColor = action.payload[7]; // Initialize chartColor if needed
-        state.databaseName = action.payload[11]; // Initialize databaseName if needed
-        state.xFontSize = action.payload[12]; // Initialize xFontSize
-        state.yFontSize = action.payload[15]; // Initialize yFontSize
-        state.categoryColor = action.payload[14]; // Initialize categoryColor
-        state.valueColor = action.payload[16]; // Initialize valueColor
-        state.fontStyle = action.payload[13]; // Initialize fontStyle
-      })
-      .addCase(fetchTotalRows.rejected, (state, action) => {
-        state.error = action.error.message;
-      })
-      .addCase(fetchChartData.rejected, (state, action) => {
-        state.error = action.error.message;
-      });
-  },
+        .addCase(fetchTotalRows.fulfilled, (state, action) => {
+            state.totalRows = action.payload;
+        })
+        .addCase(fetchChartData.fulfilled, (state, action) => {
+            state.chartData = action.payload;
+            state.chartid = action.payload[0];
+            state.tableName = action.payload[1];
+            state.xAxis = action.payload[2];
+            state.yAxis = action.payload[3];
+            state.aggregate = action.payload[4];
+            state.chartType = action.payload[5];
+            state.chartColor = action.payload[7];
+            state.databaseName = action.payload[11];
+            state.xFontSize = action.payload[12];
+            state.yFontSize = action.payload[15];
+            state.categoryColor = action.payload[14];
+            state.valueColor = action.payload[16];
+            state.fontStyle = action.payload[13];
+            state.chart_heading = action.payload[7];
+
+            try {
+                // Parse the filterOptions string
+                const parsedFilterOptions = JSON.parse(action.payload[9]);
+                state.filterOptions = parsedFilterOptions;
+
+                // Initialize checkedOptions to match filterOptions
+                state.checkedOptions = { ...parsedFilterOptions }; // Create a shallow copy
+
+            } catch (error) {
+                console.error("Error parsing filterOptions:", error);
+                state.filterOptions = {};
+                state.checkedOptions = {};
+            }
+        })
+        .addCase(fetchTotalRows.rejected, (state, action) => {
+            state.error = action.error.message;
+        })
+        .addCase(fetchChartData.rejected, (state, action) => {
+            state.error = action.error.message;
+        });
+},
 });
 
 export const {
@@ -271,7 +336,7 @@ export const {
   setChartData,
   setSelectedTable,
   setFontStyles,
-  setColorStyles,setFilterOptionsForColumn, toggleFilterDropdownForColumn,setCheckedOptionsForColumn,setSelectAllCheckedForColumn,
+  setColorStyles,setFilterOptionsForColumn, toggleFilterDropdownForColumn,setCheckedOptionsForColumn,setSelectAllCheckedForColumn,setChartHeading
 } = chartSlice.actions;
 
 export default chartSlice.reducer;

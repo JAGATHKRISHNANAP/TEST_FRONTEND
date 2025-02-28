@@ -4,22 +4,23 @@ import {  Grid} from "@mui/material";
 import DesignChart from '../../components/dashbord-Elements/Dashboard';
 import HomePage from '../HomePage';
 
-
+import {useNavigate} from "react-router";
 function LoadDataPage() {
     
-useEffect(() => {
-  // Prevent navigating back
-  const disableBackButton = () => {
-    window.history.pushState(null, "", window.location.href);
-  };
-
-  window.history.pushState(null, "", window.location.href);
-  window.addEventListener("popstate", disableBackButton);
-
-  return () => {
-    window.removeEventListener("popstate", disableBackButton);
-  };
-}, []);
+ const navigate = useNavigate(); // Initialize useNavigate
+    
+      useEffect(() => {
+          const disableBackButton = () => {
+              navigate("/"); // Redirect to the login page
+          };
+    
+          window.history.pushState(null, "", window.location.href);
+          window.addEventListener("popstate", disableBackButton);
+    
+          return () => {
+              window.removeEventListener("popstate", disableBackButton);
+          };
+      }, [navigate]); // Add navigate to the dependency array
     return (
       <div className="App">
         <HomePage />

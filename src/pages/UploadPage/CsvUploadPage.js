@@ -114,6 +114,7 @@ import * as Papa from 'papaparse';
 import { PieChart } from '@mui/x-charts/PieChart';
 import HomePage from '../HomePage';
 import Chip from '@mui/material/Chip';
+import {useNavigate} from "react-router";
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -140,21 +141,20 @@ const CsvUpload = () => {
   const databaseName = localStorage.getItem('company_name');
   const [user_id, setUser_Id] = React.useState(sessionStorage.getItem('user_id'));
   const [primaryKeyNeeded, setPrimaryKeyNeeded] = useState(false);
-
+const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-      // Prevent navigating back
       const disableBackButton = () => {
-        window.history.pushState(null, "", window.location.href);
+          navigate("/"); // Redirect to the login page
       };
-    
+
       window.history.pushState(null, "", window.location.href);
       window.addEventListener("popstate", disableBackButton);
-    
+
       return () => {
-        window.removeEventListener("popstate", disableBackButton);
+          window.removeEventListener("popstate", disableBackButton);
       };
-    }, []);
+  }, [navigate]); // Add navigate to the dependency array
   useEffect(() => {
     if (uploadError) {
       const message = typeof uploadError === "object" ? uploadError.message || JSON.stringify(uploadError) : uploadError;

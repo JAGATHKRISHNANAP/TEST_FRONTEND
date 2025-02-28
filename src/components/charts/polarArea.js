@@ -665,7 +665,7 @@ import "react-resizable/css/styles.css"; // Import styles for resizing
 // export default PolarAreaChart;
 
 
-const PolarAreaChart = ({ categories = [], values = [] }) => {
+const PolarAreaChart = ({ categories = [], values = [],aggregation=[] }) => {
   // Local state for sorted data.
   const [sortedData, setSortedData] = useState({ categories, values });
   const [legendPosition, setLegendPosition] = useState("right");
@@ -674,7 +674,10 @@ const PolarAreaChart = ({ categories = [], values = [] }) => {
   const [selectedLegendIndex, setSelectedLegendIndex] = useState(null);
   const headingColor = useSelector((state) => state.toolTip.headingColor);
   const customHeadings = useSelector((state) => state.toolTip.customHeading);
-
+const toolTipOptions = useSelector((state) => state.toolTip);
+ const xAxis = useSelector((state) => state.chart.xAxis);
+  const yAxis = useSelector((state) => state.chart.yAxis);
+  const aggregate = useSelector((state) => state.chart.aggregate);
   // Default colors for polar area slices.
   const defaultColors = [
     "#008FFB",
@@ -818,17 +821,44 @@ const PolarAreaChart = ({ categories = [], values = [] }) => {
       offsetY: -2,
       style: { fontSize: "12px" },
     },
-    tooltip: {
-      enabled: true,
-      theme: "light",
-      y: {
-        formatter: (value) => value.toLocaleString(),
-      },
-      style: { fontSize: "12px" },
-      fixed: { enabled: true, position: "topRight" },
+    tooltip:{
+
+      // enabled: true,
+      // Example custom tooltip if needed
+      custom:
+        toolTipOptions.heading || toolTipOptions.categoryName || toolTipOptions.value
+          ? function ({ series, seriesIndex, dataPointIndex, w }) {
+              // Each series is a single data point
+              const cat = categories[seriesIndex];
+              const val = values[seriesIndex];
+              const currentAggregation = aggregation || "Aggregation";
+              const currentXAxis = xAxis[0] || "X-Axis";
+              const currentYAxis = yAxis || "Y-Axis";
+              return `
+                <div style="background: white; color: black; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                  ${
+                    toolTipOptions.heading
+                      ? `<div style="font-weight: bold; margin-bottom: 5px;"><h4>${currentAggregation} of ${currentXAxis} vs ${currentYAxis}</h4></div>`
+                      : ""
+                  }
+                  <div>
+                    ${
+                      toolTipOptions.categoryName
+                        ? `<div><strong>Category:</strong> ${cat}</div>`
+                        : ""
+                    }
+                    ${
+                      toolTipOptions.value
+                        ? `<div><strong>Value:</strong> ${val}</div>`
+                        : ""
+                    }
+                  </div>
+                </div>
+              `;
+            }
+          : undefined,
     },
   };
-
   return (
     <div className="app">
       <div className="row">

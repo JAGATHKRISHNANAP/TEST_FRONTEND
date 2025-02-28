@@ -135,6 +135,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
 
     const closeFilterModal = (column) => {
         setModalOpen(false);
+        generateChart()
     };
 
   return (
@@ -157,40 +158,7 @@ const ChartControls = ({ aggregate, dispatch,xAxis, yAxis, filterOptions, checke
                              
                         ))}
                       </div>
-                      {/* {showFilterDropdown && (
-                        <div className="filter-dropdown">
-                          <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }}>
-                            <label>
-                              <ListItemButton sx={{ height: "35px" }}>
-                                <ListItemIcon>
-                                  <Checkbox style={{ marginLeft: '10px' }}
-                                    checked={selectAllChecked}
-                                    onChange={handleSelectAllChange}
-                                  />
-                                </ListItemIcon>
-                                Select All
-                              </ListItemButton>
-                            </label>
-                          </List>
-                          {filterOptions.map((option, index) => (
-                            <List sx={{ width: "20%", maxWidth: 260, bgcolor: "background.paper", zIndex: 1000 }} key={index}>
-                              <label>
-                                <ListItemButton sx={{ height: "35px" }}>
-                                  <ListItemIcon>
-                                    <Checkbox style={{ marginLeft: '10px' }}
-                                      type="checkbox"
-                                      value={option}
-                                      checked={checkedOptions.includes(option)}
-                                      onChange={() => handleCheckboxChange(option)}
-                                    />
-                                  </ListItemIcon>
-                                  {option}
-                                </ListItemButton>
-                              </label>
-                            </List>
-                          ))}
-                        </div>
-                      )}*/}
+                      
                     </div> 
                     {/* <div className="input-fields"> */}
                     {/* <FormControl style={{ width: '250px', marginLeft: '30px', marginTop: '5px' }}>

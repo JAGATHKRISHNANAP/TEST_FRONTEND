@@ -84,16 +84,27 @@ const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success
 const selectedTable=sessionStorage.getItem("selectedTable")
   const selectedTablearray = (excelCheckedPaths.length > 0) ? excelCheckedPaths : csvCheckedPaths;
   // const selectedTable = selectedTablearray.join(',');
-  useEffect(() => {
-    if (xAxis && yAxis && aggregate && chartType && selectedTable) { // Add selectedTable
-        dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions, selectedUser }));
-    }
-}, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, selectedUser, dispatch]); // Add selectedTable
+//   useEffect(() => {
+//     if (xAxis && yAxis && aggregate && chartType && selectedTable) { // Add selectedTable
+//         dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions, selectedUser }));
+//     }
+// }, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, selectedUser, dispatch]); // Add selectedTable
+useEffect(() => {
+  if (
+    previousState.xAxis !== xAxis ||
+    previousState.yAxis !== yAxis ||
+    previousState.chartType !== chartType ||
+    previousState.selectedTable !== selectedTable
+  ) {
+      dispatch(generateChart({ selectedTable, xAxis, yAxis, barColor, aggregate, chartType, checkedOptions, selectedUser }));
+      setPreviousState({ xAxis, yAxis, chartType, selectedTable });
+  }
+}, [selectedTable, xAxis, yAxis, aggregate, chartType, checkedOptions, selectedUser, dispatch]);
 
-  // const preventReload = (e) => {
-  //   e.preventDefault();
-  //   e.returnValue = '';  // This triggers a confirmation prompt
-  // };
+  const preventReload = (e) => {
+    e.preventDefault();
+    e.returnValue = '';  // This triggers a confirmation prompt
+  };
   
   
   useEffect(() => {

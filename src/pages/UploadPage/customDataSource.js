@@ -1255,6 +1255,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Select from '@mui/material/Select';
 import {  fetchTableNamesAPI, fetchColumnsAPI, performJoinOperation,fetchUsers ,fetchTableNamesFromExternalDB } from '../../utils/api';
 import HomePage from '../HomePage';
+import {useNavigate} from "react-router";
 const ItemTypes = {
   TABLE: 'table',
 };
@@ -1676,20 +1677,20 @@ const CustomJoinWithFetchTables = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const connectionType = localStorage.getItem('connectionType');
+  const navigate = useNavigate(); // Initialize useNavigate
   
     useEffect(() => {
-        // Prevent navigating back
         const disableBackButton = () => {
-          window.history.pushState(null, "", window.location.href);
+            navigate("/"); // Redirect to the login page
         };
-      
+  
         window.history.pushState(null, "", window.location.href);
         window.addEventListener("popstate", disableBackButton);
-      
+  
         return () => {
-          window.removeEventListener("popstate", disableBackButton);
+            window.removeEventListener("popstate", disableBackButton);
         };
-      }, []);
+    }, [navigate]); // Add navigate to the dependency array
   useEffect(() => {
     const fetchAllUsers = async () => {
       setIsLoading(true);

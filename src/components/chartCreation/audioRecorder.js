@@ -59,7 +59,7 @@ function AudioRecorder({ selectedTable, databaseName }) {
     };
 
     return (
-        <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', width: '275px' }}>
+        <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', width: '275px', marginLeft: '190px' }}>
              <button
             onClick={isRecording ? stopRecording : startRecording}
             style={{
